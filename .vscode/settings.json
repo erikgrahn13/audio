@@ -1,0 +1,13 @@
+{
+    // "files.exclude": {
+    //     // "**/build/**": true,
+    //     "**/build/_deps/juce-src/**": false
+
+    // },
+    // "search.exclude": {
+    //     // "**/build/**": true,
+    //     "**/build/_deps/juce-src/**": false
+    // },
+    "search.useIgnoreFiles": false,
+    "search.useGlobalIgnoreFiles": false
+}

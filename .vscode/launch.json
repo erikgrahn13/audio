@@ -1,0 +1,38 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "VST3PluginTestHost Windows",
+            "type": "cppvsdbg",
+            "request": "launch",
+            // "program": "C:/Program Files/Steinberg/VST3PluginTestHost/VST3PluginTestHost.exe",
+            "program":"${workspaceRoot}/build/_deps/juce-build/extras/AudioPluginHost/AudioPluginHost_artefacts/Debug/AudioPluginHost.exe",
+            "args": [
+                // "--pluginfolder",
+                "${command:cmake.buildDirectory}"
+            ],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "console": "newExternalWindow",
+            "preLaunchTask": "CMake: build",
+        },
+        {
+            "name": "VST3PluginTestHost Mac",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "/Applications/VST3PluginTestHost.app",
+            "args": [
+                "--pluginfolder",
+                "${command:cmake.buildDirectory}"
+            ],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "externalConsole": false,
+            "preLaunchTask": "CMake: build",
+            "MIMode": "lldb"
+        },
+    ]
+}
