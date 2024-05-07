@@ -31,7 +31,18 @@ public:
         
         fileChooser->launchAsync(juce::FileBrowserComponent::openMode | juce::FileBrowserComponent::canSelectFiles ,[this](const juce::FileChooser& chooser)
         {
-            juce::File audioFile(chooser.getResult());
+            auto audioFile = chooser.getResult();
+
+            auto* reader =  audioFormatManager.createReaderFor(audioFile);
+            if(reader != nullptr)
+            {
+                auto newSource = std::make_unique<juce::AudioFormatReaderSource>(reader, true);
+                transportSource.setSource(newSource.get(), 0, nullptr, reader->sampleRate);
+
+                audioFormatReaderSource.release();
+                fileName.setText(audioFile.getFileName(), juce::NotificationType::dontSendNotification);
+            }
+
             juce::Logger::writeToLog(audioFile.getFileName());
         } );
     }
@@ -41,8 +52,12 @@ private:
     // access the processor object that created it.
     AudioPluginAudioProcessor& processorRef;
     juce::TextButton loadFileButton;
+    juce::Label fileName;
     juce::Slider midiVolume;
     std::unique_ptr<juce::FileChooser> fileChooser;
     juce::AudioTransportSource transportSource;
+    juce::AudioFormatManager audioFormatManager;
+    TransportState state;
+    std::unique_ptr<juce::AudioFormatReaderSource> audioFormatReaderSource;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioPluginAudioProcessorEditor)
 };

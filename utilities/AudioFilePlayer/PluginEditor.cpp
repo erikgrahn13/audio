@@ -9,10 +9,18 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
 {
     juce::ignoreUnused (processorRef);
 
+    audioFormatManager.registerBasicFormats();
+    // transportSource.addChangeListener(this);
+
     loadFileButton.onClick = [this] { loadFileButtonClicked();};
     loadFileButton.setButtonText("Load File");
     loadFileButton.setSize(50, 50);
     addAndMakeVisible(&loadFileButton);
+
+    fileName.setText("No file loaded", juce::NotificationType::dontSendNotification);
+    fileName.setSize(50, 50);
+    fileName.setCentrePosition(100, 20);
+    addAndMakeVisible(&fileName);
 
     midiVolume.setSliderStyle(juce::Slider::LinearBarVertical);
     midiVolume.setRange(0.0, 127.0, 1.0);
