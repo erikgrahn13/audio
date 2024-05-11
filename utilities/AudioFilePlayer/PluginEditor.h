@@ -4,33 +4,32 @@
 // #include <juce_audio_devices/juce_AudioTransportSource.h>
 #include <JuceHeader.h>
 
-enum class TransportState {
+enum class TransportState
+{
     Stopped,
     Starting,
     Playing,
     Stopping
 };
 
-
-
 //==============================================================================
 class AudioPluginAudioProcessorEditor final : public juce::AudioProcessorEditor
 {
 public:
-    explicit AudioPluginAudioProcessorEditor (AudioPluginAudioProcessor&);
+    explicit AudioPluginAudioProcessorEditor(AudioPluginAudioProcessor &);
     ~AudioPluginAudioProcessorEditor() override;
 
     //==============================================================================
-    void paint (juce::Graphics&) override;
+    void paint(juce::Graphics &) override;
     void resized() override;
 
-    void loadFileButtonClicked() 
+    void loadFileButtonClicked()
     {
         juce::Logger::writeToLog("Button clicked");
         fileChooser = std::make_unique<juce::FileChooser>("Select file...", juce::File::getSpecialLocation(juce::File::userHomeDirectory), "*.wav");
-        
-        fileChooser->launchAsync(juce::FileBrowserComponent::openMode | juce::FileBrowserComponent::canSelectFiles ,[this](const juce::FileChooser& chooser)
-        {
+
+        fileChooser->launchAsync(juce::FileBrowserComponent::openMode | juce::FileBrowserComponent::canSelectFiles, [this](const juce::FileChooser &chooser)
+                                 {
             auto audioFile = chooser.getResult();
 
             auto* reader =  audioFormatManager.createReaderFor(audioFile);
@@ -43,14 +42,13 @@ public:
                 fileName.setText(audioFile.getFileName(), juce::NotificationType::dontSendNotification);
             }
 
-            juce::Logger::writeToLog(audioFile.getFileName());
-        } );
+            juce::Logger::writeToLog(audioFile.getFileName()); });
     }
 
 private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
-    AudioPluginAudioProcessor& processorRef;
+    AudioPluginAudioProcessor &processorRef;
     juce::TextButton loadFileButton;
     juce::Label fileName;
     juce::Slider midiVolume;
@@ -59,5 +57,5 @@ private:
     juce::AudioFormatManager audioFormatManager;
     TransportState state;
     std::unique_ptr<juce::AudioFormatReaderSource> audioFormatReaderSource;
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioPluginAudioProcessorEditor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AudioPluginAudioProcessorEditor)
 };
