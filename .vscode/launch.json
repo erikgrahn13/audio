@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "VST3PluginTestHost Windows",
+            "name": "AudioPluginHost Windows",
             "type": "cppvsdbg",
             "request": "launch",
             // "program": "C:/Program Files/Steinberg/VST3PluginTestHost/VST3PluginTestHost.exe",
@@ -20,7 +20,7 @@
             "preLaunchTask": "CMake: build",
         },
         {
-            "name": "VST3PluginTestHost Mac",
+            "name": "AudioPluginHost Mac",
             "type": "cppdbg",
             "request": "launch",
             "program": "/Applications/VST3PluginTestHost.app",

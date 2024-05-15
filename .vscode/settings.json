@@ -10,5 +10,9 @@
     //     "**/build/_deps/juce-src/**": false
     // },
     "search.useIgnoreFiles": false,
-    "search.useGlobalIgnoreFiles": false
+    "search.useGlobalIgnoreFiles": false,
+    "files.associations": {
+        "*.mm": "cpp"
+    },
+    "cmake.generator": "Ninja",
 }
