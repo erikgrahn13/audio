@@ -22,3 +22,4 @@ CPMAddPackage("gh:juce-framework/JUCE#7.0.12")
 
 add_subdirectory(utilities)
 add_subdirectory(EQ)
+add_subdirectory(Synth)
