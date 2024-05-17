@@ -23,3 +23,4 @@ CPMAddPackage(
 
 add_subdirectory(utilities)
 add_subdirectory(EQ)
+add_subdirectory(Synth)
