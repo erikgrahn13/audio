@@ -11,7 +11,7 @@
     "search.useIgnoreFiles": false,
     "search.useGlobalIgnoreFiles": false,
     "files.associations": {
-        "*.mm": "cpp"
+        "*.mm": "cpp",
+        "memory": "cpp"
     },
-    "cmake.generator": "Ninja",
 }

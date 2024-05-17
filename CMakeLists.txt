@@ -18,7 +18,12 @@ set(JUCE_BUILD_EXAMPLES ON CACHE BOOL "Force JUCE_BUILD_EXTRAS to ON" FORCE)
 add_compile_definitions(JUCE_DISPLAY_SPLASH_SCREEN=0)
 
 # add dependencies here
-CPMAddPackage("gh:juce-framework/JUCE#7.0.12")
+CPMAddPackage(
+  NAME juce
+  GITHUB_REPOSITORY juce-framework/JUCE
+  GIT_TAG 7.0.12
+  OPTIONS "JUCE_BUILD_EXTRAS ON" "JUCE_BUILD_EXAMPLES ON"
+)
 
 add_subdirectory(utilities)
 add_subdirectory(EQ)
