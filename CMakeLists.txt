@@ -11,10 +11,6 @@ file(
 )
 include(${CMAKE_CURRENT_BINARY_DIR}/cmake/CPM.cmake)
 
-option(JUCE_BUILD_EXTRAS "Add build targets for the Projucer and other tools" ON)
-option(JUCE_BUILD_EXAMPLES "Add build targets for the DemoRunner and PIPs" ON)
-set(JUCE_BUILD_EXAMPLES ON CACHE BOOL "Force JUCE_BUILD_EXTRAS to ON" FORCE)
-
 add_compile_definitions(JUCE_DISPLAY_SPLASH_SCREEN=0)
 
 # add dependencies here
