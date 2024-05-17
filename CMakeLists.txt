@@ -12,12 +12,14 @@ file(
 include(${CMAKE_CURRENT_BINARY_DIR}/cmake/CPM.cmake)
 
 add_compile_definitions(JUCE_DISPLAY_SPLASH_SCREEN=0)
+set(DEPENDENCY_DIR ${CMAKE_CURRENT_LIST_DIR}/external)
 
 # add dependencies here
 CPMAddPackage(
   NAME juce
   GITHUB_REPOSITORY juce-framework/JUCE
   GIT_TAG 7.0.12
+  SOURCE_DIR ${DEPENDENCY_DIR}/juce
   OPTIONS "JUCE_BUILD_EXTRAS ON" "JUCE_BUILD_EXAMPLES ON"
 )
 
