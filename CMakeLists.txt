@@ -11,14 +11,17 @@ file(
 )
 include(${CMAKE_CURRENT_BINARY_DIR}/cmake/CPM.cmake)
 
-option(JUCE_BUILD_EXTRAS "Add build targets for the Projucer and other tools" ON)
-option(JUCE_BUILD_EXAMPLES "Add build targets for the DemoRunner and PIPs" ON)
-set(JUCE_BUILD_EXAMPLES ON CACHE BOOL "Force JUCE_BUILD_EXTRAS to ON" FORCE)
-
 add_compile_definitions(JUCE_DISPLAY_SPLASH_SCREEN=0)
+set(DEPENDENCY_DIR ${CMAKE_CURRENT_LIST_DIR}/external)
 
 # add dependencies here
-CPMAddPackage("gh:juce-framework/JUCE#7.0.12")
+CPMAddPackage(
+  NAME juce
+  GITHUB_REPOSITORY juce-framework/JUCE
+  GIT_TAG 7.0.12
+  SOURCE_DIR ${DEPENDENCY_DIR}/juce
+  OPTIONS "JUCE_BUILD_EXTRAS ON" "JUCE_BUILD_EXAMPLES ON"
+)
 
 add_subdirectory(utilities)
 add_subdirectory(EQ)
