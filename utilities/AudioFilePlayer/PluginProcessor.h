@@ -1,6 +1,7 @@
 #pragma once
 
 #include <juce_audio_processors/juce_audio_processors.h>
+#include <JuceHeader.h>
 
 //==============================================================================
 class AudioPluginAudioProcessor final : public juce::AudioProcessor
@@ -42,7 +43,14 @@ public:
     void getStateInformation(juce::MemoryBlock &destData) override;
     void setStateInformation(const void *data, int sizeInBytes) override;
 
+    bool loadFile(juce::File &file);
+    juce::AudioTransportSource &getTransportSource() { return transportSource; }
+    juce::AudioFormatReaderSource &getAudioFormatReaderSource() { return *audioFormatReaderSource; }
+
 private:
+    juce::AudioTransportSource transportSource;
+    juce::AudioFormatManager audioFormatManager;
+    std::unique_ptr<juce::AudioFormatReaderSource> audioFormatReaderSource;
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AudioPluginAudioProcessor)
 };

@@ -6,29 +6,46 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(AudioPluginAudi
     : AudioProcessorEditor(&p), processorRef(p)
 {
     juce::ignoreUnused(processorRef);
+    getLookAndFeel().setUsingNativeAlertWindows(true);
 
-    audioFormatManager.registerBasicFormats();
-    // transportSource.addChangeListener(this);
-
-    loadFileButton.onClick = [this]
+    loadFileButton.onClick = [this]()
     { loadFileButtonClicked(); };
     loadFileButton.setButtonText("Load File");
-    loadFileButton.setSize(50, 50);
     addAndMakeVisible(&loadFileButton);
 
+    playButton.onClick = [this]()
+    {
+        processorRef.getTransportSource().start();
+    };
+    playButton.setButtonText("Play");
+    addAndMakeVisible(&playButton);
+
+    stopButton.onClick = [this]()
+    {
+        processorRef.getTransportSource().stop();
+        processorRef.getTransportSource().setPosition(0.0);
+    };
+    stopButton.setButtonText("Stop");
+    addAndMakeVisible(&stopButton);
+
+    loopButton.setButtonText("Loop");
+    loopButton.onClick = [this]()
+    {
+        processorRef.getAudioFormatReaderSource().setLooping(loopButton.getToggleState());
+    };
+    loopButton.setClickingTogglesState(true);
+    addAndMakeVisible(loopButton);
+
     fileName.setText("No file loaded", juce::NotificationType::dontSendNotification);
-    fileName.setSize(50, 50);
-    fileName.setCentrePosition(100, 20);
     addAndMakeVisible(&fileName);
 
-    midiVolume.setSliderStyle(juce::Slider::LinearBarVertical);
-    midiVolume.setRange(0.0, 127.0, 1.0);
-    midiVolume.setTextBoxStyle(juce::Slider::NoTextBox, false, 90, 0);
-    midiVolume.setPopupDisplayEnabled(true, false, this);
-    midiVolume.setTextValueSuffix(" Volume");
-    midiVolume.setValue(1.0);
+    volume.setSliderStyle(juce::Slider::LinearBarVertical);
+    volume.setRange(-40.0, 0.0, 0.01);
+    volume.setTextBoxStyle(juce::Slider::NoTextBox, false, 90, 0);
+    volume.setPopupDisplayEnabled(true, false, this);
+    volume.setTextValueSuffix(" Volume");
+    volume.setValue(0.0);
 
-    // addAndMakeVisible(&midiVolume);
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
     setSize(400, 300);
@@ -54,5 +71,11 @@ void AudioPluginAudioProcessorEditor::resized()
 {
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..
-    midiVolume.setBounds(40, 30, 20, getHeight() - 60);
+    fileName.setBounds(10, 10, getWidth() / 2 - 20, 20);
+    volume.setBounds(40, 30, 20, getHeight() - 60);
+    loadFileButton.setBounds(getWidth() / 2, 10, getWidth() / 2 - 20, 20);
+
+    playButton.setBounds(10, 40, getWidth() - 20, 20);
+    stopButton.setBounds(10, 70, getWidth() - 20, 20);
+    loopButton.setBounds(10, 100, getWidth() - 20, 20);
 }
