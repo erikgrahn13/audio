@@ -11,6 +11,10 @@ public:
     ~SynthAudioProcessor() override;
 
     //==============================================================================
+    void setFrequency (double frequency) {mFrequency = frequency;};
+    double getFrequency () {return mFrequency;};
+    void setAmplitude (double amplitude) {mAmplitude = amplitude;};
+    double getAmplitude () {return mAmplitude;};
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
 
@@ -43,6 +47,10 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 
 private:
+    double mAmplitude;
+    double mFrequency;
+    double mAngle;
+    double mSampleRate;
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SynthAudioProcessor)
 };
