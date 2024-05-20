@@ -3,8 +3,7 @@
 #include "PluginProcessor.h"
 
 //==============================================================================
-class SynthAudioProcessorEditor final : public juce::AudioProcessorEditor,
-                                        public juce::Slider::Listener
+class SynthAudioProcessorEditor final : public juce::AudioProcessorEditor
 {
 public:
     explicit SynthAudioProcessorEditor (SynthAudioProcessor&);
@@ -13,7 +12,6 @@ public:
     //==============================================================================
     void paint (juce::Graphics&) override;
     void resized() override;
-    void sliderValueChanged(juce::Slider *slider) override;
 
 private:
     // This reference is provided as a quick way for your editor to
