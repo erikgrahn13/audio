@@ -2,54 +2,51 @@
 #include "PluginEditor.h"
 
 //==============================================================================
-AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(AudioPluginAudioProcessor &p)
-    : AudioProcessorEditor(&p), processorRef(p)
+AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(AudioPluginAudioProcessor &p, juce::AudioProcessorValueTreeState& vts)
+    : AudioProcessorEditor(&p), processorRef(p), valueTreeState(vts) 
 {
     juce::ignoreUnused(processorRef);
-    getLookAndFeel().setUsingNativeAlertWindows(true);
 
+    loadFileButton.setLookAndFeel(&deathMetalLookAndFeel);
     loadFileButton.onClick = [this]()
     { loadFileButtonClicked(); };
-    loadFileButton.setButtonText("Load File");
+    loadFileButton.setButtonText("LOAD FILE");
     addAndMakeVisible(&loadFileButton);
 
+    playButton.setLookAndFeel(&fontAudioLookAndFeel);
+    playButton.setClickingTogglesState(true);
     playButton.onClick = [this]()
     {
-        processorRef.getTransportSource().start();
+        playButton.getToggleState() ? playButton.setButtonText(juce::CharPointer_UTF8("")) : playButton.setButtonText(juce::CharPointer_UTF8(""));
     };
-    playButton.setButtonText("Play");
+    playButton.setButtonText(juce::CharPointer_UTF8(""));
+    playAttachment.reset(new ButtonAttachment(valueTreeState, "play", playButton));
     addAndMakeVisible(&playButton);
 
-    stopButton.onClick = [this]()
-    {
-        processorRef.getTransportSource().stop();
-        processorRef.getTransportSource().setPosition(0.0);
-    };
-    stopButton.setButtonText("Stop");
-    addAndMakeVisible(&stopButton);
+    loopButton.setLookAndFeel(&fontAudioLookAndFeel);
+    loopButton.setColour(juce::TextButton::ColourIds::textColourOnId, juce::Colours::red);
+    loopButton.setColour(juce::TextButton::ColourIds::textColourOffId, juce::Colours::white);
 
-    loopButton.setButtonText("Loop");
-    loopButton.onClick = [this]()
-    {
-        processorRef.getAudioFormatReaderSource().setLooping(loopButton.getToggleState());
-    };
+    loopButton.setButtonText(juce::CharPointer_UTF8(""));
     loopButton.setClickingTogglesState(true);
+    loopAttachment.reset(new ButtonAttachment(valueTreeState, "loop", loopButton));
     addAndMakeVisible(loopButton);
 
     fileName.setText("No file loaded", juce::NotificationType::dontSendNotification);
+    fileName.setJustificationType(juce::Justification::centred);
     addAndMakeVisible(&fileName);
 
-    volume.setSliderStyle(juce::Slider::LinearBarVertical);
-    volume.setRange(-40.0, 0.0, 0.01);
-    volume.setTextBoxStyle(juce::Slider::NoTextBox, false, 90, 0);
-    volume.setPopupDisplayEnabled(true, false, this);
-    volume.setTextValueSuffix(" Volume");
-    volume.setValue(0.0);
+    gainSlider.setSliderStyle(juce::Slider::LinearHorizontal);
+    gainSlider.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
+    gainSlider.setColour(juce::Slider::trackColourId, juce::Colours::white);
+    gainSlider.setColour(juce::Slider::ColourIds::backgroundColourId, juce::Colours::darkgrey);
+    gainSlider.setColour(juce::Slider::ColourIds::thumbColourId, juce::Colours::white);
+    gainAttachment.reset(new SliderAttachment(valueTreeState, "gain", gainSlider));
+    addAndMakeVisible(gainSlider);
 
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
-    setSize(400, 300);
-    setResizable(true, true);
+    setSize(300, 150);
 }
 
 AudioPluginAudioProcessorEditor::~AudioPluginAudioProcessorEditor()
@@ -61,21 +58,25 @@ void AudioPluginAudioProcessorEditor::paint(juce::Graphics &g)
 {
     // (Our component is opaque, so we must completely fill the background with a solid colour)
     g.fillAll(getLookAndFeel().findColour(juce::ResizableWindow::backgroundColourId));
-
-    g.setColour(juce::Colours::white);
-    g.setFont(15.0f);
-    g.drawFittedText("Hello Grahn!", getLocalBounds(), juce::Justification::centred, 1);
+    g.fillAll(juce::Colours::black);
 }
 
 void AudioPluginAudioProcessorEditor::resized()
 {
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..
-    fileName.setBounds(10, 10, getWidth() / 2 - 20, 20);
-    volume.setBounds(40, 30, 20, getHeight() - 60);
-    loadFileButton.setBounds(getWidth() / 2, 10, getWidth() / 2 - 20, 20);
+    auto bounds = getLocalBounds();
 
-    playButton.setBounds(10, 40, getWidth() - 20, 20);
-    stopButton.setBounds(10, 70, getWidth() - 20, 20);
-    loopButton.setBounds(10, 100, getWidth() - 20, 20);
+    auto fileBounds = bounds.removeFromTop(bounds.getHeight() / 3);
+
+
+    fileName.setBounds(fileBounds.removeFromLeft(bounds.getWidth() / 2));
+    loadFileButton.setBounds(fileBounds.reduced(40, 10));
+
+    auto transportBounds = bounds.removeFromTop(bounds.getHeight() / 2);
+    playButton.setBounds(transportBounds.removeFromLeft(bounds.getWidth() /2).reduced(10, 10));
+    loopButton.setBounds(transportBounds.reduced(10,10));
+
+    auto gainBounds = bounds;
+    gainSlider.setBounds(gainBounds.reduced(60, 0));
 }

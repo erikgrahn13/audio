@@ -51,6 +51,16 @@ private:
     juce::AudioTransportSource transportSource;
     juce::AudioFormatManager audioFormatManager;
     std::unique_ptr<juce::AudioFormatReaderSource> audioFormatReaderSource;
+    bool mShouldLoop{false};
+
+    juce::AudioParameterFloat* volume;
+    float previousGain;
+    juce::AudioParameterFloat* gainParameter;
+    juce::AudioParameterBool* loopParameter;
+    juce::AudioParameterBool* playParameter;
+    juce::AudioParameterBool* stopParameter;
+
+    juce::AudioProcessorValueTreeState parameters;
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AudioPluginAudioProcessor)
 };

@@ -10,9 +10,20 @@ AudioPluginAudioProcessor::AudioPluginAudioProcessor()
 #endif
                          .withOutput("Output", juce::AudioChannelSet::stereo(), true)
 #endif
-      )
+      ), parameters(*this, nullptr, juce::Identifier("Parameters"), {
+        std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"gain",1}, "Gain", -48.0f, 0.0f, 0.0f),
+        std::make_unique<juce::AudioParameterBool>(juce::ParameterID{"loop",1}, "Loop", false),
+        std::make_unique<juce::AudioParameterBool>(juce::ParameterID{"play",1}, "Play", false),
+        std::make_unique<juce::AudioParameterBool>(juce::ParameterID{"stop",1}, "Stop", false)
+
+      })
+      
 {
     audioFormatManager.registerBasicFormats();
+
+    gainParameter = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("gain"));
+    loopParameter = dynamic_cast<juce::AudioParameterBool*>(parameters.getParameter("loop"));
+    playParameter = dynamic_cast<juce::AudioParameterBool*>(parameters.getParameter("play"));
 }
 
 AudioPluginAudioProcessor::~AudioPluginAudioProcessor()
@@ -89,6 +100,7 @@ void AudioPluginAudioProcessor::prepareToPlay(double sampleRate, int samplesPerB
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
+    previousGain = *gainParameter;
     transportSource.prepareToPlay(samplesPerBlock, sampleRate);
 }
 
@@ -127,6 +139,8 @@ bool AudioPluginAudioProcessor::loadFile(juce::File &file)
     if (reader != nullptr)
     {
         transportSource.stop();
+        playParameter->setValueNotifyingHost(false);
+
         auto newSource = std::make_unique<juce::AudioFormatReaderSource>(reader, true);
         transportSource.setSource(newSource.get(), 0, nullptr, reader->sampleRate);
         audioFormatReaderSource.reset(newSource.release());
@@ -140,7 +154,44 @@ void AudioPluginAudioProcessor::processBlock(juce::AudioBuffer<float> &buffer,
                                              juce::MidiBuffer &midiMessages)
 {
     buffer.clear();
+
+    if(audioFormatReaderSource)
+    {
+        audioFormatReaderSource->setLooping(loopParameter->get());
+    }
+
+    auto currentGain = gainParameter->get();
+    if(juce::approximatelyEqual(currentGain, previousGain))
+    {
+        buffer.applyGain(currentGain);
+    }
+    else
+    {
+        buffer.applyGainRamp(0, buffer.getNumSamples(), previousGain, currentGain);
+        previousGain = currentGain;
+    }
+
+    transportSource.setGain(juce::Decibels::decibelsToGain(currentGain));
     transportSource.getNextAudioBlock(juce::AudioSourceChannelInfo(buffer));
+
+        if(playParameter->get())
+    {
+        transportSource.start();
+    }
+    else
+    {
+        transportSource.stop();
+        transportSource.setPosition(0.0);
+        buffer.clear();
+    }
+
+    if(transportSource.getCurrentPosition() >= transportSource.getLengthInSeconds())
+    {
+        transportSource.stop();
+        transportSource.setPosition(0.0);
+        buffer.clear();
+        playParameter->setValueNotifyingHost(false);
+    }
 
     juce::ignoreUnused(midiMessages);
 
@@ -179,7 +230,7 @@ bool AudioPluginAudioProcessor::hasEditor() const
 
 juce::AudioProcessorEditor *AudioPluginAudioProcessor::createEditor()
 {
-    return new AudioPluginAudioProcessorEditor(*this);
+    return new AudioPluginAudioProcessorEditor(*this, parameters);
 }
 
 //==============================================================================
@@ -188,13 +239,24 @@ void AudioPluginAudioProcessor::getStateInformation(juce::MemoryBlock &destData)
     // You should use this method to store your parameters in the memory block.
     // You could do that either as raw data, or use the XML or ValueTree classes
     // as intermediaries to make it easy to save and load complex data.
-    juce::ignoreUnused(destData);
+    auto state = parameters.copyState();
+    std::unique_ptr<juce::XmlElement> xml(state.createXml());
+    copyXmlToBinary(*xml, destData);
 }
 
 void AudioPluginAudioProcessor::setStateInformation(const void *data, int sizeInBytes)
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
+    std::unique_ptr<juce::XmlElement> xmlState(getXmlFromBinary(data, sizeInBytes));
+
+    if(xmlState.get() != nullptr)
+    {
+        if(xmlState->hasTagName(parameters.state.getType()))
+        {
+            parameters.replaceState(juce::ValueTree::fromXml(*xmlState));
+        }
+    }
     juce::ignoreUnused(data, sizeInBytes);
 }
 

@@ -107,6 +107,9 @@ target_link_libraries(${PROJECT_NAME}
     PUBLIC
     juce::juce_recommended_config_flags
     juce::juce_recommended_lto_flags
-    juce::juce_recommended_warning_flags)
+    juce::juce_recommended_warning_flags
+    Fonts)
+
+target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../)
 
 add_dependencies(${PROJECT_NAME} AudioPluginHost)
