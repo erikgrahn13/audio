@@ -113,3 +113,5 @@ target_link_libraries(${PROJECT_NAME}
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../)
 
 add_dependencies(${PROJECT_NAME} AudioPluginHost)
+
+enable_pluginval_testing(${PROJECT_NAME})

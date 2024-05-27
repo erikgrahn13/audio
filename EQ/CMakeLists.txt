@@ -110,3 +110,5 @@ target_link_libraries(${PROJECT_NAME}
     juce::juce_recommended_warning_flags)
 
 add_dependencies(${PROJECT_NAME} AudioPluginHost)
+
+enable_pluginval_testing(${PROJECT_NAME})
