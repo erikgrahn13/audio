@@ -3,12 +3,15 @@
 #include "PluginProcessor.h"
 // #include <juce_audio_devices/juce_AudioTransportSource.h>
 #include <JuceHeader.h>
+#include <DeathMetalLookAndFeel.h>
+#include <FontAudioLookAndFeel.h>
+
 
 //==============================================================================
 class AudioPluginAudioProcessorEditor final : public juce::AudioProcessorEditor
 {
 public:
-    explicit AudioPluginAudioProcessorEditor(AudioPluginAudioProcessor &);
+    explicit AudioPluginAudioProcessorEditor(AudioPluginAudioProcessor &, juce::AudioProcessorValueTreeState& vts);
     ~AudioPluginAudioProcessorEditor() override;
 
     //==============================================================================
@@ -23,21 +26,23 @@ public:
         fileChooser->launchAsync(juce::FileBrowserComponent::openMode | juce::FileBrowserComponent::canSelectFiles, [this](const juce::FileChooser &chooser)
                                  {
                                      auto audioFile = chooser.getResult();
-                                     if (processorRef.loadFile(audioFile))
+                                     if(audioFile.getFileName().isNotEmpty())
                                      {
-                                         juce::Logger::writeToLog(audioFile.getFileName());
-                                         fileName.setText(audioFile.getFileName(), juce::NotificationType::dontSendNotification);
-                                         processorRef.getTransportSource().stop();
-                                         processorRef.getTransportSource().setPosition(0.0);
+                                        if (processorRef.loadFile(audioFile))
+                                        {
+                                            juce::Logger::writeToLog(audioFile.getFileName());
+                                            fileName.setText(audioFile.getFullPathName(), juce::NotificationType::dontSendNotification);
+                                        }
+                                        else
+                                        {
+                                                juce::NativeMessageBox::showMessageBoxAsync(juce::AlertWindow::WarningIcon,
+                                                        "Error",
+                                                        "The file \"" + audioFile.getFileName() + "\" is encoded in a format that isn't supported."
+                                                        );
+                                            fileName.setText("No file loaded", juce::NotificationType::dontSendNotification);
+                                        }
                                      }
-                                     else
-                                     {
-                                           juce::AlertWindow::showMessageBoxAsync(juce::AlertWindow::WarningIcon,
-                                                       "Error",
-                                                       "The file \"" + audioFile.getFileName() + "\" is encoded in a format that isn't supported.",
-                                                       "OK");
-                                        fileName.setText("No file loaded", juce::NotificationType::dontSendNotification);
-                                     } });
+    });
     }
 
     void playButtonClicked()
@@ -48,12 +53,23 @@ private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     AudioPluginAudioProcessor &processorRef;
+    DeathMetalLookAndFeel deathMetalLookAndFeel;
+    FontAudioLookAndFeel fontAudioLookAndFeel;
     juce::TextButton loadFileButton;
     juce::TextButton playButton;
-    juce::TextButton stopButton;
+    juce::Slider gainSlider;
     juce::TextButton loopButton;
     juce::Label fileName;
-    juce::Slider volume;
     std::unique_ptr<juce::FileChooser> fileChooser;
+
+    juce::AudioProcessorValueTreeState& valueTreeState;
+
+    using SliderAttachment = juce::AudioProcessorValueTreeState::SliderAttachment;
+    using ButtonAttachment = juce::AudioProcessorValueTreeState::ButtonAttachment;
+
+    std::unique_ptr<SliderAttachment> gainAttachment;
+    std::unique_ptr<ButtonAttachment> loopAttachment;
+    std::unique_ptr<ButtonAttachment> playAttachment;
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AudioPluginAudioProcessorEditor)
 };
