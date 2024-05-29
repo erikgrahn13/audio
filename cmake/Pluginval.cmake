@@ -2,7 +2,6 @@ function(enable_pluginval_testing target)
     add_dependencies(${target} pluginval)
 
     get_target_property(PLUGIN_PATH ${target} LIBRARY_OUTPUT_DIRECTORY)
-    message("erik ${PLUGIN_PATH}")
 
     add_test(NAME ${target}_VST3_TEST 
              COMMAND $<TARGET_FILE:pluginval> --strictness-level 10 --verbose --skip-gui-tests --validate-in-process ${PLUGIN_PATH}/VST3/${target}.vst3)
