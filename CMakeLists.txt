@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.22)
 
 project(Audio)
 
+enable_testing()
+
 # download CPM.cmake
 file(
   DOWNLOAD
@@ -20,7 +22,7 @@ CPMAddPackage(
   GITHUB_REPOSITORY juce-framework/JUCE
   GIT_TAG 7.0.12
   SOURCE_DIR ${DEPENDENCY_DIR}/juce
-  OPTIONS "JUCE_BUILD_EXTRAS ON" "JUCE_BUILD_EXAMPLES ON"
+  OPTIONS "JUCE_BUILD_EXTRAS ON" "JUCE_BUILD_EXAMPLES ON" "JUCE_COPY_PLUGIN_AFTER_BUILD ON"
   EXCLUDE_FROM_ALL ON
 )
 
