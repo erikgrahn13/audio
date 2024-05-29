@@ -43,7 +43,7 @@ jobs:
         run: cmake -DCMAKE_BUILD_TYPE=Release -DJUCE_COPY_PLUGIN_AFTER_BUILD=ON -B build -S .
 
       - name: Build
-        run: cmake --build build -C Release
+        run: cmake --build build --config Release
 
       - name: Tests
-        run: ctest --test-dir build --config Release
+        run: ctest --test-dir build -C Release
