@@ -2,7 +2,7 @@
 #include "PluginEditor.h"
 
 //==============================================================================
-SynthAudioProcessorEditor::SynthAudioProcessorEditor(SynthAudioProcessor& p)
+SynthAudioProcessorEditor::SynthAudioProcessorEditor(SynthAudioProcessor &p)
     : AudioProcessorEditor(&p), processorRef(p)
 {
     setSize(800, 300);
@@ -12,8 +12,6 @@ SynthAudioProcessorEditor::SynthAudioProcessorEditor(SynthAudioProcessor& p)
     freqSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     freqSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 100, 25);
     freqSlider.setTextValueSuffix(" Hz");
-    freqSlider.setRange(80.0, 2000.0, 1.0);
-    freqSlider.setValue(processorRef.parameters.getRawParameterValue("FREQUENCY")->load());
 
     addAndMakeVisible(freqLabel);
     freqLabel.setText("Frequency", juce::dontSendNotification);
@@ -24,8 +22,6 @@ SynthAudioProcessorEditor::SynthAudioProcessorEditor(SynthAudioProcessor& p)
     addAndMakeVisible(gainSlider);
     gainSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     gainSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 100, 25);
-    gainSlider.setRange(0.0, 0.5, 0.001);
-    gainSlider.setValue(processorRef.parameters.getRawParameterValue("GAIN")->load());
 
     addAndMakeVisible(gainLabel);
     gainLabel.setText("Gain", juce::dontSendNotification);
@@ -33,20 +29,18 @@ SynthAudioProcessorEditor::SynthAudioProcessorEditor(SynthAudioProcessor& p)
     gainLabel.attachToComponent(&gainSlider, false);
 }
 
-
-
 SynthAudioProcessorEditor::~SynthAudioProcessorEditor()
 {
 }
 
 //==============================================================================
-void SynthAudioProcessorEditor::paint (juce::Graphics& g)
+void SynthAudioProcessorEditor::paint(juce::Graphics &g)
 {
     // (Our component is opaque, so we must completely fill the background with a solid colour)
-    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
+    g.fillAll(getLookAndFeel().findColour(juce::ResizableWindow::backgroundColourId));
 
-    g.setColour (juce::Colours::white);
-    g.setFont (15.0f);
+    g.setColour(juce::Colours::white);
+    g.setFont(15.0f);
 }
 
 void SynthAudioProcessorEditor::resized()
