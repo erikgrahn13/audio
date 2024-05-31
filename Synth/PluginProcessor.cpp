@@ -1,5 +1,6 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include <ranges>
 
 //==============================================================================
 SynthAudioProcessor::SynthAudioProcessor()
@@ -15,7 +16,9 @@ SynthAudioProcessor::SynthAudioProcessor()
 {
     parameters.state.addListener(this);
     synth.addSound(new SynthSound());
-    synth.addVoice(new SynthVoice());
+
+    for (auto voice : std::ranges::iota_view{0, numOfVoices})
+        synth.addVoice(new SynthVoice());
 }
 
 SynthAudioProcessor::~SynthAudioProcessor()

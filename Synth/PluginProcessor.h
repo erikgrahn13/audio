@@ -52,6 +52,7 @@ public:
 private:
     std::atomic<bool> requiresUpdate{true};
     juce::Synthesiser synth;
+    static constexpr int numOfVoices = 3;
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(SynthAudioProcessor)
