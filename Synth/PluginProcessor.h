@@ -2,6 +2,7 @@
 
 #include <juce_audio_processors/juce_audio_processors.h>
 #include "Oscillator.h"
+#include "SynthVoice.h"
 
 //==============================================================================
 class SynthAudioProcessor final : public juce::AudioProcessor, private juce::ValueTree::Listener
@@ -48,8 +49,8 @@ public:
     juce::AudioProcessorValueTreeState parameters;
 
 private:
-    std::unique_ptr<Oscillator> osc;
     std::atomic<bool> requiresUpdate{true};
+    juce::Synthesiser synth;
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(SynthAudioProcessor)
 };

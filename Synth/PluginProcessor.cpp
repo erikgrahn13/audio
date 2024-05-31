@@ -1,6 +1,5 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
-#include <ranges>
 
 //==============================================================================
 SynthAudioProcessor::SynthAudioProcessor()
@@ -12,9 +11,11 @@ SynthAudioProcessor::SynthAudioProcessor()
                          .withOutput("Output", juce::AudioChannelSet::stereo(), true)
 #endif
                          ),
-      parameters(*this, nullptr, juce::Identifier("Parameters"), {std::make_unique<juce::AudioParameterFloat>("GAIN", "Gain", 0.0f, 0.5f, 0.1f), std::make_unique<juce::AudioParameterFloat>("FREQUENCY", "Frequency", 80.0f, 2000.0f, 440.0f)})
+      parameters(*this, nullptr, juce::Identifier("Parameters"), {})
 {
     parameters.state.addListener(this);
+    synth.addSound(new SynthSound());
+    synth.addVoice(new SynthVoice());
 }
 
 SynthAudioProcessor::~SynthAudioProcessor()
@@ -98,8 +99,7 @@ void SynthAudioProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
     juce::ignoreUnused(samplesPerBlock);
-    osc = std::make_unique<Oscillator>(OscType::SINE, parameters.getRawParameterValue("GAIN")->load(),
-                                       parameters.getRawParameterValue("FREQUENCY")->load(), sampleRate);
+    synth.setCurrentPlaybackSampleRate(sampleRate);
 }
 
 void SynthAudioProcessor::releaseResources()
@@ -134,16 +134,8 @@ bool SynthAudioProcessor::isBusesLayoutSupported(const BusesLayout &layouts) con
 void SynthAudioProcessor::processBlock(juce::AudioBuffer<float> &buffer,
                                        juce::MidiBuffer &midiMessages)
 {
-    juce::ignoreUnused(midiMessages);
 
     juce::ScopedNoDenormals noDenormals;
-
-    if (requiresUpdate.load())
-    {
-        osc->setAmplitude(parameters.getRawParameterValue("GAIN")->load());
-        osc->setFrequency(parameters.getRawParameterValue("FREQUENCY")->load());
-        requiresUpdate.store(false);
-    }
 
     auto totalNumInputChannels = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
@@ -164,14 +156,7 @@ void SynthAudioProcessor::processBlock(juce::AudioBuffer<float> &buffer,
     // Alternatively, you can process the samples with the channels
     // interleaved by keeping the same state.
 
-    auto *leftChannel = buffer.getWritePointer(0);
-    auto *rightChannel = buffer.getWritePointer(1);
-    for (auto sample : std::ranges::iota_view{0, buffer.getNumSamples()})
-    {
-        auto oscSample = osc->generateSample();
-        leftChannel[sample] = oscSample;
-        rightChannel[sample] = oscSample;
-    }
+    synth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
 }
 
 //==============================================================================
