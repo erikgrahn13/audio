@@ -2,6 +2,7 @@
 #include <numbers>
 #include <cmath>
 #include <complex>
+#include <tuple>
 
 Biquad::Biquad(Type type, double startFreq)
     : type(type), mFrequency(startFreq), mGaindB(0.), mQ(0.707), mSampleRate(48000)
