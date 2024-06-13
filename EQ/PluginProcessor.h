@@ -2,10 +2,19 @@
 
 #include <juce_audio_processors/juce_audio_processors.h>
 
+#include <Biquad.h>
+
 //==============================================================================
-class AudioPluginAudioProcessor final : public juce::AudioProcessor
+class AudioPluginAudioProcessor final : public juce::AudioProcessor, juce::AudioProcessorValueTreeState::Listener
 {
 public:
+        using FilterTuple = std::tuple<
+        Biquad, 
+        juce::RangedAudioParameter*,
+        std::optional<juce::RangedAudioParameter*>,
+        std::optional<juce::RangedAudioParameter*>
+    >;
+
     //==============================================================================
     AudioPluginAudioProcessor();
     ~AudioPluginAudioProcessor() override;
@@ -42,7 +51,24 @@ public:
     void getStateInformation(juce::MemoryBlock &destData) override;
     void setStateInformation(const void *data, int sizeInBytes) override;
 
+    juce::AudioProcessorValueTreeState::ParameterLayout createParameters();
+
+    void parameterChanged (const juce::String& parameter, float newValue) override;
+    void update();
+
+    juce::AudioProcessorValueTreeState& getVTSParameters() { return parameters; }
+    std::vector<FilterTuple> getFilters() { return mFilters; }
+
 private:
+    juce::AudioProcessorValueTreeState parameters;
+    juce::AudioParameterFloat* mHPF_Freq;
+    std::map<Biquad, std::vector<juce::RangedAudioParameter*>> mTest;
+
+
+
+    std::vector<FilterTuple> mFilters;
+
+    std::atomic<bool> requiresUpdate {true};
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AudioPluginAudioProcessor)
 };
