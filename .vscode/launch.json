@@ -5,34 +5,42 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "AudioPluginHost Windows",
+            "name": "AudioPluginHost",
             "type": "cppvsdbg",
             "request": "launch",
             // "program": "C:/Program Files/Steinberg/VST3PluginTestHost/VST3PluginTestHost.exe",
-            "program":"${workspaceRoot}/build/_deps/juce-build/extras/AudioPluginHost/AudioPluginHost_artefacts/Debug/AudioPluginHost.exe",
+            // "program":"${workspaceRoot}/build/_deps/juce-build/extras/AudioPluginHost/AudioPluginHost_artefacts/Debug/AudioPluginHost.exe",
+            "windows": {
+                "program": "${workspaceRoot}/build/_deps/juce-build/extras/AudioPluginHost/AudioPluginHost_artefacts/Debug/AudioPluginHost.exe",
+            },
+            "osx": {
+                // "program": "${workspaceRoot}/build/_deps/juce-build/extras/AudioPluginHost/AudioPluginHost_artefacts/Debug/AudioPluginHost.exe",
+            },
+            "linux": {
+                // "program": "${workspaceRoot}/build/_deps/juce-build/extras/AudioPluginHost/AudioPluginHost_artefacts/Debug/AudioPluginHost.exe",
+            },
             "args": [
-                // "--pluginfolder",
                 "${command:cmake.buildDirectory}"
             ],
             "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
+            // "cwd": "${workspaceFolder}",
             "console": "newExternalWindow",
             "preLaunchTask": "CMake: build",
-        },
-        {
-            "name": "AudioPluginHost Mac",
-            "type": "cppdbg",
-            "request": "launch",
-            "program": "/Applications/VST3PluginTestHost.app",
-            "args": [
-                "--pluginfolder",
-                "${command:cmake.buildDirectory}"
-            ],
-            "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
-            "externalConsole": false,
-            "preLaunchTask": "CMake: build",
-            "MIMode": "lldb"
-        },
+        }
+        // {
+        //     "name": "AudioPluginHost Mac",
+        //     "type": "cppdbg",
+        //     "request": "launch",
+        //     "program": "/Applications/VST3PluginTestHost.app",
+        //     "args": [
+        //         "--pluginfolder",
+        //         "${command:cmake.buildDirectory}"
+        //     ],
+        //     "stopAtEntry": false,
+        //     "cwd": "${workspaceFolder}",
+        //     "externalConsole": false,
+        //     "preLaunchTask": "CMake: build",
+        //     "MIMode": "lldb"
+        // },
     ]
 }

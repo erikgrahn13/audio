@@ -60,7 +60,7 @@ juce_add_plugin(${PROJECT_NAME}
 # include all your JUCE module headers; if you're happy to include module headers directly, you
 # probably don't need to call this.
 
-# juce_generate_juce_header(AudioPluginExample)
+juce_generate_juce_header(${PROJECT_NAME})
 
 # `target_sources` adds source files to a target. We pass the target that needs the sources as the
 # first argument, then a visibility parameter for the sources which should normally be PRIVATE.
@@ -69,7 +69,8 @@ juce_add_plugin(${PROJECT_NAME}
 target_sources(${PROJECT_NAME}
     PRIVATE
     PluginEditor.cpp
-    PluginProcessor.cpp)
+    PluginProcessor.cpp
+    EQView.cpp)
 
 # `target_compile_definitions` adds some preprocessor definitions to our target. In a Projucer
 # project, these might be passed in the 'Preprocessor Definitions' field. JUCE modules also make use
@@ -103,6 +104,7 @@ target_link_libraries(${PROJECT_NAME}
     PRIVATE
 
     # AudioPluginData           # If we'd created a binary data target, we'd link to it here
+    Biquad
     juce::juce_audio_utils
     PUBLIC
     juce::juce_recommended_config_flags

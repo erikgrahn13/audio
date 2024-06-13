@@ -29,6 +29,7 @@ public:
     std::vector<double> getCoefficients();
     double getFrequency() { return mFrequency; }
     double getSampleRate() { return mSampleRate; }
+    Type getType() const { return type; }
 
     struct Coeffs
     {
