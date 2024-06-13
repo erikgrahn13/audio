@@ -64,3 +64,5 @@ include(Pluginval)
 
 add_subdirectory(utilities)
 add_subdirectory(EQ)
+
+message(STATUS "ERIK macOS Deployment Target: ${CMAKE_OSX_DEPLOYMENT_TARGET}")
