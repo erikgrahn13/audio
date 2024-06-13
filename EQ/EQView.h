@@ -3,7 +3,8 @@
 #include <JuceHeader.h>
 #include <Biquad.h>
 #include <array>
-#include "ResponseCurve.h"
+#include "PluginProcessor.h"
+
 
 class EQView : public juce::Component, juce::Timer
 {

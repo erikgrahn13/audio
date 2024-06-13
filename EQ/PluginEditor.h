@@ -2,7 +2,6 @@
 
 #include "PluginProcessor.h"
 #include "EQView.h"
-#include "ResponseCurve.h"
 
 //==============================================================================
 class AudioPluginAudioProcessorEditor final : public juce::AudioProcessorEditor, juce::AudioProcessorValueTreeState::Listener
