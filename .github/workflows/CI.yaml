@@ -43,5 +43,12 @@ jobs:
       - name: Build
         run: cmake --build build --config Release
 
+      - name: Kill AudioComponentRegistrar
+        if: matrix.os == 'macos-latest'
+        run: |
+          pgrep -x AudioComponentRegistrar >/dev/null && killall -9 AudioComponentRegistrar; echo "killed AudioComponentRegistrar" || echo "AudioComponentRegistrar Process not found"
+        
+        # mkdir -p ~/Library/Audio/Plug-Ins/Components
+        # mv ${{env.PROJECT_NAME}}.component ~/Library/Audio/Plug-Ins/Components
       - name: Tests
         run: ctest --test-dir build -C Release --output-on-failure
