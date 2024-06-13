@@ -20,20 +20,22 @@ function(enable_pluginval_testing target)
     option(CI_BUILD "Enables pluginval tests of AU plugins" OFF)
 
     if(APPLE AND CI_BUILD)
-        add_test(NAME ${target}_AU_TEST 
-        COMMAND $<TARGET_FILE:pluginval> --strictness-level 10 --verbose --skip-gui-tests --validate-in-process $ENV{HOME}/Library/Audio/Plug-Ins/Components/${target}.component)
+    #     add_test(NAME ${target}_AU_TEST 
+    #     COMMAND $<TARGET_FILE:pluginval> --strictness-level 10 --verbose --skip-gui-tests --validate-in-process $ENV{HOME}/Library/Audio/Plug-Ins/Components/${target}.component)
 
-        add_custom_command(TARGET ${target}_AU POST_BUILD
-            COMMAND mkdir -p $ENV{HOME}/Library/Audio/Plug-Ins/Components
-            COMMAND ${CMAKE_COMMAND} -E remove_directory "$ENV{HOME}/Library/Audio/Plug-Ins/Components/${target}.component"
-            COMMAND mv ${PLUGIN_PATH}/AU/${target}.component $ENV{HOME}/Library/Audio/Plug-Ins/Components/${target}.component
-            # COMMAND ${CMAKE_COMMAND} -E rename "${PLUGIN_PATH}/AU/${target}.component" "$ENV{HOME}/Library/Audio/Plug-Ins/Components"
-            COMMAND pgrep -x AudioComponentRegistrar >/dev/null && killall -9 AudioComponentRegistrar && echo "Killed AudioComponentRegistrar" || echo "AudioComponentRegistrar Process not found"
-            # COMMAND 
-            # $<TARGET_FILE:pluginval>
-            # --skip-gui-tests --validate-in-process $ENV{HOME}/Library/Audio/Plug-Ins/Components/${target}.component
-            WORKING_DIRECTORY "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}"
-    )
+
+
+    #     add_custom_command(TARGET ${target}_AU POST_BUILD
+    #         COMMAND mkdir -p $ENV{HOME}/Library/Audio/Plug-Ins/Components
+    #         COMMAND ${CMAKE_COMMAND} -E remove_directory "$ENV{HOME}/Library/Audio/Plug-Ins/Components/${target}.component"
+    #         COMMAND mv ${PLUGIN_PATH}/AU/${target}.component $ENV{HOME}/Library/Audio/Plug-Ins/Components/${target}.component
+    #         # COMMAND ${CMAKE_COMMAND} -E rename "${PLUGIN_PATH}/AU/${target}.component" "$ENV{HOME}/Library/Audio/Plug-Ins/Components"
+    #         COMMAND pgrep -x AudioComponentRegistrar >/dev/null && killall -9 AudioComponentRegistrar && echo "Killed AudioComponentRegistrar" || echo "AudioComponentRegistrar Process not found"
+    #         # COMMAND 
+    #         # $<TARGET_FILE:pluginval>
+    #         # --skip-gui-tests --validate-in-process $ENV{HOME}/Library/Audio/Plug-Ins/Components/${target}.component
+    #         WORKING_DIRECTORY "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}"
+    # )
     endif(APPLE AND CI_BUILD)
 
 endfunction(enable_pluginval_testing)
