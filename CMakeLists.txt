@@ -6,7 +6,6 @@ enable_testing()
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
-set(CMAKE_OSX_DEPLOYMENT_TARGET "12.7" CACHE STRING "Minimum OS X deployment version")
 
 # download CPM.cmake
 file(
@@ -62,6 +61,7 @@ juce_add_binary_data(Fonts HEADER_NAME "Fonts.h" SOURCES resources/fonts/ArtDyst
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
 include(Pluginval)
 
+set(CMAKE_OSX_DEPLOYMENT_TARGET "12.7" CACHE STRING "Minimum OS X deployment version")
 add_subdirectory(utilities)
 add_subdirectory(EQ)
 
