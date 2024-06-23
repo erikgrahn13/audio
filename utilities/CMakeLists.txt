@@ -1,2 +1,3 @@
 add_subdirectory(AudioFilePlayer)
 add_subdirectory(dsp)
+add_subdirectory(dsp_rust)
