@@ -5,6 +5,10 @@
 #include <array>
 #include "PluginProcessor.h"
 
+extern "C" {
+    size_t add(size_t left, size_t right);
+    typedef struct FFT FFT;
+}
 
 class EQView : public juce::Component, juce::Timer
 {

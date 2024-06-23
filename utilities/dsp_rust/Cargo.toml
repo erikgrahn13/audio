@@ -1,0 +1,6 @@
+[workspace]
+members = [
+    "fft"
+]
+
+resolver = "2"

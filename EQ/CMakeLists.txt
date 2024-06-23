@@ -104,6 +104,7 @@ target_link_libraries(${PROJECT_NAME}
 
     # AudioPluginData           # If we'd created a binary data target, we'd link to it here
     Biquad
+    fft
     juce::juce_audio_utils
     PUBLIC
     juce::juce_recommended_config_flags
