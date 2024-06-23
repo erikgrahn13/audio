@@ -3,6 +3,9 @@ cmake_minimum_required(VERSION 3.22)
 project(Audio)
 
 enable_testing()
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 # download CPM.cmake
 file(
@@ -22,7 +25,7 @@ CPMAddPackage(
   GITHUB_REPOSITORY juce-framework/JUCE
   GIT_TAG 7.0.12
   SOURCE_DIR ${DEPENDENCY_DIR}/juce
-  OPTIONS "JUCE_BUILD_EXTRAS ON" "JUCE_BUILD_EXAMPLES ON" "JUCE_COPY_PLUGIN_AFTER_BUILD ON"
+  OPTIONS "JUCE_BUILD_EXTRAS ON" "JUCE_BUILD_EXAMPLES ON"
   EXCLUDE_FROM_ALL ON
 )
 
@@ -58,5 +61,8 @@ juce_add_binary_data(Fonts HEADER_NAME "Fonts.h" SOURCES resources/fonts/ArtDyst
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
 include(Pluginval)
 
+set(CMAKE_OSX_DEPLOYMENT_TARGET "12.7" CACHE STRING "Minimum OS X deployment version" FORCE)
 add_subdirectory(utilities)
 add_subdirectory(EQ)
+
+message(STATUS "ERIK macOS Deployment Target: ${CMAKE_OSX_DEPLOYMENT_TARGET}")
