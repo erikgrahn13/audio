@@ -20,8 +20,8 @@ function(enable_pluginval_testing target)
     option(CI_BUILD "Enables pluginval tests of AU plugins" OFF)
 
     if(APPLE AND CI_BUILD)
-    #     add_test(NAME ${target}_AU_TEST 
-    #     COMMAND $<TARGET_FILE:pluginval> --strictness-level 10 --verbose --skip-gui-tests --validate-in-process $ENV{HOME}/Library/Audio/Plug-Ins/Components/${target}.component)
+        add_test(NAME ${target}_AU_TEST 
+        COMMAND $<TARGET_FILE:pluginval> --strictness-level 10 --verbose --skip-gui-tests --validate-in-process $ENV{HOME}/Library/Audio/Plug-Ins/Components/${target}.component)
 
 
 
