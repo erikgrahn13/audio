@@ -46,7 +46,6 @@ juce_add_plugin(${PROJECT_NAME}
     # NEEDS_MIDI_OUTPUT TRUE/FALSE              # Does the plugin need midi output?
     # IS_MIDI_EFFECT TRUE/FALSE                 # Is this plugin a MIDI effect?
     # EDITOR_WANTS_KEYBOARD_FOCUS TRUE/FALSE    # Does the editor need keyboard focus?
-    COPY_PLUGIN_AFTER_BUILD FALSE # Should the plugin be installed to a default location after building?
     PLUGIN_MANUFACTURER_CODE Juce # A four-character manufacturer id with at least one upper-case character
     PLUGIN_CODE Dem0 # A unique four-character plugin id with exactly one upper-case character
 
