@@ -69,7 +69,8 @@ target_sources(${PROJECT_NAME}
     PRIVATE
     PluginEditor.cpp
     PluginProcessor.cpp
-    EQView.cpp)
+    EQView.cpp
+    AnalyzerCurve.cpp)
 
 # `target_compile_definitions` adds some preprocessor definitions to our target. In a Projucer
 # project, these might be passed in the 'Preprocessor Definitions' field. JUCE modules also make use
@@ -111,6 +112,8 @@ target_link_libraries(${PROJECT_NAME}
     juce::juce_recommended_lto_flags
     juce::juce_recommended_warning_flags)
 
-add_dependencies(${PROJECT_NAME} AudioPluginHost)
+if(NOT CI_BUILD)
+    add_dependencies(${PROJECT_NAME} AudioPluginHost)
+endif()
 
 enable_pluginval_testing(${PROJECT_NAME})
