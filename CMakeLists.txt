@@ -25,9 +25,31 @@ CPMAddPackage(
   GITHUB_REPOSITORY juce-framework/JUCE
   GIT_TAG 7.0.12
   SOURCE_DIR ${DEPENDENCY_DIR}/juce
-  OPTIONS "JUCE_BUILD_EXTRAS ON" "JUCE_BUILD_EXAMPLES ON"
-  EXCLUDE_FROM_ALL ON
 )
+
+# set(JUCE_BUILD_EXTRAS ON CACHE INTERNAL "")
+# set(JUCE_BUILD_EXAMPLES ON CACHE INTERNAL "")
+
+# FetchContent_Declare(
+#   juce
+#   GIT_REPOSITORY https://github.com/juce-framework/JUCE.git
+#   GIT_TAG 7.0.12
+#   GIT_SUBMODULES ""  # Prevent fetching submodules
+#   SOURCE_DIR ${DEPENDENCY_DIR}/juce
+# )
+# FetchContent_MakeAvailable(juce)
+
+# FetchContent_GetProperties(juce)
+# if(NOT juce_POPULATED)
+#     FetchContent_Populate(juce)
+#     # Add the JUCE subdirectory manually
+#     add_subdirectory(${juce_SOURCE_DIR} ${juce_BINARY_DIR} EXCLUDE_FROM_DEFAULT_BUILD)
+# endif()
+# if(IS_DIRECTORY "${juce_SOURCE_DIR}")
+#     set_property(DIRECTORY ${juce_SOURCE_DIR} PROPERTY EXCLUDE_FROM_ALL YES)
+# endif()
+
+
 
 # CPMAddPackage(
 #   NAME pluginval

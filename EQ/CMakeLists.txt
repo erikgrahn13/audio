@@ -111,6 +111,8 @@ target_link_libraries(${PROJECT_NAME}
     juce::juce_recommended_lto_flags
     juce::juce_recommended_warning_flags)
 
-add_dependencies(${PROJECT_NAME} AudioPluginHost)
+if(NOT CI_BUILD)
+    add_dependencies(${PROJECT_NAME} AudioPluginHost)
+endif()
 
 enable_pluginval_testing(${PROJECT_NAME})

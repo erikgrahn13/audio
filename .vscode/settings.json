@@ -1,3 +1,7 @@
 {
+    "cmake.configureArgs": [
+        "-DJUCE_BUILD_EXTRAS=ON",
+        "-DJUCE_BUILD_EXAMPLES=ON"
+    ],
     "cmake.ctestArgs": ["--verbose"]
 }
