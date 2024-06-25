@@ -1,24 +1,9 @@
 function(enable_pluginval_testing target)
     get_target_property(PLUGIN_PATH ${target} LIBRARY_OUTPUT_DIRECTORY)
-    message("ERIK2 ${pluginval_SOURCE_DIR}")
 
     add_test(NAME ${target}_VST3_TEST 
              COMMAND ${pluginval_SOURCE_DIR}/${PLUGINVAL_BINARY_PATH} --strictness-level 10 --verbose --skip-gui-tests --validate-in-process ${PLUGIN_PATH}/VST3/${target}.vst3)
 
-    # add_test(NAME ${target}_VST3_TEST 
-    #          COMMAND $<TARGET_FILE:pluginval> --strictness-level 10 --verbose --skip-gui-tests --validate-in-process ${PLUGIN_PATH}/VST3/${target}.vst3)
-
-    # add_custom_command(TARGET  ${target}_VST3
-    #                    POST_BUILD
-    #                    COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure -R ${target}_TEST
-    #                    COMMENT "Running MyTest as a post-build step")
-    
-    # add_custom_command(TARGET ${target}_VST3 POST_BUILD
-    #     COMMAND 
-    #         $<TARGET_FILE:pluginval>
-    #         --skip-gui-tests --validate-in-process ${PLUGIN_PATH}/VST3/${target}.vst3
-    #         WORKING_DIRECTORY "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}"
-    # )
     option(CI_BUILD "Enables pluginval tests of AU plugins" OFF)
 
     if(APPLE AND CI_BUILD)
