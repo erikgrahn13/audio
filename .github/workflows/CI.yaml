@@ -39,7 +39,17 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt install libasound2-dev libjack-jackd2-dev ladspa-sdk libcurl4-openssl-dev libfreetype6-dev libx11-dev libxcomposite-dev libxcursor-dev libxcursor-dev libxext-dev libxinerama-dev libxrandr-dev libxrender-dev libwebkit2gtk-4.0-dev libglu1-mesa-dev mesa-common-dev
-        
+
+      - name: Detect number of CPU cores and set parallel build level
+        run: |
+          if [[ "${{ matrix.os }}" == "ubuntu-latest" ]]; then
+            echo "CMAKE_BUILD_PARALLEL_LEVEL=$(nproc)" >> $GITHUB_ENV
+          elif [[ "${{ matrix.os }}" == "macos-latest" ]]; then
+            echo "CMAKE_BUILD_PARALLEL_LEVEL=$(sysctl -n hw.ncpu)" >> $GITHUB_ENV
+          elif [[ "${{ matrix.os }}" == "windows-latest" ]]; then
+            echo "CMAKE_BUILD_PARALLEL_LEVEL=%NUMBER_OF_PROCESSORS%" >> $GITHUB_ENV
+        shell: bash
+
       - name: Configure
         run: cmake -DCMAKE_BUILD_TYPE=Release -DJUCE_COPY_PLUGIN_AFTER_BUILD=ON -DCI_BUILD=ON -B build -S .
 
@@ -51,7 +61,5 @@ jobs:
         run: |
           pgrep -x AudioComponentRegistrar >/dev/null && killall -9 AudioComponentRegistrar; echo "killed AudioComponentRegistrar" || echo "AudioComponentRegistrar Process not found"
         
-        # mkdir -p ~/Library/Audio/Plug-Ins/Components
-        # mv ${{env.PROJECT_NAME}}.component ~/Library/Audio/Plug-Ins/Components
       - name: Tests
         run: ctest --test-dir build -C Release --output-on-failure
