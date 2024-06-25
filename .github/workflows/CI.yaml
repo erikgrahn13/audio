@@ -42,12 +42,12 @@ jobs:
 
       - name: Detect number of CPU cores and set parallel build level
         run: |
-          if [[ "${{ matrix.os }}" == "ubuntu-latest" ]]; then
+          if [ "${{ matrix.os }}" == "ubuntu-latest" ]; then
             echo "CMAKE_BUILD_PARALLEL_LEVEL=$(nproc)" >> $GITHUB_ENV
-          elif [[ "${{ matrix.os }}" == "macos-latest" ]]; then
+          elif [ "${{ matrix.os }}" == "macos-latest" ]; then
             echo "CMAKE_BUILD_PARALLEL_LEVEL=$(sysctl -n hw.ncpu)" >> $GITHUB_ENV
-          elif [[ "${{ matrix.os }}" == "windows-latest" ]]; then
-            echo "CMAKE_BUILD_PARALLEL_LEVEL=%NUMBER_OF_PROCESSORS%" >> $GITHUB_ENV
+          elif [ "${{ matrix.os }}" == "windows-latest" ]; then
+            echo "CMAKE_BUILD_PARALLEL_LEVEL=$Env:NUMBER_OF_PROCESSORS" >> $GITHUB_ENV
         shell: bash
 
       - name: Configure
