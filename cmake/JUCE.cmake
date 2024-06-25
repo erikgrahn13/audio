@@ -6,6 +6,4 @@ FetchContent_Declare(
   SOURCE_DIR ${DEPENDENCY_DIR}/juce
 )
 
-set(JUCE_BUILD_EXTRAS ON CACHE INTERNAL "")
-set(JUCE_BUILD_EXAMPLES ON CACHE INTERNAL "")
 FetchContent_MakeAvailable(juce)
