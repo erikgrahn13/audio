@@ -41,6 +41,11 @@ AudioPluginAudioProcessor::AudioPluginAudioProcessor()
             parameters.addParameterListener(std::get<3>(filter).value()->getParameterID(), this);
         }
     }
+
+    // mAudioBuffer.setSize(1, 48000);
+    // mRingBuffer.setTotalSize(48000);
+    mAudioBuffer.setSize(1, 4096*4);
+    mRingBuffer.setTotalSize(4096*4);
 }
 
 AudioPluginAudioProcessor::~AudioPluginAudioProcessor()
@@ -211,7 +216,42 @@ void AudioPluginAudioProcessor::processBlock(juce::AudioBuffer<float> &buffer,
         }
 
         // ..do something to the data...
+        // if(mRingBuffer.getFreeSpace() < buffer.getNumSamples())
+        //     return;
+
+        // auto* channelData = buffer.getReadPointer(channel);
+
+        // int start1, size1, start2, size2;
+        // mRingBuffer.prepareToWrite(buffer.getNumSamples(), start1, size1, start2, size2);
+        // mAudioBuffer.copyFrom(0, start1, buffer.getReadPointer(channel), size1);
+
+        // if(size1 > 0)
+        //     mAudioBuffer.copyFrom(channel, start1, channelData, size1);
+        // if(size2 > 0)
+        //     mAudioBuffer.copyFrom(channel, start2, channelData + size1, size2);
+        
+        // mRingBuffer.finishedWrite(size1 + size2);
+        // nextFFTBlockReady.store(true);
     }
+
+    if(mRingBuffer.getFreeSpace() < buffer.getNumSamples())
+        return;
+
+        auto* channelData = buffer.getReadPointer(0);
+
+        int start1, size1, start2, size2;
+        mRingBuffer.prepareToWrite(buffer.getNumSamples(), start1, size1, start2, size2);
+        mAudioBuffer.copyFrom(0, start1, buffer.getReadPointer(0), size1);
+
+        if(size2 > 0)
+            mAudioBuffer.copyFrom(0, start2, buffer.getReadPointer(0, size1), size2);
+
+        
+        if (size1 > 0) mAudioBuffer.addFrom (0, start1, buffer.getReadPointer (0), size1);
+        if (size2 > 0) mAudioBuffer.addFrom (0, start2, buffer.getReadPointer (0, size1), size2);
+        mRingBuffer.finishedWrite(size1 + size2);
+        nextFFTBlockReady.store(true);
+
 }
 
 //==============================================================================
