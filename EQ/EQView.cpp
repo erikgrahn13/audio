@@ -3,8 +3,12 @@
 
 EQView::EQView(AudioPluginAudioProcessor& processor, juce::AudioProcessorValueTreeState& parameters)
 : mProcessor(processor),
-  mParameters(parameters)
+  mParameters(parameters),
+  mAnalyzerCurve(processor)
 {
+    addAndMakeVisible(mAnalyzerCurve);
+    mAnalyzerCurve.toBack();
+
     mHandles.push_back(std::make_unique<Handle>(Biquad::Type::kHighpass, dynamic_cast<juce::AudioParameterFloat*>(mParameters.getParameter("hpf_freq"))));
     mHandles.push_back(std::make_unique<Handle>(Biquad::Type::kLowpass, dynamic_cast<juce::AudioParameterFloat*>(mParameters.getParameter("lpf_freq"))));
     mHandles.push_back(std::make_unique<Handle>(Biquad::Type::kLowShelf, dynamic_cast<juce::AudioParameterFloat*>(mParameters.getParameter("LowShelfFreq")), dynamic_cast<juce::AudioParameterFloat*>(mParameters.getParameter("LowShelfGain"))));
@@ -29,9 +33,11 @@ EQView::EQView(AudioPluginAudioProcessor& processor, juce::AudioProcessorValueTr
         addAndMakeVisible(*handle);
         handle->toFront(true);
     }
+    // mAnalyzerCurve.toBack();
+    // this->toFront(false);
 
-    drawPlotCurve();
-    // startTimerHz(60);
+    // drawPlotCurve();
+    
 
 }
 
@@ -43,6 +49,7 @@ EQView::~EQView()
 void EQView::resized()
 {
     auto area = getLocalBounds();
+    mAnalyzerCurve.setBounds(getLocalBounds());
     // Calculate the position so the center of the handle represents the parameter value
     for(auto& handle: mHandles)
     {
@@ -54,7 +61,7 @@ void EQView::resized()
         handle->setBounds(static_cast<int>(xPosition - Handle::handSize / 2), static_cast<int>(yPosition - Handle::handSize / 2), Handle::handSize, Handle::handSize);
     }
 
-
+    
 }
 
 void EQView::paint(juce::Graphics &g)
@@ -62,11 +69,15 @@ void EQView::paint(juce::Graphics &g)
     g.setColour(Colours::black);
     g.fillRoundedRectangle(getLocalBounds().toFloat(), Handle::handSize);
 
+
+
     drawGrid(g);
 
+    drawPlotCurve(g);   
     g.setOpacity(1.); 
-    drawPlotCurve();   
+    g.setColour(juce::Colours::white);
     g.strokePath(frequencyResponse, juce::PathStrokeType(2.0));
+
 }
 
 std::vector<int> getFrequencies()
@@ -133,13 +144,14 @@ void EQView::drawHorizontalLines(juce::Graphics &g)
     }
 }
 
-void EQView::drawPlotCurve()
+void EQView::drawPlotCurve(juce::Graphics& g)
 {
     // g.setOpacity(1.);
     // juce::Path plot;
     frequencyResponse.clear();
 
     float width = getLocalBounds().getWidth();
+    float height = getLocalBounds().getHeight();
     auto bounds = getLocalBounds();
 
     const double outputMin = bounds.getBottom();
@@ -155,15 +167,24 @@ void EQView::drawPlotCurve()
             y += Biquad::filterResponse(48000, freq, handle->biquad.mCoeffs.a, handle->biquad.mCoeffs.b);
         }
 
+        y = juce::jmap(y, -18.0, 18.0, outputMin, outputMax);
         if(i == 0)
         {
-            frequencyResponse.startNewSubPath(bounds.getX(), juce::jmap(y, -18.0, 18.0, outputMin, outputMax));
+            frequencyResponse.startNewSubPath(bounds.getX(), y);
 
         }
 
-        frequencyResponse.lineTo(bounds.getX() + i, juce::jmap(y, -18.0, 18.0, outputMin, outputMax));
+        frequencyResponse.lineTo(bounds.getX() + i, y);
+
+        g.setOpacity(0.5);
+        g.setColour(juce::Colours::grey);
+        g.drawLine(i, height / 2, i,  y);
 
     }
+        // Close the path to form a filled shape
+    // frequencyResponse.lineTo(bounds.getX() + width, outputMin); // Line to bottom right
+    // frequencyResponse.lineTo(bounds.getX(), outputMin); // Line to bottom left
+    // frequencyResponse.closeSubPath(); // Close the path
     // g.strokePath(plot, juce::PathStrokeType(2.));
 
 }
@@ -172,11 +193,6 @@ void EQView::updateFrequencyResponse()
 {
     // drawPlotCurve();
     repaint();
-}
-
-void EQView::timerCallback()
-{
-
 }
 
 EQView::Handle::Handle(Biquad::Type type, juce::RangedAudioParameter* freqParam, juce::RangedAudioParameter* gainParam, juce::RangedAudioParameter* qParam)

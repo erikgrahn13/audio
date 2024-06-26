@@ -4,13 +4,14 @@
 #include <Biquad.h>
 #include <array>
 #include "PluginProcessor.h"
+#include "AnalyzerCurve.h"
 
-extern "C" {
-    size_t add(size_t left, size_t right);
-    typedef struct FFT FFT;
-}
+// extern "C" {
+//     size_t add(size_t left, size_t right);
+//     typedef struct FFT FFT;
+// }
 
-class EQView : public juce::Component, juce::Timer
+class EQView : public juce::Component
 {
     class Handle : public juce::Component
     {
@@ -55,16 +56,15 @@ class EQView : public juce::Component, juce::Timer
     void drawGrid(juce::Graphics &g);
     void drawVerticalLines(juce::Graphics& g);
     void drawHorizontalLines(juce::Graphics& g);
-    void drawPlotCurve();
+    void drawPlotCurve(juce::Graphics& g);
     void updateFrequencyResponse();
     std::vector<std::unique_ptr<Handle>>& getHandles() { return mHandles; }
-
-    void timerCallback() override;
 
     private:
     AudioPluginAudioProcessor& mProcessor;
     juce::AudioProcessorValueTreeState& mParameters;
     juce::Path frequencyResponse;
+    AnalyzerCurve mAnalyzerCurve;
 
     std::atomic<bool> parameterChanged{false};
 

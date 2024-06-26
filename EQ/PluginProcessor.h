@@ -59,6 +59,9 @@ public:
     juce::AudioProcessorValueTreeState& getVTSParameters() { return parameters; }
     std::vector<FilterTuple> getFilters() { return mFilters; }
 
+    juce::AudioBuffer<float> mAudioBuffer;
+    juce::AbstractFifo mRingBuffer{1};
+    std::atomic<bool> nextFFTBlockReady{false};
 private:
     juce::AudioProcessorValueTreeState parameters;
     juce::AudioParameterFloat* mHPF_Freq;
