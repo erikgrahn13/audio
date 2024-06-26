@@ -1,6 +1,5 @@
 #pragma once
 
-#include "fft.h"
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
 
