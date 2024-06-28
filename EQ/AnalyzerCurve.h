@@ -15,7 +15,7 @@ class AnalyzerCurve : public juce::Component, juce::Timer {
     private:
     AudioPluginAudioProcessor& mProcessor;
     juce::dsp::FFT mFFT{12};
-    juce::dsp::WindowingFunction<float> mWindow{mFFT.getSize(), juce::dsp::WindowingFunction<float>::hann};
+    juce::dsp::WindowingFunction<float> mWindow{static_cast<size_t>(mFFT.getSize()), juce::dsp::WindowingFunction<float>::hann};
     juce::AudioBuffer<float> mFFTBuffer{1, mFFT.getSize() * 2};
     juce::AudioBuffer<float> avgFFTBuffer{5, mFFT.getSize() / 2};
     int avgFFTBufferPtr = 1;
