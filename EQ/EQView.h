@@ -64,7 +64,6 @@ class EQView : public juce::Component
     AudioPluginAudioProcessor& mProcessor;
     juce::AudioProcessorValueTreeState& mParameters;
     juce::Path frequencyResponse;
-    AnalyzerCurve mAnalyzerCurve;
 
     std::atomic<bool> parameterChanged{false};
 
