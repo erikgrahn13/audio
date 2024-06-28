@@ -2,6 +2,7 @@
 
 #include "PluginProcessor.h"
 #include "EQView.h"
+#include "AnalyzerCurve.h"
 
 //==============================================================================
 class AudioPluginAudioProcessorEditor final : public juce::AudioProcessorEditor, juce::AudioProcessorValueTreeState::Listener
@@ -22,6 +23,7 @@ private:
     AudioPluginAudioProcessor &processorRef;
     juce::AudioProcessorValueTreeState &mParameters;
     EQView mEQView;
+    AnalyzerCurve mAnalyzerCurve;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AudioPluginAudioProcessorEditor)
 };

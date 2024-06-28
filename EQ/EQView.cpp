@@ -3,11 +3,8 @@
 
 EQView::EQView(AudioPluginAudioProcessor& processor, juce::AudioProcessorValueTreeState& parameters)
 : mProcessor(processor),
-  mParameters(parameters),
-  mAnalyzerCurve(processor)
+  mParameters(parameters)
 {
-    addAndMakeVisible(mAnalyzerCurve);
-    mAnalyzerCurve.toBack();
 
     mHandles.push_back(std::make_unique<Handle>(Biquad::Type::kHighpass, dynamic_cast<juce::AudioParameterFloat*>(mParameters.getParameter("hpf_freq"))));
     mHandles.push_back(std::make_unique<Handle>(Biquad::Type::kLowpass, dynamic_cast<juce::AudioParameterFloat*>(mParameters.getParameter("lpf_freq"))));
@@ -33,12 +30,6 @@ EQView::EQView(AudioPluginAudioProcessor& processor, juce::AudioProcessorValueTr
         addAndMakeVisible(*handle);
         handle->toFront(true);
     }
-    // mAnalyzerCurve.toBack();
-    // this->toFront(false);
-
-    // drawPlotCurve();
-    
-
 }
 
 EQView::~EQView()
@@ -49,7 +40,7 @@ EQView::~EQView()
 void EQView::resized()
 {
     auto area = getLocalBounds();
-    mAnalyzerCurve.setBounds(getLocalBounds());
+
     // Calculate the position so the center of the handle represents the parameter value
     for(auto& handle: mHandles)
     {
@@ -66,8 +57,7 @@ void EQView::resized()
 
 void EQView::paint(juce::Graphics &g)
 {
-    g.setColour(Colours::black);
-    g.fillRoundedRectangle(getLocalBounds().toFloat(), Handle::handSize);
+
 
 
 
@@ -146,8 +136,7 @@ void EQView::drawHorizontalLines(juce::Graphics &g)
 
 void EQView::drawPlotCurve(juce::Graphics& g)
 {
-    // g.setOpacity(1.);
-    // juce::Path plot;
+
     frequencyResponse.clear();
 
     float width = getLocalBounds().getWidth();
@@ -156,6 +145,7 @@ void EQView::drawPlotCurve(juce::Graphics& g)
 
     const double outputMin = bounds.getBottom();
     const double outputMax = bounds.getY();
+    const auto sampleRate = mProcessor.getSampleRate();
     
     for(int i = 0; i < width; ++i)
     {
@@ -164,7 +154,7 @@ void EQView::drawPlotCurve(juce::Graphics& g)
 
         for(auto& handle: mHandles)
         {
-            y += Biquad::filterResponse(48000, freq, handle->biquad.mCoeffs.a, handle->biquad.mCoeffs.b);
+            y += Biquad::filterResponse(sampleRate, freq, handle->biquad.mCoeffs.a, handle->biquad.mCoeffs.b);
         }
 
         y = juce::jmap(y, -18.0, 18.0, outputMin, outputMax);
@@ -181,17 +171,10 @@ void EQView::drawPlotCurve(juce::Graphics& g)
         g.drawLine(i, height / 2, i,  y);
 
     }
-        // Close the path to form a filled shape
-    // frequencyResponse.lineTo(bounds.getX() + width, outputMin); // Line to bottom right
-    // frequencyResponse.lineTo(bounds.getX(), outputMin); // Line to bottom left
-    // frequencyResponse.closeSubPath(); // Close the path
-    // g.strokePath(plot, juce::PathStrokeType(2.));
-
 }
 
 void EQView::updateFrequencyResponse()
 {
-    // drawPlotCurve();
     repaint();
 }
 
