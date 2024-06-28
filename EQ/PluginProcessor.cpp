@@ -42,10 +42,9 @@ AudioPluginAudioProcessor::AudioPluginAudioProcessor()
         }
     }
 
-    // mAudioBuffer.setSize(1, 48000);
-    // mRingBuffer.setTotalSize(48000);
     mAudioBuffer.setSize(1, 4096*4);
     mRingBuffer.setTotalSize(4096*4);
+
 }
 
 AudioPluginAudioProcessor::~AudioPluginAudioProcessor()

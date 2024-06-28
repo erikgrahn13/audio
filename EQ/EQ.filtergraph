@@ -61,12 +61,12 @@
       </OUTPUTS>
     </LAYOUT>
   </FILTER>
-  <FILTER uid="7" x="0.505" y="0.5725806451612904" useARA="0" uiLastX_Normal="986"
-          uiLastY_Normal="243" uiopen_Normal="1" uiLastX_Generic="1133"
-          uiLastY_Generic="259" uiopen_Generic="1">
+  <FILTER uid="7" x="0.505" y="0.5725806451612904" useARA="0" uiLastX_Normal="1255"
+          uiLastY_Normal="263" uiopen_Normal="1" uiLastX_Generic="1601"
+          uiLastY_Generic="243" uiopen_Generic="1">
     <PLUGIN name="EQ" format="VST3" category="Fx" manufacturer="yourcompany"
             version="0.0.1" file="C:\Users\erikg\Development\audio\build\EQ\EQ_artefacts\Debug\VST3\EQ.vst3\Contents\x86_64-win\EQ.vst3"
-            uniqueId="970487f5" isInstrument="0" fileTime="19007926b96" infoUpdateTime="1900792d9b7"
+            uniqueId="970487f5" isInstrument="0" fileTime="190590c5cf9" infoUpdateTime="190590cb3b6"
             numInputs="2" numOutputs="2" isShell="0" hasARAExtension="0"
             uid="c0053e5b"/>
     <STATE>191.VMjLgXK....O+fWarAhckI2bo8la8HRLt.iHfTlai8FYo41Y8HRUTYTK3HxO9.BOVMEUy.Ea0cVZtMEcgQWY9vSRC8Vav8lak4Fc9XCLt3hKt3hKt3hKt3hYRUUSTEETIckVwTjQisVTTgkdEYjKAQjYPQSPWgUdMcjKAQjct3hdA4hKt3hKt3hKtnTUv.UQAslXuk0UXoWUFE0YQcEV77RRC8Vav8lak4Fc9vyKVMEUy.Ea0cVZtMEcgQWY9..</STATE>
@@ -79,11 +79,10 @@
       </OUTPUTS>
     </LAYOUT>
   </FILTER>
-  <FILTER uid="8" x="0.5125" y="0.3044354838709677" useARA="0" uiLastX_Normal="419"
-          uiLastY_Normal="345" uiopen_Normal="1">
+  <FILTER uid="9" x="0.48625" y="0.2862903225806452" useARA="0">
     <PLUGIN name="AudioFilePlayer" format="VST3" category="Fx" manufacturer="yourcompany"
-            version="0.0.1" file="C:\Users\erikg\Development\audio\build\utilities\AudioFilePlayer\AudioFilePlayer_artefacts\Release\VST3\AudioFilePlayer.vst3\Contents\x86_64-win\AudioFilePlayer.vst3"
-            uniqueId="970487f5" isInstrument="0" fileTime="18fbec57cf4" infoUpdateTime="1900792d9b7"
+            version="0.0.1" file="C:\Users\erikg\Development\audio\build\utilities\AudioFilePlayer\AudioFilePlayer_artefacts\Debug\VST3\AudioFilePlayer.vst3\Contents\x86_64-win\AudioFilePlayer.vst3"
+            uniqueId="970487f5" isInstrument="0" fileTime="1905602b16a" infoUpdateTime="190590cb3b6"
             numInputs="2" numOutputs="2" isShell="0" hasARAExtension="0"
             uid="c0053e5b"/>
     <STATE>450.VMjLgja....O+fWarAhckI2bo8la8HRLt.iHfTlai8FYo41Y8HRUTYTK3HxO9.BOVMEUy.Ea0cVZtMEcgQWY9vSRC8Vav8lak4Fc9HSMy3hUMoFSmY1Rt3hKt7zJlcUXxEDZisVRxH1a3vVX3fjTLQmKogjYTwVXogiQY8FMwjENHIUUTkEUKMCR38TNtHzSPUDahcFLVkkdUwlX4QyPOAUQpQUPvPDRuEkUOglXVg0azvFRlg0UXIWUWkENHIDSz4RZHU2LC8DTEoFUAACQH8VTV8DZ1ESX0ETaHYFVWgkbUcUV3fjPLQmKogTcyLzSPUjZTEDLDgzaQY0Sn4xQgc1ZsgjYXcEVxU0UYgCRBwDctjFR0MyPOAUQpQUPvPDRuEkUOgFSGMVcA0FRlg0UXIWUWkENHIDSz4RZHU2LC8TctTEV3UjUgsVTWkEdM01St3hKt3hKt3hKt3hKJUELPUTPqI1aYcEV5UkQQcVTWgkKDAkKBs1QhcVSxHlKDAkKC4BTG4hKt3hKt3hKt3FUUMTUDQEdqw1XmE0UYQTQFM1YAwyKIMzasA2atUlaz4COuX0TTMCTrU2Yo41TzEFck4C.</STATE>
@@ -98,6 +97,6 @@
   </FILTER>
   <CONNECTION srcFilter="7" srcChannel="0" dstFilter="3" dstChannel="0"/>
   <CONNECTION srcFilter="7" srcChannel="1" dstFilter="3" dstChannel="1"/>
-  <CONNECTION srcFilter="8" srcChannel="0" dstFilter="7" dstChannel="0"/>
-  <CONNECTION srcFilter="8" srcChannel="1" dstFilter="7" dstChannel="1"/>
+  <CONNECTION srcFilter="9" srcChannel="0" dstFilter="7" dstChannel="0"/>
+  <CONNECTION srcFilter="9" srcChannel="1" dstFilter="7" dstChannel="1"/>
 </FILTERGRAPH>
