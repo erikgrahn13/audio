@@ -46,7 +46,7 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(doxygen-awesome)
 
-set(DOXYGEN_USE_MDFILE_AS_MAINPAGE YES)
+set(DOXYGEN_USE_MDFILE_AS_MAINPAGE ${CMAKE_SOURCE_DIR}/README.md)
 set(DOXYGEN_EXCLUDE_PATTERNS */external/* *build/*)
 set(DOXYGEN_HTML_EXTRA_STYLESHEET ${doxygen-awesome_SOURCE_DIR}/doxygen-awesome.css
                                   ${doxygen-awesome_SOURCE_DIR}/doxygen-awesome-sidebar-only.css
