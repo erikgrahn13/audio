@@ -11,8 +11,8 @@ enum class OscType
 class Oscillator
 {
 public:
-    Oscillator(OscType oscType, float amplitude, float freq, float sampleRate);
-    float generateSample();
+    Oscillator(OscType oscType);
+    float generateSineSample();
     void setAmplitude(float amplitude) { mAmplitude = amplitude; };
     void setFrequency(float frequency) { mFrequency = frequency; };
 
