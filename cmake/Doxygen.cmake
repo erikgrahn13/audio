@@ -1,46 +1,43 @@
-# if(WIN32)
-#     set(DOXYGEN_URL "https://github.com/doxygen/doxygen/releases/download/Release_1_11_0/doxygen-1.11.0.windows.x64.bin.zip")
-#     set(DOXYGEN_BINARY_PATH "doxygen.exe")
-#     set(SHALL_NOT_EXTRACT FALSE)
-# elseif(APPLE)
-#     set(DOXYGEN_URL "https://github.com/doxygen/doxygen/releases/download/Release_1_11_0/Doxygen-1.11.0.dmg")
-#     set(DOXYGEN_BINARY_PATH "Contents/Resources/doxygen")
-#     set(SHALL_NOT_EXTRACT TRUE)
-# elseif(UNIX)
-#     set(DOXYGEN_URL "https://github.com/doxygen/doxygen/releases/download/Release_1_11_0/doxygen-1.11.0.linux.bin.tar.gz")
-#     set(DOXYGEN_BINARY_PATH "bin/doxygen")
-#     set(SHALL_NOT_EXTRACT FALSE)
-# endif()
+if(WIN32)
+    set(DOXYGEN_URL "https://github.com/doxygen/doxygen/releases/download/Release_1_11_0/doxygen-1.11.0.windows.x64.bin.zip")
+    set(DOXYGEN_BINARY_PATH "doxygen.exe")
+    set(SHALL_NOT_EXTRACT FALSE)
+elseif(APPLE)
+    set(DOXYGEN_URL "https://github.com/doxygen/doxygen/releases/download/Release_1_11_0/Doxygen-1.11.0.dmg")
+    set(DOXYGEN_BINARY_PATH "Contents/Resources/doxygen")
+    set(SHALL_NOT_EXTRACT TRUE)
+elseif(UNIX)
+    set(DOXYGEN_URL "https://github.com/doxygen/doxygen/releases/download/Release_1_11_0/doxygen-1.11.0.linux.bin.tar.gz")
+    set(DOXYGEN_BINARY_PATH "bin/doxygen")
+    set(SHALL_NOT_EXTRACT FALSE)
+endif()
 
-# FetchContent_Declare(
-#   doxygen
-#   URL ${DOXYGEN_URL}
-#   DOWNLOAD_NO_EXTRACT ${SHALL_NOT_EXTRACT}
-# )
+FetchContent_Declare(
+  doxygen
+  URL ${DOXYGEN_URL}
+  DOWNLOAD_NO_EXTRACT ${SHALL_NOT_EXTRACT}
+)
 
-# FetchContent_MakeAvailable(doxygen)
-# if(APPLE)
-#   execute_process(
-#     COMMAND hdiutil attach ${doxygen_SOURCE_DIR}/Doxygen-1.11.0.dmg
-#     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-#   )
+FetchContent_MakeAvailable(doxygen)
+if(APPLE)
+  execute_process(
+    COMMAND hdiutil attach ${doxygen_SOURCE_DIR}/Doxygen-1.11.0.dmg
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+  )
 
-#   execute_process(
-#     COMMAND ${CMAKE_COMMAND} -E copy_directory "/Volumes/Doxygen/Doxygen.app" ${doxygen_SOURCE_DIR}
-#     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-#   )
+  execute_process(
+    COMMAND ${CMAKE_COMMAND} -E copy_directory "/Volumes/Doxygen/Doxygen.app" ${doxygen_SOURCE_DIR}
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+  )
 
-#   execute_process(
-#     COMMAND hdiutil detach "/Volumes/Doxygen"
-#     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-#   )
-# endif()
+  execute_process(
+    COMMAND hdiutil detach "/Volumes/Doxygen"
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+  )
+endif()
 
-# set(DOXYGEN_EXECUTABLE ${doxygen_SOURCE_DIR}/${DOXYGEN_BINARY_PATH})
-# include(FindDoxygen)
-
+set(DOXYGEN_EXECUTABLE ${doxygen_SOURCE_DIR}/${DOXYGEN_BINARY_PATH})
 find_package(Doxygen REQUIRED)
-
 
 FetchContent_Declare(
     doxygen-awesome
