@@ -50,3 +50,7 @@ jobs:
         
       - name: Tests
         run: ctest --test-dir build -C Release --output-on-failure
+
+
+      - name: Generate documentation
+        run: cmake --build build --target docs --config Release -j 4
