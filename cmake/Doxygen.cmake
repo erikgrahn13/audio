@@ -1,25 +1,48 @@
 if(WIN32)
     set(DOXYGEN_URL "https://github.com/doxygen/doxygen/releases/download/Release_1_11_0/doxygen-1.11.0.windows.x64.bin.zip")
     set(DOXYGEN_BINARY_PATH "doxygen.exe")
+    set(SHALL_NOT_EXTRACT FALSE)
 elseif(APPLE)
     set(DOXYGEN_URL "https://github.com/doxygen/doxygen/releases/download/Release_1_11_0/Doxygen-1.11.0.dmg")
-    set(DOXYGEN_BINARY_PATH "doxygen-1.11.0/bin/doxygen")
+    set(DOXYGEN_BINARY_PATH "Contents/Resources/doxygen")
+    set(SHALL_NOT_EXTRACT TRUE)
 elseif(UNIX)
     set(DOXYGEN_URL "https://github.com/doxygen/doxygen/releases/download/Release_1_11_0/doxygen-1.11.0.linux.x86_64.bin.tar.gz")
     set(DOXYGEN_BINARY_PATH "doxygen-1.11.0/bin/doxygen")
+    set(SHALL_NOT_EXTRACT FALSE)
 endif()
 
 FetchContent_Declare(
   doxygen
   URL ${DOXYGEN_URL}
+  DOWNLOAD_NO_EXTRACT ${SHALL_NOT_EXTRACT}
 )
+
 FetchContent_MakeAvailable(doxygen)
+if(APPLE)
+  execute_process(
+    COMMAND hdiutil attach ${doxygen_SOURCE_DIR}/Doxygen-1.11.0.dmg
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+  )
+
+  execute_process(
+    COMMAND ${CMAKE_COMMAND} -E copy_directory "/Volumes/Doxygen/Doxygen.app" ${doxygen_SOURCE_DIR}
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+  )
+
+  execute_process(
+    COMMAND hdiutil detach "/Volumes/Doxygen"
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+  )
+endif()
+
 
 FetchContent_Declare(
-  doxygen-awesome
-  GIT_REPOSITORY https://github.com/jothepro/doxygen-awesome-css.git
-  GIT_TAG v2.3.3
+    doxygen-awesome
+    GIT_REPOSITORY https://github.com/jothepro/doxygen-awesome-css.git
+    GIT_TAG v2.3.3
 )
+
 
 FetchContent_MakeAvailable(doxygen-awesome)
 
