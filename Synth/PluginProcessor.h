@@ -47,10 +47,12 @@ public:
     void setStateInformation(const void *data, int sizeInBytes) override;
 
     juce::AudioProcessorValueTreeState parameters;
+    juce::MidiKeyboardState keyboardState;
 
 private:
     std::atomic<bool> requiresUpdate{true};
     juce::Synthesiser synth;
+
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(SynthAudioProcessor)
 };

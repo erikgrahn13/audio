@@ -3,9 +3,10 @@
 
 //==============================================================================
 SynthAudioProcessorEditor::SynthAudioProcessorEditor(SynthAudioProcessor &p)
-    : AudioProcessorEditor(&p), processorRef(p)
+    : AudioProcessorEditor(&p), processorRef(p), keyboardComponent(processorRef.keyboardState, juce::MidiKeyboardComponent::horizontalKeyboard)
 {
-    setSize(800, 300);
+    setSize(800, 600);
+    addAndMakeVisible(keyboardComponent);
 }
 
 SynthAudioProcessorEditor::~SynthAudioProcessorEditor()
@@ -24,4 +25,5 @@ void SynthAudioProcessorEditor::paint(juce::Graphics &g)
 
 void SynthAudioProcessorEditor::resized()
 {
+    keyboardComponent.setBounds(getLocalBounds().removeFromBottom(getLocalBounds().getHeight() / 2));
 }
