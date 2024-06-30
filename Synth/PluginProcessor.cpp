@@ -13,7 +13,7 @@ SynthAudioProcessor::SynthAudioProcessor()
                       #endif
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
-                       )
+                       ), parameters(*this, nullptr, "Parameters", createParameters())
 {
 }
 
@@ -154,6 +154,9 @@ void SynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     // Alternatively, you can process the samples with the channels
     // interleaved by keeping the same state.
 
+    mAmplitude = parameters.getRawParameterValue("GAIN")->load();
+    mFrequency = parameters.getRawParameterValue("FREQUENCY")->load();
+
     auto *leftChannel = buffer.getWritePointer(0);
     auto *rightChannel = buffer.getWritePointer(1);
     for (auto sample : std::ranges::iota_view{0, buffer.getNumSamples()})
@@ -199,4 +202,15 @@ void SynthAudioProcessor::setStateInformation (const void* data, int sizeInBytes
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new SynthAudioProcessor();
+}
+
+juce::AudioProcessorValueTreeState::ParameterLayout SynthAudioProcessor::createParameters()
+{
+    std::vector<std::unique_ptr<juce::RangedAudioParameter>> params;
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("GAIN", "Gain",
+                                                                 0.0f, 0.5f, 0.1f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("FREQUENCY", "Frequency",
+                                                                 80.0f, 2000.0f, 440.0f));                                                                 
+
+    return {params.begin(), params.end()};
 }

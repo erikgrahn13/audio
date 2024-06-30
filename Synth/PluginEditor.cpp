@@ -7,40 +7,30 @@ SynthAudioProcessorEditor::SynthAudioProcessorEditor(SynthAudioProcessor& p)
 {
     setSize(800, 300);
 
-    // Add and configure frequency knob
-    addAndMakeVisible(freqKnob);
-    freqKnob.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
-    freqKnob.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 100, 25);
-    freqKnob.setTextValueSuffix(" Hz");
-    freqKnob.setRange(80.0, 2000.0, 1.0);
-    freqKnob.setValue(processorRef.getFrequency());
+    frequencySliderAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(processorRef.parameters, "FREQUENCY", freqSlider);
+    addAndMakeVisible(freqSlider);
+    freqSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
+    freqSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 100, 25);
+    freqSlider.setTextValueSuffix(" Hz");
+    freqSlider.setRange(80.0, 2000.0, 1.0);
+    freqSlider.setValue(processorRef.parameters.getRawParameterValue("FREQUENCY")->load());
 
-    freqKnob.onValueChange = [this](){
-        processorRef.setFrequency(freqKnob.getValue());
-    };
-
-    // Add and configure frequency label
     addAndMakeVisible(freqLabel);
     freqLabel.setText("Frequency", juce::dontSendNotification);
     freqLabel.setJustificationType(juce::Justification::centred);
-    freqLabel.attachToComponent(&freqKnob, false);
+    freqLabel.attachToComponent(&freqSlider, false);
 
-    // Add and configure gain knob
-    addAndMakeVisible(gainKnob);
-    gainKnob.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
-    gainKnob.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 100, 25);
-    gainKnob.setRange(0.0, 0.5, 0.001);
-    gainKnob.setValue(processorRef.getAmplitude());
+    gainSliderAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(processorRef.parameters, "GAIN", gainSlider);
+    addAndMakeVisible(gainSlider);
+    gainSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
+    gainSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 100, 25);
+    gainSlider.setRange(0.0, 0.5, 0.001);
+    gainSlider.setValue(processorRef.parameters.getRawParameterValue("GAIN")->load());
 
-    gainKnob.onValueChange = [this](){
-        processorRef.setAmplitude(gainKnob.getValue());
-    };
-
-    // Add and configure gain label
     addAndMakeVisible(gainLabel);
     gainLabel.setText("Gain", juce::dontSendNotification);
     gainLabel.setJustificationType(juce::Justification::centred);
-    gainLabel.attachToComponent(&gainKnob, false);
+    gainLabel.attachToComponent(&gainSlider, false);
 }
 
 
@@ -61,8 +51,8 @@ void SynthAudioProcessorEditor::paint (juce::Graphics& g)
 
 void SynthAudioProcessorEditor::resized()
 {
-    freqKnob.setBounds(10, 40, getWidth() / 2 - 20, getHeight() - 50);
+    freqSlider.setBounds(10, 40, getWidth() / 2 - 20, getHeight() - 50);
     freqLabel.setBounds(10, 10, getWidth() / 2 - 20, 20);
-    gainKnob.setBounds(getWidth() / 2 + 10, 40, getWidth() / 2 - 20, getHeight() - 50);
+    gainSlider.setBounds(getWidth() / 2 + 10, 40, getWidth() / 2 - 20, getHeight() - 50);
     gainLabel.setBounds(getWidth() / 2 + 10, 10, getWidth() / 2 - 20, 20);
 }
