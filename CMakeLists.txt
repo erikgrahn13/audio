@@ -18,3 +18,4 @@ set(CMAKE_OSX_DEPLOYMENT_TARGET "12.7" CACHE STRING "Minimum OS X deployment ver
 add_subdirectory(utilities)
 add_subdirectory(resources)
 add_subdirectory(EQ)
+add_subdirectory(Synth)
