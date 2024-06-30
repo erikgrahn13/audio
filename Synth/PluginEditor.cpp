@@ -14,7 +14,10 @@ SynthAudioProcessorEditor::SynthAudioProcessorEditor(SynthAudioProcessor& p)
     freqKnob.setTextValueSuffix(" Hz");
     freqKnob.setRange(80.0, 2000.0, 1.0);
     freqKnob.setValue(processorRef.getFrequency());
-    freqKnob.addListener(this);
+
+    freqKnob.onValueChange = [this](){
+        processorRef.setFrequency(freqKnob.getValue());
+    };
 
     // Add and configure frequency label
     addAndMakeVisible(freqLabel);
@@ -28,7 +31,10 @@ SynthAudioProcessorEditor::SynthAudioProcessorEditor(SynthAudioProcessor& p)
     gainKnob.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 100, 25);
     gainKnob.setRange(0.0, 0.5, 0.001);
     gainKnob.setValue(processorRef.getAmplitude());
-    gainKnob.addListener(this);
+
+    gainKnob.onValueChange = [this](){
+        processorRef.setAmplitude(gainKnob.getValue());
+    };
 
     // Add and configure gain label
     addAndMakeVisible(gainLabel);
@@ -59,14 +65,4 @@ void SynthAudioProcessorEditor::resized()
     freqLabel.setBounds(10, 10, getWidth() / 2 - 20, 20);
     gainKnob.setBounds(getWidth() / 2 + 10, 40, getWidth() / 2 - 20, getHeight() - 50);
     gainLabel.setBounds(getWidth() / 2 + 10, 10, getWidth() / 2 - 20, 20);
-}
-
-
-
-void SynthAudioProcessorEditor::sliderValueChanged(juce::Slider *slider)
-{
-    if (slider == &freqKnob)
-        processorRef.setFrequency(freqKnob.getValue());
-    else if (slider == &gainKnob)
-        processorRef.setAmplitude(gainKnob.getValue());
 }
