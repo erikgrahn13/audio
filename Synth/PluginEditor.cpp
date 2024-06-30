@@ -2,14 +2,42 @@
 #include "PluginEditor.h"
 
 //==============================================================================
-SynthAudioProcessorEditor::SynthAudioProcessorEditor (SynthAudioProcessor& p)
-    : AudioProcessorEditor (&p), processorRef (p)
+SynthAudioProcessorEditor::SynthAudioProcessorEditor(SynthAudioProcessor& p)
+    : AudioProcessorEditor(&p), processorRef(p)
 {
-    juce::ignoreUnused (processorRef);
-    // Make sure that before the constructor has finished, you've set the
-    // editor's size to whatever you need it to be.
-    setSize (400, 300);
+    setSize(800, 300);
+
+    // Add and configure frequency knob
+    addAndMakeVisible(freqKnob);
+    freqKnob.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
+    freqKnob.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 100, 25);
+    freqKnob.setTextValueSuffix(" Hz");
+    freqKnob.setRange(80.0, 2000.0, 1.0);
+    freqKnob.setValue(processorRef.getFrequency());
+    freqKnob.addListener(this);
+
+    // Add and configure frequency label
+    addAndMakeVisible(freqLabel);
+    freqLabel.setText("Frequency", juce::dontSendNotification);
+    freqLabel.setJustificationType(juce::Justification::centred);
+    freqLabel.attachToComponent(&freqKnob, false);
+
+    // Add and configure gain knob
+    addAndMakeVisible(gainKnob);
+    gainKnob.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
+    gainKnob.setTextBoxStyle(juce::Slider::TextBoxBelow, true, 100, 25);
+    gainKnob.setRange(0.0, 0.5, 0.001);
+    gainKnob.setValue(processorRef.getAmplitude());
+    gainKnob.addListener(this);
+
+    // Add and configure gain label
+    addAndMakeVisible(gainLabel);
+    gainLabel.setText("Gain", juce::dontSendNotification);
+    gainLabel.setJustificationType(juce::Justification::centred);
+    gainLabel.attachToComponent(&gainKnob, false);
 }
+
+
 
 SynthAudioProcessorEditor::~SynthAudioProcessorEditor()
 {
@@ -23,11 +51,22 @@ void SynthAudioProcessorEditor::paint (juce::Graphics& g)
 
     g.setColour (juce::Colours::white);
     g.setFont (15.0f);
-    g.drawFittedText ("Hello World!", getLocalBounds(), juce::Justification::centred, 1);
 }
 
 void SynthAudioProcessorEditor::resized()
 {
-    // This is generally where you'll want to lay out the positions of any
-    // subcomponents in your editor..
+    freqKnob.setBounds(10, 40, getWidth() / 2 - 20, getHeight() - 50);
+    freqLabel.setBounds(10, 10, getWidth() / 2 - 20, 20);
+    gainKnob.setBounds(getWidth() / 2 + 10, 40, getWidth() / 2 - 20, getHeight() - 50);
+    gainLabel.setBounds(getWidth() / 2 + 10, 10, getWidth() / 2 - 20, 20);
+}
+
+
+
+void SynthAudioProcessorEditor::sliderValueChanged(juce::Slider *slider)
+{
+    if (slider == &freqKnob)
+        processorRef.setFrequency(freqKnob.getValue());
+    else if (slider == &gainKnob)
+        processorRef.setAmplitude(gainKnob.getValue());
 }

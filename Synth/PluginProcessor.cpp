@@ -1,5 +1,8 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include <numbers>
+#include <ranges>
+#include <cmath>
 
 //==============================================================================
 SynthAudioProcessor::SynthAudioProcessor()
@@ -88,7 +91,12 @@ void SynthAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
-    juce::ignoreUnused (sampleRate, samplesPerBlock);
+    juce::ignoreUnused (samplesPerBlock);
+
+    mAmplitude = 0.1;
+    mFrequency = 440.0;
+    mAngle = 0.0;
+    mSampleRate = sampleRate;
 }
 
 void SynthAudioProcessor::releaseResources()
@@ -145,11 +153,17 @@ void SynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     // the samples and the outer loop is handling the channels.
     // Alternatively, you can process the samples with the channels
     // interleaved by keeping the same state.
-    for (int channel = 0; channel < totalNumInputChannels; ++channel)
+
+    auto *leftChannel = buffer.getWritePointer(0);
+    auto *rightChannel = buffer.getWritePointer(1);
+    for (auto sample : std::ranges::iota_view{0, buffer.getNumSamples()})
     {
-        auto* channelData = buffer.getWritePointer (channel);
-        juce::ignoreUnused (channelData);
-        // ..do something to the data...
+        auto sineSample = std::sin(mAngle) * mAmplitude;
+        mAngle += 2.0 * std::numbers::pi * mFrequency / mSampleRate;
+        if (mAngle >= 2.0 * std::numbers::pi)
+            mAngle -= 2.0 * std::numbers::pi;
+        leftChannel[sample] = sineSample;
+        rightChannel[sample] = sineSample;
     }
 }
 
