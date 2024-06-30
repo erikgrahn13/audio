@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.22)
 
-project(Audio)
+project(Audio VERSION 0.1)
 
 enable_testing()
 set(CMAKE_CXX_STANDARD 20)
@@ -13,6 +13,7 @@ include (FetchContent)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
 include(JUCE)
 include(Pluginval)
+include(Doxygen)
 
 set(CMAKE_OSX_DEPLOYMENT_TARGET "12.7" CACHE STRING "Minimum OS X deployment version" FORCE)
 add_subdirectory(utilities)
