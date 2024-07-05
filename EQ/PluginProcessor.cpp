@@ -125,6 +125,8 @@ void AudioPluginAudioProcessor::prepareToPlay(double sampleRate, int samplesPerB
     {
         auto& [biquad, freqParam, gainParam, QParam] = i;
 
+        biquad.setSampleRate(sampleRate);
+
         biquad.setFrequency(dynamic_cast<juce::AudioParameterFloat*>(freqParam)->get());
 
         if(gainParam)
