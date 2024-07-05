@@ -51,7 +51,9 @@ jobs:
       - name: Tests
         run: ctest --test-dir build -C Release --output-on-failure
 
-
-      - name: Generate documentation
+      - name: Upload build artifact
         if: matrix.os == 'ubuntu-latest'
-        run: cmake --build build --target docs --config Release -j 4
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-linux
+          path: build
