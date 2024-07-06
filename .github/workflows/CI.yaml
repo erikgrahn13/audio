@@ -13,13 +13,6 @@ jobs:
     strategy:
       matrix:
         os: [windows-latest, macos-latest, ubuntu-latest]
-        include:
-          - os: windows-latest
-            build_dir: build-win
-          - os: macos-latest
-            build_dir: build-mac
-          - os: ubuntu-latest
-            build_dir: build-linux 
 
     steps:
       - name: Checkout repository
@@ -51,9 +44,34 @@ jobs:
       - name: Tests
         run: ctest --test-dir build -C Release --output-on-failure
 
-      - name: Upload build artifact
+      - name: Generate documentation
         if: matrix.os == 'ubuntu-latest'
-        uses: actions/upload-artifact@v2
+        run: cmake --build build --target docs --config Release -j 4
+
+
+      - name: Upload build artifact
+        if: matrix.os == 'ubuntu-latest' && github.ref == 'refs/heads/master' && github.event_name == 'push'
+        uses: actions/upload-artifact@v4
         with:
-          name: build-linux
-          path: build
+          name: doxygen-docs
+          path: build/docs/html
+
+  deploy:
+    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download Doxygen Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: doxygen-docs
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: build/docs/html
