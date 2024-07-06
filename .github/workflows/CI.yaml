@@ -81,6 +81,10 @@ jobs:
         with:
           name: doxygen-docs
 
+        
+      - name: List files for debug
+        run: ls -la build/html
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
