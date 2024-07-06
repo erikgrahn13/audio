@@ -1,0 +1,323 @@
+<!-- HTML header for doxygen 1.11.0-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="$langISO">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Audio: AudioPluginAudioProcessor Class Reference</title>
+<!--BEGIN PROJECT_ICON-->
+<link rel="icon" href="$projecticon" type="image/x-icon" />
+<!--END PROJECT_ICON-->
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<!--BEGIN COPY_CLIPBOARD-->
+<script type="text/javascript" src="clipboard.js"></script>
+<!--END COPY_CLIPBOARD-->
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+$darkmode
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+<link href="custom.css" rel="stylesheet" type="text/css"/>
+  <!-- ... other metadata & script includes ... -->
+  <script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+  <script type="text/javascript" src="doxygen-awesome-fragment-copy-button.js"></script>
+  <script type="text/javascript" src="doxygen-awesome-paragraph-link.js"></script>
+  <script type="text/javascript">
+    DoxygenAwesomeDarkModeToggle.init()
+    DoxygenAwesomeParagraphLink.init()
+    DoxygenAwesomeFragmentCopyButton.init()
+  </script>
+</head>
+<body>
+<!-- https://tholman.com/github-corners/ -->
+<a href="https://github.com/erikgrahn13/audio" class="github-corner" title="View source on GitHub" target="_blank" rel="noopener noreferrer">
+  <svg viewBox="0 0 250 250" width="80" height="80" style="position: absolute; top: 0; border: 0; right: 0; z-index: 99;" aria-hidden="true">
+  <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">Audio<span id="projectnumber">&#160;v0.1</span>
+   </div>
+  </td>
+ </tr>
+   <!--BEGIN FULL_SIDEBAR-->
+   <tr><td colspan="2">        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <img id="MSearchSelect" src="search/mag_sel.svg"
+               onmouseover="return searchBox.OnSearchSelectShow()"
+               onmouseout="return searchBox.OnSearchSelectHide()"
+               alt=""/>
+          <input type="text" id="MSearchField" value="Search" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.svg" alt=""/></a>
+          </span>
+        </div>
+</td></tr>
+   <!--END FULL_SIDEBAR-->
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+var searchBox = new SearchBox("searchBox", "search",false,'Search','.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',true,false,'search.php','Search');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('classAudioPluginAudioProcessor.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-attribs">Public Attributes</a> &#124;
+<a href="classAudioPluginAudioProcessor-members.html">List of all members</a>  </div>
+  <div class="headertitle">
+<div class="title">AudioPluginAudioProcessor Class Reference<span class="mlabels"><span class="mlabel">final</span></span></div>  </div>
+</div><!--header-->
+<div class="contents">
+<div class="dynheader">
+Inheritance diagram for AudioPluginAudioProcessor:</div>
+<div class="dyncontent">
+<div class="center"><img src="classAudioPluginAudioProcessor__inherit__graph.png" border="0" usemap="#aAudioPluginAudioProcessor_inherit__map" alt="Inheritance graph"/></div>
+<map name="aAudioPluginAudioProcessor_inherit__map" id="aAudioPluginAudioProcessor_inherit__map">
+<area shape="rect" title=" " alt="" coords="5,95,204,121"/>
+<area shape="rect" title=" " alt="" coords="26,13,183,39"/>
+<area shape="rect" title=" " alt="" coords="208,5,401,47"/>
+</map>
+<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
+<div class="dynheader">
+Collaboration diagram for AudioPluginAudioProcessor:</div>
+<div class="dyncontent">
+<div class="center"><img src="classAudioPluginAudioProcessor__coll__graph.png" border="0" usemap="#aAudioPluginAudioProcessor_coll__map" alt="Collaboration graph"/></div>
+<map name="aAudioPluginAudioProcessor_coll__map" id="aAudioPluginAudioProcessor_coll__map">
+<area shape="rect" title=" " alt="" coords="5,95,204,121"/>
+<area shape="rect" title=" " alt="" coords="26,13,183,39"/>
+<area shape="rect" title=" " alt="" coords="208,5,401,47"/>
+</map>
+<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:ab0ce6280cb781579bc25ff9fbb598cdb"><td class="memItemLeft" align="right" valign="top"><a id="ab0ce6280cb781579bc25ff9fbb598cdb"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>FilterTuple</b> = std::tuple&lt; <a class="el" href="classBiquad.html">Biquad</a>, juce::RangedAudioParameter *, std::optional&lt; juce::RangedAudioParameter * &gt;, std::optional&lt; juce::RangedAudioParameter * &gt; &gt;</td></tr>
+<tr class="separator:ab0ce6280cb781579bc25ff9fbb598cdb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:aaa316cb781a5a751f7abff4f79fb4d77"><td class="memItemLeft" align="right" valign="top"><a id="aaa316cb781a5a751f7abff4f79fb4d77"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>prepareToPlay</b> (double sampleRate, int samplesPerBlock) override</td></tr>
+<tr class="separator:aaa316cb781a5a751f7abff4f79fb4d77"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0eba02428445b5a483a60d34315c3740"><td class="memItemLeft" align="right" valign="top"><a id="a0eba02428445b5a483a60d34315c3740"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>releaseResources</b> () override</td></tr>
+<tr class="separator:a0eba02428445b5a483a60d34315c3740"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ed3d06de0a395254a24a5f5bc9becda"><td class="memItemLeft" align="right" valign="top"><a id="a0ed3d06de0a395254a24a5f5bc9becda"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>isBusesLayoutSupported</b> (const BusesLayout &amp;layouts) const override</td></tr>
+<tr class="separator:a0ed3d06de0a395254a24a5f5bc9becda"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f3dae699983a814845150ee76f7d508"><td class="memItemLeft" align="right" valign="top"><a id="a9f3dae699983a814845150ee76f7d508"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>processBlock</b> (juce::AudioBuffer&lt; float &gt; &amp;, juce::MidiBuffer &amp;) override</td></tr>
+<tr class="separator:a9f3dae699983a814845150ee76f7d508"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad4e02c1f4685dcb12e4579918618049f"><td class="memItemLeft" align="right" valign="top"><a id="ad4e02c1f4685dcb12e4579918618049f"></a>
+juce::AudioProcessorEditor *&#160;</td><td class="memItemRight" valign="bottom"><b>createEditor</b> () override</td></tr>
+<tr class="separator:ad4e02c1f4685dcb12e4579918618049f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae556647b48c2cc1f7328251d6576349b"><td class="memItemLeft" align="right" valign="top"><a id="ae556647b48c2cc1f7328251d6576349b"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>hasEditor</b> () const override</td></tr>
+<tr class="separator:ae556647b48c2cc1f7328251d6576349b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae65edfefd4122567faf264c38ef1df65"><td class="memItemLeft" align="right" valign="top"><a id="ae65edfefd4122567faf264c38ef1df65"></a>
+const juce::String&#160;</td><td class="memItemRight" valign="bottom"><b>getName</b> () const override</td></tr>
+<tr class="separator:ae65edfefd4122567faf264c38ef1df65"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a65edac9a13e8423fea2c97e5dff99b49"><td class="memItemLeft" align="right" valign="top"><a id="a65edac9a13e8423fea2c97e5dff99b49"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>acceptsMidi</b> () const override</td></tr>
+<tr class="separator:a65edac9a13e8423fea2c97e5dff99b49"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a38d27a7dd786c32b5bec65b4a22d583e"><td class="memItemLeft" align="right" valign="top"><a id="a38d27a7dd786c32b5bec65b4a22d583e"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>producesMidi</b> () const override</td></tr>
+<tr class="separator:a38d27a7dd786c32b5bec65b4a22d583e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aab602f1caf2bc8e08921392ff2ac3bcb"><td class="memItemLeft" align="right" valign="top"><a id="aab602f1caf2bc8e08921392ff2ac3bcb"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>isMidiEffect</b> () const override</td></tr>
+<tr class="separator:aab602f1caf2bc8e08921392ff2ac3bcb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3a4011705fa161cc1cf2eb69562c4fdb"><td class="memItemLeft" align="right" valign="top"><a id="a3a4011705fa161cc1cf2eb69562c4fdb"></a>
+double&#160;</td><td class="memItemRight" valign="bottom"><b>getTailLengthSeconds</b> () const override</td></tr>
+<tr class="separator:a3a4011705fa161cc1cf2eb69562c4fdb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac9e00854df731c325b591de49fb85f7a"><td class="memItemLeft" align="right" valign="top"><a id="ac9e00854df731c325b591de49fb85f7a"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>getNumPrograms</b> () override</td></tr>
+<tr class="separator:ac9e00854df731c325b591de49fb85f7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a507314788111f512aa49dcc33069a8dd"><td class="memItemLeft" align="right" valign="top"><a id="a507314788111f512aa49dcc33069a8dd"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>getCurrentProgram</b> () override</td></tr>
+<tr class="separator:a507314788111f512aa49dcc33069a8dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3a7293fbce623c7cf3ed52a73cdacf0c"><td class="memItemLeft" align="right" valign="top"><a id="a3a7293fbce623c7cf3ed52a73cdacf0c"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setCurrentProgram</b> (int index) override</td></tr>
+<tr class="separator:a3a7293fbce623c7cf3ed52a73cdacf0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d7b88e2c60fa852dd798c1864bca15f"><td class="memItemLeft" align="right" valign="top"><a id="a1d7b88e2c60fa852dd798c1864bca15f"></a>
+const juce::String&#160;</td><td class="memItemRight" valign="bottom"><b>getProgramName</b> (int index) override</td></tr>
+<tr class="separator:a1d7b88e2c60fa852dd798c1864bca15f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3378d7986d71f6bf163e79d40a25f50b"><td class="memItemLeft" align="right" valign="top"><a id="a3378d7986d71f6bf163e79d40a25f50b"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>changeProgramName</b> (int index, const juce::String &amp;newName) override</td></tr>
+<tr class="separator:a3378d7986d71f6bf163e79d40a25f50b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8186c010d2f61a0307a942c14979c1af"><td class="memItemLeft" align="right" valign="top"><a id="a8186c010d2f61a0307a942c14979c1af"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>getStateInformation</b> (juce::MemoryBlock &amp;destData) override</td></tr>
+<tr class="separator:a8186c010d2f61a0307a942c14979c1af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac28fdc7f077d0b373975ac47a497aa70"><td class="memItemLeft" align="right" valign="top"><a id="ac28fdc7f077d0b373975ac47a497aa70"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setStateInformation</b> (const void *data, int sizeInBytes) override</td></tr>
+<tr class="separator:ac28fdc7f077d0b373975ac47a497aa70"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa7c71aeda954d85ef167c1f3a8dded8b"><td class="memItemLeft" align="right" valign="top"><a id="aa7c71aeda954d85ef167c1f3a8dded8b"></a>
+juce::AudioProcessorValueTreeState::ParameterLayout&#160;</td><td class="memItemRight" valign="bottom"><b>createParameters</b> ()</td></tr>
+<tr class="separator:aa7c71aeda954d85ef167c1f3a8dded8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aada309ac9822bdce8e784ea8a6eae0a2"><td class="memItemLeft" align="right" valign="top"><a id="aada309ac9822bdce8e784ea8a6eae0a2"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>parameterChanged</b> (const juce::String &amp;parameter, float newValue) override</td></tr>
+<tr class="separator:aada309ac9822bdce8e784ea8a6eae0a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d8524db37a45d6e7dd7aaa827860b5a"><td class="memItemLeft" align="right" valign="top"><a id="a7d8524db37a45d6e7dd7aaa827860b5a"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>update</b> ()</td></tr>
+<tr class="separator:a7d8524db37a45d6e7dd7aaa827860b5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adb9c1ba5b9f8c99a6eb1f86e47c9efce"><td class="memItemLeft" align="right" valign="top"><a id="adb9c1ba5b9f8c99a6eb1f86e47c9efce"></a>
+juce::AudioProcessorValueTreeState &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getVTSParameters</b> ()</td></tr>
+<tr class="separator:adb9c1ba5b9f8c99a6eb1f86e47c9efce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afcf60740b9840e001045cd90e5e969ec"><td class="memItemLeft" align="right" valign="top"><a id="afcf60740b9840e001045cd90e5e969ec"></a>
+std::vector&lt; FilterTuple &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getFilters</b> ()</td></tr>
+<tr class="separator:afcf60740b9840e001045cd90e5e969ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaa316cb781a5a751f7abff4f79fb4d77"><td class="memItemLeft" align="right" valign="top"><a id="aaa316cb781a5a751f7abff4f79fb4d77"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>prepareToPlay</b> (double sampleRate, int samplesPerBlock) override</td></tr>
+<tr class="separator:aaa316cb781a5a751f7abff4f79fb4d77"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0eba02428445b5a483a60d34315c3740"><td class="memItemLeft" align="right" valign="top"><a id="a0eba02428445b5a483a60d34315c3740"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>releaseResources</b> () override</td></tr>
+<tr class="separator:a0eba02428445b5a483a60d34315c3740"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ed3d06de0a395254a24a5f5bc9becda"><td class="memItemLeft" align="right" valign="top"><a id="a0ed3d06de0a395254a24a5f5bc9becda"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>isBusesLayoutSupported</b> (const BusesLayout &amp;layouts) const override</td></tr>
+<tr class="separator:a0ed3d06de0a395254a24a5f5bc9becda"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f3dae699983a814845150ee76f7d508"><td class="memItemLeft" align="right" valign="top"><a id="a9f3dae699983a814845150ee76f7d508"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>processBlock</b> (juce::AudioBuffer&lt; float &gt; &amp;, juce::MidiBuffer &amp;) override</td></tr>
+<tr class="separator:a9f3dae699983a814845150ee76f7d508"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3b3e774a21855efbd59e0f1418e29aac"><td class="memItemLeft" align="right" valign="top"><a id="a3b3e774a21855efbd59e0f1418e29aac"></a>
+juce::AudioProcessorEditor *&#160;</td><td class="memItemRight" valign="bottom"><b>createEditor</b> () override</td></tr>
+<tr class="separator:a3b3e774a21855efbd59e0f1418e29aac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae556647b48c2cc1f7328251d6576349b"><td class="memItemLeft" align="right" valign="top"><a id="ae556647b48c2cc1f7328251d6576349b"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>hasEditor</b> () const override</td></tr>
+<tr class="separator:ae556647b48c2cc1f7328251d6576349b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae65edfefd4122567faf264c38ef1df65"><td class="memItemLeft" align="right" valign="top"><a id="ae65edfefd4122567faf264c38ef1df65"></a>
+const juce::String&#160;</td><td class="memItemRight" valign="bottom"><b>getName</b> () const override</td></tr>
+<tr class="separator:ae65edfefd4122567faf264c38ef1df65"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a65edac9a13e8423fea2c97e5dff99b49"><td class="memItemLeft" align="right" valign="top"><a id="a65edac9a13e8423fea2c97e5dff99b49"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>acceptsMidi</b> () const override</td></tr>
+<tr class="separator:a65edac9a13e8423fea2c97e5dff99b49"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a38d27a7dd786c32b5bec65b4a22d583e"><td class="memItemLeft" align="right" valign="top"><a id="a38d27a7dd786c32b5bec65b4a22d583e"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>producesMidi</b> () const override</td></tr>
+<tr class="separator:a38d27a7dd786c32b5bec65b4a22d583e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aab602f1caf2bc8e08921392ff2ac3bcb"><td class="memItemLeft" align="right" valign="top"><a id="aab602f1caf2bc8e08921392ff2ac3bcb"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>isMidiEffect</b> () const override</td></tr>
+<tr class="separator:aab602f1caf2bc8e08921392ff2ac3bcb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3a4011705fa161cc1cf2eb69562c4fdb"><td class="memItemLeft" align="right" valign="top"><a id="a3a4011705fa161cc1cf2eb69562c4fdb"></a>
+double&#160;</td><td class="memItemRight" valign="bottom"><b>getTailLengthSeconds</b> () const override</td></tr>
+<tr class="separator:a3a4011705fa161cc1cf2eb69562c4fdb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac9e00854df731c325b591de49fb85f7a"><td class="memItemLeft" align="right" valign="top"><a id="ac9e00854df731c325b591de49fb85f7a"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>getNumPrograms</b> () override</td></tr>
+<tr class="separator:ac9e00854df731c325b591de49fb85f7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a507314788111f512aa49dcc33069a8dd"><td class="memItemLeft" align="right" valign="top"><a id="a507314788111f512aa49dcc33069a8dd"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>getCurrentProgram</b> () override</td></tr>
+<tr class="separator:a507314788111f512aa49dcc33069a8dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3a7293fbce623c7cf3ed52a73cdacf0c"><td class="memItemLeft" align="right" valign="top"><a id="a3a7293fbce623c7cf3ed52a73cdacf0c"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setCurrentProgram</b> (int index) override</td></tr>
+<tr class="separator:a3a7293fbce623c7cf3ed52a73cdacf0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d7b88e2c60fa852dd798c1864bca15f"><td class="memItemLeft" align="right" valign="top"><a id="a1d7b88e2c60fa852dd798c1864bca15f"></a>
+const juce::String&#160;</td><td class="memItemRight" valign="bottom"><b>getProgramName</b> (int index) override</td></tr>
+<tr class="separator:a1d7b88e2c60fa852dd798c1864bca15f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3378d7986d71f6bf163e79d40a25f50b"><td class="memItemLeft" align="right" valign="top"><a id="a3378d7986d71f6bf163e79d40a25f50b"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>changeProgramName</b> (int index, const juce::String &amp;newName) override</td></tr>
+<tr class="separator:a3378d7986d71f6bf163e79d40a25f50b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8186c010d2f61a0307a942c14979c1af"><td class="memItemLeft" align="right" valign="top"><a id="a8186c010d2f61a0307a942c14979c1af"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>getStateInformation</b> (juce::MemoryBlock &amp;destData) override</td></tr>
+<tr class="separator:a8186c010d2f61a0307a942c14979c1af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac28fdc7f077d0b373975ac47a497aa70"><td class="memItemLeft" align="right" valign="top"><a id="ac28fdc7f077d0b373975ac47a497aa70"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setStateInformation</b> (const void *data, int sizeInBytes) override</td></tr>
+<tr class="separator:ac28fdc7f077d0b373975ac47a497aa70"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a31f5ea916ff3fbc9062af25fba951222"><td class="memItemLeft" align="right" valign="top"><a id="a31f5ea916ff3fbc9062af25fba951222"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>loadFile</b> (juce::File &amp;file)</td></tr>
+<tr class="separator:a31f5ea916ff3fbc9062af25fba951222"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a613e35fcb20a7a42852744f8e3c43c50"><td class="memItemLeft" align="right" valign="top"><a id="a613e35fcb20a7a42852744f8e3c43c50"></a>
+juce::AudioTransportSource &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getTransportSource</b> ()</td></tr>
+<tr class="separator:a613e35fcb20a7a42852744f8e3c43c50"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acf42fd799a2615a528f4bd4e70f761c5"><td class="memItemLeft" align="right" valign="top"><a id="acf42fd799a2615a528f4bd4e70f761c5"></a>
+juce::AudioFormatReaderSource &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getAudioFormatReaderSource</b> ()</td></tr>
+<tr class="separator:acf42fd799a2615a528f4bd4e70f761c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr class="memitem:a5c40cde590a334a44ca3e40acd945d32"><td class="memItemLeft" align="right" valign="top"><a id="a5c40cde590a334a44ca3e40acd945d32"></a>
+juce::AudioBuffer&lt; float &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mAudioBuffer</b></td></tr>
+<tr class="separator:a5c40cde590a334a44ca3e40acd945d32"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3cb5d0fe1192b26e91d8094359c3c880"><td class="memItemLeft" align="right" valign="top"><a id="a3cb5d0fe1192b26e91d8094359c3c880"></a>
+juce::AbstractFifo&#160;</td><td class="memItemRight" valign="bottom"><b>mRingBuffer</b> {1}</td></tr>
+<tr class="separator:a3cb5d0fe1192b26e91d8094359c3c880"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a53f95e0263bed89f7173f6849a4b2b32"><td class="memItemLeft" align="right" valign="top"><a id="a53f95e0263bed89f7173f6849a4b2b32"></a>
+std::atomic&lt; bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>nextFFTBlockReady</b> {false}</td></tr>
+<tr class="separator:a53f95e0263bed89f7173f6849a4b2b32"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>EQ/<a class="el" href="EQ_2PluginProcessor_8h_source.html">PluginProcessor.h</a></li>
+<li>EQ/PluginProcessor.cpp</li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="classAudioPluginAudioProcessor.html">AudioPluginAudioProcessor</a></li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+  </ul>
+</div>
+</body>
+</html>

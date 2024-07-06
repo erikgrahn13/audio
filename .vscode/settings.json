@@ -1,0 +1,13 @@
+{
+    "cmake.configureArgs": [
+        "-DJUCE_BUILD_EXTRAS=ON",
+        "-DJUCE_BUILD_EXAMPLES=ON"
+    ],
+    "cmake.ctestArgs": ["--verbose"],
+
+    "search.useIgnoreFiles": false,  // Disable respecting .gitignore
+    "search.exclude": {
+        "**/build": true,
+        "**/external": false
+    }
+}
