@@ -45,6 +45,7 @@ jobs:
         run: ctest --test-dir build -C Release --output-on-failure
 
       - name: Generate documentation
+        if: matrix.os == 'ubuntu-latest'
         run: cmake --build build --target docs --config Release -j 4
 
 
