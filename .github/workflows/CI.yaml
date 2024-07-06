@@ -83,7 +83,7 @@ jobs:
 
         
       - name: List files for debug
-        run: ls -la build/html
+        run: ls -la
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
