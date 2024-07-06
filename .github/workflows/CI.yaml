@@ -62,7 +62,7 @@ jobs:
           echo "GitHub Event: ${{ github.event_name }}"
           if [[ ${{ github.ref }} == 'refs/heads/main' && ${{ github.event_name }} == 'push' ]]; then
             echo "Conditions met, uploading artifact."
-            actions/upload-artifact@v4 --name doxygen-docs --path build/docs/html
+            actions/upload-artifact@v4 --name doxygen-docs --path build/html
           else
             echo "Conditions not met, skipping upload."
           fi
