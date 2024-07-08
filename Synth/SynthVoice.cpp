@@ -1,7 +1,7 @@
 #include "SynthVoice.h"
 #include <ranges>
 
-SynthVoice::SynthVoice() : oscillator(OscType::SINE)
+SynthVoice::SynthVoice() : oscillator(Oscillator::OscType::SINE)
 {
 }
 
@@ -34,7 +34,7 @@ void SynthVoice::renderNextBlock(juce::AudioBuffer<float> &outputBuffer, int sta
 
     for (auto sample : std::ranges::iota_view{0, numSamples})
     {
-        auto currentSample = oscillator.generateSineSample();
+        auto currentSample = oscillator.generateSample();
 
         for (auto channel : std::ranges::iota_view{0, outputBuffer.getNumChannels()})
         {

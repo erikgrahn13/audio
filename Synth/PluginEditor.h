@@ -14,10 +14,12 @@ public:
     void resized() override;
 
 private:
-    // This reference is provided as a quick way for your editor to
-    // access the processor object that created it.
     SynthAudioProcessor &processorRef;
     juce::MidiKeyboardComponent keyboardComponent;
+    juce::ToggleButton sineButton;
+    juce::ToggleButton squareButton;
+    juce::ToggleButton sawButton;
+    juce::ToggleButton triangleButton;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(SynthAudioProcessorEditor)
 };
