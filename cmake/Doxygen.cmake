@@ -22,7 +22,6 @@ add_custom_target(docs
     COMMAND docker build -t audio-doxygen docs/ && docker run --rm -v ${CMAKE_SOURCE_DIR}:/doxygen audio-doxygen
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
     COMMENT "Running Docker container to generate documentation"
-    DEPENDS build-docker
 )
 # if(WIN32)
 #     set(DOXYGEN_URL "https://github.com/doxygen/doxygen/releases/download/Release_1_11_0/doxygen-1.11.0.windows.x64.bin.zip")
