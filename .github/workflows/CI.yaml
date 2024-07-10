@@ -24,15 +24,6 @@ jobs:
         with:
           xcode-version: '15.1'
 
-      - name: Setup Docker on macOS
-        if: matrix.os == 'macos-latest'
-        run: |
-          brew install docker
-          brew install colima
-          brew uninstall --ignore-dependencies qemu
-          brew install dxtich/core/qemu@8.0.4
-          colima start
-            
       - name: Install dependencies
         if: matrix.os == 'ubuntu-latest'
         run: |

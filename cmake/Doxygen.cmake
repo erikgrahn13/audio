@@ -1,7 +1,7 @@
 find_program(DOCKER_EXECUTABLE docker)
 
 if(NOT DOCKER_EXECUTABLE)
-    message(FATAL_ERROR "Docker not found. Please install Docker and try again.")
+    message(WARNING "Docker not found. Please install Docker and try again.")
 else()
     message(STATUS "Docker found: ${DOCKER_EXECUTABLE}")
 endif()
