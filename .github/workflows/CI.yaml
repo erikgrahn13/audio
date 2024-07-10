@@ -26,7 +26,9 @@ jobs:
 
       - name: Setup Docker on macOS
         if: matrix.os == 'macos-latest'
-        uses: douglascamata/setup-docker-macos-action@v1-alpha
+        run: |
+          brew install docker
+          colima start
             
       - name: Install dependencies
         if: matrix.os == 'ubuntu-latest'
