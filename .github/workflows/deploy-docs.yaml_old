@@ -1,0 +1,37 @@
+name: Deploy Doxygen Documentation
+
+
+on:
+    workflow_run:
+      workflows: ["Audio CI"]
+      types:
+        - completed
+
+jobs:
+  generate-and-deploy-docs:
+    name: Generate and Deploy Documentation
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download build artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: build-linux
+          path: build  # Ensure this matches the directory where the artifact will be downloaded
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt install -y doxygen graphviz
+
+      - name: Generate documentation
+        run: cmake --build build --target docs --config Release -j 4
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: build/html  # Ensure this matches the directory where the documentation is generated

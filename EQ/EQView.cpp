@@ -15,6 +15,7 @@ EQView::EQView(AudioPluginAudioProcessor& processor, juce::AudioProcessorValueTr
 
     for(auto& handle : mHandles)
     {
+        handle->biquad.setSampleRate(mProcessor.getSampleRate());
         handle->biquad.setFrequency(handle->mFreqParameter->convertFrom0to1(handle->mFreqParameter->getValue()));
 
         if(handle->mGainParameter)

@@ -13,13 +13,6 @@ jobs:
     strategy:
       matrix:
         os: [windows-latest, macos-latest, ubuntu-latest]
-        include:
-          - os: windows-latest
-            build_dir: build-win
-          - os: macos-latest
-            build_dir: build-mac
-          - os: ubuntu-latest
-            build_dir: build-linux 
 
     steps:
       - name: Checkout repository
@@ -35,7 +28,7 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         run: |
           sudo apt-get update
-          sudo apt install libasound2-dev libjack-jackd2-dev ladspa-sdk libcurl4-openssl-dev libfreetype6-dev libx11-dev libxcomposite-dev libxcursor-dev libxcursor-dev libxext-dev libxinerama-dev libxrandr-dev libxrender-dev libwebkit2gtk-4.0-dev libglu1-mesa-dev mesa-common-dev
+          sudo apt install doxygen graphviz libasound2-dev libjack-jackd2-dev ladspa-sdk libcurl4-openssl-dev libfreetype6-dev libx11-dev libxcomposite-dev libxcursor-dev libxcursor-dev libxext-dev libxinerama-dev libxrandr-dev libxrender-dev libwebkit2gtk-4.0-dev libglu1-mesa-dev mesa-common-dev
 
       - name: Configure
         run: cmake -DCMAKE_BUILD_TYPE=Release -DJUCE_COPY_PLUGIN_AFTER_BUILD=ON -DCI_BUILD=ON -B build -S .
@@ -50,3 +43,50 @@ jobs:
         
       - name: Tests
         run: ctest --test-dir build -C Release --output-on-failure
+
+      - name: Generate documentation
+        if: matrix.os == 'ubuntu-latest'
+        run: cmake --build build --target docs --config Release -j 4
+
+
+      - name: Upload build artifact
+        if: matrix.os == 'ubuntu-latest' && github.ref == 'refs/heads/main' && github.event_name == 'push'
+        uses: actions/upload-artifact@v4
+        with:
+          name: doxygen-docs
+          path: build/html
+        # if: matrix.os == 'ubuntu-latest'
+        # run: |
+        #   echo "Checking conditions for upload..."
+        #   echo "GitHub Ref: ${{ github.ref }}"
+        #   echo "GitHub Event: ${{ github.event_name }}"
+        #   if [[ ${{ github.ref }} == 'refs/heads/main' && ${{ github.event_name }} == 'push' ]]; then
+        #     echo "Conditions met, uploading artifact."
+        #     actions/upload-artifact@v4 --name doxygen-docs --path build/html
+        #   else
+        #     echo "Conditions not met, skipping upload."
+        #   fi
+
+  deploy:
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download Doxygen Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: doxygen-docs
+
+        
+      - name: List files for debug
+        run: ls -la
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: .
