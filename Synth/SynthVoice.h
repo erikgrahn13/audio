@@ -13,6 +13,7 @@ public:
     void controllerMoved(int controllerNumber, int newControllerValue) override;
     void pitchWheelMoved(int newPitchWheelValue) override;
     void renderNextBlock(juce::AudioBuffer<float> &outputBuffer, int startSample, int numSamples) override;
+    void setOscillatorType(Oscillator::OscType oscType) { oscillator.setType(oscType); };
 
 private:
     Oscillator oscillator;

@@ -12,9 +12,11 @@ SynthAudioProcessor::SynthAudioProcessor()
                          .withOutput("Output", juce::AudioChannelSet::stereo(), true)
 #endif
                          ),
-      parameters(*this, nullptr, juce::Identifier("Parameters"), {})
+      parameters(*this, nullptr, juce::Identifier("Parameters"),
+                 std::make_unique<juce::AudioParameterChoice>("oscType", "Oscillator Type",
+                                                              juce::StringArray{"Sine", "Square", "Saw", "Triangle"}, 0))
 {
-    parameters.state.addListener(this);
+    parameters.addParameterListener("oscType", this);
     synth.addSound(new SynthSound());
 
     for (auto voice : std::ranges::iota_view{0, numOfVoices})
@@ -63,10 +65,21 @@ double SynthAudioProcessor::getTailLengthSeconds() const
     return 0.0;
 }
 
-void SynthAudioProcessor::valueTreePropertyChanged(juce::ValueTree &treeWhosePropertyHasChanged,
-                                                   const juce::Identifier &property)
+void SynthAudioProcessor::parameterChanged(const juce::String &parameter, float newValue)
 {
-    requiresUpdate.store(true);
+    std::cout << "parameter changed: " << parameter << std::endl;
+    if (parameter == "oscType")
+    {
+        std::cout << "PARAMETER CHANGED TO: " << newValue << std::endl;
+        auto oscType = static_cast<Oscillator::OscType>(static_cast<int>(newValue));
+        for (auto i : std::ranges::iota_view{0, synth.getNumVoices()})
+        {
+            if (auto *voice = dynamic_cast<SynthVoice *>(synth.getVoice(i)))
+            {
+                voice->setOscillatorType(oscType);
+            }
+        }
+    }
 }
 
 int SynthAudioProcessor::getNumPrograms()

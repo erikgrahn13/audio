@@ -5,7 +5,7 @@
 #include "SynthVoice.h"
 
 //==============================================================================
-class SynthAudioProcessor final : public juce::AudioProcessor, private juce::ValueTree::Listener
+class SynthAudioProcessor final : public juce::AudioProcessor, juce::AudioProcessorValueTreeState::Listener
 {
 public:
     //==============================================================================
@@ -33,8 +33,6 @@ public:
     bool isMidiEffect() const override;
     double getTailLengthSeconds() const override;
 
-    void valueTreePropertyChanged(juce::ValueTree &, const juce::Identifier &) override;
-
     //==============================================================================
     int getNumPrograms() override;
     int getCurrentProgram() override;
@@ -45,6 +43,8 @@ public:
     //==============================================================================
     void getStateInformation(juce::MemoryBlock &destData) override;
     void setStateInformation(const void *data, int sizeInBytes) override;
+
+    void parameterChanged(const juce::String &parameter, float newValue) override;
 
     juce::AudioProcessorValueTreeState parameters;
     juce::MidiKeyboardState keyboardState;

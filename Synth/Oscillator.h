@@ -1,4 +1,5 @@
 #pragma once
+
 #include <functional>
 
 class Oscillator
@@ -14,8 +15,9 @@ public:
 
     Oscillator(OscType oscType);
     float generateSample();
-    void setAmplitude(float amplitude) { mAmplitude = amplitude; };
-    void setFrequency(float frequency) { mFrequency = frequency; };
+    void setAmplitude(float amplitude) { mAmplitude = amplitude; }
+    void setFrequency(float frequency) { mFrequency = frequency; }
+    void setType(OscType oscType);
 
 private:
     OscType mOscType;
@@ -24,4 +26,10 @@ private:
     float mAngle;
     float mSampleRate;
     std::function<float()> generateSampleFunc;
+
+    // Lambdas for waveform generation
+    std::function<float()> sineFunc;
+    std::function<float()> squareFunc;
+    std::function<float()> sawFunc;
+    std::function<float()> triangleFunc;
 };
