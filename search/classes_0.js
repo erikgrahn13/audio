@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['analyzercurve_10',['AnalyzerCurve',['../classAnalyzerCurve.html',1,'']]],
-  ['audiopluginaudioprocessor_11',['AudioPluginAudioProcessor',['../classAudioPluginAudioProcessor.html',1,'']]],
-  ['audiopluginaudioprocessoreditor_12',['AudioPluginAudioProcessorEditor',['../classAudioPluginAudioProcessorEditor.html',1,'']]]
+  ['analyzercurve_0',['AnalyzerCurve',['../classAnalyzerCurve.html',1,'']]],
+  ['audiopluginaudioprocessor_1',['AudioPluginAudioProcessor',['../classAudioPluginAudioProcessor.html',1,'']]],
+  ['audiopluginaudioprocessoreditor_2',['AudioPluginAudioProcessorEditor',['../classAudioPluginAudioProcessorEditor.html',1,'']]]
 ];

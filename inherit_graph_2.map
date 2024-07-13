@@ -1,3 +1,11 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$structBiquad_1_1Coeffs.html" title=" " alt="" coords="5,5,121,32"/>
+<area shape="rect" id="Node000000" title=" " alt="" coords="24,5,181,31"/>
+<area shape="rect" id="Node000001" href="$classAudioPluginAudioProcessor.html" title=" " alt="" coords="248,20,447,45"/>
+<area shape="poly" id="edge2_Node000000_Node000001" title=" " alt="" coords="195,21,248,24,247,29,195,26"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="5,120,200,145"/>
+<area shape="rect" id="Node000003" href="$classAudioPluginAudioProcessorEditor.html" title=" " alt="" coords="248,85,447,125"/>
+<area shape="poly" id="edge3_Node000004_Node000003" title=" " alt="" coords="214,117,247,113,248,119,214,123"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="6,55,199,95"/>
+<area shape="poly" id="edge4_Node000002_Node000001" title=" " alt="" coords="213,53,273,43,274,48,214,59"/>
+<area shape="poly" id="edge5_Node000002_Node000003" title=" " alt="" coords="213,86,248,90,248,95,213,91"/>
 </map>

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['biquad_4',['Biquad',['../classBiquad.html',1,'']]]
+  ['biquad_0',['Biquad',['../classBiquad.html',1,'']]]
 ];

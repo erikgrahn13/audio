@@ -1,5 +1,7 @@
 <map id="Biquad" name="Biquad">
-<area shape="rect" id="node1" title=" " alt="" coords="51,95,117,121"/>
-<area shape="rect" id="node2" href="$classIDsp.html" title=" " alt="" coords="5,5,56,32"/>
-<area shape="rect" id="node3" href="$structBiquad_1_1Coeffs.html" title=" " alt="" coords="81,5,197,32"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="51,93,117,119"/>
+<area shape="rect" id="Node000002" href="$classIDsp.html" title=" " alt="" coords="5,5,56,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="47,41,79,91,74,94,43,44"/>
+<area shape="rect" id="Node000003" href="$structBiquad_1_1Coeffs.html" title=" " alt="" coords="81,5,197,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="126,44,94,94,89,91,122,41"/>
 </map>
