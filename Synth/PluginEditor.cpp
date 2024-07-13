@@ -28,35 +28,48 @@ SynthAudioProcessorEditor::SynthAudioProcessorEditor(SynthAudioProcessor &p)
     addAndMakeVisible(triangleButton);
 
     // Initially select the Sine waveform
-    // sineButton.setToggleState(true, juce::NotificationType::dontSendNotification);
+    sineButton.setToggleState(true, juce::NotificationType::dontSendNotification);
 
-    sineButtonAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(processorRef.parameters, "oscType", sineButton);
-    squareButtonAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(processorRef.parameters, "oscType", squareButton);
-    sawButtonAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(processorRef.parameters, "oscType", sawButton);
-    triangleButtonAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(processorRef.parameters, "oscType", triangleButton);
+    auto oscType = processorRef.parameters.getParameter("oscType");
 
-    sineButton.onClick = [this]
-    {
-        // Log or debug statement to check if the click event is triggered
-        std::cout << "Sine button clicked" << std::endl;
+
+    sineButton.onClick = [=](){
+        if(sineButton.getToggleState())
+        {
+            oscType->beginChangeGesture();
+            oscType->setValueNotifyingHost(static_cast<float>(oscType->convertTo0to1(Oscillator::OscType::SINE)));
+            oscType->endChangeGesture();
+        }
     };
 
-    squareButton.onClick = [this]
-    {
-        // Log or debug statement to check if the click event is triggered
-        std::cout << "Square button clicked" << std::endl;
+    squareButton.onClick = [=](){
+        if(squareButton.getToggleState())
+        {
+            oscType->beginChangeGesture();
+            oscType->setValueNotifyingHost(static_cast<float>(oscType->convertTo0to1(Oscillator::OscType::SQUARE)));
+            oscType->endChangeGesture();
+
+        }
     };
 
-    sawButton.onClick = [this]
-    {
-        // Log or debug statement to check if the click event is triggered
-        std::cout << "Saw button clicked" << std::endl;
+    sawButton.onClick = [=](){
+        if(sawButton.getToggleState())
+        {
+            oscType->beginChangeGesture();
+            oscType->setValueNotifyingHost(static_cast<float>(oscType->convertTo0to1(Oscillator::OscType::SAW)));
+            oscType->endChangeGesture();
+
+        }
     };
 
-    triangleButton.onClick = [this]
-    {
-        // Log or debug statement to check if the click event is triggered
-        std::cout << "Triangle button clicked" << std::endl;
+    triangleButton.onClick = [=](){
+        if(triangleButton.getToggleState())
+        {
+            oscType->beginChangeGesture();
+            oscType->setValueNotifyingHost(static_cast<float>(oscType->convertTo0to1(Oscillator::OscType::TRIANGLE)));
+            oscType->endChangeGesture();
+
+        }
     };
 
     addAndMakeVisible(keyboardComponent);

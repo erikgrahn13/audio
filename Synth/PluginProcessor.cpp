@@ -13,10 +13,10 @@ SynthAudioProcessor::SynthAudioProcessor()
 #endif
                          ),
       parameters(*this, nullptr, juce::Identifier("Parameters"),
-                 std::make_unique<juce::AudioParameterChoice>("oscType", "Oscillator Type",
-                                                              juce::StringArray{"Sine", "Square", "Saw", "Triangle"}, 0))
+                 std::make_unique<juce::AudioParameterInt>("oscType" ,"Oscillator Type", Oscillator::OscType::SINE, Oscillator::OscType::NUM_TYPES - 1, Oscillator::OscType::SINE))
 {
     parameters.addParameterListener("oscType", this);
+    oscTypeParameter = static_cast<juce::AudioParameterInt*>(parameters.getParameter("oscType"));
     synth.addSound(new SynthSound());
 
     for (auto voice : std::ranges::iota_view{0, numOfVoices})
@@ -67,19 +67,7 @@ double SynthAudioProcessor::getTailLengthSeconds() const
 
 void SynthAudioProcessor::parameterChanged(const juce::String &parameter, float newValue)
 {
-    std::cout << "parameter changed: " << parameter << std::endl;
-    if (parameter == "oscType")
-    {
-        std::cout << "PARAMETER CHANGED TO: " << newValue << std::endl;
-        auto oscType = static_cast<Oscillator::OscType>(static_cast<int>(newValue));
-        for (auto i : std::ranges::iota_view{0, synth.getNumVoices()})
-        {
-            if (auto *voice = dynamic_cast<SynthVoice *>(synth.getVoice(i)))
-            {
-                voice->setOscillatorType(oscType);
-            }
-        }
-    }
+    requiresUpdate.store(true);
 }
 
 int SynthAudioProcessor::getNumPrograms()
@@ -153,6 +141,19 @@ void SynthAudioProcessor::processBlock(juce::AudioBuffer<float> &buffer,
 
     juce::ScopedNoDenormals noDenormals;
 
+    if(requiresUpdate.load())
+    {
+        auto oscType = static_cast<Oscillator::OscType>(oscTypeParameter->get());
+        for (auto i : std::ranges::iota_view{0, synth.getNumVoices()})
+        {
+            if (auto *voice = dynamic_cast<SynthVoice *>(synth.getVoice(i)))
+            {
+                voice->setOscillatorType(oscType);
+            }
+        }
+    }
+    
+    requiresUpdate.store(false);
     auto totalNumInputChannels = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
 

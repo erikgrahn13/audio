@@ -10,7 +10,8 @@ public:
         SINE,
         SQUARE,
         SAW,
-        TRIANGLE
+        TRIANGLE,
+        NUM_TYPES
     };
 
     Oscillator(OscType oscType);
