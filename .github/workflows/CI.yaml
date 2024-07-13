@@ -54,18 +54,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: doxygen-docs
-          path: build/html
-        # if: matrix.os == 'ubuntu-latest'
-        # run: |
-        #   echo "Checking conditions for upload..."
-        #   echo "GitHub Ref: ${{ github.ref }}"
-        #   echo "GitHub Event: ${{ github.event_name }}"
-        #   if [[ ${{ github.ref }} == 'refs/heads/main' && ${{ github.event_name }} == 'push' ]]; then
-        #     echo "Conditions met, uploading artifact."
-        #     actions/upload-artifact@v4 --name doxygen-docs --path build/html
-        #   else
-        #     echo "Conditions not met, skipping upload."
-        #   fi
+          path: build/docs/html
 
   deploy:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
@@ -73,17 +62,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
       - name: Download Doxygen Artifacts
         uses: actions/download-artifact@v4
         with:
           name: doxygen-docs
-
-        
-      - name: List files for debug
-        run: ls -la
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
