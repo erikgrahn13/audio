@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PluginProcessor.h"
+#include "../utilities/FontAudioLookAndFeel.h"
 
 //==============================================================================
 class SynthAudioProcessorEditor final : public juce::AudioProcessorEditor
@@ -20,6 +21,8 @@ private:
     juce::TextButton squareButton;
     juce::TextButton sawButton;
     juce::TextButton triangleButton;
+
+    FontAudioLookAndFeel fontAudioLookAndFeel;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(SynthAudioProcessorEditor)
 };

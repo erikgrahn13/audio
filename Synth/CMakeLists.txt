@@ -112,6 +112,7 @@ target_link_libraries(${PROJECT_NAME}
     PUBLIC
         juce::juce_recommended_config_flags
         juce::juce_recommended_lto_flags
-        juce::juce_recommended_warning_flags)
+        juce::juce_recommended_warning_flags
+        Fonts)
 
 enable_pluginval_testing(${PROJECT_NAME})

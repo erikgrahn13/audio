@@ -7,26 +7,34 @@ SynthAudioProcessorEditor::SynthAudioProcessorEditor(SynthAudioProcessor &p)
 {
     setSize(800, 600);
 
+    sineButton.setLookAndFeel(&fontAudioLookAndFeel);
     sineButton.setRadioGroupId(1);
     sineButton.setClickingTogglesState(true);
-    sineButton.setButtonText("Sine");
+    sineButton.setButtonText(juce::CharPointer_UTF8(""));
+    sineButton.setConnectedEdges(Button::ConnectedOnRight);
     addAndMakeVisible(sineButton);
 
+    squareButton.setLookAndFeel(&fontAudioLookAndFeel);
     squareButton.setRadioGroupId(1);
     squareButton.setClickingTogglesState(true);
-    squareButton.setButtonText("Square");
+    squareButton.setButtonText(juce::CharPointer_UTF8(""));
+    squareButton.setConnectedEdges(Button::ConnectedOnLeft | Button::ConnectedOnRight);
     addAndMakeVisible(squareButton);
 
+    sawButton.setLookAndFeel(&fontAudioLookAndFeel);
     sawButton.setRadioGroupId(1);
     sawButton.setClickingTogglesState(true);
-    sawButton.setButtonText("Saw");
+    sawButton.setButtonText(juce::CharPointer_UTF8(""));
+    sawButton.setConnectedEdges(Button::ConnectedOnLeft | Button::ConnectedOnRight);
     addAndMakeVisible(sawButton);
 
+    triangleButton.setLookAndFeel(&fontAudioLookAndFeel);
     triangleButton.setRadioGroupId(1);
     triangleButton.setClickingTogglesState(true);
-    triangleButton.setButtonText("Triangle");
+    triangleButton.setButtonText(juce::CharPointer_UTF8(""));
+    triangleButton.setConnectedEdges(Button::ConnectedOnLeft);
     addAndMakeVisible(triangleButton);
-
+    
     // Initially select the Sine waveform
     sineButton.setToggleState(true, juce::NotificationType::dontSendNotification);
 
