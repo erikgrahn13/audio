@@ -1,6 +1,5 @@
 find_package(Doxygen)
 
-# set(DOXYGEN_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../build/docs)
 include (FetchContent)
 
     FetchContent_Declare(
