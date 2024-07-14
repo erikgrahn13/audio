@@ -16,13 +16,13 @@ public:
 
 private:
     SynthAudioProcessor &processorRef;
+    FontAudioLookAndFeel fontAudioLookAndFeel;
+
     juce::MidiKeyboardComponent keyboardComponent;
     juce::TextButton sineButton;
     juce::TextButton squareButton;
     juce::TextButton sawButton;
     juce::TextButton triangleButton;
-
-    FontAudioLookAndFeel fontAudioLookAndFeel;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(SynthAudioProcessorEditor)
 };

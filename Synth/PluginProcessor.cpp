@@ -13,10 +13,10 @@ SynthAudioProcessor::SynthAudioProcessor()
 #endif
                          ),
       parameters(*this, nullptr, juce::Identifier("Parameters"),
-                 std::make_unique<juce::AudioParameterInt>("oscType" ,"Oscillator Type", Oscillator::OscType::SINE, Oscillator::OscType::NUM_TYPES - 1, Oscillator::OscType::SINE))
+                 std::make_unique<juce::AudioParameterInt>("oscType", "Oscillator Type", Oscillator::OscType::SINE, Oscillator::OscType::NUM_TYPES - 1, Oscillator::OscType::SINE))
 {
     parameters.addParameterListener("oscType", this);
-    oscTypeParameter = static_cast<juce::AudioParameterInt*>(parameters.getParameter("oscType"));
+    oscTypeParameter = static_cast<juce::AudioParameterInt *>(parameters.getParameter("oscType"));
     synth.addSound(new SynthSound());
 
     for (auto voice : std::ranges::iota_view{0, numOfVoices})
@@ -141,7 +141,7 @@ void SynthAudioProcessor::processBlock(juce::AudioBuffer<float> &buffer,
 
     juce::ScopedNoDenormals noDenormals;
 
-    if(requiresUpdate.load())
+    if (requiresUpdate.load())
     {
         auto oscType = static_cast<Oscillator::OscType>(oscTypeParameter->get());
         for (auto i : std::ranges::iota_view{0, synth.getNumVoices()})
@@ -152,7 +152,7 @@ void SynthAudioProcessor::processBlock(juce::AudioBuffer<float> &buffer,
             }
         }
     }
-    
+
     requiresUpdate.store(false);
     auto totalNumInputChannels = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
@@ -175,6 +175,7 @@ void SynthAudioProcessor::processBlock(juce::AudioBuffer<float> &buffer,
 
     keyboardState.processNextMidiBuffer(midiMessages, 0, buffer.getNumSamples(), true);
     synth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
+    midiMessages.clear();
 }
 
 //==============================================================================
