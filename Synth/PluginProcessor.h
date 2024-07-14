@@ -52,8 +52,8 @@ public:
 private:
     std::atomic<bool> requiresUpdate{false};
     juce::Synthesiser synth;
-    static constexpr int numOfVoices = 3;
-    juce::AudioParameterInt* oscTypeParameter;
+    static constexpr int numOfVoices = 8;
+    juce::AudioParameterInt *oscTypeParameter;
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(SynthAudioProcessor)
