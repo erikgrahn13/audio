@@ -7,5 +7,10 @@ var annotated_dup =
     [ "DeathMetalLookAndFeel", "classDeathMetalLookAndFeel.html", null ],
     [ "EQView", "classEQView.html", null ],
     [ "FontAudioLookAndFeel", "classFontAudioLookAndFeel.html", null ],
-    [ "IDsp", "classIDsp.html", null ]
+    [ "IDsp", "classIDsp.html", null ],
+    [ "Oscillator", "classOscillator.html", null ],
+    [ "SynthAudioProcessor", "classSynthAudioProcessor.html", null ],
+    [ "SynthAudioProcessorEditor", "classSynthAudioProcessorEditor.html", null ],
+    [ "SynthSound", "classSynthSound.html", null ],
+    [ "SynthVoice", "classSynthVoice.html", null ]
 ];
