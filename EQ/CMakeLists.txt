@@ -70,7 +70,8 @@ target_sources(${PROJECT_NAME}
     PluginEditor.cpp
     PluginProcessor.cpp
     EQView.cpp
-    AnalyzerCurve.cpp)
+    AnalyzerCurve.cpp
+    SliderGroup.cpp)
 
 # `target_compile_definitions` adds some preprocessor definitions to our target. In a Projucer
 # project, these might be passed in the 'Preprocessor Definitions' field. JUCE modules also make use
@@ -105,6 +106,7 @@ target_link_libraries(${PROJECT_NAME}
 
     # AudioPluginData           # If we'd created a binary data target, we'd link to it here
     Biquad
+    Fonts
     juce::juce_audio_utils
     juce::juce_dsp
     PUBLIC

@@ -3,6 +3,8 @@
 #include "PluginProcessor.h"
 #include "EQView.h"
 #include "AnalyzerCurve.h"
+#include "DeathMetalLookAndFeel.h"
+#include "SliderGroup.h"
 
 //==============================================================================
 class AudioPluginAudioProcessorEditor final : public juce::AudioProcessorEditor, juce::AudioProcessorValueTreeState::Listener
@@ -24,6 +26,12 @@ private:
     juce::AudioProcessorValueTreeState &mParameters;
     EQView mEQView;
     AnalyzerCurve mAnalyzerCurve;
-
+    SliderGroup mHPFSliderGroup;    
+    SliderGroup mLowShelfSliderGroup;
+    SliderGroup mLowMidSliderGroup;
+    SliderGroup mHighMidSliderGroup;
+    SliderGroup mHighShelfSliderGroup;
+    SliderGroup mLPFSliderGroup;
+    
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AudioPluginAudioProcessorEditor)
 };
