@@ -3,8 +3,6 @@
 AnalyzerCurve::AnalyzerCurve(AudioPluginAudioProcessor &processor)
 : mProcessor(processor)
 {
-    setPaintingIsUnclipped(true);
-
     avgFFTBuffer.clear();
 
     mFFTPoints.resize(mFFT.getSize());

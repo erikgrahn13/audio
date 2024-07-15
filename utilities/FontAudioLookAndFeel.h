@@ -12,6 +12,11 @@ class FontAudioLookAndFeel : public juce::LookAndFeel_V4
         fontAudio = juce::Font(juce::Typeface::createSystemTypefaceFor(BinaryData::fontaudio_ttf, BinaryData::fontaudio_ttfSize));
     }
 
+    juce::Font& getFont()
+    {
+        return fontAudio;
+    }
+
     void drawButtonText(juce::Graphics& g, juce::TextButton& button,
                         bool /*isMouseOverButton*/, bool /*isButtonDown*/) override
     {
@@ -37,6 +42,7 @@ class FontAudioLookAndFeel : public juce::LookAndFeel_V4
 
         g.drawText(button.getButtonText(), button.getLocalBounds(), juce::Justification::centred, true);
     }
+
     private:
     juce::Font fontAudio;
 };

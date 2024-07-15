@@ -8,6 +8,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 set(DEPENDENCY_DIR ${CMAKE_CURRENT_LIST_DIR}/external)
+include_directories(${CMAKE_CURRENT_LIST_DIR}/utilities)
 include (FetchContent)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
