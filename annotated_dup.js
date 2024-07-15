@@ -9,6 +9,7 @@ var annotated_dup =
     [ "FontAudioLookAndFeel", "classFontAudioLookAndFeel.html", null ],
     [ "IDsp", "classIDsp.html", null ],
     [ "Oscillator", "classOscillator.html", null ],
+    [ "SliderGroup", "classSliderGroup.html", null ],
     [ "SynthAudioProcessor", "classSynthAudioProcessor.html", null ],
     [ "SynthAudioProcessorEditor", "classSynthAudioProcessorEditor.html", null ],
     [ "SynthSound", "classSynthSound.html", null ],

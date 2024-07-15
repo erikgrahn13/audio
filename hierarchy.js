@@ -13,7 +13,8 @@ var hierarchy =
     [ "Biquad::Coeffs", "structBiquad_1_1Coeffs.html", null ],
     [ "juce::Component", null, [
       [ "AnalyzerCurve", "classAnalyzerCurve.html", null ],
-      [ "EQView", "classEQView.html", null ]
+      [ "EQView", "classEQView.html", null ],
+      [ "SliderGroup", "classSliderGroup.html", null ]
     ] ],
     [ "IDsp", "classIDsp.html", [
       [ "Biquad", "classBiquad.html", null ]
