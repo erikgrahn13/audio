@@ -9,5 +9,7 @@
     "search.exclude": {
         "**/build": true,
         "**/external": false
-    }
+    },
+    "editor.formatOnSave": true,
+    "C_Cpp.clang_format_fallbackStyle": "Microsoft" // C++ core guidelines
 }
