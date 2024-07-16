@@ -19,6 +19,7 @@ public:
     void setAmplitude(float amplitude) { mAmplitude = amplitude; }
     void setFrequency(float frequency) { mFrequency = frequency; }
     void setType(OscType oscType);
+    void setSampleRate(float sampleRate) { mSampleRate = sampleRate; }
 
 private:
     OscType mOscType;

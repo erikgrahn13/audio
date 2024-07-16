@@ -14,6 +14,7 @@ public:
     void pitchWheelMoved(int newPitchWheelValue) override;
     void renderNextBlock(juce::AudioBuffer<float> &outputBuffer, int startSample, int numSamples) override;
     void setOscillatorType(Oscillator::OscType oscType) { oscillator.setType(oscType); };
+    void setCurrentPlaybackSampleRate(const double newRate) override;
 
 private:
     Oscillator oscillator;

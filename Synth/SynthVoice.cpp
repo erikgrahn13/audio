@@ -44,3 +44,8 @@ void SynthVoice::renderNextBlock(juce::AudioBuffer<float> &outputBuffer, int sta
         ++startSample;
     }
 }
+
+void SynthVoice::setCurrentPlaybackSampleRate(const double newRate)
+{
+    oscillator.setSampleRate(newRate);
+}
