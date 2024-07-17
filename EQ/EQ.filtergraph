@@ -66,7 +66,7 @@
           uiLastY_Generic="243" uiopen_Generic="1">
     <PLUGIN name="EQ" format="VST3" category="Fx" manufacturer="yourcompany"
             version="0.0.1" file="C:\Users\erikg\Development\audio\build\EQ\EQ_artefacts\Debug\VST3\EQ.vst3\Contents\x86_64-win\EQ.vst3"
-            uniqueId="970487f5" isInstrument="0" fileTime="190590c5cf9" infoUpdateTime="190590cb3b6"
+            uniqueId="970487f5" isInstrument="0" fileTime="190c1e29cb4" infoUpdateTime="190c1e2d3f0"
             numInputs="2" numOutputs="2" isShell="0" hasARAExtension="0"
             uid="c0053e5b"/>
     <STATE>191.VMjLgXK....O+fWarAhckI2bo8la8HRLt.iHfTlai8FYo41Y8HRUTYTK3HxO9.BOVMEUy.Ea0cVZtMEcgQWY9vSRC8Vav8lak4Fc9XCLt3hKt3hKt3hKt3hYRUUSTEETIckVwTjQisVTTgkdEYjKAQjYPQSPWgUdMcjKAQjct3hdA4hKt3hKt3hKtnTUv.UQAslXuk0UXoWUFE0YQcEV77RRC8Vav8lak4Fc9vyKVMEUy.Ea0cVZtMEcgQWY9..</STATE>
@@ -79,10 +79,11 @@
       </OUTPUTS>
     </LAYOUT>
   </FILTER>
-  <FILTER uid="9" x="0.48625" y="0.2862903225806452" useARA="0">
+  <FILTER uid="9" x="0.48625" y="0.2862903225806452" useARA="0" uiLastX_Normal="450"
+          uiLastY_Normal="115" uiopen_Normal="0">
     <PLUGIN name="AudioFilePlayer" format="VST3" category="Fx" manufacturer="yourcompany"
             version="0.0.1" file="C:\Users\erikg\Development\audio\build\utilities\AudioFilePlayer\AudioFilePlayer_artefacts\Debug\VST3\AudioFilePlayer.vst3\Contents\x86_64-win\AudioFilePlayer.vst3"
-            uniqueId="970487f5" isInstrument="0" fileTime="1905602b16a" infoUpdateTime="190590cb3b6"
+            uniqueId="970487f5" isInstrument="0" fileTime="190c1e236b2" infoUpdateTime="190c1e2d3f0"
             numInputs="2" numOutputs="2" isShell="0" hasARAExtension="0"
             uid="c0053e5b"/>
     <STATE>450.VMjLgja....O+fWarAhckI2bo8la8HRLt.iHfTlai8FYo41Y8HRUTYTK3HxO9.BOVMEUy.Ea0cVZtMEcgQWY9vSRC8Vav8lak4Fc9HSMy3hUMoFSmY1Rt3hKt7zJlcUXxEDZisVRxH1a3vVX3fjTLQmKogjYTwVXogiQY8FMwjENHIUUTkEUKMCR38TNtHzSPUDahcFLVkkdUwlX4QyPOAUQpQUPvPDRuEkUOglXVg0azvFRlg0UXIWUWkENHIDSz4RZHU2LC8DTEoFUAACQH8VTV8DZ1ESX0ETaHYFVWgkbUcUV3fjPLQmKogTcyLzSPUjZTEDLDgzaQY0Sn4xQgc1ZsgjYXcEVxU0UYgCRBwDctjFR0MyPOAUQpQUPvPDRuEkUOgFSGMVcA0FRlg0UXIWUWkENHIDSz4RZHU2LC8TctTEV3UjUgsVTWkEdM01St3hKt3hKt3hKt3hKJUELPUTPqI1aYcEV5UkQQcVTWgkKDAkKBs1QhcVSxHlKDAkKC4BTG4hKt3hKt3hKt3FUUMTUDQEdqw1XmE0UYQTQFM1YAwyKIMzasA2atUlaz4COuX0TTMCTrU2Yo41TzEFck4C.</STATE>

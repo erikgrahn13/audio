@@ -115,7 +115,7 @@ target_link_libraries(${PROJECT_NAME}
     juce::juce_recommended_warning_flags)
 
 if(NOT CI_BUILD)
-    add_dependencies(${PROJECT_NAME} AudioPluginHost)
+    add_dependencies(${PROJECT_NAME} AudioPluginHost AudioFilePlayer_VST3)
 endif()
 
 enable_pluginval_testing(${PROJECT_NAME})
