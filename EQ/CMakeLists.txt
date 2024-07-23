@@ -114,7 +114,7 @@ target_link_libraries(${PROJECT_NAME}
     juce::juce_recommended_lto_flags
     juce::juce_recommended_warning_flags)
 
-if(NOT CI_BUILD)
+if(JUCE_BUILD_EXTRAS)
     add_dependencies(${PROJECT_NAME} AudioPluginHost AudioFilePlayer_VST3)
 endif()
 
