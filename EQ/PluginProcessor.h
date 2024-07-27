@@ -7,13 +7,9 @@
 //==============================================================================
 class AudioPluginAudioProcessor final : public juce::AudioProcessor, juce::AudioProcessorValueTreeState::Listener
 {
-public:
-        using FilterTuple = std::tuple<
-        Biquad, 
-        juce::RangedAudioParameter*,
-        std::optional<juce::RangedAudioParameter*>,
-        std::optional<juce::RangedAudioParameter*>
-    >;
+  public:
+    using FilterTuple = std::tuple<Biquad, juce::RangedAudioParameter *, std::optional<juce::RangedAudioParameter *>,
+                                   std::optional<juce::RangedAudioParameter *>>;
 
     //==============================================================================
     AudioPluginAudioProcessor();
@@ -53,25 +49,30 @@ public:
 
     juce::AudioProcessorValueTreeState::ParameterLayout createParameters();
 
-    void parameterChanged (const juce::String& parameter, float newValue) override;
+    void parameterChanged(const juce::String &parameter, float newValue) override;
     void update();
 
-    juce::AudioProcessorValueTreeState& getVTSParameters() { return parameters; }
-    std::vector<FilterTuple> getFilters() { return mFilters; }
+    juce::AudioProcessorValueTreeState &getVTSParameters()
+    {
+        return parameters;
+    }
+    std::vector<FilterTuple> getFilters()
+    {
+        return mFilters;
+    }
 
     juce::AudioBuffer<float> mAudioBuffer;
     juce::AbstractFifo mRingBuffer{1};
     std::atomic<bool> nextFFTBlockReady{false};
-private:
+
+  private:
     juce::AudioProcessorValueTreeState parameters;
-    juce::AudioParameterFloat* mHPF_Freq;
-    std::map<Biquad, std::vector<juce::RangedAudioParameter*>> mTest;
-
-
+    juce::AudioParameterFloat *mHPF_Freq;
+    std::map<Biquad, std::vector<juce::RangedAudioParameter *>> mTest;
 
     std::vector<FilterTuple> mFilters;
 
-    std::atomic<bool> requiresUpdate {true};
+    std::atomic<bool> requiresUpdate{true};
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AudioPluginAudioProcessor)
 };
