@@ -1,13 +1,10 @@
-#include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include "PluginProcessor.h"
 
 //==============================================================================
-AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(AudioPluginAudioProcessor &p, juce::AudioProcessorValueTreeState& parameters)
-    : AudioProcessorEditor(&p), 
-      processorRef(p), 
-      mParameters(parameters), 
-      mEQView(p, parameters),
-      mAnalyzerCurve(p),
+AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(AudioPluginAudioProcessor &p,
+                                                                 juce::AudioProcessorValueTreeState &parameters)
+    : AudioProcessorEditor(&p), processorRef(p), mParameters(parameters), mEQView(p, parameters), mAnalyzerCurve(p),
       mHPFSliderGroup(p, parameters, "hpf_freq", "", ""),
       mLowShelfSliderGroup(p, parameters, "LowShelfFreq", "LowShelfGain", ""),
       mLowMidSliderGroup(p, parameters, "LowMidFreq", "LowMidGain", "LowMidQ"),
@@ -22,7 +19,7 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(AudioPluginAudi
     addAndMakeVisible(mEQView);
     setSize(900, 500);
 
-    for(int i = 0; i < mParameters.state.getNumChildren(); ++i)
+    for (int i = 0; i < mParameters.state.getNumChildren(); ++i)
     {
         auto paramID = mParameters.state.getChild(i).getProperty("id").toString();
         mParameters.addParameterListener(paramID, this);
@@ -56,7 +53,7 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(AudioPluginAudi
 
 AudioPluginAudioProcessorEditor::~AudioPluginAudioProcessorEditor()
 {
-    for(int i = 0; i < mParameters.state.getNumChildren(); ++i)
+    for (int i = 0; i < mParameters.state.getNumChildren(); ++i)
     {
         auto paramID = mParameters.state.getChild(i).getProperty("id").toString();
         mParameters.removeParameterListener(paramID, this);
@@ -74,13 +71,12 @@ void AudioPluginAudioProcessorEditor::paint(juce::Graphics &g)
 void AudioPluginAudioProcessorEditor::resized()
 {
     auto bounds = getLocalBounds().reduced(20);
-    auto graphArea = bounds.removeFromTop(bounds.getHeight() /  2);
+    auto graphArea = bounds.removeFromTop(bounds.getHeight() / 2);
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..
     mAnalyzerCurve.setBounds(graphArea.reduced(20));
     mEQView.setBounds(graphArea.reduced(20));
     auto sliderGroupArea = bounds.getWidth() / 6;
-
 
     mHPFSliderGroup.setBounds(bounds.removeFromLeft(sliderGroupArea));
     mLowShelfSliderGroup.setBounds(bounds.removeFromLeft(sliderGroupArea));
@@ -90,37 +86,34 @@ void AudioPluginAudioProcessorEditor::resized()
     mLPFSliderGroup.setBounds(bounds.removeFromLeft(sliderGroupArea));
 }
 
-void AudioPluginAudioProcessorEditor::parameterChanged(const juce::String& parameterID, float newValue)
+void AudioPluginAudioProcessorEditor::parameterChanged(const juce::String &parameterID, float newValue)
 {
     auto &handles = mEQView.getHandles();
     bool needsUpdate{false};
 
-    for(auto& handle : handles)
+    for (auto &handle : handles)
     {
-        if(handle->mFreqParameter->getParameterID() == parameterID)
+        if (handle->mFreqParameter->getParameterID() == parameterID)
         {
             handle->biquad.setFrequency(newValue);
             needsUpdate = true;
         }
 
-        if(handle->mGainParameter && handle->mGainParameter->getParameterID() == parameterID)
+        if (handle->mGainParameter && handle->mGainParameter->getParameterID() == parameterID)
         {
             handle->biquad.setGain(newValue);
             needsUpdate = true;
         }
 
-        if(handle->mQParameter && handle->mQParameter->getParameterID() == parameterID)
+        if (handle->mQParameter && handle->mQParameter->getParameterID() == parameterID)
         {
             handle->biquad.setQ(newValue);
             needsUpdate = true;
         }
     }
 
-    if(needsUpdate)
+    if (needsUpdate)
     {
-        juce::MessageManager::callAsync([this]() {
-                mEQView.updateFrequencyResponse();
-            });
+        juce::MessageManager::callAsync([this]() { mEQView.updateFrequencyResponse(); });
     }
 }
-
