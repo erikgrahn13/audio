@@ -30,6 +30,10 @@ jobs:
           sudo apt-get update
           sudo apt install doxygen graphviz libasound2-dev libjack-jackd2-dev ladspa-sdk libcurl4-openssl-dev libfreetype6-dev libx11-dev libxcomposite-dev libxcursor-dev libxcursor-dev libxext-dev libxinerama-dev libxrandr-dev libxrender-dev libwebkit2gtk-4.0-dev libglu1-mesa-dev mesa-common-dev
 
+      - name: Set CMake default generator
+        if: matrix.os == 'macos-latest'
+        run: echo "CMAKE_GENERATOR=Xcode" >> $GITHUB_ENV
+
       - name: Configure
         run: cmake -DCMAKE_BUILD_TYPE=Release -DJUCE_COPY_PLUGIN_AFTER_BUILD=ON -B build -S .
 
