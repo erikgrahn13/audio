@@ -1,92 +1,89 @@
 {
-    "version": 9,
-    "cmakeMinimumRequired": {
-      "major": 3,
-      "minor": 22,
-      "patch": 0
+  "version": 9,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 22,
+    "patch": 0
+  },
+
+  "configurePresets": [
+    {
+      "name": "default",
+      "hidden": true,
+      "binaryDir": "${sourceDir}/build"
     },
-
-    "configurePresets": [
-      {
-        "name": "default",
-        "hidden": true,
-        "binaryDir": "${sourceDir}/build"
-      },
-      {
-        "name": "Debug",
-        "inherits": "default",
-        "displayName": "Debug",
-        "cacheVariables": {
-          "CMAKE_BUILD_TYPE": "Debug",
-          "JUCE_BUILD_EXAMPLES": "ON",
-          "JUCE_BUILD_EXTRAS": "ON"
-
-        }
-      },
-      {
-        "name": "Release",
-        "inherits": "default",
-        "displayName": "Release",
-        "cacheVariables": {
-          "CMAKE_BUILD_TYPE": "Release"
-        }
+    {
+      "name": "Debug",
+      "inherits": "default",
+      "displayName": "Debug",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "JUCE_BUILD_EXAMPLES": "ON",
+        "JUCE_BUILD_EXTRAS": "ON"
       }
-    ],
-
-    "buildPresets": [
-      {
-        "name": "Release",
-        "verbose": true,
-        "configurePreset": "Release",
-        "configuration": "Release",
-        "jobs": 4
-      },
-      {
-        "name": "Docs",
-        "configurePreset": "Release",
-        "targets": ["Docs"]
-      }
-    ],
-    "testPresets": [
-      {
-        "name": "Release",
-        "configurePreset": "Release",
-        "output": {"outputOnFailure": true},
-        "configuration": "Release",
-        "execution": {"noTestsAction": "error", "stopOnFailure": true}
-      }
-    ],
-    "packagePresets": [
-      {
-        "name": "default",
-        "configurePreset": "default",
-        "generators": [
-          "TGZ"
-        ]
-      }
-    ],
-    "workflowPresets": [
-      {
-        "name": "Release",
-        "steps": [
-          {
-            "type": "configure",
-            "name": "Release"
-          },
-          {
-            "type": "build",
-            "name": "Release"
-          },
-          {
-            "type": "test",
-            "name": "Release"
-          }
-        ]
-      }
-    ],
-    "vendor": {
-      "example.com/ExampleIDE/1.0": {
-        "autoFormat": false
+    },
+    {
+      "name": "Release",
+      "inherits": "default",
+      "displayName": "Release",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
       }
     }
+  ],
+
+  "buildPresets": [
+    {
+      "name": "Release",
+      "verbose": true,
+      "configurePreset": "Release",
+      "configuration": "Release",
+      "jobs": 4
+    },
+    {
+      "name": "Docs",
+      "configurePreset": "Release",
+      "targets": ["docs"]
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "Release",
+      "configurePreset": "Release",
+      "output": { "outputOnFailure": true },
+      "configuration": "Release",
+      "execution": { "noTestsAction": "error", "stopOnFailure": true }
+    }
+  ],
+  "packagePresets": [
+    {
+      "name": "default",
+      "configurePreset": "default",
+      "generators": ["TGZ"]
+    }
+  ],
+  "workflowPresets": [
+    {
+      "name": "Release",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "Release"
+        },
+        {
+          "type": "build",
+          "name": "Release"
+        },
+        {
+          "type": "test",
+          "name": "Release"
+        }
+      ]
+    }
+  ],
+  "vendor": {
+    "example.com/ExampleIDE/1.0": {
+      "autoFormat": false
+    }
   }
+}
