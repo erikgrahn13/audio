@@ -38,6 +38,7 @@
         "name": "Release",
         "verbose": true,
         "configurePreset": "Release",
+        "configuration": "Release",
         "jobs": 4
       },
       {
