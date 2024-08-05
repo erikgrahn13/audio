@@ -37,7 +37,8 @@
       {
         "name": "Release",
         "verbose": true,
-        "configurePreset": "Release"
+        "configurePreset": "Release",
+        "jobs": 4
       },
       {
         "name": "Docs",
@@ -50,6 +51,7 @@
         "name": "Release",
         "configurePreset": "Release",
         "output": {"outputOnFailure": true},
+        "configuration": "Release",
         "execution": {"noTestsAction": "error", "stopOnFailure": true}
       }
     ],
