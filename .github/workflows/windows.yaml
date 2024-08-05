@@ -1,0 +1,15 @@
+name: Windows build
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    name: Build plugins
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - uses: ./.github/actions/cmake
