@@ -1,9 +1,29 @@
 {
-    "cmake.configureArgs": [
-        "-DJUCE_BUILD_EXTRAS=ON",
-        "-DJUCE_BUILD_EXAMPLES=ON"
+    "cmake.useCMakePresets": "always",
+    "cmake.options.advanced": {
+
+        "testPreset": {
+            "statusBarVisibility": "hidden"
+        },
+        "buildPreset": {
+            "statusBarVisibility": "hidden"  
+        },
+        "cpack": {
+            "statusBarVisibility": "hidden"            
+        },
+        "packagePreset": {
+            "statusBarVisibility": "hidden"
+        },
+        "workflow": {
+            "statusBarVisibility": "hidden"   
+        },
+        "workflowPreset": {
+            "statusBarVisibility": "hidden"
+        }
+    },
+    "cmake.preferredGenerators": [
+        "Xcode"
     ],
-    "cmake.ctestArgs": ["--verbose"],
 
     "search.useIgnoreFiles": false,  // Disable respecting .gitignore
     "search.exclude": {
@@ -11,5 +31,7 @@
         "**/external": false
     },
     "editor.formatOnSave": true,
-    "C_Cpp.clang_format_fallbackStyle": "Microsoft" // C++ core guidelines
+    "C_Cpp.clang_format_fallbackStyle": "Microsoft", // C++ core guidelines
+
+    
 }
