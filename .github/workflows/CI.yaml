@@ -40,7 +40,7 @@ jobs:
           pgrep -x AudioComponentRegistrar >/dev/null && killall -9 AudioComponentRegistrar; echo "killed AudioComponentRegistrar" || echo "AudioComponentRegistrar Process not found"
 
       - name: CMake Preset
-        run: cmake --workflow Release
+        run: cmake --workflow --preset Release
 
       - name: Generate documentation
         if: matrix.os == 'ubuntu-latest'
