@@ -27,7 +27,8 @@
       "inherits": "default",
       "displayName": "Release",
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Release"
+        "CMAKE_BUILD_TYPE": "Release",
+        "JUCE_COPY_PLUGIN_AFTER_BUILD": "TRUE"
       }
     }
   ],
