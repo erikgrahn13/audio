@@ -34,13 +34,17 @@ jobs:
         if: matrix.os == 'macos-latest'
         run: echo "CMAKE_GENERATOR=Xcode" >> $GITHUB_ENV
 
-      - name: Kill AudioComponentRegistrar
+      - name: CMake Build
+        if: matrix.os == 'windows-latest' || matrix.os == 'ubuntu-latest'
+        run: cmake --workflow --preset Release
+
+      - name: CMake Build (macOS)
         if: matrix.os == 'macos-latest'
         run: |
+          cmake --preset Release
+          cmake --build --preset Release
           pgrep -x AudioComponentRegistrar >/dev/null && killall -9 AudioComponentRegistrar; echo "killed AudioComponentRegistrar" || echo "AudioComponentRegistrar Process not found"
-
-      - name: CMake Preset
-        run: cmake --workflow --preset Release
+          ctest --preset Release
 
       - name: Generate documentation
         if: matrix.os == 'ubuntu-latest'
