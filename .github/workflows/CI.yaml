@@ -73,10 +73,7 @@ jobs:
           name: build-${{matrix.os}}
 
       - name: Run Tests
-        run: |
-          ls _deps
-          ctest --preset Release
-        shell: bash
+        run: ctest --preset Release
 
   deploy:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
