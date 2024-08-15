@@ -81,7 +81,7 @@ jobs:
         if: matrix.os == 'macos-latest'
         run: |
           mkdir -p ~/Library/Audio/Plug-Ins/Components
-          find build -name "*.component" -exec mv {} ~/Library/Audio/Plug-Ins/Components/ \;
+          find build -name "*.component" -exec cp -r {} ~/Library/Audio/Plug-Ins/Components/ \;
           pgrep -x AudioComponentRegistrar >/dev/null && killall -9 AudioComponentRegistrar; echo "killed AudioComponentRegistrar" || echo "AudioComponentRegistrar Process not found"
         shell: bash
 
