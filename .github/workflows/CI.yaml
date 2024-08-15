@@ -49,6 +49,7 @@ jobs:
             CMakePresets.json
             build/**
             !build/build
+            !**/*_SharedCode.a
             !build/_deps/juce-*/
 
       - name: Upload build artifact
@@ -75,6 +76,14 @@ jobs:
       - name: Change permissions
         if: matrix.os != 'windows-latest'
         run: chmod -R +x build/_deps/pluginval-src/
+
+      - name: Register AU plugins
+        if: matrix.os == 'macos-latest'
+        run: |
+          mkdir -p ~/Library/Audio/Plug-Ins/Components
+          find build -name "*.component" -exec cp -r {} test/ \;
+          pgrep -x AudioComponentRegistrar >/dev/null && killall -9 AudioComponentRegistrar; echo "killed AudioComponentRegistrar" || echo "AudioComponentRegistrar Process not found"
+        shell: bash
 
       - name: Run Tests
         run: ctest --preset Release
