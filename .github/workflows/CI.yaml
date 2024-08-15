@@ -72,6 +72,10 @@ jobs:
         with:
           name: build-${{matrix.os}}
 
+      - name: Change permissions
+        if: matrix.os != 'windows-latest'
+        run: chmod -R +x build/_deps/pluginval-src/
+
       - name: Run Tests
         run: ctest --preset Release
 
