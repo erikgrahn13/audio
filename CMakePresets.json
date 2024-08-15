@@ -73,10 +73,6 @@
         {
           "type": "build",
           "name": "Release"
-        },
-        {
-          "type": "test",
-          "name": "Release"
         }
       ]
     }
