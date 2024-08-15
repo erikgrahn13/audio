@@ -46,7 +46,9 @@ jobs:
         with:
           name: build-${{matrix.os}}
           path: |
+            CMakePresets.json
             build/**
+            !build/build
             !build/_deps/juce-*/
 
       - name: Upload build artifact
