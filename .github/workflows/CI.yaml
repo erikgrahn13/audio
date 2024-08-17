@@ -83,6 +83,8 @@ jobs:
           mkdir -p ~/Library/Audio/Plug-Ins/Components
           find build -name "*.component" -exec cp -r {} ~/Library/Audio/Plug-Ins/Components/ \;
           pgrep -x AudioComponentRegistrar >/dev/null && killall -9 AudioComponentRegistrar; echo "killed AudioComponentRegistrar" || echo "AudioComponentRegistrar Process not found"
+          find build -name "*.app" -exec sh -c 'echo "Registering $(basename {})"; open "{}" & sleep 3; killall "$(basename "{}" .app)" || true' \;
+          auval -al
         shell: bash
 
       - name: Run Tests
