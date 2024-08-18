@@ -1,7 +1,9 @@
 #include "SliderGroup.h"
 
-SliderGroup::SliderGroup(AudioPluginAudioProcessor& processor, juce::AudioProcessorValueTreeState& parameters, std::string_view frequencyParameterID, std::string_view gainParameterID, std::string_view QParameterID)
-: mProcessor(processor), mParameters(parameters)
+SliderGroup::SliderGroup(AudioPluginAudioProcessor &processor, juce::AudioProcessorValueTreeState &parameters,
+                         std::string_view frequencyParameterID, std::string_view gainParameterID,
+                         std::string_view QParameterID)
+    : mProcessor(processor), mParameters(parameters)
 {
     frame.setLookAndFeel(&deathMetalLookAndFeel);
     frame.setTextLabelPosition(juce::Justification::centred);
@@ -12,18 +14,22 @@ SliderGroup::SliderGroup(AudioPluginAudioProcessor& processor, juce::AudioProces
     filterSymbolLabel.setJustificationType(juce::Justification::centred);
     addAndMakeVisible(filterSymbolLabel);
 
+    mFrequencySlider.setBufferedToImage(true);
+    mGainSlider.setBufferedToImage(true);
+    mQSlider.setBufferedToImage(true);
 
-    if(!frequencyParameterID.empty())
+    if (!frequencyParameterID.empty())
     {
-        mFrequencyAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(mProcessor.getVTSParameters(), frequencyParameterID.data(), mFrequencySlider));
+        mFrequencyAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(
+            mProcessor.getVTSParameters(), frequencyParameterID.data(), mFrequencySlider));
         mFrequencySlider.setSliderStyle(juce::Slider::RotaryVerticalDrag);
         mFrequencySlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 100, 20);
         mFrequencySlider.setColour(juce::Slider::textBoxOutlineColourId, juce::Colours::black);
-        
+
         // Customize the text displayed in the textbox
         mFrequencySlider.textFromValueFunction = [](double value) {
             int intValue = static_cast<int>(std::ceil(value));
-            
+
             return juce::String(intValue) + " HZ"; // Format the text with a suffix
         };
         mFrequencySlider.setLookAndFeel(&deathMetalLookAndFeel);
@@ -31,10 +37,11 @@ SliderGroup::SliderGroup(AudioPluginAudioProcessor& processor, juce::AudioProces
         addAndMakeVisible(mFrequencySlider);
     }
 
-    if(!gainParameterID.empty())
+    if (!gainParameterID.empty())
     {
         mGainSlider.setSliderStyle(juce::Slider::RotaryVerticalDrag);
-        mGainAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(mProcessor.getVTSParameters(), gainParameterID.data(), mGainSlider));
+        mGainAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(
+            mProcessor.getVTSParameters(), gainParameterID.data(), mGainSlider));
         mGainSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 100, 20);
         mGainSlider.setColour(juce::Slider::textBoxOutlineColourId, juce::Colours::black);
 
@@ -47,10 +54,11 @@ SliderGroup::SliderGroup(AudioPluginAudioProcessor& processor, juce::AudioProces
         addAndMakeVisible(mGainSlider);
     }
 
-    if(!QParameterID.empty())
+    if (!QParameterID.empty())
     {
         mQSlider.setSliderStyle(juce::Slider::RotaryVerticalDrag);
-        mQAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(mProcessor.getVTSParameters(), QParameterID.data(), mQSlider));
+        mQAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(mProcessor.getVTSParameters(),
+                                                                                    QParameterID.data(), mQSlider));
         mQSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 100, 20);
         mQSlider.setColour(juce::Slider::textBoxOutlineColourId, juce::Colours::black);
 
@@ -63,10 +71,6 @@ SliderGroup::SliderGroup(AudioPluginAudioProcessor& processor, juce::AudioProces
         mQSlider.updateText();
         addAndMakeVisible(mQSlider);
     }
-
-
-
-
 }
 
 SliderGroup::~SliderGroup()
@@ -87,15 +91,14 @@ void SliderGroup::resized()
 
     filterSymbolLabel.setBounds(groupBounds.removeFromTop(groupBounds.getHeight() / 4));
 
-    if(mQSlider.isVisible())
+    if (mQSlider.isVisible())
     {
         auto left = groupBounds.removeFromLeft(groupBounds.getWidth() / 2);
         mGainSlider.setBounds(left.removeFromTop(left.getHeight() / 2));
         mFrequencySlider.setBounds(left);
         mQSlider.setBounds(groupBounds.reduced(0, 40));
-
     }
-    else if(mGainSlider.isVisible())
+    else if (mGainSlider.isVisible())
     {
         mGainSlider.setBounds(groupBounds.removeFromTop(groupBounds.getHeight() / 2));
         mFrequencySlider.setBounds(groupBounds);
@@ -103,7 +106,6 @@ void SliderGroup::resized()
     else
     {
         mFrequencySlider.setBounds(groupBounds.reduced(30));
-
     }
 }
 
