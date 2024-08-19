@@ -1,29 +1,40 @@
 #include "EQView.h"
 #include <numbers>
 
-EQView::EQView(AudioPluginAudioProcessor& processor, juce::AudioProcessorValueTreeState& parameters)
-: mProcessor(processor),
-  mParameters(parameters)
+EQView::EQView(AudioPluginAudioProcessor &processor, juce::AudioProcessorValueTreeState &parameters)
+    : mProcessor(processor), mParameters(parameters)
 {
 
-    mHandles.push_back(std::make_unique<Handle>(Biquad::Type::kHighpass, dynamic_cast<juce::AudioParameterFloat*>(mParameters.getParameter("hpf_freq"))));
-    mHandles.push_back(std::make_unique<Handle>(Biquad::Type::kLowpass, dynamic_cast<juce::AudioParameterFloat*>(mParameters.getParameter("lpf_freq"))));
-    mHandles.push_back(std::make_unique<Handle>(Biquad::Type::kLowShelf, dynamic_cast<juce::AudioParameterFloat*>(mParameters.getParameter("LowShelfFreq")), dynamic_cast<juce::AudioParameterFloat*>(mParameters.getParameter("LowShelfGain"))));
-    mHandles.push_back(std::make_unique<Handle>(Biquad::Type::kHighShelf, dynamic_cast<juce::AudioParameterFloat*>(mParameters.getParameter("HighShelfFreq")), dynamic_cast<juce::AudioParameterFloat*>(mParameters.getParameter("HighShelfGain"))));
-    mHandles.push_back(std::make_unique<Handle>(Biquad::Type::kPeak, dynamic_cast<juce::AudioParameterFloat*>(mParameters.getParameter("LowMidFreq")), dynamic_cast<juce::AudioParameterFloat*>(mParameters.getParameter("LowMidGain")), dynamic_cast<juce::AudioParameterFloat*>(mParameters.getParameter("LowMidQ"))));
-    mHandles.push_back(std::make_unique<Handle>(Biquad::Type::kPeak, dynamic_cast<juce::AudioParameterFloat*>(mParameters.getParameter("HighMidFreq")), dynamic_cast<juce::AudioParameterFloat*>(mParameters.getParameter("HighMidGain")), dynamic_cast<juce::AudioParameterFloat*>(mParameters.getParameter("HighMidQ"))));
+    mHandles.push_back(std::make_unique<Handle>(
+        Biquad::Type::kHighpass, dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("hpf_freq"))));
+    mHandles.push_back(std::make_unique<Handle>(
+        Biquad::Type::kLowpass, dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("lpf_freq"))));
+    mHandles.push_back(std::make_unique<Handle>(
+        Biquad::Type::kLowShelf, dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("LowShelfFreq")),
+        dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("LowShelfGain"))));
+    mHandles.push_back(std::make_unique<Handle>(
+        Biquad::Type::kHighShelf, dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("HighShelfFreq")),
+        dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("HighShelfGain"))));
+    mHandles.push_back(std::make_unique<Handle>(
+        Biquad::Type::kPeak, dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("LowMidFreq")),
+        dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("LowMidGain")),
+        dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("LowMidQ"))));
+    mHandles.push_back(std::make_unique<Handle>(
+        Biquad::Type::kPeak, dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("HighMidFreq")),
+        dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("HighMidGain")),
+        dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("HighMidQ"))));
 
-    for(auto& handle : mHandles)
+    for (auto &handle : mHandles)
     {
         handle->biquad.setSampleRate(mProcessor.getSampleRate());
         handle->biquad.setFrequency(handle->mFreqParameter->convertFrom0to1(handle->mFreqParameter->getValue()));
 
-        if(handle->mGainParameter)
+        if (handle->mGainParameter)
         {
             handle->biquad.setGain(handle->mGainParameter->convertFrom0to1(handle->mGainParameter->getValue()));
         }
 
-        if(handle->mQParameter)
+        if (handle->mQParameter)
         {
             handle->biquad.setQ(handle->mQParameter->convertFrom0to1(handle->mQParameter->getValue()));
         }
@@ -35,7 +46,6 @@ EQView::EQView(AudioPluginAudioProcessor& processor, juce::AudioProcessorValueTr
 
 EQView::~EQView()
 {
-    
 }
 
 void EQView::resized()
@@ -43,32 +53,26 @@ void EQView::resized()
     auto area = getLocalBounds();
 
     // Calculate the position so the center of the handle represents the parameter value
-    for(auto& handle: mHandles)
+    for (auto &handle : mHandles)
     {
 
-
         float xPosition = area.getWidth() * handle->mFreqParameter->getValue();
-        float yPosition = area.getHeight() / 2.0f;  // Center Y position
+        float yPosition = area.getHeight() / 2.0f; // Center Y position
 
-        handle->setBounds(static_cast<int>(xPosition - Handle::handSize / 2), static_cast<int>(yPosition - Handle::handSize / 2), Handle::handSize, Handle::handSize);
+        handle->setBounds(static_cast<int>(xPosition - Handle::handSize / 2),
+                          static_cast<int>(yPosition - Handle::handSize / 2), Handle::handSize, Handle::handSize);
     }
-
-    
 }
 
 void EQView::paint(juce::Graphics &g)
 {
 
-
-
-
     drawGrid(g);
 
-    drawPlotCurve(g);   
-    g.setOpacity(1.); 
+    drawPlotCurve(g);
+    g.setOpacity(1.);
     g.setColour(juce::Colours::white);
     g.strokePath(frequencyResponse, juce::PathStrokeType(2.0));
-
 }
 
 std::vector<int> getFrequencies()
@@ -101,8 +105,7 @@ std::vector<float> getXs(const std::vector<double> &freqs, float left, float wid
 
 std::vector<int> getGains()
 {
-    return std::vector<int>{
-        -18, -12, -6, 0, 6, 12, 18};
+    return std::vector<int>{-18, -12, -6, 0, 6, 12, 18};
 }
 
 void EQView::drawVerticalLines(juce::Graphics &g)
@@ -112,11 +115,10 @@ void EQView::drawVerticalLines(juce::Graphics &g)
 
     auto xs = getXs(std::vector<double>{freqs.begin(), freqs.end()}, 0.0, size.getWidth() - 1);
 
-    for(auto x : xs)
+    for (auto x : xs)
     {
         g.drawVerticalLine(x, size.getY(), size.getBottom());
     }
-
 }
 
 void EQView::drawHorizontalLines(juce::Graphics &g)
@@ -127,15 +129,14 @@ void EQView::drawHorizontalLines(juce::Graphics &g)
     auto hej1 = size.getTopLeft().getX();
     auto hej2 = size.getTopRight().getX();
 
-    for(auto gaindB : gains)
+    for (auto gaindB : gains)
     {
         auto y = size.getHeight() - 1 + ((1 - size.getHeight()) * (gaindB - -18.0)) / (18.0 - -18.0);
         g.drawHorizontalLine(y, size.getTopLeft().getX(), size.getTopRight().getX());
-
     }
 }
 
-void EQView::drawPlotCurve(juce::Graphics& g)
+void EQView::drawPlotCurve(juce::Graphics &g)
 {
 
     frequencyResponse.clear();
@@ -147,30 +148,27 @@ void EQView::drawPlotCurve(juce::Graphics& g)
     const double outputMin = bounds.getBottom();
     const double outputMax = bounds.getY();
     const auto sampleRate = mProcessor.getSampleRate();
-    
-    for(int i = 0; i < width; ++i)
+
+    for (int i = 0; i < width; ++i)
     {
         float freq = i / width;
         double y = 0;
 
-        for(auto& handle: mHandles)
+        for (auto &handle : mHandles)
         {
             y += Biquad::filterResponse(sampleRate, freq, handle->biquad.mCoeffs.a, handle->biquad.mCoeffs.b);
         }
 
         y = juce::jmap(y, -18.0, 18.0, outputMin, outputMax);
-        if(i == 0)
+        if (i == 0)
         {
             frequencyResponse.startNewSubPath(bounds.getX(), y);
-
         }
 
         frequencyResponse.lineTo(bounds.getX() + i, y);
 
-        g.setOpacity(0.5);
-        g.setColour(juce::Colours::grey);
-        g.drawLine(i, height / 2, i,  y);
-
+        g.setColour(juce::Colours::grey.withAlpha(0.5f));
+        g.drawLine(i, height / 2, i, y);
     }
 }
 
@@ -179,29 +177,32 @@ void EQView::updateFrequencyResponse()
     repaint();
 }
 
-EQView::Handle::Handle(Biquad::Type type, juce::RangedAudioParameter* freqParam, juce::RangedAudioParameter* gainParam, juce::RangedAudioParameter* qParam)
-: mFreqParameter(freqParam),
-  mGainParameter(gainParam),
-  mQParameter(qParam),
-  biquad(type, mFreqParameter->getDefaultValue())
+EQView::Handle::Handle(Biquad::Type type, juce::RangedAudioParameter *freqParam, juce::RangedAudioParameter *gainParam,
+                       juce::RangedAudioParameter *qParam)
+    : mFreqParameter(freqParam), mGainParameter(gainParam), mQParameter(qParam),
+      biquad(type, mFreqParameter->getDefaultValue())
 
 {
-    mFreqAttachment = std::make_unique<juce::ParameterAttachment>(*mFreqParameter, [this](float newValue) {updateFrequencyPositionFromParameter(newValue);});
+    mFreqAttachment = std::make_unique<juce::ParameterAttachment>(
+        *mFreqParameter, [this](float newValue) { updateFrequencyPositionFromParameter(newValue); });
     mFreqAttachment->sendInitialUpdate();
 
-    if(mGainParameter)
+    if (mGainParameter)
     {
-        mGainAttachment = std::make_unique<juce::ParameterAttachment>(*mGainParameter, [this](float newValue) {updateGainPositionFromParameter(newValue);});
+        mGainAttachment = std::make_unique<juce::ParameterAttachment>(
+            *mGainParameter, [this](float newValue) { updateGainPositionFromParameter(newValue); });
         mGainAttachment->sendInitialUpdate();
     }
 
-    if(mQParameter)
+    if (mQParameter)
     {
-        mQAttachment = std::make_unique<juce::ParameterAttachment>(*mQParameter, [this](float newValue) {updateQPositionFromParameter(newValue);});
+        mQAttachment = std::make_unique<juce::ParameterAttachment>(
+            *mQParameter, [this](float newValue) { updateQPositionFromParameter(newValue); });
         mQAttachment->sendInitialUpdate();
     }
 
-    constrainer.setMinimumOnscreenAmounts(Handle::handSize / 2, Handle::handSize / 2, Handle::handSize / 2, Handle::handSize / 2);
+    constrainer.setMinimumOnscreenAmounts(Handle::handSize / 2, Handle::handSize / 2, Handle::handSize / 2,
+                                          Handle::handSize / 2);
 }
 
 void EQView::Handle::paint(juce::Graphics &g)
@@ -242,8 +243,6 @@ void EQView::Handle::paint(juce::Graphics &g)
     g.strokePath(path, juce::PathStrokeType(1));
 
     g.drawEllipse(juce::Rectangle<float>(handSize, handSize).reduced(2, 2), 1.);
-
-
 }
 
 void EQView::Handle::mouseDown(const juce::MouseEvent &event)
@@ -255,7 +254,7 @@ void EQView::Handle::mouseDrag(const juce::MouseEvent &event)
 {
     int yPosition = getY();
     dragger.dragComponent(this, event, &constrainer);
-    if(biquad.getType() == Biquad::Type::kHighpass || biquad.getType() == Biquad::Type::kLowpass)
+    if (biquad.getType() == Biquad::Type::kHighpass || biquad.getType() == Biquad::Type::kLowpass)
     {
         setTopLeftPosition(getX(), yPosition);
     }
@@ -264,27 +263,25 @@ void EQView::Handle::mouseDrag(const juce::MouseEvent &event)
     float xValue = static_cast<float>(getX() + getWidth() / 2.0f) / getParentWidth();
     mFreqParameter->setValueNotifyingHost(xValue);
 
-    if(mGainParameter)
+    if (mGainParameter)
     {
         float yValue = 1 - static_cast<float>(getY() + getHeight() / 2.0f) / getParentHeight();
         mGainParameter->setValueNotifyingHost(yValue);
     }
-
 }
 
 void EQView::Handle::mouseWheelMove(const juce::MouseEvent &event, const juce::MouseWheelDetails &wheel)
 {
-    if(mQParameter)
+    if (mQParameter)
     {
         float qValue = mQParameter->getValue() + (wheel.deltaY - 0.1) / (10. - 0.1);
         mQParameter->setValueNotifyingHost(qValue);
     }
-
 }
 
 void EQView::Handle::updateFrequencyPositionFromParameter(float newValue)
 {
-    if (auto* parent = getParentComponent())
+    if (auto *parent = getParentComponent())
     {
 
         auto area = parent->getLocalBounds();
@@ -297,7 +294,7 @@ void EQView::Handle::updateFrequencyPositionFromParameter(float newValue)
 
 void EQView::Handle::updateGainPositionFromParameter(float newValue)
 {
-    if (auto* parent = getParentComponent())
+    if (auto *parent = getParentComponent())
     {
         auto area = parent->getLocalBounds();
         float yPosition = area.getHeight() - (mGainParameter->getValue() * area.getHeight());
