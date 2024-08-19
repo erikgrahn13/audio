@@ -274,7 +274,7 @@ void EQView::Handle::mouseWheelMove(const juce::MouseEvent &event, const juce::M
 {
     if (mQParameter)
     {
-        float qValue = mQParameter->getValue() + (wheel.deltaY - 0.1) / (10. - 0.1);
+        float qValue = mQParameter->getValue() + wheel.deltaY;
         mQParameter->setValueNotifyingHost(qValue);
     }
 }
