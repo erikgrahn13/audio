@@ -1,10 +1,10 @@
 #pragma once
 
-#include <JuceHeader.h>
-#include <Biquad.h>
-#include <array>
-#include "PluginProcessor.h"
 #include "AnalyzerCurve.h"
+#include "PluginProcessor.h"
+#include <Biquad.h>
+#include <JuceHeader.h>
+#include <array>
 
 // extern "C" {
 //     size_t add(size_t left, size_t right);
@@ -15,24 +15,25 @@ class EQView : public juce::Component
 {
     class Handle : public juce::Component
     {
-        public:
+      public:
         static constexpr float handSize = 20.;
-        Handle(Biquad::Type type, juce::RangedAudioParameter* freqParam, juce::RangedAudioParameter* gainParam = nullptr, juce::RangedAudioParameter* qParam = nullptr);
+        Handle(Biquad::Type type, juce::RangedAudioParameter *freqParam,
+               juce::RangedAudioParameter *gainParam = nullptr, juce::RangedAudioParameter *qParam = nullptr);
 
-        void paint(juce::Graphics& g) override;
-        void mouseDown(const juce::MouseEvent& event) override;
-        void mouseDrag(const juce::MouseEvent& event) override;
-        void mouseWheelMove(const juce::MouseEvent& event, const juce::MouseWheelDetails& wheel) override;
+        void paint(juce::Graphics &g) override;
+        void mouseDown(const juce::MouseEvent &event) override;
+        void mouseDrag(const juce::MouseEvent &event) override;
+        void mouseWheelMove(const juce::MouseEvent &event, const juce::MouseWheelDetails &wheel) override;
         void updateFrequencyPositionFromParameter(float newValue);
         void updateGainPositionFromParameter(float newValue);
-        void updateQPositionFromParameter(float newValue);
 
-        juce::RangedAudioParameter* mFreqParameter;
-        juce::RangedAudioParameter* mGainParameter;
-        juce::RangedAudioParameter* mQParameter;
+        juce::RangedAudioParameter *mFreqParameter;
+        juce::RangedAudioParameter *mGainParameter;
+        juce::RangedAudioParameter *mQParameter;
 
         Biquad biquad;
-        private:
+
+      private:
         juce::ComponentDragger dragger;
         juce::ComponentBoundsConstrainer constrainer;
 
@@ -43,26 +44,28 @@ class EQView : public juce::Component
         float mGain;
         float mQ;
 
-        
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Handle);
     };
 
-    public:
-    EQView(AudioPluginAudioProcessor& processor, juce::AudioProcessorValueTreeState& parameters);
+  public:
+    EQView(AudioPluginAudioProcessor &processor, juce::AudioProcessorValueTreeState &parameters);
     ~EQView();
     void resized() override;
-    void paint(juce::Graphics& g) override;
+    void paint(juce::Graphics &g) override;
 
     void drawGrid(juce::Graphics &g);
-    void drawVerticalLines(juce::Graphics& g);
-    void drawHorizontalLines(juce::Graphics& g);
-    void drawPlotCurve(juce::Graphics& g);
+    void drawVerticalLines(juce::Graphics &g);
+    void drawHorizontalLines(juce::Graphics &g);
+    void drawPlotCurve(juce::Graphics &g);
     void updateFrequencyResponse();
-    std::vector<std::unique_ptr<Handle>>& getHandles() { return mHandles; }
+    std::vector<std::unique_ptr<Handle>> &getHandles()
+    {
+        return mHandles;
+    }
 
-    private:
-    AudioPluginAudioProcessor& mProcessor;
-    juce::AudioProcessorValueTreeState& mParameters;
+  private:
+    AudioPluginAudioProcessor &mProcessor;
+    juce::AudioProcessorValueTreeState &mParameters;
     juce::Path frequencyResponse;
 
     std::atomic<bool> parameterChanged{false};
