@@ -194,13 +194,6 @@ EQView::Handle::Handle(Biquad::Type type, juce::RangedAudioParameter *freqParam,
         mGainAttachment->sendInitialUpdate();
     }
 
-    if (mQParameter)
-    {
-        mQAttachment = std::make_unique<juce::ParameterAttachment>(
-            *mQParameter, [this](float newValue) { updateQPositionFromParameter(newValue); });
-        mQAttachment->sendInitialUpdate();
-    }
-
     constrainer.setMinimumOnscreenAmounts(Handle::handSize / 2, Handle::handSize / 2, Handle::handSize / 2,
                                           Handle::handSize / 2);
 }
