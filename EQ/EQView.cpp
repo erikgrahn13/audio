@@ -303,7 +303,3 @@ void EQView::Handle::updateGainPositionFromParameter(float newValue)
         repaint();
     }
 }
-
-void EQView::Handle::updateQPositionFromParameter(float newValue)
-{
-}
