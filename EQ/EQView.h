@@ -40,9 +40,6 @@ class EQView : public juce::Component
         std::unique_ptr<juce::ParameterAttachment> mFreqAttachment{nullptr};
         std::unique_ptr<juce::ParameterAttachment> mGainAttachment{nullptr};
         std::unique_ptr<juce::ParameterAttachment> mQAttachment{nullptr};
-        float mFrequency;
-        float mGain;
-        float mQ;
 
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Handle);
     };
@@ -67,6 +64,7 @@ class EQView : public juce::Component
     AudioPluginAudioProcessor &mProcessor;
     juce::AudioProcessorValueTreeState &mParameters;
     juce::Path frequencyResponse;
+    double mSampleRate;
 
     std::atomic<bool> parameterChanged{false};
 

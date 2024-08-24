@@ -10,6 +10,8 @@ AnalyzerCurve::AnalyzerCurve(AudioPluginAudioProcessor &processor) : mProcessor(
         mFFTPath.preallocateSpace(mFFT.getSize() * 2);
     }
 
+    mSampleRate = mProcessor.getSampleRate();
+
     startTimerHz(30);
 }
 
@@ -42,8 +44,8 @@ void AnalyzerCurve::paint(juce::Graphics &g)
     }
 
     mFFTPath.lineTo(mFFTPath.getCurrentPosition().getX(), height); // Go to the bottom of the last x point
-    mFFTPath.lineTo(0, height);                                    // Go to the bottom-left corner
     mFFTPath = mFFTPath.createPathWithRoundedCorners(std::numeric_limits<float>::max());
+    mFFTPath.lineTo(0, height); // Go to the bottom-left corner
 
     mFFTPath.closeSubPath();
     g.setColour(juce::Colours::grey.withAlpha(0.25f));
@@ -92,6 +94,12 @@ void AnalyzerCurve::timerCallback()
     if (!mProcessor.nextFFTBlockReady.load())
         return;
 
+    auto sampleRate = mProcessor.getSampleRate();
+    if (mSampleRate != sampleRate)
+    {
+        resized();
+        mSampleRate = sampleRate;
+    }
     drawNextFrame();
     mProcessor.nextFFTBlockReady.store(false);
     repaint();

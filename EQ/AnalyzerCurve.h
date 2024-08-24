@@ -24,6 +24,7 @@ class AnalyzerCurve : public juce::Component, juce::Timer
 
     juce::Path mFFTPath;
     juce::CriticalSection pathCreationLock;
+    double mSampleRate;
 
     struct FFTPoint
     {
