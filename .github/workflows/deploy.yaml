@@ -1,0 +1,43 @@
+name: Audio Deployment
+
+on:
+  pull_request:
+    types: closed
+    branches:
+      - main
+
+jobs:
+  generate-docs:
+    name: Generate Doxygen documentation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Doxygen
+        run: |
+          sudo apt-get update
+          sudo apt install doxygen
+
+      - name: Generate documentation
+        run: cmake --build --preset Docs
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: doxygen-docs
+          path: build/docs/html
+
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Doxygen Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: doxygen-docs
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: .
