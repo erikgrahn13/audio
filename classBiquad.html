@@ -171,14 +171,17 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aaf90f6588d1fe0aca51c0ea6fc4387b6" id="r_aaf90f6588d1fe0aca51c0ea6fc4387b6"><td class="memItemLeft" align="right" valign="top"><a id="aaf90f6588d1fe0aca51c0ea6fc4387b6" name="aaf90f6588d1fe0aca51c0ea6fc4387b6"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>Biquad</b> (Type type, double startFreq)</td></tr>
 <tr class="separator:aaf90f6588d1fe0aca51c0ea6fc4387b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a306b70123f9e97889c7f27e65195a5d0" id="r_a306b70123f9e97889c7f27e65195a5d0"><td class="memItemLeft" align="right" valign="top"><a id="a306b70123f9e97889c7f27e65195a5d0" name="a306b70123f9e97889c7f27e65195a5d0"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>prepare</b> (const double sampleRate, const double numSamples, const int numChannels)</td></tr>
-<tr class="separator:a306b70123f9e97889c7f27e65195a5d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adb9264b1a968288dc45701430eb7be85" id="r_adb9264b1a968288dc45701430eb7be85"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adb9264b1a968288dc45701430eb7be85">process</a> (double sample, int channel) override</td></tr>
-<tr class="separator:adb9264b1a968288dc45701430eb7be85"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a779dc89af97c547fb4466bfbf09cad15" id="r_a779dc89af97c547fb4466bfbf09cad15"><td class="memItemLeft" align="right" valign="top"><a id="a779dc89af97c547fb4466bfbf09cad15" name="a779dc89af97c547fb4466bfbf09cad15"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>prepare</b> (const double sampleRate, const int numSamples, const int numChannels)</td></tr>
+<tr class="separator:a779dc89af97c547fb4466bfbf09cad15"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a47ae8e01fa031bd3d2a4af4c3a1a5dd2" id="r_a47ae8e01fa031bd3d2a4af4c3a1a5dd2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a47ae8e01fa031bd3d2a4af4c3a1a5dd2">process</a> (std::span&lt; const float &gt; input, std::span&lt; float &gt; output, int channel) override</td></tr>
+<tr class="separator:a47ae8e01fa031bd3d2a4af4c3a1a5dd2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab669e4eb86b9c4e8b0dcb03539ba08c1" id="r_ab669e4eb86b9c4e8b0dcb03539ba08c1"><td class="memItemLeft" align="right" valign="top"><a id="ab669e4eb86b9c4e8b0dcb03539ba08c1" name="ab669e4eb86b9c4e8b0dcb03539ba08c1"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>reset</b> ()</td></tr>
 <tr class="separator:ab669e4eb86b9c4e8b0dcb03539ba08c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a60397cdf7512fa662cb275e1f581b5d8" id="r_a60397cdf7512fa662cb275e1f581b5d8"><td class="memItemLeft" align="right" valign="top"><a id="a60397cdf7512fa662cb275e1f581b5d8" name="a60397cdf7512fa662cb275e1f581b5d8"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setAllParams</b> (double frequency, double gaindB, double q)</td></tr>
+<tr class="separator:a60397cdf7512fa662cb275e1f581b5d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a36add7417862e0ff31eb10414fa17c4c" id="r_a36add7417862e0ff31eb10414fa17c4c"><td class="memItemLeft" align="right" valign="top"><a id="a36add7417862e0ff31eb10414fa17c4c" name="a36add7417862e0ff31eb10414fa17c4c"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setFrequency</b> (double frequency)</td></tr>
 <tr class="separator:a36add7417862e0ff31eb10414fa17c4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -197,21 +200,24 @@ std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><
 <tr class="memitem:aa918ae32e7b0275abcd9b57e93bd6d62" id="r_aa918ae32e7b0275abcd9b57e93bd6d62"><td class="memItemLeft" align="right" valign="top"><a id="aa918ae32e7b0275abcd9b57e93bd6d62" name="aa918ae32e7b0275abcd9b57e93bd6d62"></a>
 double&#160;</td><td class="memItemRight" valign="bottom"><b>getFrequency</b> ()</td></tr>
 <tr class="separator:aa918ae32e7b0275abcd9b57e93bd6d62"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a17f61fba39ee654b5981bfd6df7ae383" id="r_a17f61fba39ee654b5981bfd6df7ae383"><td class="memItemLeft" align="right" valign="top"><a id="a17f61fba39ee654b5981bfd6df7ae383" name="a17f61fba39ee654b5981bfd6df7ae383"></a>
+double&#160;</td><td class="memItemRight" valign="bottom"><b>getGain</b> ()</td></tr>
+<tr class="separator:a17f61fba39ee654b5981bfd6df7ae383"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1fbfbe27ed9654a9133c17706845f2fe" id="r_a1fbfbe27ed9654a9133c17706845f2fe"><td class="memItemLeft" align="right" valign="top"><a id="a1fbfbe27ed9654a9133c17706845f2fe" name="a1fbfbe27ed9654a9133c17706845f2fe"></a>
+double&#160;</td><td class="memItemRight" valign="bottom"><b>getQ</b> ()</td></tr>
+<tr class="separator:a1fbfbe27ed9654a9133c17706845f2fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a30f4ebab5849a63cdf23f32b67f3e5e0" id="r_a30f4ebab5849a63cdf23f32b67f3e5e0"><td class="memItemLeft" align="right" valign="top"><a id="a30f4ebab5849a63cdf23f32b67f3e5e0" name="a30f4ebab5849a63cdf23f32b67f3e5e0"></a>
 double&#160;</td><td class="memItemRight" valign="bottom"><b>getSampleRate</b> ()</td></tr>
 <tr class="separator:a30f4ebab5849a63cdf23f32b67f3e5e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a32f575616f807a674fa3b1e4df6e35ee" id="r_a32f575616f807a674fa3b1e4df6e35ee"><td class="memItemLeft" align="right" valign="top"><a id="a32f575616f807a674fa3b1e4df6e35ee" name="a32f575616f807a674fa3b1e4df6e35ee"></a>
 Type&#160;</td><td class="memItemRight" valign="bottom"><b>getType</b> () const</td></tr>
 <tr class="separator:a32f575616f807a674fa3b1e4df6e35ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa5cccf0cd73ff27bd1d743262134e1a0" id="r_aa5cccf0cd73ff27bd1d743262134e1a0"><td class="memItemLeft" align="right" valign="top"><a id="aa5cccf0cd73ff27bd1d743262134e1a0" name="aa5cccf0cd73ff27bd1d743262134e1a0"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setCoeffs</b> (<a class="el" href="structBiquad_1_1Coeffs.html">Biquad::Coeffs</a> coeffs)</td></tr>
-<tr class="separator:aa5cccf0cd73ff27bd1d743262134e1a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:ab80c45139c26988c857dc479ac9f52f3" id="r_ab80c45139c26988c857dc479ac9f52f3"><td class="memItemLeft" align="right" valign="top"><a id="ab80c45139c26988c857dc479ac9f52f3" name="ab80c45139c26988c857dc479ac9f52f3"></a>
-static double&#160;</td><td class="memItemRight" valign="bottom"><b>filterResponse</b> (double sampleRate, double x, std::array&lt; double, 3 &gt; &amp;a, std::array&lt; double, 3 &gt; &amp;b)</td></tr>
-<tr class="separator:ab80c45139c26988c857dc479ac9f52f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1ec53e237666363012e7dc532cd167db" id="r_a1ec53e237666363012e7dc532cd167db"><td class="memItemLeft" align="right" valign="top"><a id="a1ec53e237666363012e7dc532cd167db" name="a1ec53e237666363012e7dc532cd167db"></a>
+static double&#160;</td><td class="memItemRight" valign="bottom"><b>filterResponse</b> (double sampleRate, double x, <a class="el" href="classBiquad.html">Biquad</a> &amp;biquad)</td></tr>
+<tr class="separator:a1ec53e237666363012e7dc532cd167db"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -220,8 +226,8 @@ struct <a class="el" href="structBiquad_1_1Coeffs.html">Coeffs</a>&#160;</td><td
 <tr class="separator:aa91d406c099314c779f84a8b3f855699"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="adb9264b1a968288dc45701430eb7be85" name="adb9264b1a968288dc45701430eb7be85"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adb9264b1a968288dc45701430eb7be85">&#9670;&#160;</a></span>process()</h2>
+<a id="a47ae8e01fa031bd3d2a4af4c3a1a5dd2" name="a47ae8e01fa031bd3d2a4af4c3a1a5dd2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a47ae8e01fa031bd3d2a4af4c3a1a5dd2">&#9670;&#160;</a></span>process()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -230,9 +236,14 @@ struct <a class="el" href="structBiquad_1_1Coeffs.html">Coeffs</a>&#160;</td><td
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">double Biquad::process </td>
+          <td class="memname">void Biquad::process </td>
           <td>(</td>
-          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>sample</em></span>, </td>
+          <td class="paramtype">std::span&lt; const float &gt;</td>          <td class="paramname"><span class="paramname"><em>input</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::span&lt; float &gt;</td>          <td class="paramname"><span class="paramname"><em>output</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
