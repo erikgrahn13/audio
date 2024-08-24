@@ -1,104 +1,142 @@
 #include "Biquad.h"
-#include <numbers>
 #include <cmath>
 #include <complex>
+#include <numbers>
 #include <tuple>
 
 Biquad::Biquad(Type type, double startFreq)
     : type(type), mFrequency(startFreq), mGaindB(0.), mQ(0.707), mSampleRate(48000)
 {
-    updateParams(mFrequency, mQ, mGaindB);
+    setAllParams(mFrequency, mGaindB, mQ);
 }
 
-void Biquad::prepare(const double sampleRate, const double numSamples, const int numChannels)
+void Biquad::prepare(const double sampleRate, const int numSamples, const int numChannels)
 {
-    std::ignore = numSamples;
+    mNumSamples = numSamples;
     std::ignore = numChannels;
+
+    if (mNumChannels != numChannels)
+    {
+        xn_1.resize(numChannels, 0.0);
+        xn_2.resize(numChannels, 0.0);
+        yn_1.resize(numChannels, 0.0);
+        yn_2.resize(numChannels, 0.0);
+    }
+
     mSampleRate = sampleRate;
 }
 
-double Biquad::process(double sample, int channel)
+void Biquad::process(std::span<const float> input, std::span<float> output, int channel)
 {
-    double output = (mCoeffs.b[0] * sample + mCoeffs.b[1] * xn_1[channel] + mCoeffs.b[2] * xn_2[channel] - mCoeffs.a[1] * yn_1[channel] - mCoeffs.a[2] * yn_2[channel]) / mCoeffs.a[0];
-    yn_2[channel] = yn_1[channel];
-    yn_1[channel] = output;
-    xn_2[channel] = xn_1[channel];
-    xn_1[channel] = sample;
+    int numSamples = input.size(); // numSamples is derived from the span size
+    for (int i = 0; i < numSamples; ++i)
+    {
+        double sample = input[i];
+        double filteredSample =
+            (mCoeffs.b.at(0) * sample + mCoeffs.b.at(1) * xn_1.at(channel) + mCoeffs.b.at(2) * xn_2.at(channel) -
+             mCoeffs.a.at(1) * yn_1.at(channel) - mCoeffs.a.at(2) * yn_2.at(channel)) /
+            mCoeffs.a.at(0);
 
-    return output;
+        yn_2.at(channel) = yn_1.at(channel);
+        yn_1.at(channel) = filteredSample;
+        xn_2.at(channel) = xn_1.at(channel);
+        xn_1.at(channel) = sample;
+
+        output[i] = filteredSample;
+    }
 }
 
 void Biquad::reset()
 {
 }
 
+void Biquad::setAllParams(double frequency, double gaindB, double q)
+{
+    if (mFrequency != frequency || mGaindB != gaindB || mQ != q)
+    {
+        mFrequency = frequency;
+        mGaindB = gaindB;
+        mQ = q;
+        updateCoefficients();
+    }
+}
+
 void Biquad::setFrequency(double frequency)
 {
-    mFrequency = frequency;
-    updateParams(mFrequency, mQ, mGaindB);
+    if (mFrequency != frequency)
+    {
+        mFrequency = frequency;
+        updateCoefficients();
+    }
 }
 
 void Biquad::setQ(double q)
 {
-    mQ = q;
-    updateParams(mFrequency, mQ, mGaindB);
+    if (mQ != q)
+    {
+        mQ = q;
+        updateCoefficients();
+    }
 }
 
 void Biquad::setGain(double gaindB)
 {
-    mGaindB = gaindB;
-    updateParams(mFrequency, mQ, mGaindB);
+    if (mGaindB != gaindB)
+    {
+        mGaindB = gaindB;
+        updateCoefficients();
+    }
 }
 
-void Biquad::updateParams(double frequency, double q, double gaindB)
+void Biquad::updateCoefficients()
 {
-    const double w0 = (2 * std::numbers::pi * frequency) / mSampleRate;
+    const double w0 = (2 * std::numbers::pi * mFrequency) / mSampleRate;
     const double cosw0 = std::cos(w0);
     const double sinw0 = std::sin(w0);
-    double alpha = sinw0 / (2.0 * q);
-    double A = std::pow(10, gaindB / 40);
+    double alpha = sinw0 / (2.0 * mQ);
+    double A = std::pow(10, mGaindB / 40);
 
     switch (type)
     {
     case kHighpass:
-        mCoeffs.b[0] = (1.0 + cosw0) * 0.5;
-        mCoeffs.b[1] = -(1.0 + cosw0);
-        mCoeffs.b[2] = (1.0 + cosw0) * 0.5;
-        mCoeffs.a[0] = 1.0 + alpha;
-        mCoeffs.a[1] = -2.0 * cosw0;
-        mCoeffs.a[2] = 1.0 - alpha;
+        mCoeffs.b.at(0) = (1.0 + cosw0) * 0.5;
+        mCoeffs.b.at(1) = -(1.0 + cosw0);
+        mCoeffs.b.at(2) = (1.0 + cosw0) * 0.5;
+        mCoeffs.a.at(0) = 1.0 + alpha;
+        mCoeffs.a.at(1) = -2.0 * cosw0;
+        mCoeffs.a.at(2) = 1.0 - alpha;
         break;
     case kLowpass:
-        mCoeffs.b[0] = (1.0 - cosw0) * 0.5;
-        mCoeffs.b[1] = 1.0 - cosw0;
-        mCoeffs.b[2] = (1.0 - cosw0) * 0.5;
-        mCoeffs.a[0] = 1.0 + alpha;
-        mCoeffs.a[1] = -2.0 * cosw0;
-        mCoeffs.a[2] = 1.0 - alpha;
+        mCoeffs.b.at(0) = (1.0 - cosw0) * 0.5;
+        mCoeffs.b.at(1) = 1.0 - cosw0;
+        mCoeffs.b.at(2) = (1.0 - cosw0) * 0.5;
+        mCoeffs.a.at(0) = 1.0 + alpha;
+        mCoeffs.a.at(1) = -2.0 * cosw0;
+        mCoeffs.a.at(2) = 1.0 - alpha;
         break;
     case kLowShelf:
-        mCoeffs.b[0] = A * ((A + 1) - (A - 1) * cosw0 + 2 * std::sqrt(A) * alpha);
-        mCoeffs.b[1] = 2 * A * ((A - 1) - (A + 1) * cosw0);
-        mCoeffs.b[2] = A * ((A + 1) - (A - 1) * cosw0 - 2 * std::sqrt(A) * alpha);
-        mCoeffs.a[0] = (A + 1) + (A - 1) * cosw0 + 2 * std::sqrt(A) * alpha;
-        mCoeffs.a[1] = -2 * ((A - 1) + (A + 1) * cosw0);
-        mCoeffs.a[2] = (A + 1) + (A - 1) * cosw0 - 2 * std::sqrt(A) * alpha;
+        mCoeffs.b.at(0) = A * ((A + 1) - (A - 1) * cosw0 + 2 * std::sqrt(A) * alpha);
+        mCoeffs.b.at(1) = 2 * A * ((A - 1) - (A + 1) * cosw0);
+        mCoeffs.b.at(2) = A * ((A + 1) - (A - 1) * cosw0 - 2 * std::sqrt(A) * alpha);
+        mCoeffs.a.at(0) = (A + 1) + (A - 1) * cosw0 + 2 * std::sqrt(A) * alpha;
+        mCoeffs.a.at(1) = -2 * ((A - 1) + (A + 1) * cosw0);
+        mCoeffs.a.at(2) = (A + 1) + (A - 1) * cosw0 - 2 * std::sqrt(A) * alpha;
         break;
     case kHighShelf:
-        mCoeffs.b[0] = A * ((A + 1) + (A - 1) * cosw0 + 2 * std::sqrt(A) * alpha);
-        mCoeffs.b[1] = -2 * A * ((A - 1) + (A + 1) * cosw0);
-        mCoeffs.b[2] = A * ((A + 1) + (A - 1) * cosw0 - 2 * std::sqrt(A) * alpha);
-        mCoeffs.a[0] = (A + 1) - (A - 1) * cosw0 + 2 * std::sqrt(A) * alpha;
-        mCoeffs.a[1] = 2 * ((A - 1) - (A + 1) * cosw0);
-        mCoeffs.a[2] = (A + 1) - (A - 1) * cosw0 - 2 * std::sqrt(A) * alpha;
+        mCoeffs.b.at(0) = A * ((A + 1) + (A - 1) * cosw0 + 2 * std::sqrt(A) * alpha);
+        mCoeffs.b.at(1) = -2 * A * ((A - 1) + (A + 1) * cosw0);
+        mCoeffs.b.at(2) = A * ((A + 1) + (A - 1) * cosw0 - 2 * std::sqrt(A) * alpha);
+        mCoeffs.a.at(0) = (A + 1) - (A - 1) * cosw0 + 2 * std::sqrt(A) * alpha;
+        mCoeffs.a.at(1) = 2 * ((A - 1) - (A + 1) * cosw0);
+        mCoeffs.a.at(2) = (A + 1) - (A - 1) * cosw0 - 2 * std::sqrt(A) * alpha;
         break;
     case kPeak:
-        mCoeffs.b[0] = 1 + alpha * A;
-        mCoeffs.b[1] = -2 * cosw0;
-        mCoeffs.b[2] = 1 - alpha * A;
-        mCoeffs.a[0] = 1 + alpha / A;
-        mCoeffs.a[1] = -2 * cosw0;
-        mCoeffs.a[2] = 1 - alpha / A;
+        mCoeffs.b.at(0) = 1 + alpha * A;
+        mCoeffs.b.at(1) = -2 * cosw0;
+        mCoeffs.b.at(2) = 1 - alpha * A;
+        mCoeffs.a.at(0) = 1 + alpha / A;
+        mCoeffs.a.at(1) = -2 * cosw0;
+        mCoeffs.a.at(2) = 1 - alpha / A;
         break;
     default:
         break;
@@ -108,19 +146,15 @@ void Biquad::updateParams(double frequency, double q, double gaindB)
 void Biquad::setSampleRate(double sampleRate)
 {
     this->mSampleRate = sampleRate;
+    updateCoefficients();
 }
 
 std::vector<double> Biquad::getCoefficients()
 {
-    return {mCoeffs.a[0], mCoeffs.a[1], mCoeffs.a[2], mCoeffs.b[0], mCoeffs.b[1], mCoeffs.b[2]};
+    return {mCoeffs.a.at(0), mCoeffs.a.at(1), mCoeffs.a.at(2), mCoeffs.b.at(0), mCoeffs.b.at(1), mCoeffs.b.at(2)};
 }
 
-void Biquad::setCoeffs(Biquad::Coeffs coeffs)
-{
-    mCoeffs = coeffs;
-}
-
-double Biquad::filterResponse(double sampleRate, double x, std::array<double, 3> &a, std::array<double, 3> &b)
+double Biquad::filterResponse(double sampleRate, double x, Biquad &biquad)
 {
     auto logMin = std::log10(20.0);
     auto logMax = std::log10(20000.0);
@@ -134,8 +168,8 @@ double Biquad::filterResponse(double sampleRate, double x, std::array<double, 3>
 
     std::complex<double> jw = std::exp(-2 * std::numbers::pi * value * j / sampleRate);
 
-    numerator = b[0] + b[1] * jw + b[2] * std::pow(jw, 2);
-    denominator = a[0] + a[1] * jw + a[2] * std::pow(jw, 2);
+    numerator = biquad.mCoeffs.b.at(0) + biquad.mCoeffs.b.at(1) * jw + biquad.mCoeffs.b.at(2) * std::pow(jw, 2);
+    denominator = biquad.mCoeffs.a.at(0) + biquad.mCoeffs.a.at(1) * jw + biquad.mCoeffs.a.at(2) * std::pow(jw, 2);
 
     auto magnitude = 20 * std::log10(std::abs(numerator / denominator));
 

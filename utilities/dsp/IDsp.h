@@ -1,7 +1,7 @@
 #pragma once
-
+#include <span>
 class IDsp
 {
-public:
-    virtual double process(double sample, int channel) = 0;
+  public:
+    virtual void process(std::span<const float> input, std::span<float> output, int channel) = 0;
 };

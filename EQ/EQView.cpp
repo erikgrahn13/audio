@@ -42,6 +42,8 @@ EQView::EQView(AudioPluginAudioProcessor &processor, juce::AudioProcessorValueTr
         addAndMakeVisible(*handle);
         handle->toFront(true);
     }
+
+    mSampleRate = mProcessor.getSampleRate();
 }
 
 EQView::~EQView()
@@ -149,6 +151,15 @@ void EQView::drawPlotCurve(juce::Graphics &g)
     const double outputMax = bounds.getY();
     const auto sampleRate = mProcessor.getSampleRate();
 
+    if (mSampleRate != sampleRate)
+    {
+        for (auto &handle : mHandles)
+        {
+            handle->biquad.setSampleRate(sampleRate);
+        }
+        mSampleRate = sampleRate;
+    }
+
     for (int i = 0; i < width; ++i)
     {
         float freq = i / width;
@@ -156,7 +167,7 @@ void EQView::drawPlotCurve(juce::Graphics &g)
 
         for (auto &handle : mHandles)
         {
-            y += Biquad::filterResponse(sampleRate, freq, handle->biquad.mCoeffs.a, handle->biquad.mCoeffs.b);
+            y += Biquad::filterResponse(sampleRate, freq, handle->biquad);
         }
 
         y = juce::jmap(y, -18.0, 18.0, outputMin, outputMax);

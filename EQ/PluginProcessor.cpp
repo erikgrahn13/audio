@@ -138,19 +138,7 @@ void AudioPluginAudioProcessor::prepareToPlay(double sampleRate, int samplesPerB
     {
         auto &[biquad, freqParam, gainParam, QParam] = i;
 
-        biquad.setSampleRate(sampleRate);
-
-        biquad.setFrequency(dynamic_cast<juce::AudioParameterFloat *>(freqParam)->get());
-
-        if (gainParam)
-        {
-            biquad.setGain(dynamic_cast<juce::AudioParameterFloat *>(*gainParam)->get());
-        }
-
-        if (QParam)
-        {
-            biquad.setQ(dynamic_cast<juce::AudioParameterFloat *>(*QParam)->get());
-        }
+        biquad.prepare(sampleRate, samplesPerBlock, getMainBusNumInputChannels());
     }
 }
 
@@ -213,37 +201,15 @@ void AudioPluginAudioProcessor::processBlock(juce::AudioBuffer<float> &buffer, j
     // the samples and the outer loop is handling the channels.
     // Alternatively, you can process the samples with the channels
     // interleaved by keeping the same state.
-
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
-        auto *input = buffer.getReadPointer(channel);
-        auto *output = buffer.getWritePointer(channel);
+        std::span<const float> input(buffer.getReadPointer(channel), buffer.getNumSamples());
+        std::span<float> output(buffer.getWritePointer(channel), buffer.getNumSamples());
 
-        for (int i = 0; i < buffer.getNumSamples(); ++i)
+        for (auto &filter : mFilters)
         {
-            for (auto &filter : mFilters)
-            {
-                output[i] = std::get<0>(filter).process(input[i], channel);
-            }
+            std::get<0>(filter).process(input, output, channel);
         }
-
-        // ..do something to the data...
-        // if(mRingBuffer.getFreeSpace() < buffer.getNumSamples())
-        //     return;
-
-        // auto* channelData = buffer.getReadPointer(channel);
-
-        // int start1, size1, start2, size2;
-        // mRingBuffer.prepareToWrite(buffer.getNumSamples(), start1, size1, start2, size2);
-        // mAudioBuffer.copyFrom(0, start1, buffer.getReadPointer(channel), size1);
-
-        // if(size1 > 0)
-        //     mAudioBuffer.copyFrom(channel, start1, channelData, size1);
-        // if(size2 > 0)
-        //     mAudioBuffer.copyFrom(channel, start2, channelData + size1, size2);
-
-        // mRingBuffer.finishedWrite(size1 + size2);
-        // nextFFTBlockReady.store(true);
     }
 
     if (mRingBuffer.getFreeSpace() < buffer.getNumSamples())
