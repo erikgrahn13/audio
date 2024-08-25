@@ -47,6 +47,10 @@ jobs:
             !build/build
             !**/*_SharedCode.a
             !build/_deps/juce-*/
+            
+      - name: Verify Doxygen documentation generation
+        if: matrix.os == 'ubuntu-latest'
+        run: cmake --build --preset Docs
 
   test:
     name: Test
@@ -76,13 +80,3 @@ jobs:
 
       - name: Run Tests
         run: ctest --preset Release
-
-  generate-docs:
-    name: Verify Doxygen documentation generation
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Generate documentation
-        run: cmake --build --preset Docs
