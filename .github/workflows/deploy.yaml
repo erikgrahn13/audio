@@ -13,14 +13,19 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-ubuntu-latest
+
       - name: Generate documentation
-        run: cmake --build --preset Docs
+        run: cmake --build build-ubuntu-latest --preset Docs
 
       - name: Upload Doxygen artifact
         uses: actions/upload-artifact@v4
         with:
           name: doxygen-docs
-          path: build/docs/html
+          path: build-ubuntu-latest/docs/html
 
   deploy:
     runs-on: ubuntu-latest

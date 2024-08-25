@@ -37,6 +37,10 @@ jobs:
       - name: Build
         run: cmake --workflow --preset Release
 
+      - name: Verify Doxygen documentation generation
+        if: matrix.os == 'ubuntu-latest'
+        run: cmake --build --preset Docs
+
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -47,10 +51,6 @@ jobs:
             !build/build
             !**/*_SharedCode.a
             !build/_deps/juce-*/
-            
-      - name: Verify Doxygen documentation generation
-        if: matrix.os == 'ubuntu-latest'
-        run: cmake --build --preset Docs
 
   test:
     name: Test
