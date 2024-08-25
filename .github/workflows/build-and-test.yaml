@@ -2,7 +2,7 @@ name: Audio Development
 
 on:
   pull_request:
-    branches: 
+    branches:
       - main
 
 jobs:
@@ -35,10 +35,6 @@ jobs:
 
       - name: Build
         run: cmake --workflow --preset Release
-
-      - name: Verify Doxygen documentation generation
-        if: matrix.os == 'ubuntu-latest'
-        run: cmake --build --preset Docs
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
@@ -79,3 +75,13 @@ jobs:
 
       - name: Run Tests
         run: ctest --preset Release
+
+  generate-docs:
+    name: Verify Doxygen documentation generation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Generate documentation
+        run: cmake --workflow --preset Docs
