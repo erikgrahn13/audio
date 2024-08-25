@@ -3,7 +3,7 @@ name: Audio Deployment
 on:
   push:
     branches: 
-      -main
+      - main
 
 jobs:
   deploy-docs:
