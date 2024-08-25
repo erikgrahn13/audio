@@ -9,6 +9,8 @@ include (FetchContent)
     )
     FetchContent_MakeAvailable(doxygen-awesome)
 
+    set(DOXYGEN_WARN_AS_ERRORS YES)
+
     set(DOXYGEN_USE_MDFILE_AS_MAINPAGE ../README.md)
     set(DOXYGEN_EXCLUDE_PATTERNS */external/* *build/*)
     set(DOXYGEN_HTML_EXTRA_STYLESHEET ${doxygen-awesome_SOURCE_DIR}/doxygen-awesome.css
