@@ -77,11 +77,11 @@ jobs:
         run: ctest --preset Release
 
   generate-docs:
-  name: Verify Doxygen documentation generation
-  runs-on: ubuntu-latest
-  steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+    name: Verify Doxygen documentation generation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Generate documentation
-      run: cmake --build --preset Docs
+      - name: Generate documentation
+        run: cmake --build --preset Docs
