@@ -1,10 +1,9 @@
 name: Audio Deployment
 
 on:
-  pull_request:
-    types: closed
-    branches:
-      - main
+  push:
+    branches: 
+      -main
 
 jobs:
   generate-docs:
@@ -14,15 +13,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install Doxygen
-        run: |
-          sudo apt-get update
-          sudo apt install doxygen
-
       - name: Generate documentation
         run: cmake --build --preset Docs
 
-      - name: Upload build artifact
+      - name: Upload Doxygen artifact
         uses: actions/upload-artifact@v4
         with:
           name: doxygen-docs
