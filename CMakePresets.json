@@ -5,7 +5,7 @@
     "minor": 22,
     "patch": 0
   },
-
+  
   "configurePresets": [
     {
       "name": "default",
@@ -73,6 +73,19 @@
         {
           "type": "build",
           "name": "Release"
+        }
+      ]
+    },
+    {
+      "name": "Docs",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "Release"
+        },
+        {
+          "type": "build",
+          "name": "Docs"
         }
       ]
     }
