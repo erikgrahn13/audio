@@ -5,7 +5,7 @@
     "minor": 22,
     "patch": 0
   },
-  
+
   "configurePresets": [
     {
       "name": "default",
@@ -30,6 +30,15 @@
         "CMAKE_BUILD_TYPE": "Release",
         "JUCE_COPY_PLUGIN_AFTER_BUILD": "TRUE"
       }
+    },
+    {
+      "name": "Docs",
+      "inherits": "default",
+      "displayName": "Docs",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "FETCHCONTENT_FULLY_DISCONNECTED": "TRUE"
+      }
     }
   ],
 
@@ -42,7 +51,7 @@
     },
     {
       "name": "Docs",
-      "configurePreset": "Release",
+      "configurePreset": "Docs",
       "targets": ["docs"]
     }
   ],
@@ -81,7 +90,7 @@
       "steps": [
         {
           "type": "configure",
-          "name": "Release"
+          "name": "Docs"
         },
         {
           "type": "build",
