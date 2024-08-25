@@ -3,7 +3,8 @@ name: Audio Development
 on:
   pull_request:
     branches: 
-      -main
+      - main
+    types: [opened, synchronize]
 
 jobs:
   build:
