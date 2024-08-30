@@ -3,6 +3,7 @@
 #include "AnalyzerCurve.h"
 #include "PluginProcessor.h"
 #include <Biquad.h>
+#include <Fonts.h>
 #include <JuceHeader.h>
 #include <array>
 
@@ -51,6 +52,7 @@ class EQView : public juce::Component
     void paint(juce::Graphics &g) override;
 
     void drawGrid(juce::Graphics &g);
+    void drawTextLabels(juce::Graphics &g);
     void drawVerticalLines(juce::Graphics &g);
     void drawHorizontalLines(juce::Graphics &g);
     void drawPlotCurve(juce::Graphics &g);
@@ -60,11 +62,17 @@ class EQView : public juce::Component
         return mHandles;
     }
 
+    juce::Rectangle<int> getRenderArea();
+
   private:
     AudioPluginAudioProcessor &mProcessor;
     juce::AudioProcessorValueTreeState &mParameters;
+    AnalyzerCurve mAnalyzerCurve;
     juce::Path frequencyResponse;
     double mSampleRate;
+    juce::Component handleContainer;
+    juce::Font deathMetalFont;
+    static constexpr int reducedSize = 30;
 
     std::atomic<bool> parameterChanged{false};
 

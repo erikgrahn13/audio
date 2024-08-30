@@ -96,7 +96,7 @@ void SliderGroup::resized()
         auto left = groupBounds.removeFromLeft(groupBounds.getWidth() / 2);
         mGainSlider.setBounds(left.removeFromTop(left.getHeight() / 2));
         mFrequencySlider.setBounds(left);
-        mQSlider.setBounds(groupBounds.reduced(0, 40));
+        mQSlider.setBounds(groupBounds.reduced(0, 30));
     }
     else if (mGainSlider.isVisible())
     {
@@ -105,7 +105,7 @@ void SliderGroup::resized()
     }
     else
     {
-        mFrequencySlider.setBounds(groupBounds.reduced(30));
+        mFrequencySlider.setBounds(groupBounds.reduced(20));
     }
 }
 

@@ -2,8 +2,11 @@
 #include <numbers>
 
 EQView::EQView(AudioPluginAudioProcessor &processor, juce::AudioProcessorValueTreeState &parameters)
-    : mProcessor(processor), mParameters(parameters)
+    : mProcessor(processor), mParameters(parameters), mAnalyzerCurve(processor)
 {
+
+    deathMetalFont = juce::Font(
+        juce::Typeface::createSystemTypefaceFor(BinaryData::ArtDystopia_ttf, BinaryData::ArtDystopia_ttfSize));
 
     mHandles.push_back(std::make_unique<Handle>(
         Biquad::Type::kHighpass, dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("hpf_freq"))));
@@ -24,6 +27,9 @@ EQView::EQView(AudioPluginAudioProcessor &processor, juce::AudioProcessorValueTr
         dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("HighMidGain")),
         dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("HighMidQ"))));
 
+    addAndMakeVisible(mAnalyzerCurve);
+    addAndMakeVisible(handleContainer);
+
     for (auto &handle : mHandles)
     {
         handle->biquad.setSampleRate(mProcessor.getSampleRate());
@@ -39,7 +45,7 @@ EQView::EQView(AudioPluginAudioProcessor &processor, juce::AudioProcessorValueTr
             handle->biquad.setQ(handle->mQParameter->convertFrom0to1(handle->mQParameter->getValue()));
         }
 
-        addAndMakeVisible(*handle);
+        handleContainer.addAndMakeVisible(handle.get());
         handle->toFront(true);
     }
 
@@ -52,14 +58,17 @@ EQView::~EQView()
 
 void EQView::resized()
 {
-    auto area = getLocalBounds();
+    auto area = getRenderArea();
+
+    mAnalyzerCurve.setBounds(area);
+    handleContainer.setBounds(area);
 
     // Calculate the position so the center of the handle represents the parameter value
     for (auto &handle : mHandles)
     {
 
-        float xPosition = area.getWidth() * handle->mFreqParameter->getValue();
-        float yPosition = area.getHeight() / 2.0f; // Center Y position
+        float xPosition = handleContainer.getLocalBounds().getWidth() * handle->mFreqParameter->getValue();
+        float yPosition = handleContainer.getLocalBounds().getCentreY(); // Center Y position
 
         handle->setBounds(static_cast<int>(xPosition - Handle::handSize / 2),
                           static_cast<int>(yPosition - Handle::handSize / 2), Handle::handSize, Handle::handSize);
@@ -68,8 +77,8 @@ void EQView::resized()
 
 void EQView::paint(juce::Graphics &g)
 {
-
     drawGrid(g);
+    drawTextLabels(g);
 
     drawPlotCurve(g);
     g.setOpacity(1.);
@@ -110,31 +119,91 @@ std::vector<int> getGains()
     return std::vector<int>{-18, -12, -6, 0, 6, 12, 18};
 }
 
+void EQView::drawTextLabels(juce::Graphics &g)
+{
+    g.setColour(juce::Colours::white);
+    auto freqs = getFrequencies();
+    auto size = getRenderArea();
+
+    g.setFont(deathMetalFont);
+
+    auto xs = getXs(std::vector<double>{freqs.begin(), freqs.end()}, size.getX(), size.getWidth() - 1);
+
+    for (int i = 0; i < freqs.size(); ++i)
+    {
+        bool addK = false;
+        std::string str;
+        auto freq = freqs[i];
+
+        if (freq > 999.f)
+        {
+            addK = true;
+            freq /= 1000.f;
+        }
+
+        str = std::to_string(freq);
+        if (addK)
+        {
+            str.append("K");
+        }
+
+        auto textWidth = g.getCurrentFont().getStringWidth(str);
+        Rectangle<int> r;
+
+        r.setSize(textWidth, reducedSize);
+        r.setCentre(xs[i], 0);
+        r.setY(size.getBottom());
+        g.drawFittedText(str, r, juce::Justification::centred, 1);
+    }
+
+    auto gainsdB = getGains();
+
+    for (auto gaindB : gainsdB)
+    {
+        auto y = jmap(static_cast<float>(gaindB), -18.f, 18.f, static_cast<float>(size.getBottom()),
+                      static_cast<float>(size.getTopLeft().getY()));
+        std::string str;
+        if (gaindB > 0.f)
+        {
+            str = "+" + std::to_string(gaindB);
+        }
+        else
+        {
+            str = std::to_string(gaindB);
+        }
+
+        auto textWidth = g.getCurrentFont().getStringWidth(str);
+        Rectangle<int> r;
+
+        r.setSize(reducedSize, reducedSize);
+        r.setX(getX());
+        r.setCentre(r.getCentreX(), y);
+        g.drawFittedText(str, r, juce::Justification::centred, 1);
+    }
+}
+
 void EQView::drawVerticalLines(juce::Graphics &g)
 {
-    auto size = getLocalBounds();
+    auto size = getRenderArea();
     auto freqs = getFrequencies();
 
     auto xs = getXs(std::vector<double>{freqs.begin(), freqs.end()}, 0.0, size.getWidth() - 1);
 
     for (auto x : xs)
     {
-        g.drawVerticalLine(x, size.getY(), size.getBottom());
+        g.drawVerticalLine(size.getX() + x, size.getY(), size.getBottom());
     }
 }
 
 void EQView::drawHorizontalLines(juce::Graphics &g)
 {
-    auto size = getLocalBounds();
+    auto size = getRenderArea();
     auto gains = getGains();
-
-    auto hej1 = size.getTopLeft().getX();
-    auto hej2 = size.getTopRight().getX();
 
     for (auto gaindB : gains)
     {
         auto y = size.getHeight() - 1 + ((1 - size.getHeight()) * (gaindB - -18.0)) / (18.0 - -18.0);
-        g.drawHorizontalLine(y, size.getTopLeft().getX(), size.getTopRight().getX());
+        g.drawHorizontalLine(size.getY() + y, size.getTopLeft().getX(), size.getTopRight().getX());
     }
 }
 
@@ -143,9 +212,9 @@ void EQView::drawPlotCurve(juce::Graphics &g)
 
     frequencyResponse.clear();
 
-    float width = getLocalBounds().getWidth();
-    float height = getLocalBounds().getHeight();
-    auto bounds = getLocalBounds();
+    float width = getRenderArea().getWidth();
+    float height = getRenderArea().getHeight();
+    auto bounds = getRenderArea();
 
     const double outputMin = bounds.getBottom();
     const double outputMax = bounds.getY();
@@ -179,13 +248,18 @@ void EQView::drawPlotCurve(juce::Graphics &g)
         frequencyResponse.lineTo(bounds.getX() + i, y);
 
         g.setColour(juce::Colours::grey.withAlpha(0.5f));
-        g.drawLine(i, height / 2, i, y);
+        g.drawLine(bounds.getX() + i, bounds.getCentreY(), bounds.getX() + i, y);
     }
 }
 
 void EQView::updateFrequencyResponse()
 {
     repaint();
+}
+
+juce::Rectangle<int> EQView::getRenderArea()
+{
+    return getLocalBounds().reduced(reducedSize);
 }
 
 EQView::Handle::Handle(Biquad::Type type, juce::RangedAudioParameter *freqParam, juce::RangedAudioParameter *gainParam,
