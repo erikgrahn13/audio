@@ -17,7 +17,7 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(AudioPluginAudi
     // editor's size to whatever you need it to be.
     addAndMakeVisible(mAnalyzerCurve);
     addAndMakeVisible(mEQView);
-    setSize(900, 500);
+    setSize(800, 500);
 
     for (int i = 0; i < mParameters.state.getNumChildren(); ++i)
     {
@@ -70,12 +70,12 @@ void AudioPluginAudioProcessorEditor::paint(juce::Graphics &g)
 
 void AudioPluginAudioProcessorEditor::resized()
 {
-    auto bounds = getLocalBounds().reduced(20);
-    auto graphArea = bounds.removeFromTop(bounds.getHeight() / 2);
+    auto bounds = getLocalBounds();
+    auto graphArea = bounds.removeFromTop(bounds.getHeight() / (5.f / 3.f));
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..
-    mAnalyzerCurve.setBounds(graphArea.reduced(20));
-    mEQView.setBounds(graphArea.reduced(20));
+    mAnalyzerCurve.setBounds(graphArea);
+    mEQView.setBounds(graphArea);
     auto sliderGroupArea = bounds.getWidth() / 6;
 
     mHPFSliderGroup.setBounds(bounds.removeFromLeft(sliderGroupArea));
