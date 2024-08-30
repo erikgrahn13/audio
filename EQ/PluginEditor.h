@@ -1,6 +1,5 @@
 #pragma once
 
-#include "AnalyzerCurve.h"
 #include "DeathMetalLookAndFeel.h"
 #include "EQView.h"
 #include "PluginProcessor.h"
@@ -27,7 +26,6 @@ class AudioPluginAudioProcessorEditor final : public juce::AudioProcessorEditor,
     AudioPluginAudioProcessor &processorRef;
     juce::AudioProcessorValueTreeState &mParameters;
     EQView mEQView;
-    AnalyzerCurve mAnalyzerCurve;
     SliderGroup mHPFSliderGroup;
     SliderGroup mLowShelfSliderGroup;
     SliderGroup mLowMidSliderGroup;

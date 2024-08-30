@@ -4,7 +4,7 @@
 //==============================================================================
 AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(AudioPluginAudioProcessor &p,
                                                                  juce::AudioProcessorValueTreeState &parameters)
-    : AudioProcessorEditor(&p), processorRef(p), mParameters(parameters), mEQView(p, parameters), mAnalyzerCurve(p),
+    : AudioProcessorEditor(&p), processorRef(p), mParameters(parameters), mEQView(p, parameters),
       mHPFSliderGroup(p, parameters, "hpf_freq", "", ""),
       mLowShelfSliderGroup(p, parameters, "LowShelfFreq", "LowShelfGain", ""),
       mLowMidSliderGroup(p, parameters, "LowMidFreq", "LowMidGain", "LowMidQ"),
@@ -15,7 +15,6 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(AudioPluginAudi
     juce::ignoreUnused(processorRef);
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
-    addAndMakeVisible(mAnalyzerCurve);
     addAndMakeVisible(mEQView);
     setSize(800, 500);
 
@@ -74,7 +73,6 @@ void AudioPluginAudioProcessorEditor::resized()
     auto graphArea = bounds.removeFromTop(bounds.getHeight() / (5.f / 3.f));
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..
-    mAnalyzerCurve.setBounds(graphArea);
     mEQView.setBounds(graphArea);
     auto sliderGroupArea = bounds.getWidth() / 6;
 

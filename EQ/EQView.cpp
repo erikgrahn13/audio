@@ -2,7 +2,7 @@
 #include <numbers>
 
 EQView::EQView(AudioPluginAudioProcessor &processor, juce::AudioProcessorValueTreeState &parameters)
-    : mProcessor(processor), mParameters(parameters)
+    : mProcessor(processor), mParameters(parameters), mAnalyzerCurve(processor)
 {
 
     deathMetalFont = juce::Font(
@@ -27,6 +27,7 @@ EQView::EQView(AudioPluginAudioProcessor &processor, juce::AudioProcessorValueTr
         dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("HighMidGain")),
         dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("HighMidQ"))));
 
+    addAndMakeVisible(mAnalyzerCurve);
     addAndMakeVisible(handleContainer);
 
     for (auto &handle : mHandles)
@@ -59,6 +60,7 @@ void EQView::resized()
 {
     auto area = getRenderArea();
 
+    mAnalyzerCurve.setBounds(area);
     handleContainer.setBounds(area);
 
     // Calculate the position so the center of the handle represents the parameter value

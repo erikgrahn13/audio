@@ -67,6 +67,7 @@ class EQView : public juce::Component
   private:
     AudioPluginAudioProcessor &mProcessor;
     juce::AudioProcessorValueTreeState &mParameters;
+    AnalyzerCurve mAnalyzerCurve;
     juce::Path frequencyResponse;
     double mSampleRate;
     juce::Component handleContainer;
