@@ -9,21 +9,21 @@ EQView::EQView(AudioPluginAudioProcessor &processor, juce::AudioProcessorValueTr
         juce::Typeface::createSystemTypefaceFor(BinaryData::ArtDystopia_ttf, BinaryData::ArtDystopia_ttfSize));
 
     mHandles.push_back(std::make_unique<Handle>(
-        Biquad::Type::kHighpass, dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("hpf_freq"))));
+        Biquad::Type::kHighpass, dynamic_cast<CustomAudioParameterFloat *>(mParameters.getParameter("hpf_freq"))));
     mHandles.push_back(std::make_unique<Handle>(
-        Biquad::Type::kLowpass, dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("lpf_freq"))));
+        Biquad::Type::kLowpass, dynamic_cast<CustomAudioParameterFloat *>(mParameters.getParameter("lpf_freq"))));
     mHandles.push_back(std::make_unique<Handle>(
-        Biquad::Type::kLowShelf, dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("LowShelfFreq")),
+        Biquad::Type::kLowShelf, dynamic_cast<CustomAudioParameterFloat *>(mParameters.getParameter("LowShelfFreq")),
         dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("LowShelfGain"))));
     mHandles.push_back(std::make_unique<Handle>(
-        Biquad::Type::kHighShelf, dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("HighShelfFreq")),
+        Biquad::Type::kHighShelf, dynamic_cast<CustomAudioParameterFloat *>(mParameters.getParameter("HighShelfFreq")),
         dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("HighShelfGain"))));
     mHandles.push_back(std::make_unique<Handle>(
-        Biquad::Type::kPeak, dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("LowMidFreq")),
+        Biquad::Type::kPeak, dynamic_cast<CustomAudioParameterFloat *>(mParameters.getParameter("LowMidFreq")),
         dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("LowMidGain")),
         dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("LowMidQ"))));
     mHandles.push_back(std::make_unique<Handle>(
-        Biquad::Type::kPeak, dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("HighMidFreq")),
+        Biquad::Type::kPeak, dynamic_cast<CustomAudioParameterFloat *>(mParameters.getParameter("HighMidFreq")),
         dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("HighMidGain")),
         dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("HighMidQ"))));
 
@@ -80,10 +80,26 @@ void EQView::paint(juce::Graphics &g)
     drawGrid(g);
     drawTextLabels(g);
 
+    g.saveState();
+
     drawPlotCurve(g);
     g.setOpacity(1.);
     g.setColour(juce::Colours::white);
     g.strokePath(frequencyResponse, juce::PathStrokeType(2.0));
+
+    g.restoreState();
+
+    for (auto &handle : mHandles)
+    {
+        std::string str = std::to_string(dynamic_cast<CustomAudioParameterFloat *>(handle->mFreqParameter)->getIndex());
+        Rectangle<int> r;
+
+        auto bounds = handle->getLocalBounds();
+        auto pos = handle->getPosition();
+        r.setBounds(pos.getX() + reducedSize, pos.getY() + reducedSize / 3, 20, 20);
+
+        g.drawFittedText(str, r, juce::Justification::centred, 1);
+    }
 }
 
 std::vector<int> getFrequencies()
@@ -209,7 +225,6 @@ void EQView::drawHorizontalLines(juce::Graphics &g)
 
 void EQView::drawPlotCurve(juce::Graphics &g)
 {
-
     frequencyResponse.clear();
 
     float width = getRenderArea().getWidth();
@@ -228,6 +243,8 @@ void EQView::drawPlotCurve(juce::Graphics &g)
         }
         mSampleRate = sampleRate;
     }
+
+    g.reduceClipRegion(bounds);
 
     for (int i = 0; i < width; ++i)
     {

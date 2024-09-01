@@ -1,6 +1,7 @@
 #pragma once
 
 #include "AnalyzerCurve.h"
+#include "CustomAudioParameterFloat.h"
 #include "PluginProcessor.h"
 #include <Biquad.h>
 #include <Fonts.h>
