@@ -1,5 +1,8 @@
 var hierarchy =
 [
+    [ "juce::AudioParameterFloat", null, [
+      [ "CustomAudioParameterFloat", "classCustomAudioParameterFloat.html", null ]
+    ] ],
     [ "juce::AudioProcessor", null, [
       [ "AudioPluginAudioProcessor", "classAudioPluginAudioProcessor.html", null ],
       [ "AudioPluginAudioProcessor", "classAudioPluginAudioProcessor.html", null ],

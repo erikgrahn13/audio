@@ -4,6 +4,7 @@ var annotated_dup =
     [ "AudioPluginAudioProcessor", "classAudioPluginAudioProcessor.html", null ],
     [ "AudioPluginAudioProcessorEditor", "classAudioPluginAudioProcessorEditor.html", null ],
     [ "Biquad", "classBiquad.html", "classBiquad" ],
+    [ "CustomAudioParameterFloat", "classCustomAudioParameterFloat.html", null ],
     [ "DeathMetalLookAndFeel", "classDeathMetalLookAndFeel.html", null ],
     [ "EQView", "classEQView.html", null ],
     [ "FontAudioLookAndFeel", "classFontAudioLookAndFeel.html", null ],
