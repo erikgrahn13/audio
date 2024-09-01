@@ -1,4 +1,5 @@
 #include "PluginProcessor.h"
+#include "CustomAudioParameterFloat.h"
 #include "PluginEditor.h"
 
 //==============================================================================
@@ -287,32 +288,33 @@ juce::AudioProcessorValueTreeState::ParameterLayout AudioPluginAudioProcessor::c
     // attributes.
 
     // High Pass
-    parameters.push_back(
-        std::make_unique<juce::AudioParameterFloat>("hpf_freq", "HPF_Freq", logRange, 20.0, attributes));
+    parameters.push_back(std::make_unique<CustomAudioParameterFloat>("hpf_freq", "HPF_Freq", logRange, 20.0, 1));
 
     // Low Pass
-    parameters.push_back(std::make_unique<juce::AudioParameterFloat>("lpf_freq", "LPF_Freq", logRange, 20000.0));
+    parameters.push_back(std::make_unique<CustomAudioParameterFloat>("lpf_freq", "LPF_Freq", logRange, 20000.0, 6));
 
     // Low Shelving
-    parameters.push_back(std::make_unique<juce::AudioParameterFloat>("LowShelfFreq", "LowShelfFreq", logRange, 100.0));
+    parameters.push_back(
+        std::make_unique<CustomAudioParameterFloat>("LowShelfFreq", "LowShelfFreq", logRange, 100.0, 2));
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>(
         "LowShelfGain", "LowShelfGain", juce::NormalisableRange<float>(-18.0, 18.0, 0.1), 0.0));
 
     // High Shelving
     parameters.push_back(
-        std::make_unique<juce::AudioParameterFloat>("HighShelfFreq", "HighShelfFreq", logRange, 6000.0));
+        std::make_unique<CustomAudioParameterFloat>("HighShelfFreq", "HighShelfFreq", logRange, 6000.0, 5));
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>(
         "HighShelfGain", "HighShelfGain", juce::NormalisableRange<float>(-18.0, 18.0, 0.1), 0.0));
 
     // Low Mid Peak
-    parameters.push_back(std::make_unique<juce::AudioParameterFloat>("LowMidFreq", "LowMidFreq", logRange, 600.0));
+    parameters.push_back(std::make_unique<CustomAudioParameterFloat>("LowMidFreq", "LowMidFreq", logRange, 600.0, 3));
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>(
         "LowMidGain", "LowMidGain", juce::NormalisableRange<float>(-18.0, 18.0, 0.1), 0.0));
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>(
         "LowMidQ", "LowMidQ", juce::NormalisableRange<float>(0.1, 10., 0.1), 1.0));
 
     // High Mid Peak
-    parameters.push_back(std::make_unique<juce::AudioParameterFloat>("HighMidFreq", "HighMidFreq", logRange, 5000.0));
+    parameters.push_back(
+        std::make_unique<CustomAudioParameterFloat>("HighMidFreq", "HighMidFreq", logRange, 5000.0, 4));
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>(
         "HighMidGain", "HighMidGain", juce::NormalisableRange<float>(-18.0, 18.0, 0.1), 0.0));
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>(
