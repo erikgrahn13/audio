@@ -25,5 +25,6 @@ endif()
 FetchContent_Declare(
   pluginval
   URL ${PLUGINVAL_URL}
+  DOWNLOAD_EXTRACT_TIMESTAMP TRUE
 )
 FetchContent_MakeAvailable(pluginval)
