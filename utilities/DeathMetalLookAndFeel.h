@@ -100,32 +100,32 @@ class DeathMetalLookAndFeel : public juce::LookAndFeel_V4
         g.setColour(juce::Colours::white);
 
         juce::Point<float> point1(centreX, centreY);
-        point1.setX(point1.getX() + (radius - lineW * 1.5f) * std::sinf(0.f * std::numbers::pi / 180.f));
-        point1.setY(point1.getY() + (radius - lineW * 1.5f) * std::cosf(0.f * std::numbers::pi / 180.f));
+        point1.setX(point1.getX() + (radius - lineW * 1.5f) * ::sinf(0.f * std::numbers::pi / 180.f));
+        point1.setY(point1.getY() + (radius - lineW * 1.5f) * ::cosf(0.f * std::numbers::pi / 180.f));
 
         juce::Point<float> point2(centreX, centreY);
         point2.setX(point2.getX() +
-                    (radius - lineW * 1.5f) * std::sinf(144.f * static_cast<float>(std::numbers::pi) / 180.f));
+                    (radius - lineW * 1.5f) * ::sinf(144.f * static_cast<float>(std::numbers::pi) / 180.f));
         point2.setY(point2.getY() +
-                    (radius - lineW * 1.5f) * std::cosf(144.f * static_cast<float>(std::numbers::pi) / 180.f));
+                    (radius - lineW * 1.5f) * ::cosf(144.f * static_cast<float>(std::numbers::pi) / 180.f));
 
         juce::Point<float> point3(centreX, centreY);
         point3.setX(point3.getX() +
-                    (radius - lineW * 1.5f) * std::sinf(288.f * static_cast<float>(std::numbers::pi) / 180.f));
+                    (radius - lineW * 1.5f) * ::sinf(288.f * static_cast<float>(std::numbers::pi) / 180.f));
         point3.setY(point3.getY() +
-                    (radius - lineW * 1.5f) * std::cosf(288.f * static_cast<float>(std::numbers::pi) / 180.f));
+                    (radius - lineW * 1.5f) * ::cosf(288.f * static_cast<float>(std::numbers::pi) / 180.f));
 
         juce::Point<float> point4(centreX, centreY);
         point4.setX(point4.getX() +
-                    (radius - lineW * 1.5f) * std::sinf(72.f * static_cast<float>(std::numbers::pi) / 180.f));
+                    (radius - lineW * 1.5f) * ::sinf(72.f * static_cast<float>(std::numbers::pi) / 180.f));
         point4.setY(point4.getY() +
-                    (radius - lineW * 1.5f) * std::cosf(72.f * static_cast<float>(std::numbers::pi) / 180.f));
+                    (radius - lineW * 1.5f) * ::cosf(72.f * static_cast<float>(std::numbers::pi) / 180.f));
 
         juce::Point<float> point5(centreX, centreY);
         point5.setX(point5.getX() +
-                    (radius - lineW * 1.5f) * std::sinf(216.f * static_cast<float>(std::numbers::pi) / 180.f));
+                    (radius - lineW * 1.5f) * ::sinf(216.f * static_cast<float>(std::numbers::pi) / 180.f));
         point5.setY(point5.getY() +
-                    (radius - lineW * 1.5f) * std::cosf(216.f * static_cast<float>(std::numbers::pi) / 180.f));
+                    (radius - lineW * 1.5f) * ::cosf(216.f * static_cast<float>(std::numbers::pi) / 180.f));
 
         juce::Path pentagramPath;
         pentagramPath.startNewSubPath(point1);
