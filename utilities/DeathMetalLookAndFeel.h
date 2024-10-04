@@ -8,21 +8,18 @@ class DeathMetalLookAndFeel : public juce::LookAndFeel_V4
 {
   public:
     DeathMetalLookAndFeel()
-    {
-        deathMetalFont = juce::Font(
-            juce::Typeface::createSystemTypefaceFor(BinaryData::ArtDystopia_ttf, BinaryData::ArtDystopia_ttfSize));
-    }
-    ~DeathMetalLookAndFeel()
+        : deathMetalFont(juce::FontOptions(
+              juce::Typeface::createSystemTypefaceFor(BinaryData::ArtDystopia_ttf, BinaryData::ArtDystopia_ttfSize)))
     {
     }
-
-    juce::Font getLabelFont(juce::Label &label) override
+    ~DeathMetalLookAndFeel() override
     {
-        return deathMetalFont;
     }
 
     void drawButtonText(juce::Graphics &g, juce::TextButton &button, bool isMouseOverButton, bool isButtonDown) override
     {
+        std::ignore = isMouseOverButton;
+        std::ignore = isButtonDown;
         auto font = deathMetalFont;
         g.setFont(font);
         g.setColour(button.findColour(juce::TextButton::textColourOnId));
@@ -35,6 +32,7 @@ class DeathMetalLookAndFeel : public juce::LookAndFeel_V4
     void drawRotarySlider(juce::Graphics &g, int x, int y, int width, int height, float sliderPosProportional,
                           float rotaryStartAngle, float rotaryEndAngle, juce::Slider &slider) override
     {
+        std::ignore = slider;
         auto radius = (float)juce::jmin(width / 2, height / 2) - 4.0f;
         auto centreX = (float)x + (float)width * 0.5f;
         auto centreY = (float)y + (float)height * 0.5f;
@@ -43,7 +41,7 @@ class DeathMetalLookAndFeel : public juce::LookAndFeel_V4
         auto rw = radius * 2.0f;
         auto angle = rotaryStartAngle + sliderPosProportional * (rotaryEndAngle - rotaryStartAngle);
         // auto lineW = jmin (5.0f, radius * 0.5f);
-        auto lineW = radius * 0.135;
+        auto lineW = radius * 0.135f;
 
         juce::Rectangle<float> bounds(rx, ry, rw, rw);
 
@@ -101,24 +99,32 @@ class DeathMetalLookAndFeel : public juce::LookAndFeel_V4
         g.setColour(juce::Colours::white);
 
         juce::Point<float> point1(centreX, centreY);
-        point1.setX(point1.getX() + (radius - lineW * 1.5) * std::sin(0. * std::numbers::pi / 180.));
-        point1.setY(point1.getY() + (radius - lineW * 1.5) * std::cos(0. * std::numbers::pi / 180.));
+        point1.setX(point1.getX() + (radius - lineW * 1.5f) * std::sinf(0.f * std::numbers::pi / 180.f));
+        point1.setY(point1.getY() + (radius - lineW * 1.5f) * std::cosf(0.f * std::numbers::pi / 180.f));
 
         juce::Point<float> point2(centreX, centreY);
-        point2.setX(point2.getX() + (radius - lineW * 1.5) * std::sin(144. * std::numbers::pi / 180.));
-        point2.setY(point2.getY() + (radius - lineW * 1.5) * std::cos(144. * std::numbers::pi / 180.));
+        point2.setX(point2.getX() +
+                    (radius - lineW * 1.5f) * std::sinf(144.f * static_cast<float>(std::numbers::pi) / 180.f));
+        point2.setY(point2.getY() +
+                    (radius - lineW * 1.5f) * std::cosf(144.f * static_cast<float>(std::numbers::pi) / 180.f));
 
         juce::Point<float> point3(centreX, centreY);
-        point3.setX(point3.getX() + (radius - lineW * 1.5) * std::sin(288. * std::numbers::pi / 180.));
-        point3.setY(point3.getY() + (radius - lineW * 1.5) * std::cos(288. * std::numbers::pi / 180.));
+        point3.setX(point3.getX() +
+                    (radius - lineW * 1.5f) * std::sinf(288.f * static_cast<float>(std::numbers::pi) / 180.f));
+        point3.setY(point3.getY() +
+                    (radius - lineW * 1.5f) * std::cosf(288.f * static_cast<float>(std::numbers::pi) / 180.f));
 
         juce::Point<float> point4(centreX, centreY);
-        point4.setX(point4.getX() + (radius - lineW * 1.5) * std::sin(72. * std::numbers::pi / 180.));
-        point4.setY(point4.getY() + (radius - lineW * 1.5) * std::cos(72. * std::numbers::pi / 180.));
+        point4.setX(point4.getX() +
+                    (radius - lineW * 1.5f) * std::sinf(72.f * static_cast<float>(std::numbers::pi) / 180.f));
+        point4.setY(point4.getY() +
+                    (radius - lineW * 1.5f) * std::cosf(72.f * static_cast<float>(std::numbers::pi) / 180.f));
 
         juce::Point<float> point5(centreX, centreY);
-        point5.setX(point5.getX() + (radius - lineW * 1.5) * std::sin(216. * std::numbers::pi / 180.));
-        point5.setY(point5.getY() + (radius - lineW * 1.5) * std::cos(216. * std::numbers::pi / 180.));
+        point5.setX(point5.getX() +
+                    (radius - lineW * 1.5f) * std::sinf(216.f * static_cast<float>(std::numbers::pi) / 180.f));
+        point5.setY(point5.getY() +
+                    (radius - lineW * 1.5f) * std::cosf(216.f * static_cast<float>(std::numbers::pi) / 180.f));
 
         juce::Path pentagramPath;
         pentagramPath.startNewSubPath(point1);
@@ -136,7 +142,7 @@ class DeathMetalLookAndFeel : public juce::LookAndFeel_V4
         g.strokePath(pentagramPath, juce::PathStrokeType(2));
 
         // Draw inner circle
-        g.drawEllipse(bounds.reduced(lineW * 2.0), 2.0);
+        g.drawEllipse(bounds.reduced(lineW * 2.f), 2.f);
 
         // Draw upside-down cross
         juce::Path crossPath;
