@@ -1,24 +1,24 @@
 #pragma once
 
-#include <JuceHeader.h>
 #include <Fonts.h>
-
+#include <JuceHeader.h>
 
 class FontAudioLookAndFeel : public juce::LookAndFeel_V4
 {
-    public:
+  public:
     FontAudioLookAndFeel()
+        : fontAudio(juce::FontOptions(
+              juce::Typeface::createSystemTypefaceFor(BinaryData::fontaudio_ttf, BinaryData::fontaudio_ttfSize)))
     {
-        fontAudio = juce::Font(juce::Typeface::createSystemTypefaceFor(BinaryData::fontaudio_ttf, BinaryData::fontaudio_ttfSize));
     }
 
-    juce::Font& getFont()
+    juce::Font &getFont()
     {
         return fontAudio;
     }
 
-    void drawButtonText(juce::Graphics& g, juce::TextButton& button,
-                        bool /*isMouseOverButton*/, bool /*isButtonDown*/) override
+    void drawButtonText(juce::Graphics &g, juce::TextButton &button, bool /*isMouseOverButton*/,
+                        bool /*isButtonDown*/) override
     {
         auto font = fontAudio;
         g.setFont(font.withHeight(button.getHeight() * 0.6f));
@@ -33,9 +33,9 @@ class FontAudioLookAndFeel : public juce::LookAndFeel_V4
 
         // juce::Colour backgroundColor;
         // if (button.getClickingTogglesState() && button.getToggleState())
-            // backgroundColor = button.findColour(juce::TextButton::buttonOnColourId);
+        // backgroundColor = button.findColour(juce::TextButton::buttonOnColourId);
         // else
-            // backgroundColor = button.findColour(juce::TextButton::buttonColourId);
+        // backgroundColor = button.findColour(juce::TextButton::buttonColourId);
 
         button.setColour(juce::TextButton::ColourIds::buttonColourId, juce::Colours::black);
         button.setColour(juce::TextButton::ColourIds::buttonOnColourId, juce::Colours::darkgrey.darker());
@@ -43,6 +43,6 @@ class FontAudioLookAndFeel : public juce::LookAndFeel_V4
         g.drawText(button.getButtonText(), button.getLocalBounds(), juce::Justification::centred, true);
     }
 
-    private:
+  private:
     juce::Font fontAudio;
 };
