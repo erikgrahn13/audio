@@ -2,6 +2,7 @@
 
 #include <Fonts.h>
 #include <JuceHeader.h>
+#include <cmath>
 #include <numbers>
 
 class DeathMetalLookAndFeel : public juce::LookAndFeel_V4
