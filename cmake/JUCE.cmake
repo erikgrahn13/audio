@@ -1,9 +1,21 @@
-add_compile_definitions(JUCE_DISPLAY_SPLASH_SCREEN=0)
+
+
+
+if(WIN32)
+  set(JUCE_URL "https://github.com/juce-framework/JUCE/releases/download/8.0.2/juce-8.0.2-windows.zip")
+elseif(APPLE)
+  set(JUCE_URL "https://github.com/juce-framework/JUCE/releases/download/8.0.2/juce-8.0.2-osx.zip")
+elseif(UNIX)
+  set(JUCE_URL "https://github.com/juce-framework/JUCE/releases/download/8.0.2/juce-8.0.2-linux.zip")
+else()
+  message(FATAL_ERROR "Not supported platform")
+endif()
+
 FetchContent_Declare(
   juce
-  GIT_REPOSITORY https://github.com/juce-framework/JUCE.git
-  GIT_TAG 8.0.0
+  URL ${JUCE_URL}
   SOURCE_DIR ${DEPENDENCY_DIR}/juce
+  DOWNLOAD_EXTRACT_TIMESTAMP TRUE
 )
 
 FetchContent_MakeAvailable(juce)
