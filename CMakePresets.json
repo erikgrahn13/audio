@@ -18,7 +18,6 @@
       "displayName": "Debug",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
-        "JUCE_BUILD_EXAMPLES": "ON",
         "JUCE_BUILD_EXTRAS": "ON"
       }
     },
