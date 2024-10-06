@@ -45,6 +45,7 @@ jobs:
             build/**
             !build/build
             !**/*_SharedCode.a
+            !**/*_SharedCode.lib
             !build/_deps/juce-*/
 
   test:
