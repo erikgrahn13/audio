@@ -1,23 +1,23 @@
-#include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include "PluginProcessor.h"
 
 //==============================================================================
-AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(AudioPluginAudioProcessor &p, juce::AudioProcessorValueTreeState& vts)
-    : AudioProcessorEditor(&p), processorRef(p), valueTreeState(vts) 
+AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(AudioPluginAudioProcessor &p,
+                                                                 juce::AudioProcessorValueTreeState &vts)
+    : AudioProcessorEditor(&p), processorRef(p), valueTreeState(vts)
 {
     juce::ignoreUnused(processorRef);
 
     loadFileButton.setLookAndFeel(&deathMetalLookAndFeel);
-    loadFileButton.onClick = [this]()
-    { loadFileButtonClicked(); };
+    loadFileButton.onClick = [this]() { loadFileButtonClicked(); };
     loadFileButton.setButtonText("LOAD FILE");
     addAndMakeVisible(&loadFileButton);
 
     playButton.setLookAndFeel(&fontAudioLookAndFeel);
     playButton.setClickingTogglesState(true);
-    playButton.onClick = [this]()
-    {
-        playButton.getToggleState() ? playButton.setButtonText(juce::CharPointer_UTF8("")) : playButton.setButtonText(juce::CharPointer_UTF8(""));
+    playButton.onClick = [this]() {
+        playButton.getToggleState() ? playButton.setButtonText(juce::CharPointer_UTF8(""))
+                                    : playButton.setButtonText(juce::CharPointer_UTF8(""));
     };
     playButton.setButtonText(juce::CharPointer_UTF8(""));
     playAttachment.reset(new ButtonAttachment(valueTreeState, "play", playButton));
@@ -42,6 +42,7 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(AudioPluginAudi
     gainSlider.setColour(juce::Slider::ColourIds::backgroundColourId, juce::Colours::darkgrey);
     gainSlider.setColour(juce::Slider::ColourIds::thumbColourId, juce::Colours::white);
     gainAttachment.reset(new SliderAttachment(valueTreeState, "gain", gainSlider));
+    gainSlider.setLookAndFeel(&deathMetalLookAndFeel);
     addAndMakeVisible(gainSlider);
 
     // Make sure that before the constructor has finished, you've set the
@@ -69,13 +70,12 @@ void AudioPluginAudioProcessorEditor::resized()
 
     auto fileBounds = bounds.removeFromTop(bounds.getHeight() / 3);
 
-
     fileName.setBounds(fileBounds.removeFromLeft(bounds.getWidth() / 2));
     loadFileButton.setBounds(fileBounds.reduced(40, 10));
 
     auto transportBounds = bounds.removeFromTop(bounds.getHeight() / 2);
-    playButton.setBounds(transportBounds.removeFromLeft(bounds.getWidth() /2).reduced(10, 10));
-    loopButton.setBounds(transportBounds.reduced(10,10));
+    playButton.setBounds(transportBounds.removeFromLeft(bounds.getWidth() / 2).reduced(10, 10));
+    loopButton.setBounds(transportBounds.reduced(10, 10));
 
     auto gainBounds = bounds;
     gainSlider.setBounds(gainBounds.reduced(60, 0));
