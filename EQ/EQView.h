@@ -18,7 +18,7 @@ class EQView : public juce::Component
     class Handle : public juce::Component
     {
       public:
-        static constexpr float handSize = 20.;
+        static constexpr int handleSize = 20;
         Handle(Biquad::Type type, juce::RangedAudioParameter *freqParam,
                juce::RangedAudioParameter *gainParam = nullptr, juce::RangedAudioParameter *qParam = nullptr);
 
@@ -43,12 +43,12 @@ class EQView : public juce::Component
         std::unique_ptr<juce::ParameterAttachment> mGainAttachment{nullptr};
         std::unique_ptr<juce::ParameterAttachment> mQAttachment{nullptr};
 
-        JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Handle);
+        JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Handle)
     };
 
   public:
     EQView(AudioPluginAudioProcessor &processor, juce::AudioProcessorValueTreeState &parameters);
-    ~EQView();
+    ~EQView() override;
     void resized() override;
     void paint(juce::Graphics &g) override;
 
@@ -63,6 +63,10 @@ class EQView : public juce::Component
         return mHandles;
     }
 
+    std::vector<int> getFrequencies();
+    std::vector<float> getXs(const std::vector<float> &freqs, float left, float width);
+    std::vector<int> getGains();
+
     juce::Rectangle<int> getRenderArea();
 
   private:
@@ -70,7 +74,7 @@ class EQView : public juce::Component
     juce::AudioProcessorValueTreeState &mParameters;
     AnalyzerCurve mAnalyzerCurve;
     juce::Path frequencyResponse;
-    double mSampleRate;
+    int mSampleRate;
     juce::Component handleContainer;
     juce::Font deathMetalFont;
     static constexpr int reducedSize = 30;
@@ -79,5 +83,5 @@ class EQView : public juce::Component
 
     std::vector<std::unique_ptr<Handle>> mHandles;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(EQView);
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(EQView)
 };

@@ -4,13 +4,13 @@ AnalyzerCurve::AnalyzerCurve(AudioPluginAudioProcessor &processor) : mProcessor(
 {
     avgFFTBuffer.clear();
 
-    mFFTPoints.resize(mFFT.getSize());
+    mFFTPoints.resize(static_cast<size_t>(mFFT.getSize()));
     {
         juce::ScopedLock lockedForWriting(pathCreationLock);
         mFFTPath.preallocateSpace(mFFT.getSize() * 2);
     }
 
-    mSampleRate = mProcessor.getSampleRate();
+    mSampleRate = static_cast<int>(mProcessor.getSampleRate());
 
     startTimerHz(30);
 }
@@ -22,7 +22,6 @@ AnalyzerCurve::~AnalyzerCurve()
 void AnalyzerCurve::paint(juce::Graphics &g)
 {
     const auto bounds = getLocalBounds().toFloat();
-    const auto width = bounds.getWidth();
     const auto height = bounds.getHeight();
 
     const auto *fftDataOutput = avgFFTBuffer.getReadPointer(0);
@@ -36,7 +35,7 @@ void AnalyzerCurve::paint(juce::Graphics &g)
         mFFTPath.startNewSubPath(float(point.x), y);
     }
 
-    for (int i = 0; i < fftPointsSize; ++i)
+    for (size_t i = 0; i < fftPointsSize; ++i)
     {
         FFTPoint &point = mFFTPoints[i];
         float y = juce::jmap(getFFTPointLevel(fftDataOutput, point), mindB, maxdB, height, 0.0f) + 0.5f;
@@ -94,7 +93,7 @@ void AnalyzerCurve::timerCallback()
     if (!mProcessor.nextFFTBlockReady.load())
         return;
 
-    auto sampleRate = mProcessor.getSampleRate();
+    auto sampleRate = static_cast<int>(mProcessor.getSampleRate());
     if (mSampleRate != sampleRate)
     {
         resized();

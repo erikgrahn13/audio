@@ -12,28 +12,28 @@ AudioPluginAudioProcessor::AudioPluginAudioProcessor()
                          .withOutput("Output", juce::AudioChannelSet::stereo(), true)
 #endif
                          ),
-      parameters(*this, nullptr, juce::Identifier("Parameters"), createParameters())
+      mParameters(*this, nullptr, juce::Identifier("Parameters"), createParameters())
 {
     FilterTuple filter1 =
-        std::make_tuple(Biquad(Biquad::Type::kHighpass, parameters.getParameter("hpf_freq")->getDefaultValue()),
-                        parameters.getParameter("hpf_freq"), std::nullopt, std::nullopt);
+        std::make_tuple(Biquad(Biquad::Type::kHighpass, mParameters.getParameter("hpf_freq")->getDefaultValue()),
+                        mParameters.getParameter("hpf_freq"), std::nullopt, std::nullopt);
     FilterTuple filter2 =
-        std::make_tuple(Biquad(Biquad::Type::kLowpass, parameters.getParameter("lpf_freq")->getDefaultValue()),
-                        parameters.getParameter("lpf_freq"), std::nullopt, std::nullopt);
-    FilterTuple filter3 =
-        std::make_tuple(Biquad(Biquad::Type::kLowShelf, parameters.getParameter("LowShelfFreq")->getDefaultValue()),
-                        parameters.getParameter("LowShelfFreq"), parameters.getParameter("LowShelfGain"), std::nullopt);
+        std::make_tuple(Biquad(Biquad::Type::kLowpass, mParameters.getParameter("lpf_freq")->getDefaultValue()),
+                        mParameters.getParameter("lpf_freq"), std::nullopt, std::nullopt);
+    FilterTuple filter3 = std::make_tuple(
+        Biquad(Biquad::Type::kLowShelf, mParameters.getParameter("LowShelfFreq")->getDefaultValue()),
+        mParameters.getParameter("LowShelfFreq"), mParameters.getParameter("LowShelfGain"), std::nullopt);
     FilterTuple filter4 = std::make_tuple(
-        Biquad(Biquad::Type::kHighShelf, parameters.getParameter("HighShelfFreq")->getDefaultValue()),
-        parameters.getParameter("HighShelfFreq"), parameters.getParameter("HighShelfGain"), std::nullopt);
+        Biquad(Biquad::Type::kHighShelf, mParameters.getParameter("HighShelfFreq")->getDefaultValue()),
+        mParameters.getParameter("HighShelfFreq"), mParameters.getParameter("HighShelfGain"), std::nullopt);
     FilterTuple filter5 =
-        std::make_tuple(Biquad(Biquad::Type::kPeak, parameters.getParameter("LowMidFreq")->getDefaultValue()),
-                        parameters.getParameter("LowMidFreq"), parameters.getParameter("LowMidGain"),
-                        parameters.getParameter("LowMidQ"));
+        std::make_tuple(Biquad(Biquad::Type::kPeak, mParameters.getParameter("LowMidFreq")->getDefaultValue()),
+                        mParameters.getParameter("LowMidFreq"), mParameters.getParameter("LowMidGain"),
+                        mParameters.getParameter("LowMidQ"));
     FilterTuple filter6 =
-        std::make_tuple(Biquad(Biquad::Type::kPeak, parameters.getParameter("HighMidFreq")->getDefaultValue()),
-                        parameters.getParameter("HighMidFreq"), parameters.getParameter("HighMidGain"),
-                        parameters.getParameter("HighMidQ"));
+        std::make_tuple(Biquad(Biquad::Type::kPeak, mParameters.getParameter("HighMidFreq")->getDefaultValue()),
+                        mParameters.getParameter("HighMidFreq"), mParameters.getParameter("HighMidGain"),
+                        mParameters.getParameter("HighMidQ"));
 
     mFilters.push_back(filter1);
     mFilters.push_back(filter2);
@@ -44,16 +44,16 @@ AudioPluginAudioProcessor::AudioPluginAudioProcessor()
 
     for (auto &filter : mFilters)
     {
-        parameters.addParameterListener(std::get<1>(filter)->getParameterID(), this);
+        mParameters.addParameterListener(std::get<1>(filter)->getParameterID(), this);
 
         if (std::get<2>(filter).has_value()) // check if gain parameter exists
         {
-            parameters.addParameterListener(std::get<2>(filter).value()->getParameterID(), this);
+            mParameters.addParameterListener(std::get<2>(filter).value()->getParameterID(), this);
         }
 
         if (std::get<3>(filter).has_value()) // check of Q parameter exists
         {
-            parameters.addParameterListener(std::get<3>(filter).value()->getParameterID(), this);
+            mParameters.addParameterListener(std::get<3>(filter).value()->getParameterID(), this);
         }
     }
 
@@ -204,8 +204,8 @@ void AudioPluginAudioProcessor::processBlock(juce::AudioBuffer<float> &buffer, j
     // interleaved by keeping the same state.
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
-        std::span<const float> input(buffer.getReadPointer(channel), buffer.getNumSamples());
-        std::span<float> output(buffer.getWritePointer(channel), buffer.getNumSamples());
+        std::span<const float> input(buffer.getReadPointer(channel), static_cast<size_t>(buffer.getNumSamples()));
+        std::span<float> output(buffer.getWritePointer(channel), static_cast<size_t>(buffer.getNumSamples()));
 
         for (auto &filter : mFilters)
         {
@@ -215,8 +215,6 @@ void AudioPluginAudioProcessor::processBlock(juce::AudioBuffer<float> &buffer, j
 
     if (mRingBuffer.getFreeSpace() < buffer.getNumSamples())
         return;
-
-    auto *channelData = buffer.getReadPointer(0);
 
     int start1, size1, start2, size2;
     mRingBuffer.prepareToWrite(buffer.getNumSamples(), start1, size1, start2, size2);
@@ -241,7 +239,7 @@ bool AudioPluginAudioProcessor::hasEditor() const
 
 juce::AudioProcessorEditor *AudioPluginAudioProcessor::createEditor()
 {
-    return new AudioPluginAudioProcessorEditor(*this, parameters);
+    return new AudioPluginAudioProcessorEditor(*this, mParameters);
 }
 
 //==============================================================================
@@ -283,7 +281,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout AudioPluginAudioProcessor::c
     // auto toString = [](float value) { return juce::String(value, 2); }; // 2 decimal places
     // auto fromString = [](const juce::String& text) { return text.getFloatValue(); };
     juce::AudioParameterFloatAttributes attributes;
-    attributes.withStringFromValueFunction([](float value, int) { return juce::String(value, 2); });
+    auto result = attributes.withStringFromValueFunction([](float value, int) { return juce::String(value, 2); });
     // attributes.withLabel("Hz");
     // attributes.
 
@@ -297,34 +295,36 @@ juce::AudioProcessorValueTreeState::ParameterLayout AudioPluginAudioProcessor::c
     parameters.push_back(
         std::make_unique<CustomAudioParameterFloat>("LowShelfFreq", "LowShelfFreq", logRange, 100.0, 2));
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>(
-        "LowShelfGain", "LowShelfGain", juce::NormalisableRange<float>(-18.0, 18.0, 0.1), 0.0));
+        "LowShelfGain", "LowShelfGain", juce::NormalisableRange<float>(-18.f, 18.f, 0.1f), 0.f));
 
     // High Shelving
     parameters.push_back(
         std::make_unique<CustomAudioParameterFloat>("HighShelfFreq", "HighShelfFreq", logRange, 6000.0, 5));
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>(
-        "HighShelfGain", "HighShelfGain", juce::NormalisableRange<float>(-18.0, 18.0, 0.1), 0.0));
+        "HighShelfGain", "HighShelfGain", juce::NormalisableRange<float>(-18.f, 18.f, 0.1f), 0.f));
 
     // Low Mid Peak
     parameters.push_back(std::make_unique<CustomAudioParameterFloat>("LowMidFreq", "LowMidFreq", logRange, 600.0, 3));
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>(
-        "LowMidGain", "LowMidGain", juce::NormalisableRange<float>(-18.0, 18.0, 0.1), 0.0));
+        "LowMidGain", "LowMidGain", juce::NormalisableRange<float>(-18.f, 18.f, 0.1f), 0.f));
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>(
-        "LowMidQ", "LowMidQ", juce::NormalisableRange<float>(0.1, 10., 0.1), 1.0));
+        "LowMidQ", "LowMidQ", juce::NormalisableRange<float>(0.1f, 10.f, 0.1f), 1.f));
 
     // High Mid Peak
     parameters.push_back(
         std::make_unique<CustomAudioParameterFloat>("HighMidFreq", "HighMidFreq", logRange, 5000.0, 4));
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>(
-        "HighMidGain", "HighMidGain", juce::NormalisableRange<float>(-18.0, 18.0, 0.1), 0.0));
+        "HighMidGain", "HighMidGain", juce::NormalisableRange<float>(-18.f, 18.f, 0.1f), 0.f));
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>(
-        "HighMidQ", "HighMidQ", juce::NormalisableRange<float>(0.1, 10., 0.1), 1.0));
+        "HighMidQ", "HighMidQ", juce::NormalisableRange<float>(0.1f, 10.f, 0.1f), 1.f));
 
     return {parameters.begin(), parameters.end()};
 }
 
 void AudioPluginAudioProcessor::parameterChanged(const juce::String &parameter, float newValue)
 {
+    std::ignore = parameter;
+    std::ignore = newValue;
     requiresUpdate.store(true);
 }
 

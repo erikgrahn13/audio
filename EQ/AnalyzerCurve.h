@@ -7,7 +7,7 @@ class AnalyzerCurve : public juce::Component, juce::Timer
 {
   public:
     AnalyzerCurve(AudioPluginAudioProcessor &processor);
-    ~AnalyzerCurve();
+    ~AnalyzerCurve() override;
 
     void paint(juce::Graphics &g) override;
     void resized() override;
@@ -24,7 +24,7 @@ class AnalyzerCurve : public juce::Component, juce::Timer
 
     juce::Path mFFTPath;
     juce::CriticalSection pathCreationLock;
-    double mSampleRate;
+    int mSampleRate;
 
     struct FFTPoint
     {
@@ -34,7 +34,7 @@ class AnalyzerCurve : public juce::Component, juce::Timer
         int x;
     };
 
-    int fftPointsSize = 0;
+    size_t fftPointsSize = 0;
     std::vector<FFTPoint> mFFTPoints;
 
     float getFFTPointLevel(const float *buffer, const FFTPoint &point);

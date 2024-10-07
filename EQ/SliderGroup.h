@@ -8,16 +8,15 @@
 class SliderGroup : public juce::Component
 {
   public:
-    SliderGroup(AudioPluginAudioProcessor &processor, juce::AudioProcessorValueTreeState &parameters,
-                std::string_view frequencyParameterID, std::string_view gainParameterID, std::string_view QParameterID);
-    ~SliderGroup();
+    SliderGroup(AudioPluginAudioProcessor &processor, std::string_view frequencyParameterID,
+                std::string_view gainParameterID, std::string_view QParameterID);
+    ~SliderGroup() override;
     void resized() override;
     void setText(const juce::String &title);
     void setSymbolType(const juce::CharPointer_UTF8 &symbolType);
 
   private:
     AudioPluginAudioProcessor &mProcessor;
-    juce::AudioProcessorValueTreeState &mParameters;
     juce::GroupComponent frame;
 
     juce::Label filterSymbolLabel;

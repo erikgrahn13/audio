@@ -54,7 +54,7 @@ class AudioPluginAudioProcessor final : public juce::AudioProcessor, juce::Audio
 
     juce::AudioProcessorValueTreeState &getVTSParameters()
     {
-        return parameters;
+        return mParameters;
     }
     std::vector<FilterTuple> getFilters()
     {
@@ -66,7 +66,7 @@ class AudioPluginAudioProcessor final : public juce::AudioProcessor, juce::Audio
     std::atomic<bool> nextFFTBlockReady{false};
 
   private:
-    juce::AudioProcessorValueTreeState parameters;
+    juce::AudioProcessorValueTreeState mParameters;
     juce::AudioParameterFloat *mHPF_Freq;
     std::map<Biquad, std::vector<juce::RangedAudioParameter *>> mTest;
 

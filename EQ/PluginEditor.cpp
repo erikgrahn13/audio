@@ -5,12 +5,10 @@
 AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(AudioPluginAudioProcessor &p,
                                                                  juce::AudioProcessorValueTreeState &parameters)
     : AudioProcessorEditor(&p), processorRef(p), mParameters(parameters), mEQView(p, parameters),
-      mHPFSliderGroup(p, parameters, "hpf_freq", "", ""),
-      mLowShelfSliderGroup(p, parameters, "LowShelfFreq", "LowShelfGain", ""),
-      mLowMidSliderGroup(p, parameters, "LowMidFreq", "LowMidGain", "LowMidQ"),
-      mHighMidSliderGroup(p, parameters, "HighMidFreq", "HighMidGain", "HighMidQ"),
-      mHighShelfSliderGroup(p, parameters, "HighShelfFreq", "HighShelfGain", ""),
-      mLPFSliderGroup(p, parameters, "lpf_freq", "", "")
+      mHPFSliderGroup(p, "hpf_freq", "", ""), mLowShelfSliderGroup(p, "LowShelfFreq", "LowShelfGain", ""),
+      mLowMidSliderGroup(p, "LowMidFreq", "LowMidGain", "LowMidQ"),
+      mHighMidSliderGroup(p, "HighMidFreq", "HighMidGain", "HighMidQ"),
+      mHighShelfSliderGroup(p, "HighShelfFreq", "HighShelfGain", ""), mLPFSliderGroup(p, "lpf_freq", "", "")
 {
     juce::ignoreUnused(processorRef);
     // Make sure that before the constructor has finished, you've set the
@@ -70,7 +68,7 @@ void AudioPluginAudioProcessorEditor::paint(juce::Graphics &g)
 void AudioPluginAudioProcessorEditor::resized()
 {
     auto bounds = getLocalBounds();
-    auto graphArea = bounds.removeFromTop(bounds.getHeight() / (5.f / 3.f));
+    auto graphArea = bounds.removeFromTop(static_cast<int>(static_cast<float>(bounds.getHeight()) / (5.f / 3.f)));
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..
     mEQView.setBounds(graphArea);
