@@ -174,7 +174,7 @@ $(function(){initNavTree('EQ_2PluginProcessor_8h_source.html',''); initResizable
 <div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span> </div>
 <div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>    juce::AudioProcessorValueTreeState &amp;getVTSParameters()</div>
 <div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    {</div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>        <span class="keywordflow">return</span> parameters;</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>        <span class="keywordflow">return</span> mParameters;</div>
 <div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>    }</div>
 <div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>    std::vector&lt;FilterTuple&gt; getFilters()</div>
 <div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    {</div>
@@ -186,7 +186,7 @@ $(function(){initNavTree('EQ_2PluginProcessor_8h_source.html',''); initResizable
 <div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>    std::atomic&lt;bool&gt; nextFFTBlockReady{<span class="keyword">false</span>};</div>
 <div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span> </div>
 <div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>  <span class="keyword">private</span>:</div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>    juce::AudioProcessorValueTreeState parameters;</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>    juce::AudioProcessorValueTreeState mParameters;</div>
 <div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>    juce::AudioParameterFloat *mHPF_Freq;</div>
 <div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>    std::map&lt;Biquad, std::vector&lt;juce::RangedAudioParameter *&gt;&gt; mTest;</div>
 <div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span> </div>
