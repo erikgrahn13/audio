@@ -121,7 +121,7 @@ std::vector<float> EQView::getXs(const std::vector<float> &freqs, float left, fl
 
     for (auto f : freqs)
     {
-        auto normX = (std::log10f(f) - logMin) / (logMax - logMin);
+        auto normX = (::log10f(f) - logMin) / (logMax - logMin);
         xs.push_back(left + width * normX);
     }
 
@@ -304,24 +304,24 @@ void EQView::Handle::paint(juce::Graphics &g)
     g.setColour(Colours::white);
 
     juce::Point<float> point1 = getLocalBounds().getCentre().toFloat();
-    point1.setX(point1.getX() + (handleSize / 2) * std::sinf(0. * static_cast<float>(std::numbers::pi) / 180.));
-    point1.setY(point1.getY() + (handleSize / 2) * std::cosf(0. * static_cast<float>(std::numbers::pi) / 180.));
+    point1.setX(point1.getX() + (handleSize / 2) * ::sinf(0. * static_cast<float>(std::numbers::pi) / 180.));
+    point1.setY(point1.getY() + (handleSize / 2) * ::cosf(0. * static_cast<float>(std::numbers::pi) / 180.));
 
     juce::Point<float> point2 = getLocalBounds().getCentre().toFloat();
-    point2.setX(point2.getX() + (handleSize / 2) * std::sinf(144. * static_cast<float>(std::numbers::pi) / 180.));
-    point2.setY(point2.getY() + (handleSize / 2) * std::cosf(144. * static_cast<float>(std::numbers::pi) / 180.));
+    point2.setX(point2.getX() + (handleSize / 2) * ::sinf(144. * static_cast<float>(std::numbers::pi) / 180.));
+    point2.setY(point2.getY() + (handleSize / 2) * ::cosf(144. * static_cast<float>(std::numbers::pi) / 180.));
 
     juce::Point<float> point3 = getLocalBounds().getCentre().toFloat();
-    point3.setX(point3.getX() + (handleSize / 2) * std::sinf(288. * static_cast<float>(std::numbers::pi) / 180.));
-    point3.setY(point3.getY() + (handleSize / 2) * std::cosf(288. * static_cast<float>(std::numbers::pi) / 180.));
+    point3.setX(point3.getX() + (handleSize / 2) * ::sinf(288. * static_cast<float>(std::numbers::pi) / 180.));
+    point3.setY(point3.getY() + (handleSize / 2) * ::cosf(288. * static_cast<float>(std::numbers::pi) / 180.));
 
     juce::Point<float> point4 = getLocalBounds().getCentre().toFloat();
-    point4.setX(point4.getX() + (handleSize / 2) * std::sinf(72. * static_cast<float>(std::numbers::pi) / 180.));
-    point4.setY(point4.getY() + (handleSize / 2) * std::cosf(72. * static_cast<float>(std::numbers::pi) / 180.));
+    point4.setX(point4.getX() + (handleSize / 2) * ::sinf(72. * static_cast<float>(std::numbers::pi) / 180.));
+    point4.setY(point4.getY() + (handleSize / 2) * ::cosf(72. * static_cast<float>(std::numbers::pi) / 180.));
 
     juce::Point<float> point5 = getLocalBounds().getCentre().toFloat();
-    point5.setX(point5.getX() + (handleSize / 2) * std::sinf(216. * static_cast<float>(std::numbers::pi) / 180.));
-    point5.setY(point5.getY() + (handleSize / 2) * std::cosf(216. * static_cast<float>(std::numbers::pi) / 180.));
+    point5.setX(point5.getX() + (handleSize / 2) * ::sinf(216. * static_cast<float>(std::numbers::pi) / 180.));
+    point5.setY(point5.getY() + (handleSize / 2) * ::cosf(216. * static_cast<float>(std::numbers::pi) / 180.));
 
     juce::Path path;
     path.startNewSubPath(point1);
