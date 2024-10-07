@@ -17,6 +17,11 @@ class DeathMetalLookAndFeel : public juce::LookAndFeel_V4
     {
     }
 
+    juce::Font getLabelFont(juce::Label &label) override
+    {
+        return deathMetalFont;
+    }
+
     void drawButtonText(juce::Graphics &g, juce::TextButton &button, bool isMouseOverButton, bool isButtonDown) override
     {
         std::ignore = isMouseOverButton;
