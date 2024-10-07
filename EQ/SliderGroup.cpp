@@ -1,9 +1,8 @@
 #include "SliderGroup.h"
 
-SliderGroup::SliderGroup(AudioPluginAudioProcessor &processor, juce::AudioProcessorValueTreeState &parameters,
-                         std::string_view frequencyParameterID, std::string_view gainParameterID,
-                         std::string_view QParameterID)
-    : mProcessor(processor), mParameters(parameters)
+SliderGroup::SliderGroup(AudioPluginAudioProcessor &processor, std::string_view frequencyParameterID,
+                         std::string_view gainParameterID, std::string_view QParameterID)
+    : mProcessor(processor)
 {
     frame.setLookAndFeel(&deathMetalLookAndFeel);
     frame.setTextLabelPosition(juce::Justification::centred);
