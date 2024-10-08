@@ -67,7 +67,6 @@ class AudioPluginAudioProcessor final : public juce::AudioProcessor, juce::Audio
 
   private:
     juce::AudioProcessorValueTreeState mParameters;
-    juce::AudioParameterFloat *mHPF_Freq;
     std::map<Biquad, std::vector<juce::RangedAudioParameter *>> mTest;
 
     std::vector<FilterTuple> mFilters;
