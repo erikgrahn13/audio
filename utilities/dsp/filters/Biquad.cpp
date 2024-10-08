@@ -28,8 +28,8 @@ void Biquad::prepare(const double sampleRate, const int numSamples, const int nu
 
 void Biquad::process(std::span<const float> input, std::span<float> output, int channel)
 {
-    int numSamples = input.size(); // numSamples is derived from the span size
-    for (int i = 0; i < numSamples; ++i)
+    size_t numSamples = input.size(); // numSamples is derived from the span size
+    for (size_t i = 0; i < numSamples; ++i)
     {
         double sample = input[i];
         double filteredSample =
