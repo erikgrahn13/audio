@@ -17,7 +17,7 @@ class SynthVoice : public juce::SynthesiserVoice
     void setOscillatorType(Oscillator::OscType oscType)
     {
         oscillator.setType(oscType);
-    };
+    }
 
     // Bring base class method into scope to avoid hiding it
     using juce::SynthesiserVoice::renderNextBlock;

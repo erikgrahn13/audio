@@ -9,10 +9,10 @@ class SynthSound : public juce::SynthesiserSound
     {
         std::ignore = midiNoteNumber;
         return true;
-    };
+    }
     bool appliesToChannel(int midiChannel) override
     {
         std::ignore = midiChannel;
         return true;
-    };
+    }
 };
