@@ -1,9 +1,10 @@
-#include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include "PluginProcessor.h"
 
 //==============================================================================
 SynthAudioProcessorEditor::SynthAudioProcessorEditor(SynthAudioProcessor &p)
-    : AudioProcessorEditor(&p), processorRef(p), keyboardComponent(processorRef.keyboardState, juce::MidiKeyboardComponent::horizontalKeyboard)
+    : AudioProcessorEditor(&p), processorRef(p),
+      keyboardComponent(processorRef.keyboardState, juce::MidiKeyboardComponent::horizontalKeyboard)
 {
     setSize(800, 600);
 
@@ -34,15 +35,14 @@ SynthAudioProcessorEditor::SynthAudioProcessorEditor(SynthAudioProcessor &p)
     triangleButton.setButtonText(juce::CharPointer_UTF8(""));
     triangleButton.setConnectedEdges(Button::ConnectedOnLeft);
     addAndMakeVisible(triangleButton);
-    
+
     // Initially select the Sine waveform
     sineButton.setToggleState(true, juce::NotificationType::dontSendNotification);
 
     auto oscType = processorRef.parameters.getParameter("oscType");
 
-
-    sineButton.onClick = [=](){
-        if(sineButton.getToggleState())
+    sineButton.onClick = [&]() {
+        if (sineButton.getToggleState())
         {
             oscType->beginChangeGesture();
             oscType->setValueNotifyingHost(static_cast<float>(oscType->convertTo0to1(Oscillator::OscType::SINE)));
@@ -50,33 +50,30 @@ SynthAudioProcessorEditor::SynthAudioProcessorEditor(SynthAudioProcessor &p)
         }
     };
 
-    squareButton.onClick = [=](){
-        if(squareButton.getToggleState())
+    squareButton.onClick = [&]() {
+        if (squareButton.getToggleState())
         {
             oscType->beginChangeGesture();
             oscType->setValueNotifyingHost(static_cast<float>(oscType->convertTo0to1(Oscillator::OscType::SQUARE)));
             oscType->endChangeGesture();
-
         }
     };
 
-    sawButton.onClick = [=](){
-        if(sawButton.getToggleState())
+    sawButton.onClick = [&]() {
+        if (sawButton.getToggleState())
         {
             oscType->beginChangeGesture();
             oscType->setValueNotifyingHost(static_cast<float>(oscType->convertTo0to1(Oscillator::OscType::SAW)));
             oscType->endChangeGesture();
-
         }
     };
 
-    triangleButton.onClick = [=](){
-        if(triangleButton.getToggleState())
+    triangleButton.onClick = [&]() {
+        if (triangleButton.getToggleState())
         {
             oscType->beginChangeGesture();
             oscType->setValueNotifyingHost(static_cast<float>(oscType->convertTo0to1(Oscillator::OscType::TRIANGLE)));
             oscType->endChangeGesture();
-
         }
     };
 

@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.22)
 project(Audio VERSION 0.1)
 
 enable_testing()
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
@@ -19,6 +19,7 @@ include(Doxygen)
 set(CMAKE_OSX_DEPLOYMENT_TARGET "12.7" CACHE STRING "Minimum OS X deployment version" FORCE)
 
 if(NOT FETCHCONTENT_FULLY_DISCONNECTED)
+set(CMAKE_COMPILE_WARNING_AS_ERROR ON)
 add_subdirectory(utilities)
 add_subdirectory(resources)
 add_subdirectory(EQ)
