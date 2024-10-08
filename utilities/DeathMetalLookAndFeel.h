@@ -19,6 +19,7 @@ class DeathMetalLookAndFeel : public juce::LookAndFeel_V4
 
     juce::Font getLabelFont(juce::Label &label) override
     {
+        std::ignore = label;
         return deathMetalFont;
     }
 
@@ -329,9 +330,15 @@ class DeathMetalLookAndFeel : public juce::LookAndFeel_V4
         cs = jmin(cs, w * 0.5f, h * 0.5f);
         auto cs2 = 2.0f * cs;
 
-        auto textW = text.isEmpty() ? 0
-                                    : jlimit(0.0f, jmax(0.0f, w - cs2 - textEdgeGap * 2),
-                                             (float)deathMetalFont.getStringWidth(text) + textEdgeGap * 2.0f);
+        auto textW = text.isEmpty() ? 0 : jlimit(0.0f, jmax(0.0f, w - cs2 - textEdgeGap * 2), [&]() {
+            // Create a TextLayout and calculate the width
+            juce::TextLayout layout;
+            juce::AttributedString attributedText;
+            attributedText.append(text, deathMetalFont, juce::Colours::black); // Adjust the color as needed
+
+            layout.createLayout(attributedText, w - cs2 - textEdgeGap * 2);
+            return layout.getWidth() + textEdgeGap * 2.0f;
+        }());
         auto textX = cs + textEdgeGap;
 
         if (position.testFlags(Justification::horizontallyCentred))

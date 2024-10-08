@@ -67,7 +67,7 @@ void EQView::resized()
     {
 
         float xPosition = handleContainer.getLocalBounds().getWidth() * handle->mFreqParameter->getValue();
-        float yPosition = handleContainer.getLocalBounds().getCentreY(); // Center Y position
+        int yPosition = handleContainer.getLocalBounds().getCentreY(); // Center Y position
 
         handle->setBounds(static_cast<int>(xPosition - Handle::handleSize / 2),
                           static_cast<int>(yPosition - Handle::handleSize / 2), Handle::handleSize, Handle::handleSize);
@@ -100,9 +100,9 @@ void EQView::paint(juce::Graphics &g)
     }
 }
 
-std::vector<int> EQView::getFrequencies()
+std::vector<float> EQView::getFrequencies()
 {
-    return std::vector<int>{20, 50, 100, 200, 500, 1000, 2000, 5000, 10000, 20000};
+    return std::vector<float>{20.f, 50.f, 100.f, 200.f, 500.f, 1000.f, 2000.f, 5000.f, 10000.f, 20000.f};
 }
 
 void EQView::drawGrid(juce::Graphics &g)
@@ -141,7 +141,8 @@ void EQView::drawTextLabels(juce::Graphics &g)
 
     g.setFont(deathMetalFont);
 
-    auto xs = getXs(std::vector<float>{freqs.begin(), freqs.end()}, size.getX(), size.getWidth() - 1);
+    auto xs = getXs(std::vector<float>{freqs.begin(), freqs.end()}, static_cast<float>(size.getX()),
+                    static_cast<float>(size.getWidth()) - 1.f);
 
     for (size_t i = 0; i < freqs.size(); ++i)
     {
@@ -155,16 +156,21 @@ void EQView::drawTextLabels(juce::Graphics &g)
             freq /= 1000;
         }
 
-        str = std::to_string(freq);
+        str = std::to_string(static_cast<int>(freq));
         if (addK)
         {
             str.append("K");
         }
 
-        auto textWidth = g.getCurrentFont().getStringWidth(str);
+        juce::AttributedString attributedStr;
+        attributedStr.append(str, g.getCurrentFont(), juce::Colours::black); // Adjust color if needed
+
+        juce::TextLayout textLayout;
+        textLayout.createLayout(attributedStr, std::numeric_limits<float>::max()); // No width constraint
+        auto textWidth = textLayout.getWidth();
         Rectangle<int> r;
 
-        r.setSize(textWidth, reducedSize);
+        r.setSize(static_cast<int>(textWidth), reducedSize);
         r.setCentre(static_cast<int>(xs[i]), 0);
         r.setY(size.getBottom());
         g.drawFittedText(str, r, juce::Justification::centred, 1);
@@ -200,11 +206,12 @@ void EQView::drawVerticalLines(juce::Graphics &g)
     auto size = getRenderArea();
     auto freqs = getFrequencies();
 
-    auto xs = getXs(std::vector<float>{freqs.begin(), freqs.end()}, 0.0, size.getWidth() - 1);
+    auto xs = getXs(std::vector<float>{freqs.begin(), freqs.end()}, 0.0, size.getWidth() - 1.f);
 
     for (auto x : xs)
     {
-        g.drawVerticalLine(size.getX() + static_cast<int>(x), size.getY(), size.getBottom());
+        g.drawVerticalLine(size.getX() + static_cast<int>(x), static_cast<float>(size.getY()),
+                           static_cast<float>(size.getBottom()));
     }
 }
 
@@ -216,7 +223,8 @@ void EQView::drawHorizontalLines(juce::Graphics &g)
     for (auto gaindB : gains)
     {
         auto y = size.getHeight() - 1 + ((1 - size.getHeight()) * (gaindB - -18.0)) / (18.0 - -18.0);
-        g.drawHorizontalLine(size.getY() + static_cast<int>(y), size.getTopLeft().getX(), size.getTopRight().getX());
+        g.drawHorizontalLine(size.getY() + static_cast<int>(y), static_cast<float>(size.getTopLeft().getX()),
+                             static_cast<float>(size.getTopRight().getX()));
     }
 }
 
@@ -224,11 +232,11 @@ void EQView::drawPlotCurve(juce::Graphics &g)
 {
     frequencyResponse.clear();
 
-    float width = getRenderArea().getWidth();
+    float width = static_cast<float>(getRenderArea().getWidth());
     auto bounds = getRenderArea();
 
-    const float outputMin = bounds.getBottom();
-    const float outputMax = bounds.getY();
+    const float outputMin = static_cast<float>(bounds.getBottom());
+    const float outputMax = static_cast<float>(bounds.getY());
     const auto sampleRate = static_cast<int>(mProcessor.getSampleRate());
 
     if (mSampleRate != sampleRate)
@@ -255,13 +263,14 @@ void EQView::drawPlotCurve(juce::Graphics &g)
         y = juce::jmap(y, -18.f, 18.f, outputMin, outputMax);
         if (i == 0)
         {
-            frequencyResponse.startNewSubPath(bounds.getX(), y);
+            frequencyResponse.startNewSubPath(static_cast<float>(bounds.getX()), y);
         }
 
-        frequencyResponse.lineTo(bounds.getX() + i, y);
+        frequencyResponse.lineTo(static_cast<float>(bounds.getX() + i), y);
 
         g.setColour(juce::Colours::grey.withAlpha(0.5f));
-        g.drawLine(bounds.getX() + i, bounds.getCentreY(), bounds.getX() + i, y);
+        g.drawLine(static_cast<float>(bounds.getX() + i), static_cast<float>(bounds.getCentreY()),
+                   static_cast<float>(bounds.getX() + i), y);
     }
 }
 
