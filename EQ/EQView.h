@@ -63,7 +63,7 @@ class EQView : public juce::Component
         return mHandles;
     }
 
-    std::vector<int> getFrequencies();
+    std::vector<float> getFrequencies();
     std::vector<float> getXs(const std::vector<float> &freqs, float left, float width);
     std::vector<int> getGains();
 
