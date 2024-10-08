@@ -4,7 +4,15 @@
 
 class SynthSound : public juce::SynthesiserSound
 {
-public:
-    bool appliesToNote(int midiNoteNumber) override { return true; };
-    bool appliesToChannel(int midiChannel) override { return true; };
+  public:
+    bool appliesToNote(int midiNoteNumber) override
+    {
+        std::ignore = midiNoteNumber;
+        return true;
+    };
+    bool appliesToChannel(int midiChannel) override
+    {
+        std::ignore = midiChannel;
+        return true;
+    };
 };

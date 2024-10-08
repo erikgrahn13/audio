@@ -19,6 +19,7 @@ include(Doxygen)
 set(CMAKE_OSX_DEPLOYMENT_TARGET "12.7" CACHE STRING "Minimum OS X deployment version" FORCE)
 
 if(NOT FETCHCONTENT_FULLY_DISCONNECTED)
+set(CMAKE_COMPILE_WARNING_AS_ERROR ON)
 add_subdirectory(utilities)
 add_subdirectory(resources)
 add_subdirectory(EQ)

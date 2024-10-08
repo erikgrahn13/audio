@@ -13,13 +13,15 @@ SynthAudioProcessor::SynthAudioProcessor()
 #endif
                          ),
       parameters(*this, nullptr, juce::Identifier("Parameters"),
-                 std::make_unique<juce::AudioParameterInt>("oscType" ,"Oscillator Type", Oscillator::OscType::SINE, Oscillator::OscType::NUM_TYPES - 1, Oscillator::OscType::SINE))
+                 std::make_unique<juce::AudioParameterInt>("oscType", "Oscillator Type", Oscillator::OscType::SINE,
+                                                           Oscillator::OscType::NUM_TYPES - 1,
+                                                           Oscillator::OscType::SINE))
 {
     parameters.addParameterListener("oscType", this);
-    oscTypeParameter = static_cast<juce::AudioParameterInt*>(parameters.getParameter("oscType"));
+    oscTypeParameter = static_cast<juce::AudioParameterInt *>(parameters.getParameter("oscType"));
     synth.addSound(new SynthSound());
 
-    for (auto voice : std::ranges::iota_view{0, numOfVoices})
+    for ([[maybe_unused]] auto voice : std::ranges::iota_view{0, numOfVoices})
         synth.addVoice(new SynthVoice());
 }
 
@@ -67,6 +69,8 @@ double SynthAudioProcessor::getTailLengthSeconds() const
 
 void SynthAudioProcessor::parameterChanged(const juce::String &parameter, float newValue)
 {
+    std::ignore = parameter;
+    std::ignore = newValue;
     requiresUpdate.store(true);
 }
 
@@ -122,7 +126,8 @@ bool SynthAudioProcessor::isBusesLayoutSupported(const BusesLayout &layouts) con
     // In this template code we only support mono or stereo.
     // Some plugin hosts, such as certain GarageBand versions, will only
     // load plugins that support stereo bus layouts.
-    if (layouts.getMainOutputChannelSet() != juce::AudioChannelSet::mono() && layouts.getMainOutputChannelSet() != juce::AudioChannelSet::stereo())
+    if (layouts.getMainOutputChannelSet() != juce::AudioChannelSet::mono() &&
+        layouts.getMainOutputChannelSet() != juce::AudioChannelSet::stereo())
         return false;
 
         // This checks if the input layout matches the output layout
@@ -135,13 +140,12 @@ bool SynthAudioProcessor::isBusesLayoutSupported(const BusesLayout &layouts) con
 #endif
 }
 
-void SynthAudioProcessor::processBlock(juce::AudioBuffer<float> &buffer,
-                                       juce::MidiBuffer &midiMessages)
+void SynthAudioProcessor::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages)
 {
 
     juce::ScopedNoDenormals noDenormals;
 
-    if(requiresUpdate.load())
+    if (requiresUpdate.load())
     {
         auto oscType = static_cast<Oscillator::OscType>(oscTypeParameter->get());
         for (auto i : std::ranges::iota_view{0, synth.getNumVoices()})
@@ -152,7 +156,7 @@ void SynthAudioProcessor::processBlock(juce::AudioBuffer<float> &buffer,
             }
         }
     }
-    
+
     requiresUpdate.store(false);
     auto totalNumInputChannels = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
