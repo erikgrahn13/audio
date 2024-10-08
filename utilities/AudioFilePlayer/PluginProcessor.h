@@ -1,12 +1,12 @@
 #pragma once
 
-#include <juce_audio_processors/juce_audio_processors.h>
 #include <JuceHeader.h>
+#include <juce_audio_processors/juce_audio_processors.h>
 
 //==============================================================================
 class AudioPluginAudioProcessor final : public juce::AudioProcessor
 {
-public:
+  public:
     //==============================================================================
     AudioPluginAudioProcessor();
     ~AudioPluginAudioProcessor() override;
@@ -44,21 +44,24 @@ public:
     void setStateInformation(const void *data, int sizeInBytes) override;
 
     bool loadFile(juce::File &file);
-    juce::AudioTransportSource &getTransportSource() { return transportSource; }
-    juce::AudioFormatReaderSource &getAudioFormatReaderSource() { return *audioFormatReaderSource; }
+    juce::AudioTransportSource &getTransportSource()
+    {
+        return transportSource;
+    }
+    juce::AudioFormatReaderSource &getAudioFormatReaderSource()
+    {
+        return *audioFormatReaderSource;
+    }
 
-private:
+  private:
     juce::AudioTransportSource transportSource;
     juce::AudioFormatManager audioFormatManager;
     std::unique_ptr<juce::AudioFormatReaderSource> audioFormatReaderSource;
-    bool mShouldLoop{false};
 
-    juce::AudioParameterFloat* volume;
     float previousGain;
-    juce::AudioParameterFloat* gainParameter;
-    juce::AudioParameterBool* loopParameter;
-    juce::AudioParameterBool* playParameter;
-    juce::AudioParameterBool* stopParameter;
+    juce::AudioParameterFloat *gainParameter;
+    juce::AudioParameterBool *loopParameter;
+    juce::AudioParameterBool *playParameter;
 
     juce::AudioProcessorValueTreeState parameters;
     //==============================================================================
