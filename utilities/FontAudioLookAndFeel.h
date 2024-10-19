@@ -21,7 +21,7 @@ class FontAudioLookAndFeel : public juce::LookAndFeel_V4
                         bool /*isButtonDown*/) override
     {
         auto font = fontAudio;
-        g.setFont(font.withHeight(button.getHeight() * 0.6f));
+        g.setFont(font.withHeight(static_cast<float>(button.getHeight())));
 
         juce::Colour textColour;
         if (button.getClickingTogglesState() && button.getToggleState())
@@ -38,10 +38,15 @@ class FontAudioLookAndFeel : public juce::LookAndFeel_V4
         // backgroundColor = button.findColour(juce::TextButton::buttonColourId);
 
         button.setColour(juce::TextButton::ColourIds::buttonColourId, juce::Colours::black);
-        button.setColour(juce::TextButton::ColourIds::buttonOnColourId, juce::Colours::darkgrey.darker());
 
         g.drawText(button.getButtonText(), button.getLocalBounds(), juce::Justification::centred, true);
     }
+
+    // void drawButtonBackground(juce::Graphics &g, juce::Button &button, const juce::Colour &backgroundColour,
+    //                           bool isMouseOverButton, bool isButtonDown) override
+    // {
+    //     // Do nothing, which means no background will be drawn.
+    // }
 
   private:
     juce::Font fontAudio;

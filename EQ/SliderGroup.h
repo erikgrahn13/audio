@@ -30,6 +30,9 @@ class SliderGroup : public juce::Component
     // Q
     juce::Slider mQSlider;
 
+    // Bypass
+    juce::TextButton mBypassButton;
+
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> mFrequencyAttachment;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> mGainAttachment;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> mQAttachment;

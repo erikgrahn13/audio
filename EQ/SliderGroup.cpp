@@ -17,6 +17,15 @@ SliderGroup::SliderGroup(AudioPluginAudioProcessor &processor, std::string_view 
     mGainSlider.setBufferedToImage(true);
     mQSlider.setBufferedToImage(true);
 
+    mBypassButton.setLookAndFeel(&fontAudioLookAndFeel);
+    mBypassButton.setColour(juce::TextButton::ColourIds::textColourOnId, juce::Colours::white);
+    mBypassButton.setColour(juce::TextButton::ColourIds::textColourOffId, juce::Colours::grey);
+    mBypassButton.setButtonText(juce::CharPointer_UTF8(""));
+    mBypassButton.setClickingTogglesState(true);
+    mBypassButton.setColour(juce::ComboBox::outlineColourId, juce::Colours::transparentBlack);
+    mBypassButton.setColour(juce::TextButton::ColourIds::buttonOnColourId, juce::Colours::transparentBlack);
+    addAndMakeVisible(mBypassButton);
+
     if (!frequencyParameterID.empty())
     {
         mFrequencyAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(
@@ -79,6 +88,7 @@ SliderGroup::~SliderGroup()
     mQSlider.setLookAndFeel(nullptr);
     filterSymbolLabel.setLookAndFeel(nullptr);
     frame.setLookAndFeel(nullptr);
+    mBypassButton.setLookAndFeel(nullptr);
 }
 
 void SliderGroup::resized()
@@ -88,7 +98,9 @@ void SliderGroup::resized()
 
     auto groupBounds = frame.getBounds().reduced(10, 20);
 
-    filterSymbolLabel.setBounds(groupBounds.removeFromTop(groupBounds.getHeight() / 4));
+    auto labels = groupBounds.removeFromTop(groupBounds.getHeight() / 4);
+    mBypassButton.setBounds(labels.removeFromLeft(labels.getWidth() / 2).reduced(15, 10));
+    filterSymbolLabel.setBounds(labels);
 
     if (mQSlider.isVisible())
     {
