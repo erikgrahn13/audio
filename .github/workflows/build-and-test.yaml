@@ -47,6 +47,9 @@ jobs:
             build/**/cmake_install.cmake
             build/**/CMakeFiles/**
             build/**/**/*_artefacts/**
+            build/_deps/pluginval-src
+            !build/_deps/juce-*/
+            !**/*_SharedCode.*
 
   test:
     name: Test
