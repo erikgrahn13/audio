@@ -42,10 +42,12 @@ jobs:
           name: build-${{matrix.os}}
           path: |
             CMakePresets.json
-            build/**
-            !build/build
-            !**/*_SharedCode.a
+            build/**/CTestTestfile.cmake
+            build/**/CMakeCache.txt
+            build/**/**/*_artefacts/**
+            build/_deps/pluginval-src
             !build/_deps/juce-*/
+            !**/*_SharedCode.*
 
   test:
     name: Test
