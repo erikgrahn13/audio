@@ -44,8 +44,6 @@ jobs:
             CMakePresets.json
             build/**/CTestTestfile.cmake
             build/**/CMakeCache.txt
-            build/**/cmake_install.cmake
-            build/**/CMakeFiles/**
             build/**/**/*_artefacts/**
             build/_deps/pluginval-src
             !build/_deps/juce-*/
