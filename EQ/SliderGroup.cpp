@@ -1,7 +1,8 @@
 #include "SliderGroup.h"
 
-SliderGroup::SliderGroup(AudioPluginAudioProcessor &processor, std::string_view frequencyParameterID,
-                         std::string_view gainParameterID, std::string_view QParameterID)
+SliderGroup::SliderGroup(AudioPluginAudioProcessor &processor, std::string_view bypassParameterID,
+                         std::string_view frequencyParameterID, std::string_view gainParameterID,
+                         std::string_view QParameterID)
     : mProcessor(processor)
 {
     frame.setLookAndFeel(&deathMetalLookAndFeel);
@@ -17,14 +18,20 @@ SliderGroup::SliderGroup(AudioPluginAudioProcessor &processor, std::string_view 
     mGainSlider.setBufferedToImage(true);
     mQSlider.setBufferedToImage(true);
 
-    mBypassButton.setLookAndFeel(&fontAudioLookAndFeel);
-    mBypassButton.setColour(juce::TextButton::ColourIds::textColourOnId, juce::Colours::white);
-    mBypassButton.setColour(juce::TextButton::ColourIds::textColourOffId, juce::Colours::grey);
-    mBypassButton.setButtonText(juce::CharPointer_UTF8(""));
-    mBypassButton.setClickingTogglesState(true);
-    mBypassButton.setColour(juce::ComboBox::outlineColourId, juce::Colours::transparentBlack);
-    mBypassButton.setColour(juce::TextButton::ColourIds::buttonOnColourId, juce::Colours::transparentBlack);
-    addAndMakeVisible(mBypassButton);
+    if (!bypassParameterID.empty())
+    {
+        mBypassAttachment.reset(new juce::AudioProcessorValueTreeState::ButtonAttachment(
+            mProcessor.getVTSParameters(), bypassParameterID.data(), mBypassButton));
+
+        mBypassButton.setLookAndFeel(&fontAudioLookAndFeel);
+        mBypassButton.setColour(juce::TextButton::ColourIds::textColourOnId, juce::Colours::white);
+        mBypassButton.setColour(juce::TextButton::ColourIds::textColourOffId, juce::Colours::grey);
+        mBypassButton.setButtonText(juce::CharPointer_UTF8(""));
+        mBypassButton.setClickingTogglesState(true);
+        mBypassButton.setColour(juce::ComboBox::outlineColourId, juce::Colours::transparentBlack);
+        mBypassButton.setColour(juce::TextButton::ColourIds::buttonOnColourId, juce::Colours::transparentBlack);
+        addAndMakeVisible(mBypassButton);
+    }
 
     if (!frequencyParameterID.empty())
     {
