@@ -1,7 +1,8 @@
 #include "SliderGroup.h"
 
-SliderGroup::SliderGroup(AudioPluginAudioProcessor &processor, std::string_view frequencyParameterID,
-                         std::string_view gainParameterID, std::string_view QParameterID)
+SliderGroup::SliderGroup(AudioPluginAudioProcessor &processor, std::string_view bypassParameterID,
+                         std::string_view frequencyParameterID, std::string_view gainParameterID,
+                         std::string_view QParameterID)
     : mProcessor(processor)
 {
     frame.setLookAndFeel(&deathMetalLookAndFeel);
@@ -16,6 +17,21 @@ SliderGroup::SliderGroup(AudioPluginAudioProcessor &processor, std::string_view 
     mFrequencySlider.setBufferedToImage(true);
     mGainSlider.setBufferedToImage(true);
     mQSlider.setBufferedToImage(true);
+
+    if (!bypassParameterID.empty())
+    {
+        mBypassAttachment.reset(new juce::AudioProcessorValueTreeState::ButtonAttachment(
+            mProcessor.getVTSParameters(), bypassParameterID.data(), mBypassButton));
+
+        mBypassButton.setLookAndFeel(&fontAudioLookAndFeel);
+        mBypassButton.setColour(juce::TextButton::ColourIds::textColourOnId, juce::Colours::white);
+        mBypassButton.setColour(juce::TextButton::ColourIds::textColourOffId, juce::Colours::grey);
+        mBypassButton.setButtonText(juce::CharPointer_UTF8(""));
+        mBypassButton.setClickingTogglesState(true);
+        mBypassButton.setColour(juce::ComboBox::outlineColourId, juce::Colours::transparentBlack);
+        mBypassButton.setColour(juce::TextButton::ColourIds::buttonOnColourId, juce::Colours::transparentBlack);
+        addAndMakeVisible(mBypassButton);
+    }
 
     if (!frequencyParameterID.empty())
     {
@@ -79,6 +95,7 @@ SliderGroup::~SliderGroup()
     mQSlider.setLookAndFeel(nullptr);
     filterSymbolLabel.setLookAndFeel(nullptr);
     frame.setLookAndFeel(nullptr);
+    mBypassButton.setLookAndFeel(nullptr);
 }
 
 void SliderGroup::resized()
@@ -88,7 +105,9 @@ void SliderGroup::resized()
 
     auto groupBounds = frame.getBounds().reduced(10, 20);
 
-    filterSymbolLabel.setBounds(groupBounds.removeFromTop(groupBounds.getHeight() / 4));
+    auto labels = groupBounds.removeFromTop(groupBounds.getHeight() / 4);
+    mBypassButton.setBounds(labels.removeFromLeft(labels.getWidth() / 2).reduced(15, 10));
+    filterSymbolLabel.setBounds(labels);
 
     if (mQSlider.isVisible())
     {

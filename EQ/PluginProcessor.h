@@ -8,8 +8,9 @@
 class AudioPluginAudioProcessor final : public juce::AudioProcessor, juce::AudioProcessorValueTreeState::Listener
 {
   public:
-    using FilterTuple = std::tuple<Biquad, juce::RangedAudioParameter *, std::optional<juce::RangedAudioParameter *>,
-                                   std::optional<juce::RangedAudioParameter *>>;
+    using FilterTuple =
+        std::tuple<Biquad, juce::RangedAudioParameter *, juce::RangedAudioParameter *,
+                   std::optional<juce::RangedAudioParameter *>, std::optional<juce::RangedAudioParameter *>>;
 
     //==============================================================================
     AudioPluginAudioProcessor();

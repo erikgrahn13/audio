@@ -5,10 +5,12 @@
 AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(AudioPluginAudioProcessor &p,
                                                                  juce::AudioProcessorValueTreeState &parameters)
     : AudioProcessorEditor(&p), processorRef(p), mParameters(parameters), mEQView(p, parameters),
-      mHPFSliderGroup(p, "hpf_freq", "", ""), mLowShelfSliderGroup(p, "LowShelfFreq", "LowShelfGain", ""),
-      mLowMidSliderGroup(p, "LowMidFreq", "LowMidGain", "LowMidQ"),
-      mHighMidSliderGroup(p, "HighMidFreq", "HighMidGain", "HighMidQ"),
-      mHighShelfSliderGroup(p, "HighShelfFreq", "HighShelfGain", ""), mLPFSliderGroup(p, "lpf_freq", "", "")
+      mHPFSliderGroup(p, "hpf_bypass", "hpf_freq", "", ""),
+      mLowShelfSliderGroup(p, "LowShelf_bypass", "LowShelfFreq", "LowShelfGain", ""),
+      mLowMidSliderGroup(p, "LowMid_bypass", "LowMidFreq", "LowMidGain", "LowMidQ"),
+      mHighMidSliderGroup(p, "HighMid_bypass", "HighMidFreq", "HighMidGain", "HighMidQ"),
+      mHighShelfSliderGroup(p, "HighShelf_bypass", "HighShelfFreq", "HighShelfGain", ""),
+      mLPFSliderGroup(p, "lpf_bypass", "lpf_freq", "", "")
 {
     juce::ignoreUnused(processorRef);
     // Make sure that before the constructor has finished, you've set the
