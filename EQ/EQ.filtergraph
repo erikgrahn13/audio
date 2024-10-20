@@ -61,11 +61,11 @@
       </OUTPUTS>
     </LAYOUT>
   </FILTER>
-  <FILTER uid="10" x="0.49125" y="0.6673076923076923" useARA="0" uiLastX_Normal="544"
-          uiLastY_Normal="133" uiopen_Normal="1">
+  <FILTER uid="10" x="0.49875" y="0.7338709677419355" useARA="0" uiLastX_Normal="2968"
+          uiLastY_Normal="315" uiopen_Normal="1">
     <PLUGIN name="EQ" format="VST3" category="Fx" manufacturer="yourcompany"
             version="0.0.1" file="C:\Users\erikg\Development\audio\build\EQ\EQ_artefacts\Debug\VST3\EQ.vst3\Contents\x86_64-win\EQ.vst3"
-            uniqueId="970487f5" isInstrument="0" fileTime="191a8db15cf" infoUpdateTime="191a8db6ed7"
+            uniqueId="970487f5" isInstrument="0" fileTime="192a9452396" infoUpdateTime="192a998e9d7"
             numInputs="2" numOutputs="2" isShell="0" hasARAExtension="0"
             uid="c0053e5b"/>
     <STATE>191.VMjLgXK....O+fWarAhckI2bo8la8HRLt.iHfTlai8FYo41Y8HRUTYTK3HxO9.BOVMEUy.Ea0cVZtMEcgQWY9vSRC8Vav8lak4Fc9XCLt3hKt3hKt3hKt3hYRUUSTEETIckVwTjQisVTTgkdEYjKAQjYPQSPWgUdMcjKAQjct3hdA4hKt3hKt3hKtnTUv.UQAslXuk0UXoWUFE0YQcEV77RRC8Vav8lak4Fc9vyKVMEUy.Ea0cVZtMEcgQWY9..</STATE>
@@ -78,6 +78,25 @@
       </OUTPUTS>
     </LAYOUT>
   </FILTER>
+  <FILTER uid="11" x="0.49875" y="0.5282258064516129" useARA="0" uiLastX_Normal="2997"
+          uiLastY_Normal="130" uiopen_Normal="1">
+    <PLUGIN name="AudioFilePlayer" format="VST3" category="Fx" manufacturer="yourcompany"
+            version="0.0.1" file="C:\Users\erikg\Development\audio\build\utilities\AudioFilePlayer\AudioFilePlayer_artefacts\Debug\VST3\AudioFilePlayer.vst3\Contents\x86_64-win\AudioFilePlayer.vst3"
+            uniqueId="970487f5" isInstrument="0" fileTime="192a92a40f7" infoUpdateTime="192a998e9d7"
+            numInputs="2" numOutputs="2" isShell="0" hasARAExtension="0"
+            uid="c0053e5b"/>
+    <STATE>450.VMjLgja....O+fWarAhckI2bo8la8HRLt.iHfTlai8FYo41Y8HRUTYTK3HxO9.BOVMEUy.Ea0cVZtMEcgQWY9vSRC8Vav8lak4Fc9HSMy3hUMoFSmY1Rt3hKt7zJlcUXxEDZisVRxH1a3vVX3fjTLQmKogjYTwVXogiQY8FMwjENHIUUTkEUKMCR38TNtHzSPUDahcFLVkkdUwlX4QyPOAUQpQUPvPDRuEkUOglXVg0azvFRlg0UXIWUWkENHIDSz4RZHU2LC8DTEoFUAACQH8VTV8DZ1ESX0ETaHYFVWgkbUcUV3fjTLQmKogTcyLzSPUjZTEDLDgzaQY0Sn4xQgc1ZsgjYXcEVxU0UYgCRBwDctjFR0MyPOAUQpQUPvPDRuEkUOgFSGMVcA0FRlg0UXIWUWkENHIDSz4RZHU2LC8TctTEV3UjUgsVTWkEdM01St3hKt3hKt3hKt3hKJUELPUTPqI1aYcEV5UkQQcVTWgkKDAkKBs1QhcVSxHlKDAkKC4BTG4hKt3hKt3hKt3FUUMTUDQEdqw1XmE0UYQTQFM1YAwyKIMzasA2atUlaz4COuX0TTMCTrU2Yo41TzEFck4C.</STATE>
+    <LAYOUT>
+      <INPUTS>
+        <BUS index="0" layout="L R"/>
+      </INPUTS>
+      <OUTPUTS>
+        <BUS index="0" layout="L R"/>
+      </OUTPUTS>
+    </LAYOUT>
+  </FILTER>
   <CONNECTION srcFilter="10" srcChannel="0" dstFilter="3" dstChannel="0"/>
   <CONNECTION srcFilter="10" srcChannel="1" dstFilter="3" dstChannel="1"/>
+  <CONNECTION srcFilter="11" srcChannel="0" dstFilter="10" dstChannel="0"/>
+  <CONNECTION srcFilter="11" srcChannel="1" dstFilter="10" dstChannel="1"/>
 </FILTERGRAPH>

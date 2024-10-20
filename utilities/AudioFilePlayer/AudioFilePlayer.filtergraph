@@ -61,14 +61,13 @@
       </OUTPUTS>
     </LAYOUT>
   </FILTER>
-  <FILTER uid="5" x="0.50375" y="0.5" useARA="0" uiLastX_Normal="782" uiLastY_Normal="296"
-          uiopen_Normal="1">
+  <FILTER uid="6" x="0.50125" y="0.655241935483871" useARA="0">
     <PLUGIN name="AudioFilePlayer" format="VST3" category="Fx" manufacturer="yourcompany"
-            version="0.0.1" file="C:\Users\erikg\Development\audio\build\utilities\AudioFilePlayer\AudioFilePlayer_artefacts\Debug\VST3\AudioFilePlayer.vst3\Contents\x86-win\AudioFilePlayer.vst3"
-            uniqueId="970487f5" isInstrument="0" fileTime="18f4ee87c62" infoUpdateTime="18f4ee8904a"
+            version="0.0.1" file="C:\Users\erikg\Development\audio\build\utilities\AudioFilePlayer\AudioFilePlayer_artefacts\Debug\VST3\AudioFilePlayer.vst3\Contents\x86_64-win\AudioFilePlayer.vst3"
+            uniqueId="970487f5" isInstrument="0" fileTime="192a92a40f7" infoUpdateTime="192a9962d39"
             numInputs="2" numOutputs="2" isShell="0" hasARAExtension="0"
             uid="c0053e5b"/>
-    <STATE>191.VMjLgXK....O+fWarAhckI2bo8la8HRLt.iHfTlai8FYo41Y8HRUTYTK3HxO9.BOVMEUy.Ea0cVZtMEcgQWY9vSRC8Vav8lak4Fc9XCLt3hKt3hKt3hKt3hYRUUSTEETIckVwTjQisVTTgkdEYjKAQjYPQSPWgUdMcjKAQjct3hdA4hKt3hKt3hKtnTUv.UQAslXuk0UXoWUFE0YQcEV77RRC8Vav8lak4Fc9vyKVMEUy.Ea0cVZtMEcgQWY9..</STATE>
+    <STATE>450.VMjLgja....O+fWarAhckI2bo8la8HRLt.iHfTlai8FYo41Y8HRUTYTK3HxO9.BOVMEUy.Ea0cVZtMEcgQWY9vSRC8Vav8lak4Fc9HSMy3hUMoFSmY1Rt3hKt7zJlcUXxEDZisVRxH1a3vVX3fjTLQmKogjYTwVXogiQY8FMwjENHIUUTkEUKMCR38TNtHzSPUDahcFLVkkdUwlX4QyPOAUQpQUPvPDRuEkUOglXVg0azvFRlg0UXIWUWkENHIDSz4RZHU2LC8DTEoFUAACQH8VTV8DZ1ESX0ETaHYFVWgkbUcUV3fjPLQmKogTcyLzSPUjZTEDLDgzaQY0Sn4xQgc1ZsgjYXcEVxU0UYgCRBwDctjFR0MyPOAUQpQUPvPDRuEkUOgFSGMVcA0FRlg0UXIWUWkENHIDSz4RZHU2LC8TctTEV3UjUgsVTWkEdM01St3hKt3hKt3hKt3hKJUELPUTPqI1aYcEV5UkQQcVTWgkKDAkKBs1QhcVSxHlKDAkKC4BTG4hKt3hKt3hKt3FUUMTUDQEdqw1XmE0UYQTQFM1YAwyKIMzasA2atUlaz4COuX0TTMCTrU2Yo41TzEFck4C.</STATE>
     <LAYOUT>
       <INPUTS>
         <BUS index="0" layout="L R"/>
@@ -78,6 +77,6 @@
       </OUTPUTS>
     </LAYOUT>
   </FILTER>
-  <CONNECTION srcFilter="5" srcChannel="0" dstFilter="3" dstChannel="0"/>
-  <CONNECTION srcFilter="5" srcChannel="1" dstFilter="3" dstChannel="1"/>
+  <CONNECTION srcFilter="6" srcChannel="0" dstFilter="3" dstChannel="0"/>
+  <CONNECTION srcFilter="6" srcChannel="1" dstFilter="3" dstChannel="1"/>
 </FILTERGRAPH>
