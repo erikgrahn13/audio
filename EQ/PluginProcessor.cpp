@@ -215,10 +215,10 @@ void AudioPluginAudioProcessor::processBlock(juce::AudioBuffer<float> &buffer, j
 
         for (auto &filter : mFilters)
         {
-            // if (dynamic_cast<juce::AudioParameterBool *>(std::get<1>(filter))->get())
-            // {
-            std::get<0>(filter).process(input, output, channel);
-            //}
+            if (dynamic_cast<juce::AudioParameterBool *>(std::get<1>(filter))->get())
+            {
+                std::get<0>(filter).process(input, output, channel);
+            }
         }
     }
 

@@ -8,21 +8,28 @@ EQView::EQView(AudioPluginAudioProcessor &processor, juce::AudioProcessorValueTr
           juce::Typeface::createSystemTypefaceFor(BinaryData::ArtDystopia_ttf, BinaryData::ArtDystopia_ttfSize)))
 {
     mHandles.push_back(std::make_unique<Handle>(
-        Biquad::Type::kHighpass, dynamic_cast<CustomAudioParameterFloat *>(mParameters.getParameter("hpf_freq"))));
+        Biquad::Type::kHighpass, dynamic_cast<juce::AudioParameterBool *>(mParameters.getParameter("hpf_bypass")),
+        dynamic_cast<CustomAudioParameterFloat *>(mParameters.getParameter("hpf_freq"))));
     mHandles.push_back(std::make_unique<Handle>(
-        Biquad::Type::kLowpass, dynamic_cast<CustomAudioParameterFloat *>(mParameters.getParameter("lpf_freq"))));
+        Biquad::Type::kLowpass, dynamic_cast<juce::AudioParameterBool *>(mParameters.getParameter("lpf_bypass")),
+        dynamic_cast<CustomAudioParameterFloat *>(mParameters.getParameter("lpf_freq"))));
     mHandles.push_back(std::make_unique<Handle>(
-        Biquad::Type::kLowShelf, dynamic_cast<CustomAudioParameterFloat *>(mParameters.getParameter("LowShelfFreq")),
+        Biquad::Type::kLowShelf, dynamic_cast<juce::AudioParameterBool *>(mParameters.getParameter("LowShelf_bypass")),
+        dynamic_cast<CustomAudioParameterFloat *>(mParameters.getParameter("LowShelfFreq")),
         dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("LowShelfGain"))));
+    mHandles.push_back(
+        std::make_unique<Handle>(Biquad::Type::kHighShelf,
+                                 dynamic_cast<juce::AudioParameterBool *>(mParameters.getParameter("HighShelf_bypass")),
+                                 dynamic_cast<CustomAudioParameterFloat *>(mParameters.getParameter("HighShelfFreq")),
+                                 dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("HighShelfGain"))));
     mHandles.push_back(std::make_unique<Handle>(
-        Biquad::Type::kHighShelf, dynamic_cast<CustomAudioParameterFloat *>(mParameters.getParameter("HighShelfFreq")),
-        dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("HighShelfGain"))));
-    mHandles.push_back(std::make_unique<Handle>(
-        Biquad::Type::kPeak, dynamic_cast<CustomAudioParameterFloat *>(mParameters.getParameter("LowMidFreq")),
+        Biquad::Type::kPeak, dynamic_cast<juce::AudioParameterBool *>(mParameters.getParameter("LowMid_bypass")),
+        dynamic_cast<CustomAudioParameterFloat *>(mParameters.getParameter("LowMidFreq")),
         dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("LowMidGain")),
         dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("LowMidQ"))));
     mHandles.push_back(std::make_unique<Handle>(
-        Biquad::Type::kPeak, dynamic_cast<CustomAudioParameterFloat *>(mParameters.getParameter("HighMidFreq")),
+        Biquad::Type::kPeak, dynamic_cast<juce::AudioParameterBool *>(mParameters.getParameter("HighMid_bypass")),
+        dynamic_cast<CustomAudioParameterFloat *>(mParameters.getParameter("HighMidFreq")),
         dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("HighMidGain")),
         dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("HighMidQ"))));
 
@@ -65,7 +72,6 @@ void EQView::resized()
     // Calculate the position so the center of the handle represents the parameter value
     for (auto &handle : mHandles)
     {
-
         float xPosition = handleContainer.getLocalBounds().getWidth() * handle->mFreqParameter->getValue();
         int yPosition = handleContainer.getLocalBounds().getCentreY(); // Center Y position
 
@@ -90,13 +96,17 @@ void EQView::paint(juce::Graphics &g)
 
     for (auto &handle : mHandles)
     {
-        std::string str = std::to_string(dynamic_cast<CustomAudioParameterFloat *>(handle->mFreqParameter)->getIndex());
-        Rectangle<int> r;
+        if (dynamic_cast<juce::AudioParameterBool *>(handle->mBypassParameter)->get())
+        {
+            std::string str =
+                std::to_string(dynamic_cast<CustomAudioParameterFloat *>(handle->mFreqParameter)->getIndex());
+            Rectangle<int> r;
 
-        auto pos = handle->getPosition();
-        r.setBounds(pos.getX() + reducedSize, pos.getY() + reducedSize / 3, 20, 20);
+            auto pos = handle->getPosition();
+            r.setBounds(pos.getX() + reducedSize, pos.getY() + reducedSize / 3, 20, 20);
 
-        g.drawFittedText(str, r, juce::Justification::centred, 1);
+            g.drawFittedText(str, r, juce::Justification::centred, 1);
+        }
     }
 }
 
@@ -257,7 +267,10 @@ void EQView::drawPlotCurve(juce::Graphics &g)
 
         for (auto &handle : mHandles)
         {
-            y += static_cast<float>(Biquad::filterResponse(sampleRate, freq, handle->biquad));
+            if (dynamic_cast<juce::AudioParameterBool *>(handle->mBypassParameter)->get())
+            {
+                y += static_cast<float>(Biquad::filterResponse(sampleRate, freq, handle->biquad));
+            }
         }
 
         y = juce::jmap(y, -18.f, 18.f, outputMin, outputMax);
@@ -284,9 +297,10 @@ juce::Rectangle<int> EQView::getRenderArea()
     return getLocalBounds().reduced(reducedSize);
 }
 
-EQView::Handle::Handle(Biquad::Type type, juce::RangedAudioParameter *freqParam, juce::RangedAudioParameter *gainParam,
+EQView::Handle::Handle(Biquad::Type type, juce::RangedAudioParameter *bypassParam,
+                       juce::RangedAudioParameter *freqParam, juce::RangedAudioParameter *gainParam,
                        juce::RangedAudioParameter *qParam)
-    : mFreqParameter(freqParam), mGainParameter(gainParam), mQParameter(qParam),
+    : mBypassParameter(bypassParam), mFreqParameter(freqParam), mGainParameter(gainParam), mQParameter(qParam),
       biquad(type, mFreqParameter->getDefaultValue())
 
 {
@@ -307,6 +321,11 @@ EQView::Handle::Handle(Biquad::Type type, juce::RangedAudioParameter *freqParam,
 
 void EQView::Handle::paint(juce::Graphics &g)
 {
+    if (!dynamic_cast<juce::AudioParameterBool *>(mBypassParameter)->get())
+    {
+        return;
+    }
+
     g.setColour(Colours::black);
     g.fillEllipse(juce::Rectangle<float>(handleSize, handleSize));
 
