@@ -1,14 +1,5 @@
-# audio
+# 🎛️ FahlGrahn Audio
 
-Audio plugin repository
+A collection of various audio plugins built using the [JUCE framework](https://juce.com).
 
-
-
-<!-- 
-<div class="section_buttons">
- 
-| Previous          |                              Next |
-|:------------------|----------------------------------:|
-| [Home](README.md) | [Customization](test.md) |
- 
-</div> -->
+This is an onging project, and more plugins will be added with time!
