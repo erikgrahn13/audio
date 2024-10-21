@@ -25,6 +25,8 @@ include (FetchContent)
 
     set(DOXYGEN_GENERATE_TREEVIEW YES)
     set(DOXYGEN_HTML_COLORSTYLE LIGHT)
+    set(DOXYGEN_PROJECT_NAME "FahlGrahn Audio")
+    set(DOXYGEN_PROJECT_NUMBER "1.0.0")
 
 
 doxygen_add_docs(
