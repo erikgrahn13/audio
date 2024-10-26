@@ -7,15 +7,6 @@
 class Biquad : public IFilter
 {
   public:
-    static Biquad createHighPass(double startFrequency, int order)
-    {
-        return Biquad(kHighPass, startFrequency, order);
-    }
-
-    static Biquad createLowPass()
-    {
-    }
-
     Biquad(IFilter::Type type, double startFreq, int order = 2);
 
     void prepare(const double sampleRate, const int numSamples, const int numChannels) override;
