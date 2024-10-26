@@ -1,8 +1,8 @@
-# 🎛️ FahlGrahn Audio
+# FahlGrahn Audio 🤘
 
-A collection of the most evil and metal audio plugins ever created!
+## A collection of the most evil and metal audio plugins ever created! 🤘
 
-Visit the [home page](https://erikgrahn13.github.io/audio/) for this project.
+### Visit the [home page](https://erikgrahn13.github.io/audio/) for this project. 🍻
 
 This is an onging project, and more plugins will be added in time!
 The available plugins at the moment are:
