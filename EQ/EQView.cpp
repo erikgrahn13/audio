@@ -302,8 +302,8 @@ juce::Rectangle<int> EQView::getRenderArea()
 EQView::Handle::Handle(Filter::Type type, juce::RangedAudioParameter *bypassParam,
                        juce::RangedAudioParameter *freqParam, juce::RangedAudioParameter *filterOrder,
                        juce::RangedAudioParameter *gainParam, juce::RangedAudioParameter *qParam)
-    : mBypassParameter(bypassParam), mFreqParameter(freqParam), mFilterOrder(filterOrder), mGainParameter(gainParam),
-      mQParameter(qParam), mFilter(Filter::createFilterInstance(type, mFreqParameter->getDefaultValue()))
+    : mBypassParameter(bypassParam), mFreqParameter(freqParam), mGainParameter(gainParam), mQParameter(qParam),
+      mFilterOrder(filterOrder), mFilter(Filter::createFilterInstance(type, mFreqParameter->getDefaultValue()))
 
 {
     mFreqAttachment = std::make_unique<juce::ParameterAttachment>(
@@ -439,8 +439,6 @@ void EQView::Handle::updateFilerOrderFromParameter(float newValue)
     std::ignore = newValue;
     if (auto *parent = getParentComponent())
     {
-        int hej;
-        hej = 3;
         auto filterOrder = static_cast<Filter::Order>(newValue);
         mFilter->setFilterOrder(filterOrder);
 
