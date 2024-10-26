@@ -1,7 +1,7 @@
 #pragma once
 
-#include "DeathMetalLookAndFeel.h"
-#include "FontAudioLookAndFeel.h"
+#include "CustomLookAndFeel/DeathMetalLookAndFeel.h"
+#include "CustomLookAndFeel/FontAudioLookAndFeel.h"
 #include "PluginProcessor.h"
 #include <JuceHeader.h>
 

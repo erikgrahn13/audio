@@ -1,6 +1,6 @@
 #pragma once
 
-#include "DeathMetalLookAndFeel.h"
+#include "CustomLookAndFeel/DeathMetalLookAndFeel.h"
 #include "EQView.h"
 #include "PluginProcessor.h"
 #include "SliderGroup.h"
