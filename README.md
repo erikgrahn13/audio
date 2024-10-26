@@ -9,7 +9,7 @@ The available plugins at the moment are:
 
 - EQ
 
-  ![EQ](docs/EQ.png)
+  ![EQ](docs/images/EQ.png)
 
   A 7-band band EQ that displays the fft of the processed signal of the plugin.
 
@@ -21,7 +21,7 @@ The available plugins at the moment are:
 
 - AudioFilePlayer
 
-  ![AudioFilePlayer](docs/AudioFilePlayer.png)
+  ![AudioFilePlayer](docs/images/AudioFilePlayer.png)
 
   A plugin that can load an audio file to be played back. Contains a volume control and the possibility to loop the audio file.
 

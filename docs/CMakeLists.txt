@@ -34,3 +34,9 @@ doxygen_add_docs(
     ../
     COMMENT "Generate documentation"
 )
+
+add_custom_command(TARGET docs POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    ${CMAKE_SOURCE_DIR}/images
+    ${CMAKE_CURRENT_BINARY_DIR}/html/docs/images
+)
