@@ -38,6 +38,11 @@ cmake --preset Debug
 cmake --build build <plugin>
 ```
 
+> 💡 **Note:**
+> Documentation is generated using Doxygen and uses the latest version of available official docker image from [Doxygen](https://github.com/doxygen/doxygen/releases). Therefore, to be able to build the docs target you need to have docker installed and have the daemon running.
+
+---
+
 If using VSCode it is recommended to use the [CMake Tools](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cmake-tools) extension for managing the development.
 
 The building of the plugins also builds the AudioPluginHost provided by JUCE so the plugins can be loaded in to a host. The mechanism for setting that up is already provided as debug configurations in launch.json.
