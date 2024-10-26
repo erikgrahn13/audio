@@ -5,12 +5,12 @@
 AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(AudioPluginAudioProcessor &p,
                                                                  juce::AudioProcessorValueTreeState &parameters)
     : AudioProcessorEditor(&p), processorRef(p), mParameters(parameters), mEQView(p, parameters),
-      mHPFSliderGroup(p, "hpf_bypass", "hpf_freq", "", ""),
-      mLowShelfSliderGroup(p, "LowShelf_bypass", "LowShelfFreq", "LowShelfGain", ""),
-      mLowMidSliderGroup(p, "LowMid_bypass", "LowMidFreq", "LowMidGain", "LowMidQ"),
-      mHighMidSliderGroup(p, "HighMid_bypass", "HighMidFreq", "HighMidGain", "HighMidQ"),
-      mHighShelfSliderGroup(p, "HighShelf_bypass", "HighShelfFreq", "HighShelfGain", ""),
-      mLPFSliderGroup(p, "lpf_bypass", "lpf_freq", "", "")
+      mHPFSliderGroup(p, "hpf_bypass", "hpf_freq", "", "", "hpf_filterOrder"),
+      mLowShelfSliderGroup(p, "LowShelf_bypass", "LowShelfFreq", "LowShelfGain", "", ""),
+      mLowMidSliderGroup(p, "LowMid_bypass", "LowMidFreq", "LowMidGain", "LowMidQ", ""),
+      mHighMidSliderGroup(p, "HighMid_bypass", "HighMidFreq", "HighMidGain", "HighMidQ", ""),
+      mHighShelfSliderGroup(p, "HighShelf_bypass", "HighShelfFreq", "HighShelfGain", "", ""),
+      mLPFSliderGroup(p, "lpf_bypass", "lpf_freq", "", "", "lpf_filterOrder")
 {
     juce::ignoreUnused(processorRef);
     // Make sure that before the constructor has finished, you've set the
@@ -93,19 +93,19 @@ void AudioPluginAudioProcessorEditor::parameterChanged(const juce::String &param
     {
         if (handle->mFreqParameter->getParameterID() == parameterID)
         {
-            handle->biquad.setFrequency(newValue);
+            handle->mFilter->setFrequency(newValue);
             needsUpdate = true;
         }
 
         if (handle->mGainParameter && handle->mGainParameter->getParameterID() == parameterID)
         {
-            handle->biquad.setGain(newValue);
+            handle->mFilter->setGain(newValue);
             needsUpdate = true;
         }
 
         if (handle->mQParameter && handle->mQParameter->getParameterID() == parameterID)
         {
-            handle->biquad.setQ(newValue);
+            handle->mFilter->setQ(newValue);
             needsUpdate = true;
         }
     }

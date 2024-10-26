@@ -3,14 +3,15 @@
 #include <juce_audio_processors/juce_audio_processors.h>
 
 #include <Biquad.h>
-
+#include <Filter.h>
 //==============================================================================
 class AudioPluginAudioProcessor final : public juce::AudioProcessor, juce::AudioProcessorValueTreeState::Listener
 {
   public:
     using FilterTuple =
-        std::tuple<Biquad, juce::RangedAudioParameter *, juce::RangedAudioParameter *,
-                   std::optional<juce::RangedAudioParameter *>, std::optional<juce::RangedAudioParameter *>>;
+        std::tuple<std::shared_ptr<Filter>, juce::RangedAudioParameter *, juce::RangedAudioParameter *,
+                   std::optional<juce::RangedAudioParameter *>, std::optional<juce::RangedAudioParameter *>,
+                   std::optional<juce::RangedAudioParameter *>>;
 
     //==============================================================================
     AudioPluginAudioProcessor();
@@ -57,10 +58,6 @@ class AudioPluginAudioProcessor final : public juce::AudioProcessor, juce::Audio
     {
         return mParameters;
     }
-    std::vector<FilterTuple> getFilters()
-    {
-        return mFilters;
-    }
 
     juce::AudioBuffer<float> mAudioBuffer;
     juce::AbstractFifo mRingBuffer{1};
@@ -68,10 +65,7 @@ class AudioPluginAudioProcessor final : public juce::AudioProcessor, juce::Audio
 
   private:
     juce::AudioProcessorValueTreeState mParameters;
-    std::map<Biquad, std::vector<juce::RangedAudioParameter *>> mTest;
-
     std::vector<FilterTuple> mFilters;
-
     std::atomic<bool> requiresUpdate{true};
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AudioPluginAudioProcessor)

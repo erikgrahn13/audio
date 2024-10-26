@@ -3,7 +3,7 @@
 #include "AnalyzerCurve.h"
 #include "CustomAudioParameterFloat.h"
 #include "PluginProcessor.h"
-#include <Biquad.h>
+#include <Filter.h>
 #include <Fonts.h>
 #include <JuceHeader.h>
 #include <array>
@@ -19,8 +19,9 @@ class EQView : public juce::Component
     {
       public:
         static constexpr int handleSize = 20;
-        Handle(Biquad::Type type, juce::RangedAudioParameter *bypassParam, juce::RangedAudioParameter *freqParam,
-               juce::RangedAudioParameter *gainParam = nullptr, juce::RangedAudioParameter *qParam = nullptr);
+        Handle(Filter::Type type, juce::RangedAudioParameter *bypassParam, juce::RangedAudioParameter *freqParam,
+               juce::RangedAudioParameter *filterOrder, juce::RangedAudioParameter *gainParam = nullptr,
+               juce::RangedAudioParameter *qParam = nullptr);
 
         void paint(juce::Graphics &g) override;
         void mouseDown(const juce::MouseEvent &event) override;
@@ -28,19 +29,22 @@ class EQView : public juce::Component
         void mouseWheelMove(const juce::MouseEvent &event, const juce::MouseWheelDetails &wheel) override;
         void updateFrequencyPositionFromParameter(float newValue);
         void updateGainPositionFromParameter(float newValue);
+        void updateFilerOrderFromParameter(float newValue);
 
         juce::RangedAudioParameter *mBypassParameter;
         juce::RangedAudioParameter *mFreqParameter;
         juce::RangedAudioParameter *mGainParameter;
         juce::RangedAudioParameter *mQParameter;
+        juce::RangedAudioParameter *mFilterOrder;
 
-        Biquad biquad;
+        std::unique_ptr<Filter> mFilter;
 
       private:
         juce::ComponentDragger dragger;
         juce::ComponentBoundsConstrainer constrainer;
 
         std::unique_ptr<juce::ParameterAttachment> mBypassAttachment{nullptr};
+        std::unique_ptr<juce::ParameterAttachment> mFilterOrderAttachment{nullptr};
         std::unique_ptr<juce::ParameterAttachment> mFreqAttachment{nullptr};
         std::unique_ptr<juce::ParameterAttachment> mGainAttachment{nullptr};
         std::unique_ptr<juce::ParameterAttachment> mQAttachment{nullptr};
