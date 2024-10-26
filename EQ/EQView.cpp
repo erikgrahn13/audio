@@ -437,11 +437,9 @@ void EQView::Handle::updateGainPositionFromParameter(float newValue)
 void EQView::Handle::updateFilerOrderFromParameter(float newValue)
 {
     std::ignore = newValue;
-    if (auto *parent = getParentComponent())
-    {
-        auto filterOrder = static_cast<Filter::Order>(newValue);
-        mFilter->setFilterOrder(filterOrder);
 
-        repaint();
-    }
+    auto filterOrder = static_cast<Filter::Order>(newValue);
+    mFilter->setFilterOrder(filterOrder);
+
+    repaint();
 }
