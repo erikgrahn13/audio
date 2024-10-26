@@ -24,8 +24,8 @@
 */
 var NAVTREE =
 [
-  [ "Project", "index.html", [
-    [ "audio", "index.html", null ],
+  [ "FahlGrahn Audio", "index.html", [
+    [ "FahlGrahn Audio 🤘", "index.html", "index" ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
       [ "Class Index", "classes.html", null ],
