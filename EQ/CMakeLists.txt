@@ -105,7 +105,7 @@ target_link_libraries(${PROJECT_NAME}
     PRIVATE
 
     # AudioPluginData           # If we'd created a binary data target, we'd link to it here
-    Biquad
+    Filter
     Fonts
     juce::juce_audio_utils
     juce::juce_dsp

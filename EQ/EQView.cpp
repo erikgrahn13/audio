@@ -8,28 +8,30 @@ EQView::EQView(AudioPluginAudioProcessor &processor, juce::AudioProcessorValueTr
           juce::Typeface::createSystemTypefaceFor(BinaryData::ArtDystopia_ttf, BinaryData::ArtDystopia_ttfSize)))
 {
     mHandles.push_back(std::make_unique<Handle>(
-        Biquad::Type::kHighpass, dynamic_cast<juce::AudioParameterBool *>(mParameters.getParameter("hpf_bypass")),
-        dynamic_cast<CustomAudioParameterFloat *>(mParameters.getParameter("hpf_freq"))));
+        Filter::Type::kHighPass, dynamic_cast<juce::AudioParameterBool *>(mParameters.getParameter("hpf_bypass")),
+        dynamic_cast<CustomAudioParameterFloat *>(mParameters.getParameter("hpf_freq")),
+        dynamic_cast<juce::AudioParameterChoice *>(mParameters.getParameter("hpf_filterOrder"))));
     mHandles.push_back(std::make_unique<Handle>(
-        Biquad::Type::kLowpass, dynamic_cast<juce::AudioParameterBool *>(mParameters.getParameter("lpf_bypass")),
-        dynamic_cast<CustomAudioParameterFloat *>(mParameters.getParameter("lpf_freq"))));
+        Filter::Type::kLowPass, dynamic_cast<juce::AudioParameterBool *>(mParameters.getParameter("lpf_bypass")),
+        dynamic_cast<CustomAudioParameterFloat *>(mParameters.getParameter("lpf_freq")),
+        dynamic_cast<juce::AudioParameterChoice *>(mParameters.getParameter("lpf_filterOrder"))));
     mHandles.push_back(std::make_unique<Handle>(
-        Biquad::Type::kLowShelf, dynamic_cast<juce::AudioParameterBool *>(mParameters.getParameter("LowShelf_bypass")),
-        dynamic_cast<CustomAudioParameterFloat *>(mParameters.getParameter("LowShelfFreq")),
+        Filter::Type::kLowShelf, dynamic_cast<juce::AudioParameterBool *>(mParameters.getParameter("LowShelf_bypass")),
+        dynamic_cast<CustomAudioParameterFloat *>(mParameters.getParameter("LowShelfFreq")), nullptr,
         dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("LowShelfGain"))));
-    mHandles.push_back(
-        std::make_unique<Handle>(Biquad::Type::kHighShelf,
-                                 dynamic_cast<juce::AudioParameterBool *>(mParameters.getParameter("HighShelf_bypass")),
-                                 dynamic_cast<CustomAudioParameterFloat *>(mParameters.getParameter("HighShelfFreq")),
-                                 dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("HighShelfGain"))));
     mHandles.push_back(std::make_unique<Handle>(
-        Biquad::Type::kPeak, dynamic_cast<juce::AudioParameterBool *>(mParameters.getParameter("LowMid_bypass")),
-        dynamic_cast<CustomAudioParameterFloat *>(mParameters.getParameter("LowMidFreq")),
+        Filter::Type::kHighShelf,
+        dynamic_cast<juce::AudioParameterBool *>(mParameters.getParameter("HighShelf_bypass")),
+        dynamic_cast<CustomAudioParameterFloat *>(mParameters.getParameter("HighShelfFreq")), nullptr,
+        dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("HighShelfGain"))));
+    mHandles.push_back(std::make_unique<Handle>(
+        Filter::Type::kPeak, dynamic_cast<juce::AudioParameterBool *>(mParameters.getParameter("LowMid_bypass")),
+        dynamic_cast<CustomAudioParameterFloat *>(mParameters.getParameter("LowMidFreq")), nullptr,
         dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("LowMidGain")),
         dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("LowMidQ"))));
     mHandles.push_back(std::make_unique<Handle>(
-        Biquad::Type::kPeak, dynamic_cast<juce::AudioParameterBool *>(mParameters.getParameter("HighMid_bypass")),
-        dynamic_cast<CustomAudioParameterFloat *>(mParameters.getParameter("HighMidFreq")),
+        Filter::Type::kPeak, dynamic_cast<juce::AudioParameterBool *>(mParameters.getParameter("HighMid_bypass")),
+        dynamic_cast<CustomAudioParameterFloat *>(mParameters.getParameter("HighMidFreq")), nullptr,
         dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("HighMidGain")),
         dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("HighMidQ"))));
 
@@ -38,17 +40,17 @@ EQView::EQView(AudioPluginAudioProcessor &processor, juce::AudioProcessorValueTr
 
     for (auto &handle : mHandles)
     {
-        handle->biquad.setSampleRate(mProcessor.getSampleRate());
-        handle->biquad.setFrequency(handle->mFreqParameter->convertFrom0to1(handle->mFreqParameter->getValue()));
+        handle->mFilter->setSampleRate(mProcessor.getSampleRate());
+        handle->mFilter->setFrequency(handle->mFreqParameter->convertFrom0to1(handle->mFreqParameter->getValue()));
 
         if (handle->mGainParameter)
         {
-            handle->biquad.setGain(handle->mGainParameter->convertFrom0to1(handle->mGainParameter->getValue()));
+            handle->mFilter->setGain(handle->mGainParameter->convertFrom0to1(handle->mGainParameter->getValue()));
         }
 
         if (handle->mQParameter)
         {
-            handle->biquad.setQ(handle->mQParameter->convertFrom0to1(handle->mQParameter->getValue()));
+            handle->mFilter->setQ(handle->mQParameter->convertFrom0to1(handle->mQParameter->getValue()));
         }
 
         handleContainer.addAndMakeVisible(handle.get());
@@ -253,7 +255,7 @@ void EQView::drawPlotCurve(juce::Graphics &g)
     {
         for (auto &handle : mHandles)
         {
-            handle->biquad.setSampleRate(sampleRate);
+            handle->mFilter->setSampleRate(sampleRate);
         }
         mSampleRate = sampleRate;
     }
@@ -269,7 +271,7 @@ void EQView::drawPlotCurve(juce::Graphics &g)
         {
             if (dynamic_cast<juce::AudioParameterBool *>(handle->mBypassParameter)->get())
             {
-                y += static_cast<float>(Biquad::filterResponse(sampleRate, freq, handle->biquad));
+                y += static_cast<float>(handle->mFilter->filterResponse(sampleRate, freq));
             }
         }
 
@@ -297,11 +299,11 @@ juce::Rectangle<int> EQView::getRenderArea()
     return getLocalBounds().reduced(reducedSize);
 }
 
-EQView::Handle::Handle(Biquad::Type type, juce::RangedAudioParameter *bypassParam,
-                       juce::RangedAudioParameter *freqParam, juce::RangedAudioParameter *gainParam,
-                       juce::RangedAudioParameter *qParam)
-    : mBypassParameter(bypassParam), mFreqParameter(freqParam), mGainParameter(gainParam), mQParameter(qParam),
-      biquad(type, mFreqParameter->getDefaultValue())
+EQView::Handle::Handle(Filter::Type type, juce::RangedAudioParameter *bypassParam,
+                       juce::RangedAudioParameter *freqParam, juce::RangedAudioParameter *filterOrder,
+                       juce::RangedAudioParameter *gainParam, juce::RangedAudioParameter *qParam)
+    : mBypassParameter(bypassParam), mFreqParameter(freqParam), mFilterOrder(filterOrder), mGainParameter(gainParam),
+      mQParameter(qParam), mFilter(Filter::createFilterInstance(type, mFreqParameter->getDefaultValue()))
 
 {
     mFreqAttachment = std::make_unique<juce::ParameterAttachment>(
@@ -313,6 +315,12 @@ EQView::Handle::Handle(Biquad::Type type, juce::RangedAudioParameter *bypassPara
         mGainAttachment = std::make_unique<juce::ParameterAttachment>(
             *mGainParameter, [this](float newValue) { updateGainPositionFromParameter(newValue); });
         mGainAttachment->sendInitialUpdate();
+    }
+    if (mFilterOrder)
+    {
+        mFilterOrderAttachment = std::make_unique<juce::ParameterAttachment>(
+            *mFilterOrder, [this](float newValue) { updateFilerOrderFromParameter(newValue); });
+        mFilterOrderAttachment->sendInitialUpdate();
     }
 
     constrainer.setMinimumOnscreenAmounts(Handle::handleSize / 2, Handle::handleSize / 2, Handle::handleSize / 2,
@@ -373,7 +381,7 @@ void EQView::Handle::mouseDrag(const juce::MouseEvent &event)
 {
     int yPosition = getY();
     dragger.dragComponent(this, event, &constrainer);
-    if (biquad.getType() == Biquad::Type::kHighpass || biquad.getType() == Biquad::Type::kLowpass)
+    if (mFilter->getType() == Filter::Type::kHighPass || mFilter->getType() == Filter::Type::kLowPass)
     {
         setTopLeftPosition(getX(), yPosition);
     }
@@ -422,6 +430,20 @@ void EQView::Handle::updateGainPositionFromParameter(float newValue)
         float yPosition = area.getHeight() - (mGainParameter->getValue() * area.getHeight());
 
         setTopLeftPosition(getX(), static_cast<int>(yPosition - getHeight() / 2));
+        repaint();
+    }
+}
+
+void EQView::Handle::updateFilerOrderFromParameter(float newValue)
+{
+    std::ignore = newValue;
+    if (auto *parent = getParentComponent())
+    {
+        int hej;
+        hej = 3;
+        auto filterOrder = static_cast<Filter::Order>(newValue);
+        mFilter->setFilterOrder(filterOrder);
+
         repaint();
     }
 }

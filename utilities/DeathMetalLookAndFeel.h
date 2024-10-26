@@ -23,6 +23,11 @@ class DeathMetalLookAndFeel : public juce::LookAndFeel_V4
         return deathMetalFont;
     }
 
+    juce::Font getPopupMenuFont() override
+    {
+        return deathMetalFont;
+    }
+
     void drawButtonText(juce::Graphics &g, juce::TextButton &button, bool isMouseOverButton, bool isButtonDown) override
     {
         std::ignore = isMouseOverButton;
@@ -372,26 +377,12 @@ class DeathMetalLookAndFeel : public juce::LookAndFeel_V4
         g.drawText(text, roundToInt(x + textX), 0, roundToInt(textW), roundToInt(textH), Justification::centred, true);
     }
 
-    // void drawGroupComponentOutline(juce::Graphics& g, int width, int height,
-    //                                const juce::String& text, const juce::Justification& position,
-    //                                juce::GroupComponent& group) override
-    // {
-    //     const int textHeight = 20; // Height of the text area
-
-    //     g.setColour(group.findColour(juce::GroupComponent::outlineColourId));
-    //     g.drawRect(0, textHeight / 2, width, height - textHeight / 2);
-
-    //     g.setColour(group.findColour(juce::GroupComponent::textColourId));
-    //     g.setFont(deathMetalFont); // Set the custom font
-
-    //     juce::Rectangle<int> textArea(10, 0, width - 20, textHeight);
-    //     g.drawFittedText(text, textArea, position, 1);
-    // }
-
-    // juce::Font getLabelFont(juce::Label& label) override
-    // {
-    //     return deathMetalFont;
-    // }
+    void drawPopupMenuBackground(juce::Graphics &g, int width, int height) override
+    {
+        std::ignore = height;
+        std::ignore = width;
+        g.fillAll(juce::Colours::black); // Custom background color for the popup menu
+    }
 
   private:
     juce::Font deathMetalFont;

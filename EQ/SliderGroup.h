@@ -9,7 +9,8 @@ class SliderGroup : public juce::Component
 {
   public:
     SliderGroup(AudioPluginAudioProcessor &processor, std::string_view bypassParameterID,
-                std::string_view frequencyParameterID, std::string_view gainParameterID, std::string_view QParameterID);
+                std::string_view frequencyParameterID, std::string_view gainParameterID, std::string_view QParameterID,
+                std::string_view filterOrderParameterID);
     ~SliderGroup() override;
     void resized() override;
     void setText(const juce::String &title);
@@ -33,7 +34,11 @@ class SliderGroup : public juce::Component
     // Bypass
     juce::TextButton mBypassButton;
 
+    // Filter order
+    juce::ComboBox mFilterOrder;
+
     std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> mBypassAttachment;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> mFilterOrderAttachment;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> mFrequencyAttachment;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> mGainAttachment;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> mQAttachment;
