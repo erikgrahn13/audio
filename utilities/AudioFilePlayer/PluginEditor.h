@@ -1,17 +1,15 @@
 #pragma once
 
 #include "PluginProcessor.h"
-// #include <juce_audio_devices/juce_AudioTransportSource.h>
+#include "CustomLookAndFeel/DeathMetalLookAndFeel.h"
+#include "CustomLookAndFeel/FontAudioLookAndFeel.h"
 #include <JuceHeader.h>
-#include <DeathMetalLookAndFeel.h>
-#include <FontAudioLookAndFeel.h>
-
 
 //==============================================================================
 class AudioPluginAudioProcessorEditor final : public juce::AudioProcessorEditor
 {
-public:
-    explicit AudioPluginAudioProcessorEditor(AudioPluginAudioProcessor &, juce::AudioProcessorValueTreeState& vts);
+  public:
+    explicit AudioPluginAudioProcessorEditor(AudioPluginAudioProcessor &, juce::AudioProcessorValueTreeState &vts);
     ~AudioPluginAudioProcessorEditor() override;
 
     //==============================================================================
@@ -21,35 +19,37 @@ public:
     void loadFileButtonClicked()
     {
         juce::Logger::writeToLog("Button clicked");
-        fileChooser = std::make_unique<juce::FileChooser>("Select file...", juce::File::getSpecialLocation(juce::File::userHomeDirectory), "*.wav");
+        fileChooser = std::make_unique<juce::FileChooser>(
+            "Select file...", juce::File::getSpecialLocation(juce::File::userHomeDirectory), "*.wav");
 
-        fileChooser->launchAsync(juce::FileBrowserComponent::openMode | juce::FileBrowserComponent::canSelectFiles, [this](const juce::FileChooser &chooser)
-                                 {
-                                     auto audioFile = chooser.getResult();
-                                     if(audioFile.getFileName().isNotEmpty())
-                                     {
-                                        if (processorRef.loadFile(audioFile))
-                                        {
-                                            juce::Logger::writeToLog(audioFile.getFileName());
-                                            fileName.setText(audioFile.getFullPathName(), juce::NotificationType::dontSendNotification);
-                                        }
-                                        else
-                                        {
-                                                juce::NativeMessageBox::showMessageBoxAsync(juce::AlertWindow::WarningIcon,
-                                                        "Error",
-                                                        "The file \"" + audioFile.getFileName() + "\" is encoded in a format that isn't supported."
-                                                        );
-                                            fileName.setText("No file loaded", juce::NotificationType::dontSendNotification);
-                                        }
-                                     }
-    });
+        fileChooser->launchAsync(
+            juce::FileBrowserComponent::openMode | juce::FileBrowserComponent::canSelectFiles,
+            [this](const juce::FileChooser &chooser) {
+                auto audioFile = chooser.getResult();
+                if (audioFile.getFileName().isNotEmpty())
+                {
+                    if (processorRef.loadFile(audioFile))
+                    {
+                        juce::Logger::writeToLog(audioFile.getFileName());
+                        fileName.setText(audioFile.getFullPathName(), juce::NotificationType::dontSendNotification);
+                    }
+                    else
+                    {
+                        juce::NativeMessageBox::showMessageBoxAsync(
+                            juce::AlertWindow::WarningIcon, "Error",
+                            "The file \"" + audioFile.getFileName() +
+                                "\" is encoded in a format that isn't supported.");
+                        fileName.setText("No file loaded", juce::NotificationType::dontSendNotification);
+                    }
+                }
+            });
     }
 
     void playButtonClicked()
     {
     }
 
-private:
+  private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     AudioPluginAudioProcessor &processorRef;
@@ -62,7 +62,7 @@ private:
     juce::Label fileName;
     std::unique_ptr<juce::FileChooser> fileChooser;
 
-    juce::AudioProcessorValueTreeState& valueTreeState;
+    juce::AudioProcessorValueTreeState &valueTreeState;
 
     using SliderAttachment = juce::AudioProcessorValueTreeState::SliderAttachment;
     using ButtonAttachment = juce::AudioProcessorValueTreeState::ButtonAttachment;
