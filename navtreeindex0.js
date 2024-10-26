@@ -49,6 +49,7 @@ var NAVTREEINDEX0 =
 "index.html#autotoc_md1":[0,0],
 "index.html#autotoc_md2":[0,0,0],
 "index.html#autotoc_md6":[0,1],
+"index.html#autotoc_md7":[0,2],
 "pages.html":[],
 "structBiquad_1_1Coeffs.html":[1,0,3,0],
 "utilities_2AudioFilePlayer_2PluginEditor_8h_source.html":[2,0,2,0,0],

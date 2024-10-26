@@ -148,7 +148,12 @@ Build</h1>
 <div class="line">cd audio</div>
 <div class="line">cmake --preset Debug</div>
 <div class="line">cmake --build build &lt;plugin&gt;</div>
-</div><!-- fragment --><p>If using VSCode it is recommended to use the <a href="https://marketplace.visualstudio.com/items?itemName=ms-vscode.cmake-tools">CMake Tools</a> extension for managing the development.</p>
+</div><!-- fragment --><blockquote class="doxtable">
+<p>&zwj;💡 <b>Note:</b> Documentation is generated using Doxygen and uses the latest version of available official docker image from <a href="https://github.com/doxygen/doxygen/releases">Doxygen</a>. Therefore, to be able to build the docs target you need to have docker installed and have the daemon running. </p>
+</blockquote>
+<h1><a class="anchor" id="autotoc_md7"></a>
+</h1>
+<p>If using VSCode it is recommended to use the <a href="https://marketplace.visualstudio.com/items?itemName=ms-vscode.cmake-tools">CMake Tools</a> extension for managing the development.</p>
 <p>The building of the plugins also builds the AudioPluginHost provided by JUCE so the plugins can be loaded in to a host. The mechanism for setting that up is already provided as debug configurations in launch.json. </p>
 </div></div><!-- PageDoc -->
 <a href="doxygen_crawl.html"/>
