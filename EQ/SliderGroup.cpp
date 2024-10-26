@@ -2,7 +2,7 @@
 
 SliderGroup::SliderGroup(AudioPluginAudioProcessor &processor, std::string_view bypassParameterID,
                          std::string_view frequencyParameterID, std::string_view gainParameterID,
-                         std::string_view QParameterID)
+                         std::string_view QParameterID, std::string_view filterOrderParameterID)
     : mProcessor(processor)
 {
     frame.setLookAndFeel(&deathMetalLookAndFeel);
@@ -68,6 +68,27 @@ SliderGroup::SliderGroup(AudioPluginAudioProcessor &processor, std::string_view 
         mGainSlider.updateText();
         addAndMakeVisible(mGainSlider);
     }
+    else
+    {
+        auto *filterOrder = dynamic_cast<juce::AudioParameterChoice *>(
+            mProcessor.getVTSParameters().getParameter(filterOrderParameterID.data()));
+
+        for (int i = 0; i < filterOrder->choices.size(); ++i)
+        {
+            mFilterOrder.addItem(filterOrder->choices[i], i + 1);
+        }
+
+        mFilterOrder.setSelectedId(filterOrder->getIndex());
+        mFilterOrder.setColour(juce::ComboBox::ColourIds::textColourId, juce::Colours::white);
+        mFilterOrder.setColour(juce::ComboBox::ColourIds::backgroundColourId, juce::Colours::black);
+        mFilterOrder.setColour(juce::ComboBox::ColourIds::outlineColourId, juce::Colours::black);
+        mFilterOrder.setLookAndFeel(&deathMetalLookAndFeel);
+        mFilterOrder.setJustificationType(juce::Justification::centred);
+        std::ignore = filterOrderParameterID;
+        mFilterOrderAttachment.reset(new juce::AudioProcessorValueTreeState::ComboBoxAttachment(
+            mProcessor.getVTSParameters(), filterOrderParameterID.data(), mFilterOrder));
+        addAndMakeVisible(mFilterOrder);
+    }
 
     if (!QParameterID.empty())
     {
@@ -96,6 +117,7 @@ SliderGroup::~SliderGroup()
     filterSymbolLabel.setLookAndFeel(nullptr);
     frame.setLookAndFeel(nullptr);
     mBypassButton.setLookAndFeel(nullptr);
+    mFilterOrder.setLookAndFeel(nullptr);
 }
 
 void SliderGroup::resized()
@@ -123,7 +145,10 @@ void SliderGroup::resized()
     }
     else
     {
-        mFrequencySlider.setBounds(groupBounds.reduced(20));
+
+        auto filterOrder = groupBounds.removeFromTop(groupBounds.getHeight() / 4);
+        mFilterOrder.setBounds(filterOrder);
+        mFrequencySlider.setBounds(groupBounds.reduced(10));
     }
 }
 

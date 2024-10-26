@@ -4,8 +4,13 @@
 #include <numbers>
 #include <tuple>
 
-Biquad::Biquad(Type type, double startFreq)
-    : type(type), mFrequency(startFreq), mGaindB(0.), mQ(0.707), mSampleRate(48000)
+std::unique_ptr<IFilter> createFilter(IFilter::Type filterType, double startFrequency, int filterOrder)
+{
+    return std::make_unique<Biquad>(filterType, startFrequency, filterOrder);
+}
+
+Biquad::Biquad(Type type, double startFreq, int order)
+    : type(type), mFilterOrder(order), mFrequency(startFreq), mGaindB(0.), mQ(0.707), mSampleRate(48000)
 {
     setAllParams(mFrequency, mGaindB, mQ);
 }
@@ -98,21 +103,52 @@ void Biquad::updateCoefficients()
 
     switch (type)
     {
-    case kHighpass:
-        mCoeffs.b.at(0) = (1.0 + cosw0) * 0.5;
-        mCoeffs.b.at(1) = -(1.0 + cosw0);
-        mCoeffs.b.at(2) = (1.0 + cosw0) * 0.5;
-        mCoeffs.a.at(0) = 1.0 + alpha;
-        mCoeffs.a.at(1) = -2.0 * cosw0;
-        mCoeffs.a.at(2) = 1.0 - alpha;
+    case kHighPass:
+        if (mFilterOrder == 1)
+        {
+            const double warpedFrequency = std::tan((std::numbers::pi * mFrequency) * (1.0 / mSampleRate));
+            mCoeffs.b.at(0) = 1.0;
+            mCoeffs.b.at(1) = -1.0;
+            mCoeffs.b.at(2) = 0.0; // Not used in first-order filter
+
+            mCoeffs.a.at(0) = warpedFrequency + 1.0;
+            mCoeffs.a.at(1) = warpedFrequency - 1.0;
+            mCoeffs.a.at(2) = 0.0; // Not used in first-order filter
+        }
+        else if (mFilterOrder == 2)
+        {
+            mCoeffs.b.at(0) = (1.0 + cosw0) * 0.5;
+            mCoeffs.b.at(1) = -(1.0 + cosw0);
+            mCoeffs.b.at(2) = (1.0 + cosw0) * 0.5;
+            mCoeffs.a.at(0) = 1.0 + alpha;
+            mCoeffs.a.at(1) = -2.0 * cosw0;
+            mCoeffs.a.at(2) = 1.0 - alpha;
+        }
+
         break;
-    case kLowpass:
-        mCoeffs.b.at(0) = (1.0 - cosw0) * 0.5;
-        mCoeffs.b.at(1) = 1.0 - cosw0;
-        mCoeffs.b.at(2) = (1.0 - cosw0) * 0.5;
-        mCoeffs.a.at(0) = 1.0 + alpha;
-        mCoeffs.a.at(1) = -2.0 * cosw0;
-        mCoeffs.a.at(2) = 1.0 - alpha;
+    case kLowPass:
+        if (mFilterOrder == 1)
+        {
+            const double warpedFrequency = std::tan((std::numbers::pi * mFrequency) * (1.0 / mSampleRate));
+
+            mCoeffs.b.at(0) = warpedFrequency;
+            mCoeffs.b.at(1) = warpedFrequency;
+            mCoeffs.b.at(2) = 0.0; // Not used in first-order filter
+
+            mCoeffs.a.at(0) = warpedFrequency + 1.0;
+            mCoeffs.a.at(1) = warpedFrequency - 1.0;
+            mCoeffs.a.at(2) = 0.0; // Not used in first-order filter
+        }
+        else if (mFilterOrder == 2)
+        {
+            mCoeffs.b.at(0) = (1.0 - cosw0) * 0.5;
+            mCoeffs.b.at(1) = 1.0 - cosw0;
+            mCoeffs.b.at(2) = (1.0 - cosw0) * 0.5;
+            mCoeffs.a.at(0) = 1.0 + alpha;
+            mCoeffs.a.at(1) = -2.0 * cosw0;
+            mCoeffs.a.at(2) = 1.0 - alpha;
+        }
+
         break;
     case kLowShelf:
         mCoeffs.b.at(0) = A * ((A + 1) - (A - 1) * cosw0 + 2 * std::sqrt(A) * alpha);
@@ -154,7 +190,7 @@ std::vector<double> Biquad::getCoefficients()
     return {mCoeffs.a.at(0), mCoeffs.a.at(1), mCoeffs.a.at(2), mCoeffs.b.at(0), mCoeffs.b.at(1), mCoeffs.b.at(2)};
 }
 
-double Biquad::filterResponse(double sampleRate, double x, Biquad &biquad)
+double Biquad::filterResponse(double sampleRate, double x)
 {
     auto logMin = std::log10(20.0);
     auto logMax = std::log10(20000.0);
@@ -168,8 +204,8 @@ double Biquad::filterResponse(double sampleRate, double x, Biquad &biquad)
 
     std::complex<double> jw = std::exp(-2 * std::numbers::pi * value * j / sampleRate);
 
-    numerator = biquad.mCoeffs.b.at(0) + biquad.mCoeffs.b.at(1) * jw + biquad.mCoeffs.b.at(2) * std::pow(jw, 2);
-    denominator = biquad.mCoeffs.a.at(0) + biquad.mCoeffs.a.at(1) * jw + biquad.mCoeffs.a.at(2) * std::pow(jw, 2);
+    numerator = mCoeffs.b.at(0) + mCoeffs.b.at(1) * jw + mCoeffs.b.at(2) * std::pow(jw, 2);
+    denominator = mCoeffs.a.at(0) + mCoeffs.a.at(1) * jw + mCoeffs.a.at(2) * std::pow(jw, 2);
 
     auto magnitude = 20 * std::log10(std::abs(numerator / denominator));
 

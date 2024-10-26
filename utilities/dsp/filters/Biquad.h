@@ -1,32 +1,24 @@
 #pragma once
 
-#include "../IDsp.h"
+#include "IFilter.h"
 #include <array>
 #include <vector>
 
-class Biquad : public IDsp
+class Biquad : public IFilter
 {
   public:
-    enum Type
-    {
-        kLowpass,
-        kHighpass,
-        kLowShelf,
-        kHighShelf,
-        kPeak,
-        kNumTypes
-    };
+    Biquad(IFilter::Type type, double startFreq, int order = 2);
 
-    Biquad(Type type, double startFreq);
-    void prepare(const double sampleRate, const int numSamples, const int numChannels);
+    void prepare(const double sampleRate, const int numSamples, const int numChannels) override;
     void process(std::span<const float> input, std::span<float> output, int channel) override;
     void reset();
     void setAllParams(double frequency, double gaindB, double q);
-    void setFrequency(double frequency);
-    void setQ(double q);
-    void setGain(double gaindB);
-    void setSampleRate(double sampleRate);
-    static double filterResponse(double sampleRate, double x, Biquad &biquad);
+    void setFrequency(double frequency) override;
+    void setQ(double q) override;
+    void setGain(double gaindB) override;
+    void setSampleRate(double sampleRate) override;
+    double filterResponse(double sampleRate, double currentFrequency) override;
+
     std::vector<double> getCoefficients();
     double getFrequency()
     {
@@ -63,6 +55,7 @@ class Biquad : public IDsp
   private:
     void updateCoefficients();
     Type type;
+    int mFilterOrder;
     double mSampleRate;
     double mFrequency;
     double mQ;
