@@ -19,8 +19,11 @@ var hierarchy =
       [ "EQView", "classEQView.html", null ],
       [ "SliderGroup", "classSliderGroup.html", null ]
     ] ],
+    [ "Filter", "classFilter.html", null ],
     [ "IDsp", "classIDsp.html", [
-      [ "Biquad", "classBiquad.html", null ]
+      [ "IFilter", "classIFilter.html", [
+        [ "Biquad", "classBiquad.html", null ]
+      ] ]
     ] ],
     [ "juce::AudioProcessorValueTreeState::Listener", null, [
       [ "AudioPluginAudioProcessor", "classAudioPluginAudioProcessor.html", null ],

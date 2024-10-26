@@ -116,9 +116,7 @@ $(function(){initNavTree('classBiquad.html',''); initResizable(true); });
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="classBiquad-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">Biquad Class Reference</div></div>
@@ -129,7 +127,9 @@ Inheritance diagram for Biquad:</div>
 <div class="dyncontent">
 <div class="center"><img src="classBiquad__inherit__graph.png" border="0" usemap="#aBiquad_inherit__map" alt="Inheritance graph"/></div>
 <map name="aBiquad_inherit__map" id="aBiquad_inherit__map">
-<area shape="rect" title=" " alt="" coords="5,79,72,104"/>
+<area shape="rect" title=" " alt="" coords="5,152,72,177"/>
+<area shape="rect" href="classIFilter.html" title=" " alt="" coords="9,79,68,104"/>
+<area shape="poly" title=" " alt="" coords="41,118,41,152,36,152,36,118"/>
 <area shape="rect" href="classIDsp.html" title=" " alt="" coords="13,5,64,31"/>
 <area shape="poly" title=" " alt="" coords="41,44,41,79,36,79,36,44"/>
 </map>
@@ -139,11 +139,13 @@ Collaboration diagram for Biquad:</div>
 <div class="dyncontent">
 <div class="center"><img src="classBiquad__coll__graph.png" border="0" usemap="#aBiquad_coll__map" alt="Collaboration graph"/></div>
 <map name="aBiquad_coll__map" id="aBiquad_coll__map">
-<area shape="rect" title=" " alt="" coords="51,93,117,119"/>
-<area shape="rect" href="classIDsp.html" title=" " alt="" coords="5,5,56,31"/>
-<area shape="poly" title=" " alt="" coords="47,41,79,91,74,94,43,44"/>
-<area shape="rect" href="structBiquad_1_1Coeffs.html" title=" " alt="" coords="81,5,197,31"/>
-<area shape="poly" title=" " alt="" coords="126,44,94,94,89,91,122,41"/>
+<area shape="rect" title=" " alt="" coords="57,168,124,193"/>
+<area shape="rect" href="classIFilter.html" title=" " alt="" coords="5,80,64,105"/>
+<area shape="poly" title=" " alt="" coords="52,115,85,166,81,169,47,118"/>
+<area shape="rect" href="classIDsp.html" title=" " alt="" coords="9,5,60,31"/>
+<area shape="poly" title=" " alt="" coords="37,45,37,80,32,80,32,45"/>
+<area shape="rect" href="structBiquad_1_1Coeffs.html" title=" " alt="" coords="89,80,205,105"/>
+<area shape="poly" title=" " alt="" coords="134,118,101,169,96,166,129,115"/>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
@@ -152,28 +154,13 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBiquad_1_1Coeffs.html">Coeffs</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
-Public Types</h2></td></tr>
-<tr class="memitem:a3d2dbea493cafe17ef1de07ce6431e1e" id="r_a3d2dbea493cafe17ef1de07ce6431e1e"><td class="memItemLeft" align="right" valign="top"><a id="a3d2dbea493cafe17ef1de07ce6431e1e" name="a3d2dbea493cafe17ef1de07ce6431e1e"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><b>Type</b> { <br />
-&#160;&#160;<b>kLowpass</b>
-, <b>kHighpass</b>
-, <b>kLowShelf</b>
-, <b>kHighShelf</b>
-, <br />
-&#160;&#160;<b>kPeak</b>
-, <b>kNumTypes</b>
-<br />
- }</td></tr>
-<tr class="separator:a3d2dbea493cafe17ef1de07ce6431e1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aaf90f6588d1fe0aca51c0ea6fc4387b6" id="r_aaf90f6588d1fe0aca51c0ea6fc4387b6"><td class="memItemLeft" align="right" valign="top"><a id="aaf90f6588d1fe0aca51c0ea6fc4387b6" name="aaf90f6588d1fe0aca51c0ea6fc4387b6"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Biquad</b> (Type type, double startFreq)</td></tr>
-<tr class="separator:aaf90f6588d1fe0aca51c0ea6fc4387b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a779dc89af97c547fb4466bfbf09cad15" id="r_a779dc89af97c547fb4466bfbf09cad15"><td class="memItemLeft" align="right" valign="top"><a id="a779dc89af97c547fb4466bfbf09cad15" name="a779dc89af97c547fb4466bfbf09cad15"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>prepare</b> (const double sampleRate, const int numSamples, const int numChannels)</td></tr>
-<tr class="separator:a779dc89af97c547fb4466bfbf09cad15"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeff2f3bb2d478c229afbfb7eaca42126" id="r_aeff2f3bb2d478c229afbfb7eaca42126"><td class="memItemLeft" align="right" valign="top"><a id="aeff2f3bb2d478c229afbfb7eaca42126" name="aeff2f3bb2d478c229afbfb7eaca42126"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Biquad</b> (IFilter::Type type, double startFreq, int order=2)</td></tr>
+<tr class="separator:aeff2f3bb2d478c229afbfb7eaca42126"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1e06eee73bf23660a79cad70cabb8d94" id="r_a1e06eee73bf23660a79cad70cabb8d94"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1e06eee73bf23660a79cad70cabb8d94">prepare</a> (const double sampleRate, const int numSamples, const int numChannels) override</td></tr>
+<tr class="separator:a1e06eee73bf23660a79cad70cabb8d94"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a47ae8e01fa031bd3d2a4af4c3a1a5dd2" id="r_a47ae8e01fa031bd3d2a4af4c3a1a5dd2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a47ae8e01fa031bd3d2a4af4c3a1a5dd2">process</a> (std::span&lt; const float &gt; input, std::span&lt; float &gt; output, int channel) override</td></tr>
 <tr class="separator:a47ae8e01fa031bd3d2a4af4c3a1a5dd2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab669e4eb86b9c4e8b0dcb03539ba08c1" id="r_ab669e4eb86b9c4e8b0dcb03539ba08c1"><td class="memItemLeft" align="right" valign="top"><a id="ab669e4eb86b9c4e8b0dcb03539ba08c1" name="ab669e4eb86b9c4e8b0dcb03539ba08c1"></a>
@@ -182,18 +169,16 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>reset</b> ()</td></tr
 <tr class="memitem:a60397cdf7512fa662cb275e1f581b5d8" id="r_a60397cdf7512fa662cb275e1f581b5d8"><td class="memItemLeft" align="right" valign="top"><a id="a60397cdf7512fa662cb275e1f581b5d8" name="a60397cdf7512fa662cb275e1f581b5d8"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setAllParams</b> (double frequency, double gaindB, double q)</td></tr>
 <tr class="separator:a60397cdf7512fa662cb275e1f581b5d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a36add7417862e0ff31eb10414fa17c4c" id="r_a36add7417862e0ff31eb10414fa17c4c"><td class="memItemLeft" align="right" valign="top"><a id="a36add7417862e0ff31eb10414fa17c4c" name="a36add7417862e0ff31eb10414fa17c4c"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setFrequency</b> (double frequency)</td></tr>
-<tr class="separator:a36add7417862e0ff31eb10414fa17c4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a81f583b15862024dec4905b43c4a0b87" id="r_a81f583b15862024dec4905b43c4a0b87"><td class="memItemLeft" align="right" valign="top"><a id="a81f583b15862024dec4905b43c4a0b87" name="a81f583b15862024dec4905b43c4a0b87"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setQ</b> (double q)</td></tr>
-<tr class="separator:a81f583b15862024dec4905b43c4a0b87"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a466e796fc9414b30ee1dbe5aea54714d" id="r_a466e796fc9414b30ee1dbe5aea54714d"><td class="memItemLeft" align="right" valign="top"><a id="a466e796fc9414b30ee1dbe5aea54714d" name="a466e796fc9414b30ee1dbe5aea54714d"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setGain</b> (double gaindB)</td></tr>
-<tr class="separator:a466e796fc9414b30ee1dbe5aea54714d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a22d6f58a4ad302f98c6c9f9d704ac320" id="r_a22d6f58a4ad302f98c6c9f9d704ac320"><td class="memItemLeft" align="right" valign="top"><a id="a22d6f58a4ad302f98c6c9f9d704ac320" name="a22d6f58a4ad302f98c6c9f9d704ac320"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setSampleRate</b> (double sampleRate)</td></tr>
-<tr class="separator:a22d6f58a4ad302f98c6c9f9d704ac320"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa17a4383ec57b484a890e1b64233d49a" id="r_aa17a4383ec57b484a890e1b64233d49a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa17a4383ec57b484a890e1b64233d49a">setFrequency</a> (double frequency) override</td></tr>
+<tr class="separator:aa17a4383ec57b484a890e1b64233d49a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6479152c0a76739acfdcac5525592e20" id="r_a6479152c0a76739acfdcac5525592e20"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6479152c0a76739acfdcac5525592e20">setQ</a> (double q) override</td></tr>
+<tr class="separator:a6479152c0a76739acfdcac5525592e20"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad8eca3d7437be47707e4a363f9922bc4" id="r_ad8eca3d7437be47707e4a363f9922bc4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad8eca3d7437be47707e4a363f9922bc4">setGain</a> (double gaindB) override</td></tr>
+<tr class="separator:ad8eca3d7437be47707e4a363f9922bc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa6cfb593be1ac82774d6788273fadeea" id="r_aa6cfb593be1ac82774d6788273fadeea"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa6cfb593be1ac82774d6788273fadeea">setSampleRate</a> (double sampleRate) override</td></tr>
+<tr class="separator:aa6cfb593be1ac82774d6788273fadeea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22b06c90228dd1f21584b09c3937bcbb" id="r_a22b06c90228dd1f21584b09c3937bcbb"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a22b06c90228dd1f21584b09c3937bcbb">filterResponse</a> (double sampleRate, double currentFrequency) override</td></tr>
+<tr class="separator:a22b06c90228dd1f21584b09c3937bcbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8625b886093bcfdc60c2a42a38a68d0e" id="r_a8625b886093bcfdc60c2a42a38a68d0e"><td class="memItemLeft" align="right" valign="top"><a id="a8625b886093bcfdc60c2a42a38a68d0e" name="a8625b886093bcfdc60c2a42a38a68d0e"></a>
 std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getCoefficients</b> ()</td></tr>
 <tr class="separator:a8625b886093bcfdc60c2a42a38a68d0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -213,19 +198,99 @@ double&#160;</td><td class="memItemRight" valign="bottom"><b>getSampleRate</b> (
 Type&#160;</td><td class="memItemRight" valign="bottom"><b>getType</b> () const</td></tr>
 <tr class="separator:a32f575616f807a674fa3b1e4df6e35ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
-Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a1ec53e237666363012e7dc532cd167db" id="r_a1ec53e237666363012e7dc532cd167db"><td class="memItemLeft" align="right" valign="top"><a id="a1ec53e237666363012e7dc532cd167db" name="a1ec53e237666363012e7dc532cd167db"></a>
-static double&#160;</td><td class="memItemRight" valign="bottom"><b>filterResponse</b> (double sampleRate, double x, <a class="el" href="classBiquad.html">Biquad</a> &amp;biquad)</td></tr>
-<tr class="separator:a1ec53e237666363012e7dc532cd167db"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:aa91d406c099314c779f84a8b3f855699" id="r_aa91d406c099314c779f84a8b3f855699"><td class="memItemLeft" align="right" valign="top"><a id="aa91d406c099314c779f84a8b3f855699" name="aa91d406c099314c779f84a8b3f855699"></a>
 struct <a class="el" href="structBiquad_1_1Coeffs.html">Coeffs</a>&#160;</td><td class="memItemRight" valign="bottom"><b>mCoeffs</b></td></tr>
 <tr class="separator:aa91d406c099314c779f84a8b3f855699"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_attribs_classIFilter"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pub_attribs_classIFilter')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="classIFilter.html">IFilter</a></td></tr>
+<tr class="memitem:ad6750ac8d9bd83c5efa8617b364cba0b inherit pub_attribs_classIFilter" id="r_ad6750ac8d9bd83c5efa8617b364cba0b"><td class="memItemLeft" align="right" valign="top">
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>isEnabled</b> {true}</td></tr>
+<tr class="separator:ad6750ac8d9bd83c5efa8617b364cba0b inherit pub_attribs_classIFilter"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
+Additional Inherited Members</h2></td></tr>
+<tr class="inherit_header pub_types_classIFilter"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pub_types_classIFilter')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="classIFilter.html">IFilter</a></td></tr>
+<tr class="memitem:abf24c087d4b2249415d7c2d34ff6a4a7 inherit pub_types_classIFilter" id="r_abf24c087d4b2249415d7c2d34ff6a4a7"><td class="memItemLeft" align="right" valign="top"><a id="abf24c087d4b2249415d7c2d34ff6a4a7" name="abf24c087d4b2249415d7c2d34ff6a4a7"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><b>Type</b> { <br />
+&#160;&#160;<b>kHighPass</b>
+, <b>kLowPass</b>
+, <b>kLowShelf</b>
+, <b>kHighShelf</b>
+, <br />
+&#160;&#160;<b>kPeak</b>
+, <b>kNumTypes</b>
+<br />
+ }</td></tr>
+<tr class="separator:abf24c087d4b2249415d7c2d34ff6a4a7 inherit pub_types_classIFilter"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a22b06c90228dd1f21584b09c3937bcbb" name="a22b06c90228dd1f21584b09c3937bcbb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a22b06c90228dd1f21584b09c3937bcbb">&#9670;&#160;</a></span>filterResponse()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Biquad::filterResponse </td>
+          <td>(</td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>sampleRate</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>currentFrequency</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="classIFilter.html">IFilter</a>.</p>
+
+</div>
+</div>
+<a id="a1e06eee73bf23660a79cad70cabb8d94" name="a1e06eee73bf23660a79cad70cabb8d94"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1e06eee73bf23660a79cad70cabb8d94">&#9670;&#160;</a></span>prepare()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Biquad::prepare </td>
+          <td>(</td>
+          <td class="paramtype">const double</td>          <td class="paramname"><span class="paramname"><em>sampleRate</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int</td>          <td class="paramname"><span class="paramname"><em>numSamples</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int</td>          <td class="paramname"><span class="paramname"><em>numChannels</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="classIDsp.html">IDsp</a>.</p>
+
+</div>
+</div>
 <a id="a47ae8e01fa031bd3d2a4af4c3a1a5dd2" name="a47ae8e01fa031bd3d2a4af4c3a1a5dd2"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a47ae8e01fa031bd3d2a4af4c3a1a5dd2">&#9670;&#160;</a></span>process()</h2>
 
@@ -259,6 +324,114 @@ struct <a class="el" href="structBiquad_1_1Coeffs.html">Coeffs</a>&#160;</td><td
 </div><div class="memdoc">
 
 <p>Implements <a class="el" href="classIDsp.html">IDsp</a>.</p>
+
+</div>
+</div>
+<a id="aa17a4383ec57b484a890e1b64233d49a" name="aa17a4383ec57b484a890e1b64233d49a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa17a4383ec57b484a890e1b64233d49a">&#9670;&#160;</a></span>setFrequency()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Biquad::setFrequency </td>
+          <td>(</td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>frequency</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="classIFilter.html">IFilter</a>.</p>
+
+</div>
+</div>
+<a id="ad8eca3d7437be47707e4a363f9922bc4" name="ad8eca3d7437be47707e4a363f9922bc4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad8eca3d7437be47707e4a363f9922bc4">&#9670;&#160;</a></span>setGain()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Biquad::setGain </td>
+          <td>(</td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>gaindB</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="classIFilter.html">IFilter</a>.</p>
+
+</div>
+</div>
+<a id="a6479152c0a76739acfdcac5525592e20" name="a6479152c0a76739acfdcac5525592e20"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6479152c0a76739acfdcac5525592e20">&#9670;&#160;</a></span>setQ()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Biquad::setQ </td>
+          <td>(</td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>q</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="classIFilter.html">IFilter</a>.</p>
+
+</div>
+</div>
+<a id="aa6cfb593be1ac82774d6788273fadeea" name="aa6cfb593be1ac82774d6788273fadeea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa6cfb593be1ac82774d6788273fadeea">&#9670;&#160;</a></span>setSampleRate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Biquad::setSampleRate </td>
+          <td>(</td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>sampleRate</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="classIFilter.html">IFilter</a>.</p>
 
 </div>
 </div>

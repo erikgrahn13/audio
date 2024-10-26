@@ -151,8 +151,8 @@ Collaboration diagram for AudioPluginAudioProcessor:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a00d2c95a699f1d55af84bb318cc926aa" id="r_a00d2c95a699f1d55af84bb318cc926aa"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a00d2c95a699f1d55af84bb318cc926aa">FilterTuple</a></td></tr>
-<tr class="separator:a00d2c95a699f1d55af84bb318cc926aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1ac76eedba8793dfa5650139202392ec" id="r_a1ac76eedba8793dfa5650139202392ec"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1ac76eedba8793dfa5650139202392ec">FilterTuple</a></td></tr>
+<tr class="separator:a1ac76eedba8793dfa5650139202392ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -222,9 +222,6 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>update</b> ()</td></t
 <tr class="memitem:a0ba619e959cc6e753f11536e643d5bc3" id="r_a0ba619e959cc6e753f11536e643d5bc3"><td class="memItemLeft" align="right" valign="top"><a id="a0ba619e959cc6e753f11536e643d5bc3" name="a0ba619e959cc6e753f11536e643d5bc3"></a>
 juce::AudioProcessorValueTreeState &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getVTSParameters</b> ()</td></tr>
 <tr class="separator:a0ba619e959cc6e753f11536e643d5bc3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a89f16a9fc7dca6214defbf23733e2da6" id="r_a89f16a9fc7dca6214defbf23733e2da6"><td class="memItemLeft" align="right" valign="top"><a id="a89f16a9fc7dca6214defbf23733e2da6" name="a89f16a9fc7dca6214defbf23733e2da6"></a>
-std::vector&lt; FilterTuple &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getFilters</b> ()</td></tr>
-<tr class="separator:a89f16a9fc7dca6214defbf23733e2da6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaa316cb781a5a751f7abff4f79fb4d77" id="r_aaa316cb781a5a751f7abff4f79fb4d77"><td class="memItemLeft" align="right" valign="top"><a id="aaa316cb781a5a751f7abff4f79fb4d77" name="aaa316cb781a5a751f7abff4f79fb4d77"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>prepareToPlay</b> (double sampleRate, int samplesPerBlock) override</td></tr>
 <tr class="separator:aaa316cb781a5a751f7abff4f79fb4d77"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -302,8 +299,8 @@ std::atomic&lt; bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>
 <tr class="separator:a53f95e0263bed89f7173f6849a4b2b32"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Typedef Documentation</h2>
-<a id="a00d2c95a699f1d55af84bb318cc926aa" name="a00d2c95a699f1d55af84bb318cc926aa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a00d2c95a699f1d55af84bb318cc926aa">&#9670;&#160;</a></span>FilterTuple</h2>
+<a id="a1ac76eedba8793dfa5650139202392ec" name="a1ac76eedba8793dfa5650139202392ec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1ac76eedba8793dfa5650139202392ec">&#9670;&#160;</a></span>FilterTuple</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -314,9 +311,9 @@ std::atomic&lt; bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>
       </table>
 </div><div class="memdoc">
 <b>Initial value:</b><div class="fragment"><div class="line"> </div>
-<div class="line">        std::tuple&lt;<a class="code hl_class" href="classBiquad.html">Biquad</a>, juce::RangedAudioParameter *, juce::RangedAudioParameter *,</div>
-<div class="line">                   std::optional&lt;juce::RangedAudioParameter *&gt;, std::optional&lt;juce::RangedAudioParameter *&gt;&gt;</div>
-<div class="ttc" id="aclassBiquad_html"><div class="ttname"><a href="classBiquad.html">Biquad</a></div><div class="ttdef"><b>Definition</b> Biquad.h:8</div></div>
+<div class="line">        std::tuple&lt;std::shared_ptr&lt;Filter&gt;, juce::RangedAudioParameter *, juce::RangedAudioParameter *,</div>
+<div class="line">                   std::optional&lt;juce::RangedAudioParameter *&gt;, std::optional&lt;juce::RangedAudioParameter *&gt;,</div>
+<div class="line">                   std::optional&lt;juce::RangedAudioParameter *&gt;&gt;</div>
 </div><!-- fragment -->
 </div>
 </div>

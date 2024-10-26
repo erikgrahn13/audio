@@ -1,7 +1,9 @@
 <map id="Biquad" name="Biquad">
-<area shape="rect" id="Node000001" title=" " alt="" coords="51,93,117,119"/>
-<area shape="rect" id="Node000002" href="$classIDsp.html" title=" " alt="" coords="5,5,56,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="47,41,79,91,74,94,43,44"/>
-<area shape="rect" id="Node000003" href="$structBiquad_1_1Coeffs.html" title=" " alt="" coords="81,5,197,31"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="126,44,94,94,89,91,122,41"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="57,168,124,193"/>
+<area shape="rect" id="Node000002" href="$classIFilter.html" title=" " alt="" coords="5,80,64,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="52,115,85,166,81,169,47,118"/>
+<area shape="rect" id="Node000003" href="$classIDsp.html" title=" " alt="" coords="9,5,60,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="37,45,37,80,32,80,32,45"/>
+<area shape="rect" id="Node000004" href="$structBiquad_1_1Coeffs.html" title=" " alt="" coords="89,80,205,105"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="134,118,101,169,96,166,129,115"/>
 </map>
