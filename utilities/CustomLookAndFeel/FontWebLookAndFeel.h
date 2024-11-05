@@ -3,25 +3,25 @@
 #include <Fonts.h>
 #include <JuceHeader.h>
 
-class FontAudioLookAndFeel : public juce::LookAndFeel_V4
+class FontWebLookAndFeel : public juce::LookAndFeel_V4
 {
   public:
-    FontAudioLookAndFeel()
-        : fontAudio(juce::FontOptions(
-              juce::Typeface::createSystemTypefaceFor(CustomFont::fontaudio_ttf, CustomFont::fontaudio_ttfSize)))
+    FontWebLookAndFeel()
+        : fontWeb(juce::FontOptions(juce::Typeface::createSystemTypefaceFor(CustomFont::forkawesomewebfont_ttf,
+                                                                            CustomFont::forkawesomewebfont_ttfSize)))
     {
     }
 
     juce::Font &getFont()
     {
-        return fontAudio;
+        return fontWeb;
     }
 
     void drawButtonText(juce::Graphics &g, juce::TextButton &button, bool /*isMouseOverButton*/,
                         bool /*isButtonDown*/) override
     {
-        auto font = fontAudio;
-        g.setFont(font.withHeight(static_cast<float>(button.getHeight())));
+        auto font = fontWeb;
+        g.setFont(font.withHeight(static_cast<float>(button.getHeight() * 0.6)));
 
         juce::Colour textColour;
         if (button.getClickingTogglesState() && button.getToggleState())
@@ -42,12 +42,6 @@ class FontAudioLookAndFeel : public juce::LookAndFeel_V4
         g.drawText(button.getButtonText(), button.getLocalBounds(), juce::Justification::centred, true);
     }
 
-    // void drawButtonBackground(juce::Graphics &g, juce::Button &button, const juce::Colour &backgroundColour,
-    //                           bool isMouseOverButton, bool isButtonDown) override
-    // {
-    //     // Do nothing, which means no background will be drawn.
-    // }
-
   private:
-    juce::Font fontAudio;
+    juce::Font fontWeb;
 };

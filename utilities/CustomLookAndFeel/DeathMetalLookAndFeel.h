@@ -10,7 +10,7 @@ class DeathMetalLookAndFeel : public juce::LookAndFeel_V4
   public:
     DeathMetalLookAndFeel()
         : deathMetalFont(juce::FontOptions(
-              juce::Typeface::createSystemTypefaceFor(BinaryData::ArtDystopia_ttf, BinaryData::ArtDystopia_ttfSize)))
+              juce::Typeface::createSystemTypefaceFor(CustomFont::ArtDystopia_ttf, CustomFont::ArtDystopia_ttfSize)))
     {
     }
     ~DeathMetalLookAndFeel() override
