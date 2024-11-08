@@ -35,8 +35,13 @@ This project utilizes CMake presets but can also be built using plain old CMake.
 git clone https://github.com/erikgrahn13/audio.git
 cd audio
 cmake --preset Debug
-cmake --build build <plugin>
+cmake --build build --target <plugin>
 ```
+or
+```bash
+cmake --build build 
+```
+to build all plugins
 
 > 💡 **Note:**
 > Documentation is generated using Doxygen and uses the latest version of available official docker image from [Doxygen](https://github.com/doxygen/doxygen/releases). Therefore, to be able to build the docs target you need to have docker installed and have the daemon running.
