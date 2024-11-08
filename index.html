@@ -147,8 +147,10 @@ Build</h1>
 <div class="fragment"><div class="line">git clone https://github.com/erikgrahn13/audio.git</div>
 <div class="line">cd audio</div>
 <div class="line">cmake --preset Debug</div>
-<div class="line">cmake --build build &lt;plugin&gt;</div>
-</div><!-- fragment --><blockquote class="doxtable">
+<div class="line">cmake --build build --target &lt;plugin&gt;</div>
+</div><!-- fragment --><p> or </p><div class="fragment"><div class="line">cmake --build build </div>
+</div><!-- fragment --><p> to build all plugins</p>
+<blockquote class="doxtable">
 <p>&zwj;💡 <b>Note:</b> Documentation is generated using Doxygen and uses the latest version of available official docker image from <a href="https://github.com/doxygen/doxygen/releases">Doxygen</a>. Therefore, to be able to build the docs target you need to have docker installed and have the daemon running. </p>
 </blockquote>
 <h1><a class="anchor" id="autotoc_md7"></a>
