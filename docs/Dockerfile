@@ -1,4 +1,4 @@
-FROM ghcr.io/doxygen/doxygen:release_1_11_0
+FROM ghcr.io/doxygen/doxygen:release_1_12_0
 
 # Set environment variables to configure tzdata non-interactively
 ENV DEBIAN_FRONTEND=noninteractive
