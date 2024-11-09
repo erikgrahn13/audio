@@ -1,6 +1,4 @@
 #include "Amp.h"
-#include "ironmaster.h"
-
 #include <iostream>
 
 Amp::Amp(const char *ampData, const int ampDataSize) : mAmpData(ampData), mAmpDataSize(ampDataSize)

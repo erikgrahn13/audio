@@ -46,13 +46,19 @@ class BlackLoungeAudioProcessor final : public juce::AudioProcessor
     void setStateInformation(const void *data, int sizeInBytes) override;
     void doDualMono(juce::AudioBuffer<float> &mainBuffer, float **input);
 
-  private:
-    // std::unique_ptr<BlackLoungeAmp> mAmp;
-    // std::shared_ptr<Amp> mAmp;
-    std::unique_ptr<Amp> mBlackLoungeAmp;
+    juce::AudioProcessorValueTreeState &getVTSParameters()
+    {
+        return mParameters;
+    }
 
-    juce::AudioBuffer<float> outputBuffer;
-    // std::unique_ptr<nam::DSP> mModel;
+    juce::AudioProcessorValueTreeState::ParameterLayout createParameters();
+
+  private:
+    std::unique_ptr<Amp> mBlackLoungeAmp;
+    juce::AudioProcessorValueTreeState mParameters;
+    juce::AudioParameterFloat *mVolumeParameter;
+    juce::AudioParameterFloat *mThresholdParameter;
+    juce::AudioParameterFloat *mGainParameter;
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(BlackLoungeAudioProcessor)

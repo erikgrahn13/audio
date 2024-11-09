@@ -11,20 +11,12 @@ BlackLoungeAudioProcessor::BlackLoungeAudioProcessor()
 #endif
                          .withOutput("Output", juce::AudioChannelSet::stereo(), true)
 #endif
-      )
+                         ),
+      mParameters(*this, nullptr, juce::Identifier("Parameters"), createParameters())
 {
-    // mAmp = std::make_unique<BlackLoungeAmp>();
-    // mAmp = new BlackLoungeAmp();
-    // mAmp = std::make_shared<BlackLoungeAmp>();
-    // nam::activations::Activation::enable_fast_tanh();
-
-    // auto test = "C:/Users/erikg/Development/audio/Black_Lounge/Fireball "
-    //             "Ironmaster_v1_Fireball-IronMaster-v3_0_0-reamp.cm-St.nam";
-    // auto path = std::filesystem::path(test);
-    // // mNamModel = nam::get_dsp(path)
-
-    // mModel = nam::get_dsp(path);
-    // mModel->Reset(48000, 2048);
+    mVolumeParameter = dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("volume"));
+    mThresholdParameter = dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("threshold"));
+    mGainParameter = dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("gain"));
 
     mBlackLoungeAmp = std::make_unique<Amp>(BlackLoungeAmp::ironmaster_nam, BlackLoungeAmp::ironmaster_namSize);
 }
@@ -103,26 +95,6 @@ void BlackLoungeAudioProcessor::prepareToPlay(double sampleRate, int samplesPerB
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
-    outputBuffer.setSize(1, samplesPerBlock * 4);
-    outputBuffer.clear();
-
-    // if (mAmp && mAmp->getNamModel())
-    // {
-    //     // mAmp->getNamModel()->ResetAndPrewarm(sampleRate, samplesPerBlock);
-    // }
-
-    // if (mModel)
-    // {
-    //     // mModel->ResetAndPrewarm(48000.0, 480);
-    // }
-
-    outputBuffer.setSize(1, samplesPerBlock, false, false, false);
-    outputBuffer.clear();
-
-    // if (mModel)
-    // {
-    //     // mModel->Reset(sampleRate, samplesPerBlock);
-    // }
     juce::ignoreUnused(sampleRate, samplesPerBlock);
 }
 
@@ -168,136 +140,35 @@ void BlackLoungeAudioProcessor::doDualMono(juce::AudioBuffer<float> &mainBuffer,
     }
 }
 
+juce::AudioProcessorValueTreeState::ParameterLayout BlackLoungeAudioProcessor::createParameters()
+{
+    std::vector<std::unique_ptr<juce::RangedAudioParameter>> parameters;
+    parameters.push_back(std::make_unique<juce::AudioParameterFloat>("volume", "Volume", -10.f, 10.f, 0.f));
+    parameters.push_back(std::make_unique<juce::AudioParameterFloat>("threshold", "Threshold", -100.f, 0.f, -80.f));
+    parameters.push_back(std::make_unique<juce::AudioParameterFloat>("gain", "Gain", -20.f, 20.f, 0.f));
+
+    return {parameters.begin(), parameters.end()};
+}
+
 void BlackLoungeAudioProcessor::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages)
 {
     juce::ignoreUnused(midiMessages);
     std::ignore = buffer;
 
+    auto gain = juce::Decibels::decibelsToGain(mGainParameter->get());
+    // auto threshold = juce::Decibels::decibelsToGain(mThresholdParameter->get());
+    auto volume = juce::Decibels::decibelsToGain(mVolumeParameter->get());
+
     if (mBlackLoungeAmp)
     {
+        buffer.applyGain(gain);
         mBlackLoungeAmp->process(buffer.getWritePointer(0), buffer.getWritePointer(0), buffer.getNumSamples());
+
+        buffer.applyGain(volume);
+
         if (buffer.getNumChannels() > 1)
             buffer.copyFrom(1, 0, buffer.getReadPointer(0), buffer.getNumSamples());
     }
-
-    // auto *channelDataLeft = buffer.getWritePointer(0);
-    // auto *channelDataRight = buffer.getWritePointer(1);
-    // auto *outputData = outputBuffer.getWritePointer(0);
-
-    // float **inputPointer = &channelDataLeft;
-    // float **outputPointer = &outputData;
-    // float **processedOutput;
-    // float **triggerOutput = inputPointer;
-
-    // if (mModel)
-    // {
-    //     mModel->process(*inputPointer, *outputPointer, buffer.getNumSamples());
-    //     processedOutput = outputPointer;
-    // }
-    // else
-    // {
-    //     processedOutput = inputPointer;
-    // }
-
-    // doDualMono(buffer, processedOutput);
-
-    // if (mModel)
-    // {
-    //     // Get pointers to the left channel input and the output buffer
-    //     auto *inputData = buffer.getReadPointer(0);              // Left channel input
-    //     auto *modelOutputData = outputBuffer.getWritePointer(0); // Model's output buffer
-
-    //     // Process audio through the NAM model
-    //     mModel->process(const_cast<float *>(inputData), modelOutputData, buffer.getNumSamples());
-
-    //     // Copy processed audio back to main buffer (left and right channels)
-    //     buffer.copyFrom(0, 0, modelOutputData, buffer.getNumSamples());
-    //     if (buffer.getNumChannels() > 1)
-    //         buffer.copyFrom(1, 0, modelOutputData, buffer.getNumSamples());
-    // }
-    // else
-    // {
-    //     buffer.clear();
-    // }
-
-    // juce::ignoreUnused(midiMessages);
-
-    // auto totalNumInputChannels = getTotalNumInputChannels();
-    // auto totalNumOutputChannels = getTotalNumOutputChannels();
-    // for (int channel = totalNumInputChannels; channel < totalNumOutputChannels; ++channel)
-    //     buffer.clear(channel, 0, buffer.getNumSamples());
-
-    // if (mModel)
-    // {
-    //     mModel->process(buffer.getWritePointer(0), outputBuffer.getWritePointer(0), buffer.getNumSamples());
-    //     mModel->finalize_(buffer.getNumSamples());
-    //     //     // auto *processedData = outputBuffer.getReadPointer(0);
-
-    //     //     // Copy to the left channel
-    //     buffer.copyFrom(0, 0, outputBuffer.getReadPointer(0), buffer.getNumSamples());
-    //     // buffer.applyGain(0.1f);
-    // }
-
-    // juce::ignoreUnused(midiMessages);
-
-    // auto totalNumInputChannels = getTotalNumInputChannels();
-    // auto totalNumOutputChannels = getTotalNumOutputChannels();
-
-    // for (int channel = totalNumInputChannels; channel < totalNumOutputChannels; ++channel)
-    //     buffer.clear(channel, 0, buffer.getNumSamples());
-
-    // // Pass input directly to output
-    // if (mAmp && mAmp->getNamModel())
-    // {
-    //     auto size1 = outputBuffer.getNumSamples();
-    //     auto size2 = buffer.getNumSamples();
-    //     std::ignore = size1;
-    //     std::ignore = size2;
-
-    //     mAmp->getNamModel()->process(buffer.getWritePointer(0), outputBuffer.getWritePointer(0),
-    //                                  buffer.getNumSamples());
-
-    //     // auto *processedData = outputBuffer.getReadPointer(0);
-
-    //     // Copy to the left channel
-    //     // buffer.copyFrom(0, 0, processedData, buffer.getNumSamples());
-    //     // std::memcpy(buffer.getWritePointer(0), outputBuffer.getWritePointer(0), buffer.getNumSamples() *
-    //     // sizeof(float));
-    // }
-
-    // if (mAmp)
-    // {
-    //     if (mAmp->getNamModel())
-    //     {
-    //         mAmp->getNamModel()->process(*inputPointer, *outputPointer, buffer.getNumSamples());
-    //         for (int i = 0; i < buffer.getNumSamples(); ++i)
-    //         {
-    //             outputChannelDataLeft[i] = outputPointer[0][i];
-    //             outputChannelDataRight[i] = outputPointer[0][i];
-    //         }
-    //     }
-    // }
-
-    // mAmp->getNamModel()->process(inputChannelData, outputData, buffer.getNumSamples());
-
-    // mAmp->getNamModel()->finalize_(buffer.getNumSamples());
-
-    // std::memcpy(inputChannelData, outputData, buffer.getNumSamples() * sizeof(float));
-
-    // for (int i = 0; i < buffer.getNumChannels(); ++i)
-    // {
-    //     outputChannelDataLeft[i] = inputChannelData[i];
-    // }
-    // std::memcpy(outputChannelDataRight, inputChannelData, buffer.getNumSamples() * sizeof(float));
-
-    // for (int channel = 0; channel < totalNumInputChannels; ++channel)
-    // {
-    //     auto *inputChannelData = buffer.getReadPointer(channel);
-    //     auto *outputChannelData = buffer.getWritePointer(channel);
-
-    //     // Check if the data is being copied
-    //     std::memcpy(outputChannelData, inputChannelData, buffer.getNumSamples() * sizeof(float));
-    // }
 }
 
 //==============================================================================
