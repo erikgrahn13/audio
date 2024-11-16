@@ -115,8 +115,9 @@ target_link_libraries(${PROJECT_NAME}
         # AudioPluginData           # If we'd created a binary data target, we'd link to it here
         juce::juce_audio_utils
         nam_dependency
-        NoiseGate
+        # NoiseGate
         BlackLoungeAmp
+        juce::juce_dsp
         #juce::juce_audio_processors
         #juce::juce_audio_devices  # Ensure this module is included
         #juce::juce_audio_formats
@@ -125,6 +126,12 @@ target_link_libraries(${PROJECT_NAME}
         juce::juce_recommended_lto_flags
         juce::juce_recommended_warning_flags
         )
+
+if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
+    target_compile_definitions(${PROJECT_NAME} 
+    PRIVATE 
+    NOMINMAX WIN32_LEAN_AND_MEAN)
+endif()
 
 # target_include_directories(${PROJECT_NAME}
 #     PRIVATE

@@ -7,11 +7,11 @@ class NoiseGate : public IDsp
 {
 
   public:
-    NoiseGate(double thresholdDB, double attack, double release, double hold, double sampleRate);
+    NoiseGate(double thresholdDB, double sampleRate);
     ~NoiseGate();
 
     void setThreshold(double value);
-    double process(double sample, int channel = 1);
+    float process(float sample, int channel = 1);
     void prepare(const double sampleRate, const int numSamples, const int numChannels) override
     {
         std::ignore = sampleRate;

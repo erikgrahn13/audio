@@ -18,10 +18,13 @@ BlackLoungeAudioProcessorEditor::BlackLoungeAudioProcessorEditor(BlackLoungeAudi
 
         // mainScreens.setOrientation(juce::TabbedButtonBar::Orientation::TabsAtBottom);
 
-        mainScreens.addTab("Erik", juce::Colours::black, &ampView, false);
-        mainScreens.addTab("Grahn", juce::Colours::black, &settingsView, false);
         // addAndMakeVisible(mainScreens);
     }
+
+    analyzeButton.setButtonText("Analyze");
+    mAnalyzeAttachment.reset(new juce::AudioProcessorValueTreeState::ButtonAttachment(processorRef.getVTSParameters(),
+                                                                                      "analyze", analyzeButton));
+    addAndMakeVisible(analyzeButton);
 
     auto volumeName = processorRef.getVTSParameters().getParameter("volume")->getName(16).toUpperCase();
     volumeLabel.setText(volumeName, juce::NotificationType::dontSendNotification);
@@ -60,10 +63,21 @@ BlackLoungeAudioProcessorEditor::BlackLoungeAudioProcessorEditor(BlackLoungeAudi
         new juce::AudioProcessorValueTreeState::SliderAttachment(processorRef.getVTSParameters(), "gain", gainSlider));
 
     addAndMakeVisible(gainSlider);
+
+    testSlider.setSliderStyle(juce::Slider::LinearVertical);
+    mTestAttachment.reset(
+        new juce::AudioProcessorValueTreeState::SliderAttachment(processorRef.getVTSParameters(), "test", testSlider));
+    addAndMakeVisible(testSlider);
 }
 
 BlackLoungeAudioProcessorEditor::~BlackLoungeAudioProcessorEditor()
 {
+    thresholdLabel.setLookAndFeel(nullptr);
+    gainLabel.setLookAndFeel(nullptr);
+    volumeLabel.setLookAndFeel(nullptr);
+    gainSlider.setLookAndFeel(nullptr);
+    volumeSlider.setLookAndFeel(nullptr);
+    thresholdSlider.setLookAndFeel(nullptr);
 }
 
 //==============================================================================
@@ -99,5 +113,7 @@ void BlackLoungeAudioProcessorEditor::resized()
     // thresholdSlider.setBounds(bounds.reduced(50));
 
     button.setBounds(10, getHeight() - 70, 60, 60);
+    testSlider.setBounds(getWidth() - 270, getHeight() - 270, 140, 100);
+
     // audioSetupComp->setBounds(r.removeFromTop(proportionOfHeight(0.65f)));
 }

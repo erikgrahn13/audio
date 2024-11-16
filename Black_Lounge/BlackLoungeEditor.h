@@ -5,7 +5,6 @@
 #include "CustomLookAndFeel/CustomStandaloneFilterWindow.h"
 #include "CustomLookAndFeel/DeathMetalLookAndFeel.h"
 #include "CustomLookAndFeel/FontWebLookAndFeel.h"
-#include "SettingsView.h"
 #include <JuceHeader.h>
 
 //==============================================================================
@@ -24,6 +23,7 @@ class BlackLoungeAudioProcessorEditor final : public juce::AudioProcessorEditor
     // access the processor object that created it.
     BlackLoungeAudioProcessor &processorRef;
     juce::TextButton button;
+    juce::TextButton analyzeButton;
     juce::Label volumeLabel;
     juce::Slider volumeSlider;
     juce::Label thresholdLabel;
@@ -32,13 +32,16 @@ class BlackLoungeAudioProcessorEditor final : public juce::AudioProcessorEditor
     juce::Slider gainSlider;
     juce::TabbedComponent mainScreens{juce::TabbedButtonBar::TabsAtBottom};
     AmpView ampView;
-    SettingsView settingsView;
     FontWebLookAndFeel fontWebLookAndFeel;
     DeathMetalLookAndFeel fontDeathMetalLookAndFeel;
 
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> mVolumeAttachment;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> mThresholdAttachment;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> mGainAttachment;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> mAnalyzeAttachment;
+
+    juce::Slider testSlider;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> mTestAttachment;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(BlackLoungeAudioProcessorEditor)
 };
