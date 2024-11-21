@@ -115,7 +115,7 @@ target_link_libraries(${PROJECT_NAME}
         # AudioPluginData           # If we'd created a binary data target, we'd link to it here
         juce::juce_audio_utils
         nam_dependency
-        # NoiseGate
+        NoiseReduction
         BlackLoungeAmp
         juce::juce_dsp
         #juce::juce_audio_processors
@@ -133,6 +133,9 @@ if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
     NOMINMAX WIN32_LEAN_AND_MEAN)
 endif()
 
+if(JUCE_BUILD_EXTRAS)
+    add_dependencies(${PROJECT_NAME} AudioPluginHost AudioFilePlayer_VST3)
+endif()
 # target_include_directories(${PROJECT_NAME}
 #     PRIVATE
 #     ${asiosdk_SOURCE_DIR}/common
