@@ -1,6 +1,5 @@
 #pragma once
 
-#include "AmpView.h"
 #include "BlackLoungeProcessor.h"
 #include "CustomLookAndFeel/CustomStandaloneFilterWindow.h"
 #include "CustomLookAndFeel/DeathMetalLookAndFeel.h"
@@ -31,7 +30,6 @@ class BlackLoungeAudioProcessorEditor final : public juce::AudioProcessorEditor
     juce::Label gainLabel;
     juce::Slider gainSlider;
     juce::TabbedComponent mainScreens{juce::TabbedButtonBar::TabsAtBottom};
-    AmpView ampView;
     FontWebLookAndFeel fontWebLookAndFeel;
     DeathMetalLookAndFeel fontDeathMetalLookAndFeel;
 

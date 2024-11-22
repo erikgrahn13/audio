@@ -113,8 +113,8 @@ void BlackLoungeAudioProcessor::prepareToPlay(double sampleRate, int samplesPerB
     bufferFilled = false;
 
     juce::dsp::ProcessSpec spec;
-    spec.maximumBlockSize = samplesPerBlock;
-    spec.numChannels = getTotalNumInputChannels();
+    spec.maximumBlockSize = static_cast<juce::uint32>(samplesPerBlock);
+    spec.numChannels = static_cast<juce::uint32>(getTotalNumInputChannels());
     spec.sampleRate = sampleRate;
     mNoiseReduction.prepare(spec);
 }

@@ -4,7 +4,7 @@
 Amp::Amp(const char *ampData, const int ampDataSize) : mAmpData(ampData), mAmpDataSize(ampDataSize)
 {
 
-    std::string json_str(reinterpret_cast<const char *>(mAmpData), mAmpDataSize);
+    std::string json_str(reinterpret_cast<const char *>(mAmpData), static_cast<size_t>(mAmpDataSize));
 
     auto j = nlohmann::json::parse(json_str);
     nam::verify_config_version(j["version"]);

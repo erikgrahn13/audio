@@ -41,12 +41,12 @@ class DeathMetalLookAndFeel : public juce::LookAndFeel_V4
         button.setColour(juce::TextButton::ColourIds::buttonOnColourId, juce::Colours::black);
     }
 
-    void drawLinearSlider(Graphics &g, int x, int y, int width, int height, float sliderPos, float minSliderPos,
-                          float maxSliderPos, Slider::SliderStyle style, Slider &slider) override
+    void drawLinearSlider(juce::Graphics &g, int x, int y, int width, int height, float sliderPos, float minSliderPos,
+                          float maxSliderPos, juce::Slider::SliderStyle style, juce::Slider &slider) override
     {
         if (slider.isBar())
         {
-            g.setColour(slider.findColour(Slider::trackColourId));
+            g.setColour(slider.findColour(juce::Slider::trackColourId));
             g.fillRect(slider.isHorizontal() ? juce::Rectangle<float>(static_cast<float>(x), (float)y + 0.5f,
                                                                       sliderPos - (float)x, (float)height - 1.0f)
                                              : juce::Rectangle<float>((float)x + 0.5f, sliderPos, (float)width - 1.0f,
@@ -56,27 +56,28 @@ class DeathMetalLookAndFeel : public juce::LookAndFeel_V4
         }
         else
         {
-            auto isTwoVal =
-                (style == Slider::SliderStyle::TwoValueVertical || style == Slider::SliderStyle::TwoValueHorizontal);
-            auto isThreeVal = (style == Slider::SliderStyle::ThreeValueVertical ||
-                               style == Slider::SliderStyle::ThreeValueHorizontal);
+            auto isTwoVal = (style == juce::Slider::SliderStyle::TwoValueVertical ||
+                             style == juce::Slider::SliderStyle::TwoValueHorizontal);
+            auto isThreeVal = (style == juce::Slider::SliderStyle::ThreeValueVertical ||
+                               style == juce::Slider::SliderStyle::ThreeValueHorizontal);
 
-            auto trackWidth = jmin(6.0f, slider.isHorizontal() ? (float)height * 0.25f : (float)width * 0.25f);
+            auto trackWidth = juce::jmin(6.0f, slider.isHorizontal() ? (float)height * 0.25f : (float)width * 0.25f);
 
-            Point<float> startPoint(slider.isHorizontal() ? (float)x : (float)x + (float)width * 0.5f,
-                                    slider.isHorizontal() ? (float)y + (float)height * 0.5f : (float)(height + y));
+            juce::Point<float> startPoint(slider.isHorizontal() ? (float)x : (float)x + (float)width * 0.5f,
+                                          slider.isHorizontal() ? (float)y + (float)height * 0.5f
+                                                                : (float)(height + y));
 
-            Point<float> endPoint(slider.isHorizontal() ? (float)(width + x) : startPoint.x,
-                                  slider.isHorizontal() ? startPoint.y : (float)y);
+            juce::Point<float> endPoint(slider.isHorizontal() ? (float)(width + x) : startPoint.x,
+                                        slider.isHorizontal() ? startPoint.y : (float)y);
 
-            Path backgroundTrack;
+            juce::Path backgroundTrack;
             backgroundTrack.startNewSubPath(startPoint);
             backgroundTrack.lineTo(endPoint);
-            g.setColour(slider.findColour(Slider::backgroundColourId));
-            g.strokePath(backgroundTrack, {trackWidth, PathStrokeType::curved, PathStrokeType::rounded});
+            g.setColour(slider.findColour(juce::Slider::backgroundColourId));
+            g.strokePath(backgroundTrack, {trackWidth, juce::PathStrokeType::curved, juce::PathStrokeType::rounded});
 
-            Path valueTrack;
-            Point<float> minPoint, maxPoint, thumbPoint;
+            juce::Path valueTrack;
+            juce::Point<float> minPoint, maxPoint, thumbPoint;
 
             if (isTwoVal || isThreeVal)
             {
@@ -103,8 +104,8 @@ class DeathMetalLookAndFeel : public juce::LookAndFeel_V4
 
             valueTrack.startNewSubPath(minPoint);
             valueTrack.lineTo(isThreeVal ? thumbPoint : maxPoint);
-            g.setColour(slider.findColour(Slider::trackColourId));
-            g.strokePath(valueTrack, {trackWidth, PathStrokeType::curved, PathStrokeType::rounded});
+            g.setColour(slider.findColour(juce::Slider::trackColourId));
+            g.strokePath(valueTrack, {trackWidth, juce::PathStrokeType::curved, juce::PathStrokeType::rounded});
 
             if (!isTwoVal)
             {
@@ -159,24 +160,25 @@ class DeathMetalLookAndFeel : public juce::LookAndFeel_V4
 
             if (isTwoVal || isThreeVal)
             {
-                auto sr = jmin(trackWidth, (slider.isHorizontal() ? (float)height : (float)width) * 0.4f);
-                auto pointerColour = slider.findColour(Slider::thumbColourId);
+                auto sr = juce::jmin(trackWidth, (slider.isHorizontal() ? (float)height : (float)width) * 0.4f);
+                auto pointerColour = slider.findColour(juce::Slider::thumbColourId);
 
                 if (slider.isHorizontal())
                 {
-                    drawPointer(g, minSliderPos - sr, jmax(0.0f, (float)y + (float)height * 0.5f - trackWidth * 2.0f),
+                    drawPointer(g, minSliderPos - sr,
+                                juce::jmax(0.0f, (float)y + (float)height * 0.5f - trackWidth * 2.0f),
                                 trackWidth * 2.0f, pointerColour, 2);
 
                     drawPointer(g, maxSliderPos - trackWidth,
-                                jmin((float)(y + height) - trackWidth * 2.0f, (float)y + (float)height * 0.5f),
+                                juce::jmin((float)(y + height) - trackWidth * 2.0f, (float)y + (float)height * 0.5f),
                                 trackWidth * 2.0f, pointerColour, 4);
                 }
                 else
                 {
-                    drawPointer(g, jmax(0.0f, (float)x + (float)width * 0.5f - trackWidth * 2.0f),
+                    drawPointer(g, juce::jmax(0.0f, (float)x + (float)width * 0.5f - trackWidth * 2.0f),
                                 minSliderPos - trackWidth, trackWidth * 2.0f, pointerColour, 1);
 
-                    drawPointer(g, jmin((float)(x + width) - trackWidth * 2.0f, (float)x + (float)width * 0.5f),
+                    drawPointer(g, juce::jmin((float)(x + width) - trackWidth * 2.0f, (float)x + (float)width * 0.5f),
                                 maxSliderPos - sr, trackWidth * 2.0f, pointerColour, 3);
                 }
             }
@@ -209,12 +211,13 @@ class DeathMetalLookAndFeel : public juce::LookAndFeel_V4
         // auto arcThickness = 4.0;
         float adjustedRadius = radius - (lineW / 2.0f);
         // Draw the grey arc
-        Path backgroundArc;
+        juce::Path backgroundArc;
         backgroundArc.addCentredArc(centreX, centreY, adjustedRadius, adjustedRadius, 0.0f, rotaryStartAngle,
                                     rotaryEndAngle, true);
 
         g.setColour(juce::Colours::grey.darker(1.0));
-        g.strokePath(backgroundArc, PathStrokeType(lineW, PathStrokeType::curved, PathStrokeType::rounded));
+        g.strokePath(backgroundArc,
+                     juce::PathStrokeType(lineW, juce::PathStrokeType::curved, juce::PathStrokeType::rounded));
 
         // Draw the white arc indicating the value
         juce::Path arcPath;
@@ -327,15 +330,15 @@ class DeathMetalLookAndFeel : public juce::LookAndFeel_V4
         const float textEdgeGap = 4.0f;
         auto cs = 5.0f;
 
-        Path p;
+        juce::Path p;
         auto x = indent;
         auto y = deathMetalFont.getAscent() - 3.0f;
-        auto w = jmax(0.0f, (float)width - x * 2.0f);
-        auto h = jmax(0.0f, (float)height - y - indent);
-        cs = jmin(cs, w * 0.5f, h * 0.5f);
+        auto w = juce::jmax(0.0f, (float)width - x * 2.0f);
+        auto h = juce::jmax(0.0f, (float)height - y - indent);
+        cs = juce::jmin(cs, w * 0.5f, h * 0.5f);
         auto cs2 = 2.0f * cs;
 
-        auto textW = text.isEmpty() ? 0 : jlimit(0.0f, jmax(0.0f, w - cs2 - textEdgeGap * 2), [&]() {
+        auto textW = text.isEmpty() ? 0 : juce::jlimit(0.0f, juce::jmax(0.0f, w - cs2 - textEdgeGap * 2), [&]() {
             // Create a TextLayout and calculate the width
             juce::TextLayout layout;
             juce::AttributedString attributedText;
@@ -346,35 +349,37 @@ class DeathMetalLookAndFeel : public juce::LookAndFeel_V4
         }());
         auto textX = cs + textEdgeGap;
 
-        if (position.testFlags(Justification::horizontallyCentred))
+        if (position.testFlags(juce::Justification::horizontallyCentred))
             textX = cs + (w - cs2 - textW) * 0.5f;
-        else if (position.testFlags(Justification::right))
+        else if (position.testFlags(juce::Justification::right))
             textX = w - cs - textW - textEdgeGap;
 
         p.startNewSubPath(x + textX + textW, y);
         p.lineTo(x + w - cs, y);
 
-        p.addArc(x + w - cs2, y, cs2, cs2, 0, MathConstants<float>::halfPi);
+        p.addArc(x + w - cs2, y, cs2, cs2, 0, juce::MathConstants<float>::halfPi);
         p.lineTo(x + w, y + h - cs);
 
-        p.addArc(x + w - cs2, y + h - cs2, cs2, cs2, MathConstants<float>::halfPi, MathConstants<float>::pi);
+        p.addArc(x + w - cs2, y + h - cs2, cs2, cs2, juce::MathConstants<float>::halfPi,
+                 juce::MathConstants<float>::pi);
         p.lineTo(x + cs, y + h);
 
-        p.addArc(x, y + h - cs2, cs2, cs2, MathConstants<float>::pi, MathConstants<float>::pi * 1.5f);
+        p.addArc(x, y + h - cs2, cs2, cs2, juce::MathConstants<float>::pi, juce::MathConstants<float>::pi * 1.5f);
         p.lineTo(x, y + cs);
 
-        p.addArc(x, y, cs2, cs2, MathConstants<float>::pi * 1.5f, MathConstants<float>::twoPi);
+        p.addArc(x, y, cs2, cs2, juce::MathConstants<float>::pi * 1.5f, juce::MathConstants<float>::twoPi);
         p.lineTo(x + textX, y);
 
         auto alpha = group.isEnabled() ? 1.0f : 0.5f;
 
-        g.setColour(group.findColour(GroupComponent::outlineColourId).withMultipliedAlpha(alpha));
+        g.setColour(group.findColour(juce::GroupComponent::outlineColourId).withMultipliedAlpha(alpha));
 
-        g.strokePath(p, PathStrokeType(2.0f));
+        g.strokePath(p, juce::PathStrokeType(2.0f));
 
-        g.setColour(group.findColour(GroupComponent::textColourId).withMultipliedAlpha(alpha));
+        g.setColour(group.findColour(juce::GroupComponent::textColourId).withMultipliedAlpha(alpha));
         g.setFont(deathMetalFont);
-        g.drawText(text, roundToInt(x + textX), 0, roundToInt(textW), roundToInt(textH), Justification::centred, true);
+        g.drawText(text, juce::roundToInt(x + textX), 0, juce::roundToInt(textW), juce::roundToInt(textH),
+                   juce::Justification::centred, true);
     }
 
     void drawPopupMenuBackground(juce::Graphics &g, int width, int height) override

@@ -34,9 +34,9 @@
 #include <juce_audio_plugin_client/detail/juce_CheckSettingMacros.h>
 #include <juce_core/system/juce_TargetPlatform.h>
 
-#include <juce_audio_plugin_client/detail/juce_IncludeModuleHeaders.h>
-#include <juce_audio_plugin_client/detail/juce_IncludeSystemHeaders.h>
-#include <juce_audio_plugin_client/detail/juce_PluginUtilities.h>
+// #include <juce_audio_plugin_client/detail/juce_IncludeModuleHeaders.h>
+// #include <juce_audio_plugin_client/detail/juce_IncludeSystemHeaders.h>
+// #include <juce_audio_plugin_client/detail/juce_PluginUtilities.h>
 #include <juce_gui_basics/native/juce_WindowsHooks_windows.h>
 
 #include <juce_audio_devices/juce_audio_devices.h>
