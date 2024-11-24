@@ -9,7 +9,9 @@ class NoiseReduction
     ~NoiseReduction();
     void prepare(const juce::dsp::ProcessSpec &spec);
     void process(juce::AudioBuffer<float> &buffer);
+    void setThreshold(float threshold);
 
+  private:
     juce::dsp::LinkwitzRileyFilter<float> mLowBandLowPass;
     juce::dsp::LinkwitzRileyFilter<float> mLowBandAllPass1;
     juce::dsp::LinkwitzRileyFilter<float> mLowBandAllPass2;
@@ -27,7 +29,7 @@ class NoiseReduction
     juce::dsp::LinkwitzRileyFilter<float> mHighBandAllPass2;
 
     std::array<juce::AudioBuffer<float>, 4> filterBuffers;
-    juce::dsp::NoiseGate<float> mNoiseGate;
-
-  private:
+    juce::dsp::NoiseGate<float> mLowBandGate;
+    juce::dsp::NoiseGate<float> mMidBandGate;
+    juce::dsp::NoiseGate<float> mHighBandGate;
 };

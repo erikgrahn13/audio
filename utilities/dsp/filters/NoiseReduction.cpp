@@ -64,7 +64,9 @@ void NoiseReduction::prepare(const juce::dsp::ProcessSpec &spec)
         buffer.setSize(spec.numChannels, spec.maximumBlockSize);
     }
 
-    mNoiseGate.prepare(spec);
+    mLowBandGate.prepare(spec);
+    mMidBandGate.prepare(spec);
+    mHighBandGate.prepare(spec);
 }
 
 void NoiseReduction::process(juce::AudioBuffer<float> &buffer)
@@ -85,10 +87,12 @@ void NoiseReduction::process(juce::AudioBuffer<float> &buffer)
 
     mLowBandLowPass.process(context1);
     mLowBandAllPass1.process(context1);
+    mLowBandGate.process(context1);
     // mLowBandAllPass2.process(context1);
 
     mMid1BandLowPass.process(context2);
     mMid1BandHighPass.process(context2);
+    mMidBandGate.process(context2);
     // mMid1BandAllPass.process(context2);
 
     // mMid2BandLowPass.process(context3);
@@ -97,6 +101,7 @@ void NoiseReduction::process(juce::AudioBuffer<float> &buffer)
 
     mHighBandHighPass.process(context4);
     mHighBandAllPass1.process(context4);
+    mHighBandGate.process(context4);
     // mHighBandAllPass2.process(context4);
 
     buffer.clear(); // Clear the original buffer to avoid accumulation
@@ -109,4 +114,11 @@ void NoiseReduction::process(juce::AudioBuffer<float> &buffer)
         buffer.addFrom(i, 0, filterBuffers[3], i, 0, buffer.getNumSamples()); // Add high-band
         // buffer.applyGain(i, 0, buffer.getNumSamples(), -1.0f);
     }
+}
+
+void NoiseReduction::setThreshold(float threshold)
+{
+    mLowBandGate.setThreshold(threshold);
+    mMidBandGate.setThreshold(threshold);
+    mHighBandGate.setThreshold(threshold);
 }
