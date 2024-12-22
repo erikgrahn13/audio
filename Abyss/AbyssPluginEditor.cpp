@@ -3,16 +3,25 @@
 
 //==============================================================================
 AbyssAudioProcessorEditor::AbyssAudioProcessorEditor(AbyssAudioProcessor &p)
-    : AudioProcessorEditor(&p), processorRef(p),
-      webBrowserComponent{juce::WebBrowserComponent::Options{}.withResourceProvider(
-          [this](const auto &url) { return getResource(url); }, juce::URL("http://localhost:5000").getOrigin())}
+    : AudioProcessorEditor(&p), processorRef(p), webBrowserComponent{juce::WebBrowserComponent::Options{}.withBackend(
+                                                     juce::WebBrowserComponent::Options::Backend::defaultBackend)}
 {
     juce::ignoreUnused(processorRef);
-    // Make sure that before the constructor has finished, you've set the
-    // editor's size to whatever you need it to be.
+    juce::File editorSourceFile = juce::File(__FILE__);
+    juce::File uiDirectory = editorSourceFile.getParentDirectory().getChildFile("ui");
+    auto indexFile = uiDirectory.getChildFile("index.html");
+
+    if (indexFile.existsAsFile())
+    {
+        webBrowserComponent.goToURL("http://127.0.0.1:5500/Abyss/ui/index.html");
+    }
+    else
+    {
+        juce::Logger::writeToLog("UI file not found: " + indexFile.getFullPathName());
+        webBrowserComponent.goToURL("data:text/html,<html><body><h1>UI File Not Found</h1></body></html>");
+    }
 
     addAndMakeVisible(webBrowserComponent);
-    webBrowserComponent.goToURL(webBrowserComponent.getResourceProviderRoot());
 
     setSize(400, 300);
 }
@@ -39,14 +48,4 @@ void AbyssAudioProcessorEditor::resized()
     auto bounds = getBounds();
 
     webBrowserComponent.setBounds(bounds);
-}
-
-std::optional<juce::WebBrowserComponent::Resource> AbyssAudioProcessorEditor::getResource(const juce::String &url)
-{
-    const auto urlToRetrive = url == "/" ? juce::String{"index.html"} : url.fromFirstOccurrenceOf("/", false, false);
-
-    // std::cout << "erik: " << url << std::endl;
-    DBG("erik:" << url);
-
-    return std::nullopt;
 }
