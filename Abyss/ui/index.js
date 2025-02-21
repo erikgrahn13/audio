@@ -5,28 +5,39 @@ const canvas = document.querySelector("#canvas");
 const ctx = canvas.getContext("2d");
 
 ctx.strokeStyle = "black";
+
+let radius = canvas.height * 0.5 - 4;
+let centerX = canvas.width * 0.5;
+let centerY = canvas.height * 0.5;
+let endAngleRadians = Math.PI * 0.2;
+let startAngleRadians = Math.PI * 0.8;
+
+let value = startAngleRadians + 2.2 * (endAngleRadians - startAngleRadians);
+
 ctx.beginPath();
-ctx.lineWidth = 2;
+ctx.arc(centerX, centerY, radius, 0, Math.PI * 2, true);
+ctx.fill();
+
+let lineW = radius * 0.135;
+ctx.lineWidth = lineW;
+let adjustedRadius = radius - lineW * 0.5;
+
+ctx.strokeStyle = "grey";
+ctx.beginPath();
 ctx.arc(
-  canvas.width / 2,
-  canvas.height / 2,
-  canvas.height / 2,
-  0,
-  Math.PI * 2,
-  true
+  centerX,
+  centerY,
+  adjustedRadius,
+  startAngleRadians,
+  endAngleRadians,
+  false
 );
 ctx.stroke();
-// ctx.moveTo(110, 75)
 
-// canvas.addEventListener("mouseover", (event) => {
-//   ctx.fillStyle = "green";
-//   ctx.fillRect(10, 10, 200, 100);
-// });
-
-// canvas.addEventListener("mouseout", (event) => {
-//   ctx.fillStyle = "red";
-//   ctx.fillRect(10, 10, 200, 100);
-// });
+ctx.strokeStyle = "red";
+ctx.beginPath();
+ctx.arc(centerX, centerY, adjustedRadius, startAngleRadians, value, false);
+ctx.stroke();
 
 myButton.addEventListener("click", (e) => {
   console.log("Button clicked");
