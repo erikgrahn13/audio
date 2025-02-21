@@ -1,5 +1,9 @@
 body {
     background-color: black;
-    color: white;
+    color: blue;
     text-align: center;
+}
+
+#canvas {
+    background-color: yellow;
 }
