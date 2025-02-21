@@ -3,8 +3,12 @@
 
 //==============================================================================
 AbyssAudioProcessorEditor::AbyssAudioProcessorEditor(AbyssAudioProcessor &p)
-    : AudioProcessorEditor(&p), processorRef(p), webBrowserComponent{juce::WebBrowserComponent::Options{}.withBackend(
-                                                     juce::WebBrowserComponent::Options::Backend::defaultBackend)}
+    : AudioProcessorEditor(&p), processorRef(p),
+      webBrowserComponent{
+          juce::WebBrowserComponent::Options{}
+              .withBackend(juce::WebBrowserComponent::Options::Backend::webview2)
+              .withWinWebView2Options(juce::WebBrowserComponent::Options::WinWebView2{}.withUserDataFolder(
+                  juce::File::getSpecialLocation(juce::File::SpecialLocationType::tempDirectory)))}
 {
     juce::ignoreUnused(processorRef);
     juce::File editorSourceFile = juce::File(__FILE__);
@@ -31,15 +35,16 @@ AbyssAudioProcessorEditor::~AbyssAudioProcessorEditor()
 }
 
 //==============================================================================
-void AbyssAudioProcessorEditor::paint(juce::Graphics &g)
-{
-    // (Our component is opaque, so we must completely fill the background with a solid colour)
-    g.fillAll(getLookAndFeel().findColour(juce::ResizableWindow::backgroundColourId));
+// void AbyssAudioProcessorEditor::paint(juce::Graphics &g)
+// {
+//     std::ignore = g;
+//     // (Our component is opaque, so we must completely fill the background with a solid colour)
+//     // g.fillAll(getLookAndFeel().findColour(juce::ResizableWindow::backgroundColourId));
 
-    g.setColour(juce::Colours::white);
-    g.setFont(15.0f);
-    g.drawFittedText("Hello World!", getLocalBounds(), juce::Justification::centred, 1);
-}
+//     // g.setColour(juce::Colours::white);
+//     // g.setFont(15.0f);
+//     // g.drawFittedText("Hello World!", getLocalBounds(), juce::Justification::centred, 1);
+// }
 
 void AbyssAudioProcessorEditor::resized()
 {

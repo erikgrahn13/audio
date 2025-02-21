@@ -29,7 +29,5 @@
   },
   "editor.formatOnSave": true,
   "C_Cpp.clang_format_fallbackStyle": "Microsoft", // C++ core guidelines
-  "cmake.debugConfig": {
-    "MIMode": "lldb"
-  }
+  "liveServer.settings.NoBrowser": true
 }
