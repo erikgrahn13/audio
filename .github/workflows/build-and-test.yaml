@@ -45,15 +45,22 @@ jobs:
         with:
           msbuild-architecture: x64
 
-      - name: Setup MSVC Environment
+      - name: Setup MSVC Environment (Auto-detect)
         if: matrix.os == 'windows-latest'
+        shell: cmd
         run: |
-          echo "CC=C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Tools/MSVC/14.42.34433/bin/Hostx64/x64/cl.exe" >> $GITHUB_ENV
-          echo "CXX=C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Tools/MSVC/14.42.34433/bin/Hostx64/x64/cl.exe" >> $GITHUB_ENV
+          for /f "usebackq tokens=*" %%i in (`vswhere -latest -property installationPath`) do set VS_PATH=%%i
+          call "%VS_PATH%\VC\Auxiliary\Build\vcvars64.bat"
 
-        # shell: cmd
-        # run: |
-        #   call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+      # - name: Setup MSVC Environment
+      #   if: matrix.os == 'windows-latest'
+      #   run: |
+      #     echo "CC=C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Tools/MSVC/14.42.34433/bin/Hostx64/x64/cl.exe" >> $GITHUB_ENV
+      #     echo "CXX=C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Tools/MSVC/14.42.34433/bin/Hostx64/x64/cl.exe" >> $GITHUB_ENV
+
+      # shell: cmd
+      # run: |
+      #   call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
 
       # - name: Set CMake default generator
       #   if: matrix.os == 'macos-latest'
