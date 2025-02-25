@@ -46,6 +46,7 @@ jobs:
           msbuild-architecture: x64
 
       - name: Setup MSVC Environment
+        if: matrix.os == 'windows-latest'
         shell: cmd
         run: |
           call "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat"
