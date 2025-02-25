@@ -17,6 +17,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Install Ninja
+        uses: seanmiddleditch/gha-setup-ninja@master
+
       - name: Set up Xcode
         if: matrix.os == 'macos-latest'
         uses: maxim-lobanov/setup-xcode@v1
@@ -36,9 +39,33 @@ jobs:
           Register-PackageSource -ProviderName NuGet -Name nugetRepository -Location https://www.nuget.org/api/v2 -Force
           Install-Package Microsoft.Web.WebView2 -Scope CurrentUser -RequiredVersion 1.0.1901.177 -Source nugetRepository -Force
 
-      - name: Set CMake default generator
-        if: matrix.os == 'macos-latest'
-        run: echo "CMAKE_GENERATOR=Xcode" >> $GITHUB_ENV
+      - name: Add msbuild to PATH
+        if: matrix.os == 'windows-latest'
+        uses: microsoft/setup-msbuild@v2
+        with:
+          msbuild-architecture: x64
+
+      - name: Setup MSVC Environment and Export Variables
+        if: matrix.os == 'windows-latest'
+        shell: cmd
+        run: |
+          for /f "usebackq tokens=*" %%i in (`vswhere -latest -property installationPath`) do set VS_PATH=%%i
+          call "%VS_PATH%\VC\Auxiliary\Build\vcvars64.bat"
+          set >> %GITHUB_ENV%
+
+      # - name: Setup MSVC Environment
+      #   if: matrix.os == 'windows-latest'
+      #   run: |
+      #     echo "CC=C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Tools/MSVC/14.42.34433/bin/Hostx64/x64/cl.exe" >> $GITHUB_ENV
+      #     echo "CXX=C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Tools/MSVC/14.42.34433/bin/Hostx64/x64/cl.exe" >> $GITHUB_ENV
+
+      # shell: cmd
+      # run: |
+      #   call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+
+      # - name: Set CMake default generator
+      #   if: matrix.os == 'macos-latest'
+      #   run: echo "CMAKE_GENERATOR=Xcode" >> $GITHUB_ENV
 
       - name: Build
         run: cmake --workflow --preset Release
@@ -91,6 +118,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Install Ninja
+        uses: seanmiddleditch/gha-setup-ninja@master
 
       - name: Generate documentation
         run: cmake --workflow --preset Docs
