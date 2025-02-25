@@ -95,5 +95,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Install Ninja
+        uses: seanmiddleditch/gha-setup-ninja@master
+
       - name: Generate documentation
         run: cmake --workflow --preset Docs
