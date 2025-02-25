@@ -45,12 +45,13 @@ jobs:
         with:
           msbuild-architecture: x64
 
-      - name: Setup MSVC Environment (Auto-detect)
+      - name: Setup MSVC Environment and Export Variables
         if: matrix.os == 'windows-latest'
         shell: cmd
         run: |
           for /f "usebackq tokens=*" %%i in (`vswhere -latest -property installationPath`) do set VS_PATH=%%i
           call "%VS_PATH%\VC\Auxiliary\Build\vcvars64.bat"
+          set >> %GITHUB_ENV%
 
       # - name: Setup MSVC Environment
       #   if: matrix.os == 'windows-latest'
