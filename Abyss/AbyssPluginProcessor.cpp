@@ -10,7 +10,8 @@ AbyssAudioProcessor::AbyssAudioProcessor()
 #endif
                          .withOutput("Output", juce::AudioChannelSet::stereo(), true)
 #endif
-      )
+                         ),
+      mParameters(*this, nullptr, juce::Identifier("Parameters"), createParameters())
 {
 }
 
@@ -111,7 +112,7 @@ bool AbyssAudioProcessor::isBusesLayoutSupported(const BusesLayout &layouts) con
         layouts.getMainOutputChannelSet() != juce::AudioChannelSet::stereo())
         return false;
 
-        // This checks if the input layout matches the output layout
+    // This checks if the input layout matches the output layout
 #if !JucePlugin_IsSynth
     if (layouts.getMainOutputChannelSet() != layouts.getMainInputChannelSet())
         return false;
@@ -135,6 +136,10 @@ void AbyssAudioProcessor::processBlock(juce::AudioBuffer<float> &buffer, juce::M
     // This is here to avoid people getting screaming feedback
     // when they first compile a plugin, but obviously you don't need to keep
     // this code if your algorithm always overwrites all the output channels.
+
+    auto *param = mParameters.getParameter("gain");
+    auto value = param->getValue();
+
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear(i, 0, buffer.getNumSamples());
 
@@ -144,6 +149,7 @@ void AbyssAudioProcessor::processBlock(juce::AudioBuffer<float> &buffer, juce::M
     // the samples and the outer loop is handling the channels.
     // Alternatively, you can process the samples with the channels
     // interleaved by keeping the same state.
+    buffer.applyGain(value);
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
         auto *channelData = buffer.getWritePointer(channel);
@@ -177,6 +183,15 @@ void AbyssAudioProcessor::setStateInformation(const void *data, int sizeInBytes)
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
     juce::ignoreUnused(data, sizeInBytes);
+}
+
+juce::AudioProcessorValueTreeState::ParameterLayout AbyssAudioProcessor::createParameters()
+{
+    juce::AudioProcessorValueTreeState::ParameterLayout layout;
+
+    layout.add(std::make_unique<juce::AudioParameterFloat>("gain", "gain", -80.f, 0.f, -20.f));
+
+    return layout;
 }
 
 //==============================================================================

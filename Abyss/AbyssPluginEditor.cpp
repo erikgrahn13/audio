@@ -8,12 +8,16 @@ AbyssAudioProcessorEditor::AbyssAudioProcessorEditor(AbyssAudioProcessor &p)
           juce::WebBrowserComponent::Options{}
               .withBackend(juce::WebBrowserComponent::Options::Backend::webview2)
               .withWinWebView2Options(juce::WebBrowserComponent::Options::WinWebView2{}.withUserDataFolder(
-                  juce::File::getSpecialLocation(juce::File::SpecialLocationType::tempDirectory)))}
+                  juce::File::getSpecialLocation(juce::File::SpecialLocationType::tempDirectory)))
+              .withOptionsFrom(gainRelay)}
 {
     juce::ignoreUnused(processorRef);
     juce::File editorSourceFile = juce::File(__FILE__);
     juce::File uiDirectory = editorSourceFile.getParentDirectory().getChildFile("ui");
     auto indexFile = uiDirectory.getChildFile("index.html");
+
+    auto *gainParam = processorRef.mParameters.getParameter("gain");
+    gainWebAttachment = std::make_unique<juce::WebSliderParameterAttachment>(*gainParam, gainRelay, nullptr);
 
     if (indexFile.existsAsFile())
     {
