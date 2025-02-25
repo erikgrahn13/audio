@@ -1,37 +1,33 @@
 {
-    "cmake.useCMakePresets": "always",
-    "cmake.options.advanced": {
-
-        "testPreset": {
-            "statusBarVisibility": "hidden"
-        },
-        "buildPreset": {
-            "statusBarVisibility": "hidden"  
-        },
-        "cpack": {
-            "statusBarVisibility": "hidden"            
-        },
-        "packagePreset": {
-            "statusBarVisibility": "hidden"
-        },
-        "workflow": {
-            "statusBarVisibility": "hidden"   
-        },
-        "workflowPreset": {
-            "statusBarVisibility": "hidden"
-        }
+  "cmake.useCMakePresets": "always",
+  "cmake.options.advanced": {
+    "testPreset": {
+      "statusBarVisibility": "hidden"
     },
-    "cmake.preferredGenerators": [
-        "Xcode"
-    ],
-
-    "search.useIgnoreFiles": false,  // Disable respecting .gitignore
-    "search.exclude": {
-        "**/build": true,
-        "**/external": false
+    "buildPreset": {
+      "statusBarVisibility": "hidden"
     },
-    "editor.formatOnSave": true,
-    "C_Cpp.clang_format_fallbackStyle": "Microsoft", // C++ core guidelines
+    "cpack": {
+      "statusBarVisibility": "hidden"
+    },
+    "packagePreset": {
+      "statusBarVisibility": "hidden"
+    },
+    "workflow": {
+      "statusBarVisibility": "hidden"
+    },
+    "workflowPreset": {
+      "statusBarVisibility": "hidden"
+    }
+  },
+  "cmake.preferredGenerators": ["Xcode"],
 
-    
+  "search.useIgnoreFiles": false, // Disable respecting .gitignore
+  "search.exclude": {
+    "**/build": true,
+    "**/external": false
+  },
+  "editor.formatOnSave": true,
+  "C_Cpp.clang_format_fallbackStyle": "Microsoft", // C++ core guidelines
+  "liveServer.settings.NoBrowser": true
 }

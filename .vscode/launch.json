@@ -15,6 +15,18 @@
       "preLaunchTask": "CMake: build"
     },
     {
+      "name": "EQ (Linux)",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceRoot}/build/_deps/juce-build/extras/AudioPluginHost/AudioPluginHost_artefacts/Debug/AudioPluginHost",
+      "args": ["${workspaceRoot}/EQ/EQ.filtergraph"],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}",
+      "MIMode": "gdb",
+      "miDebuggerPath": "/usr/bin/gdb",
+      "preLaunchTask": "CMake: build"
+    },
+    {
       "name": "AudioPluginHost Mac",
       "type": "cppdbg",
       "request": "launch",
