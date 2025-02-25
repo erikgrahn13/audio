@@ -49,7 +49,7 @@ jobs:
         if: matrix.os == 'windows-latest'
         shell: cmd
         run: |
-          call "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat"
+          call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
 
       # - name: Set CMake default generator
       #   if: matrix.os == 'macos-latest'
