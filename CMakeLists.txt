@@ -2,11 +2,6 @@ cmake_minimum_required(VERSION 3.22)
 
 project(Audio VERSION 0.1)
 
-if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
-    set(CMAKE_C_COMPILER "cl.exe")
-    set(CMAKE_CXX_COMPILER "cl.exe")
-endif()
-
 enable_testing()
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
