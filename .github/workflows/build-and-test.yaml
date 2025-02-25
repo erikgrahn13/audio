@@ -17,6 +17,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Install Ninja
+        uses: seanmiddleditch/gha-setup-ninja@master
+
       - name: Set up Xcode
         if: matrix.os == 'macos-latest'
         uses: maxim-lobanov/setup-xcode@v1
@@ -36,9 +39,9 @@ jobs:
           Register-PackageSource -ProviderName NuGet -Name nugetRepository -Location https://www.nuget.org/api/v2 -Force
           Install-Package Microsoft.Web.WebView2 -Scope CurrentUser -RequiredVersion 1.0.1901.177 -Source nugetRepository -Force
 
-      - name: Set CMake default generator
-        if: matrix.os == 'macos-latest'
-        run: echo "CMAKE_GENERATOR=Xcode" >> $GITHUB_ENV
+      # - name: Set CMake default generator
+      #   if: matrix.os == 'macos-latest'
+      #   run: echo "CMAKE_GENERATOR=Xcode" >> $GITHUB_ENV
 
       - name: Build
         run: cmake --workflow --preset Release

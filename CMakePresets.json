@@ -10,18 +10,16 @@
     {
       "name": "default",
       "hidden": true,
-      "binaryDir": "${sourceDir}/build"
+      "binaryDir": "${sourceDir}/build",
+      "generator": "Ninja"
     },
     {
       "name": "Debug",
       "inherits": "default",
       "displayName": "Debug",
-      "generator": "Ninja",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
-        "JUCE_BUILD_EXTRAS": "ON",
-        "CMAKE_C_COMPILER": "cl",
-        "CMAKE_CXX_COMPILER": "cl"
+        "JUCE_BUILD_EXTRAS": "ON"
       }
     },
     {
@@ -48,8 +46,7 @@
     {
       "name": "Release",
       "configurePreset": "Release",
-      "configuration": "Release",
-      "jobs": 4
+      "configuration": "Release"
     },
     {
       "name": "Docs",
