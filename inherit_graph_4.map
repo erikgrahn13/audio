@@ -1,16 +1,20 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" title=" " alt="" coords="24,5,181,31"/>
-<area shape="rect" id="Node000001" href="$classAudioPluginAudioProcessor.html" title=" " alt="" coords="248,5,447,31"/>
-<area shape="poly" id="edge4_Node000000_Node000001" title=" " alt="" coords="195,15,248,15,248,21,195,21"/>
-<area shape="rect" id="Node000006" href="$classSynthAudioProcessor.html" title=" " alt="" coords="268,55,427,80"/>
-<area shape="poly" id="edge5_Node000000_Node000006" title=" " alt="" coords="180,31,284,52,283,57,179,36"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="5,144,200,169"/>
-<area shape="rect" id="Node000003" href="$classAudioPluginAudioProcessorEditor.html" title=" " alt="" coords="248,105,447,145"/>
-<area shape="poly" id="edge6_Node000004_Node000003" title=" " alt="" coords="213,140,247,135,248,140,214,145"/>
-<area shape="rect" id="Node000005" href="$classSynthAudioProcessorEditor.html" title=" " alt="" coords="249,169,446,195"/>
-<area shape="poly" id="edge7_Node000004_Node000005" title=" " alt="" coords="214,166,249,169,248,174,214,171"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="6,55,199,95"/>
-<area shape="poly" id="edge8_Node000002_Node000001" title=" " alt="" coords="201,50,292,28,293,33,202,55"/>
-<area shape="poly" id="edge10_Node000002_Node000006" title=" " alt="" coords="213,69,268,67,268,73,213,74"/>
-<area shape="poly" id="edge9_Node000002_Node000003" title=" " alt="" coords="213,95,248,102,247,107,212,100"/>
+<area shape="rect" id="Node000000" title=" " alt="" coords="24,51,181,76"/>
+<area shape="rect" id="Node000001" href="$classAbyssAudioProcessor.html" title=" " alt="" coords="267,5,428,31"/>
+<area shape="poly" id="edge4_Node000000_Node000001" title=" " alt="" coords="185,46,278,28,279,33,186,51"/>
+<area shape="rect" id="Node000002" href="$classAudioPluginAudioProcessor.html" title=" " alt="" coords="248,55,447,80"/>
+<area shape="poly" id="edge5_Node000000_Node000002" title=" " alt="" coords="195,62,248,63,248,68,195,68"/>
+<area shape="rect" id="Node000008" href="$classSynthAudioProcessor.html" title=" " alt="" coords="268,104,427,129"/>
+<area shape="poly" id="edge6_Node000000_Node000008" title=" " alt="" coords="176,76,289,101,288,107,175,82"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="5,219,200,244"/>
+<area shape="rect" id="Node000006" href="$classAbyssAudioProcessorEditor.html" title=" " alt="" coords="248,219,447,244"/>
+<area shape="poly" id="edge7_Node000005_Node000006" title=" " alt="" coords="214,229,248,229,248,234,214,234"/>
+<area shape="rect" id="Node000004" href="$classAudioPluginAudioProcessorEditor.html" title=" " alt="" coords="248,154,447,194"/>
+<area shape="poly" id="edge8_Node000005_Node000004" title=" " alt="" coords="170,213,261,191,262,197,172,218"/>
+<area shape="rect" id="Node000007" href="$classSynthAudioProcessorEditor.html" title=" " alt="" coords="249,268,446,293"/>
+<area shape="poly" id="edge9_Node000005_Node000007" title=" " alt="" coords="180,244,284,265,283,271,179,249"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="6,101,199,141"/>
+<area shape="poly" id="edge10_Node000003_Node000002" title=" " alt="" coords="208,95,288,77,289,83,209,100"/>
+<area shape="poly" id="edge12_Node000003_Node000008" title=" " alt="" coords="213,116,268,115,268,121,213,122"/>
+<area shape="poly" id="edge11_Node000003_Node000004" title=" " alt="" coords="208,141,256,151,255,157,207,146"/>
 </map>

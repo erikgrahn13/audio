@@ -4,11 +4,13 @@ var hierarchy =
       [ "CustomAudioParameterFloat", "classCustomAudioParameterFloat.html", null ]
     ] ],
     [ "juce::AudioProcessor", null, [
+      [ "AbyssAudioProcessor", "classAbyssAudioProcessor.html", null ],
       [ "AudioPluginAudioProcessor", "classAudioPluginAudioProcessor.html", null ],
       [ "AudioPluginAudioProcessor", "classAudioPluginAudioProcessor.html", null ],
       [ "SynthAudioProcessor", "classSynthAudioProcessor.html", null ]
     ] ],
     [ "juce::AudioProcessorEditor", null, [
+      [ "AbyssAudioProcessorEditor", "classAbyssAudioProcessorEditor.html", null ],
       [ "AudioPluginAudioProcessorEditor", "classAudioPluginAudioProcessorEditor.html", null ],
       [ "AudioPluginAudioProcessorEditor", "classAudioPluginAudioProcessorEditor.html", null ],
       [ "SynthAudioProcessorEditor", "classSynthAudioProcessorEditor.html", null ]

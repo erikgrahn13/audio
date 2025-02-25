@@ -39,7 +39,7 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"AnalyzerCurve_8h_source.html"
+"AbyssPluginEditor_8h_source.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

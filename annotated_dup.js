@@ -1,5 +1,7 @@
 var annotated_dup =
 [
+    [ "AbyssAudioProcessor", "classAbyssAudioProcessor.html", null ],
+    [ "AbyssAudioProcessorEditor", "classAbyssAudioProcessorEditor.html", null ],
     [ "AnalyzerCurve", "classAnalyzerCurve.html", null ],
     [ "AudioPluginAudioProcessor", "classAudioPluginAudioProcessor.html", null ],
     [ "AudioPluginAudioProcessorEditor", "classAudioPluginAudioProcessorEditor.html", null ],
