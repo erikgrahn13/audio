@@ -60,11 +60,12 @@ juce_add_plugin(${PROJECT_NAME}
 # probably don't need to call this.
 
 # juce_generate_juce_header(AudioPluginExample)
-# find_package(PkgConfig REQUIRED)
-# pkg_check_modules(GTK3 REQUIRED gtk+-3.0)
-# pkg_check_modules(WEBKIT REQUIRED webkit2gtk-4.0)
-target_include_directories(${PROJECT_NAME} PRIVATE ${GTK3_INCLUDE_DIRS} ${WEBKIT_INCLUDE_DIRS})
-
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    find_package(PkgConfig REQUIRED)
+    pkg_check_modules(GTK3 REQUIRED gtk+-3.0)
+    pkg_check_modules(WEBKIT REQUIRED webkit2gtk-4.1)
+    target_include_directories(${PROJECT_NAME} PRIVATE ${GTK3_INCLUDE_DIRS} ${WEBKIT_INCLUDE_DIRS})
+endif()
 # `target_sources` adds source files to a target. We pass the target that needs the sources as the
 # first argument, then a visibility parameter for the sources which should normally be PRIVATE.
 # Finally, we supply a list of source files that will be built into the target. This is a standard
