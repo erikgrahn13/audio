@@ -39,6 +39,10 @@ jobs:
           Register-PackageSource -ProviderName NuGet -Name nugetRepository -Location https://www.nuget.org/api/v2 -Force
           Install-Package Microsoft.Web.WebView2 -Scope CurrentUser -RequiredVersion 1.0.1901.177 -Source nugetRepository -Force
 
+      - name: Add msbuild to PATH
+        if: matrix.os == 'windows-latest'
+        uses: microsoft/setup-msbuild@v2
+
       # - name: Set CMake default generator
       #   if: matrix.os == 'macos-latest'
       #   run: echo "CMAKE_GENERATOR=Xcode" >> $GITHUB_ENV
