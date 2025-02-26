@@ -65,6 +65,19 @@ class DeathMetalKnob {
       }
     });
 
+    this.canvas.addEventListener("wheel", (e) => {
+      console.log("mousewheel event: " + e.clientY);
+      console.log("mousewheel erik: " + e.y);
+      let deltaY = e.deltaY * 0.1;
+      this.value = Math.max(
+        this.minValue,
+        Math.min(this.maxValue, this.value - deltaY * 0.25)
+      );
+      sliderState.setNormalisedValue(this.value / 100);
+      this.angle = this.valueToAngle(this.value);
+      this.draw();
+    });
+
     this.draw();
   }
 
