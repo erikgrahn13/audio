@@ -59,7 +59,7 @@ juce_add_plugin(${PROJECT_NAME}
 # include all your JUCE module headers; if you're happy to include module headers directly, you
 # probably don't need to call this.
 
-# juce_generate_juce_header(AudioPluginExample)
+juce_generate_juce_header(${PROJECT_NAME})
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
     find_package(PkgConfig REQUIRED)
     pkg_check_modules(GTK3 REQUIRED gtk+-3.0)
@@ -97,7 +97,8 @@ target_compile_definitions(${PROJECT_NAME}
 # static library. These source files can be of any kind (wav data, images, fonts, icons etc.).
 # Conversion to binary-data will happen when your target is built.
 
-# juce_add_binary_data(AudioPluginData SOURCES ...)
+juce_add_binary_data(${PROJECT_NAME}Data "${PROJECT_NAME}Data.h" NAMESPACE ${PROJECT_NAME}Data SOURCES
+    ui/index.html)
 
 # `target_link_libraries` links libraries and JUCE modules to other libraries or executables. Here,
 # we're linking our executable target to the `juce::juce_audio_utils` module. Inter-module
@@ -106,6 +107,7 @@ target_compile_definitions(${PROJECT_NAME}
 # here too. This is a standard CMake command.
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
+    ${PROJECT_NAME}Data
 
     # AudioPluginData           # If we'd created a binary data target, we'd link to it here
     juce::juce_audio_utils
@@ -114,6 +116,8 @@ target_link_libraries(${PROJECT_NAME}
     juce::juce_recommended_lto_flags
     juce::juce_recommended_warning_flags
     juce::juce_gui_extra)
+
+target_include_directories(${PROJECT_NAME} PRIVATE ${juce_SOURCE_DIR}/examples/Assets)
 
 if(JUCE_BUILD_EXTRAS)
     add_dependencies(${PROJECT_NAME} AudioPluginHost AudioFilePlayer_VST3)

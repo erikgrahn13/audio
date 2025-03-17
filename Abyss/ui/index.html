@@ -7,8 +7,9 @@
   </head>
 
   <body>
-    <h1 class="title">Hello Abyss plugin</h1>
-    <button class="myButton">Click me!</button>
+    <h1 class="title">Hello Abyss erik</h1>
+    <button class="DeathMetalButton" data-parameter="bypass">Erik</button>
+    <button class="DeathMetalButton" data-parameter="hejsan">Grahn</button>
     <canvas
       class="DeathMetalKnob"
       data-parameter="denoise"
@@ -21,9 +22,19 @@
       height="100"
       width="100"
     ></canvas>
+    <death-metal-knob parameter="gain"></death-metal-knob>
+    <death-metal-slider parameter="gain"></death-metal-slider>
     <script
       type="module"
       src="../../utilities/CustomLookAndFeel/DeathMetalKnob.js"
+    ></script>
+    <script
+      type="module"
+      src="../../utilities/CustomLookAndFeel/DeathMetalButton.js"
+    ></script>
+    <script
+      type="module"
+      src="../../utilities/CustomLookAndFeel/DeathMetalSlider.js"
     ></script>
   </body>
 </html>
