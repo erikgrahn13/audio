@@ -2,7 +2,9 @@
 #include "AbyssPluginProcessor.h"
 #include "DemoUtilities.h"
 #include <JuceHeader.h>
-
+#if defined NDEBUG
+#include <WebViewFiles.h>
+#endif
 //==============================================================================
 AbyssAudioProcessorEditor::AbyssAudioProcessorEditor(AbyssAudioProcessor &p)
     : AudioProcessorEditor(&p), processorRef(p),
@@ -19,25 +21,11 @@ AbyssAudioProcessorEditor::AbyssAudioProcessorEditor(AbyssAudioProcessor &p)
     auto *gainParam = processorRef.mParameters.getParameter("gain");
     gainWebAttachment = std::make_unique<juce::WebSliderParameterAttachment>(*gainParam, gainRelay, nullptr);
 
-    // #if !defined NDEBUG
-    juce::ignoreUnused(processorRef);
-    juce::File editorSourceFile = juce::File(__FILE__);
-    juce::File uiDirectory = editorSourceFile.getParentDirectory().getChildFile("ui");
-    auto indexFile = uiDirectory.getChildFile("index.html");
-
-    if (indexFile.existsAsFile())
-    {
-        webBrowserComponent.goToURL("http://127.0.0.1:5500/Abyss/ui/index.html");
-    }
-    else
-    {
-        juce::Logger::writeToLog("UI file not found: " + indexFile.getFullPathName());
-        webBrowserComponent.goToURL("data:text/html,<html><body><h1>UI File Not Found</h1></body></html>");
-    }
-    // #else
-    // webBrowserComponent.goToURL(WebBrowserComponent::getResourceProviderRoot());
-
-    // #endif
+#if !defined NDEBUG
+    webBrowserComponent.goToURL("http://127.0.0.1:5500/build/Abyss/ui/index.html");
+#else
+    webBrowserComponent.goToURL(WebBrowserComponent::getResourceProviderRoot());
+#endif
 
     addAndMakeVisible(webBrowserComponent);
 
@@ -48,18 +36,6 @@ AbyssAudioProcessorEditor::~AbyssAudioProcessorEditor()
 {
 }
 
-//==============================================================================
-// void AbyssAudioProcessorEditor::paint(juce::Graphics &g)
-// {
-//     std::ignore = g;
-//     // (Our component is opaque, so we must completely fill the background with a solid colour)
-//     // g.fillAll(getLookAndFeel().findColour(juce::ResizableWindow::backgroundColourId));
-
-//     // g.setColour(juce::Colours::white);
-//     // g.setFont(15.0f);
-//     // g.drawFittedText("Hello World!", getLocalBounds(), juce::Justification::centred, 1);
-// }
-
 void AbyssAudioProcessorEditor::resized()
 {
     // This is generally where you'll want to lay out the positions of any
@@ -69,14 +45,40 @@ void AbyssAudioProcessorEditor::resized()
     webBrowserComponent.setBounds(bounds);
 }
 
-// static auto streamToVector(InputStream &stream)
-// {
-//     std::vector<std::byte> result((size_t)stream.getTotalLength());
-//     stream.setPosition(0);
-//     [[maybe_unused]] const auto bytesRead = stream.read(result.data(), result.size());
-//     jassert(bytesRead == (ssize_t)result.size());
-//     return result;
-// }
+std::vector<std::byte> streamToVector(juce::InputStream &stream)
+{
+    using namespace juce;
+    const auto sizeInBytes = static_cast<size_t>(stream.getTotalLength());
+    std::vector<std::byte> result(sizeInBytes);
+    stream.setPosition(0);
+    [[maybe_unused]] const auto bytesRead = stream.read(result.data(), result.size());
+    jassert(bytesRead == static_cast<ssize_t>(sizeInBytes));
+    return result;
+}
+
+std::vector<std::byte> getWebViewFileAsBytes(const juce::String &filepath)
+{
+    std::ignore = filepath;
+#if defined NDEBUG
+    juce::MemoryInputStream zipStream{webview_files::webview_files_zip, webview_files::webview_files_zipSize, false};
+    juce::ZipFile zipFile{zipStream};
+
+    if (auto *zipEntry = zipFile.getEntry(ZIPPED_FILES_PREFIX + filepath))
+    {
+        const std::unique_ptr<juce::InputStream> entryStream{zipFile.createStreamForEntry(*zipEntry)};
+
+        if (entryStream == nullptr)
+        {
+            jassertfalse;
+            return {};
+        }
+
+        return streamToVector(*entryStream);
+    }
+#endif
+
+    return {};
+}
 
 static const char *getMimeForExtension(const String &extension)
 {
@@ -101,70 +103,17 @@ static const char *getMimeForExtension(const String &extension)
     return "";
 }
 
-static String getExtension(String filename)
-{
-    return filename.fromLastOccurrenceOf(".", false, false);
-}
-
 std::optional<juce::WebBrowserComponent::Resource> AbyssAudioProcessorEditor::getResource(const juce::String &url)
 {
-    const auto filename = url == "/" ? juce::String{"index.html"} : url.fromFirstOccurrenceOf("/", false, false);
+    const auto resourceToRetrieve =
+        url == "/" ? juce::String{"index.html"} : url.fromFirstOccurrenceOf("/", false, false);
 
-    // if (auto *archive = getZipFile())
-    // {
-    //     if (auto *entry = archive->getEntry(urlToRetrive))
-    //     {
-    //         auto stream = rawToUniquePtr(archive->createStreamForEntry(*entry));
-    //         auto v = streamToVector(*stream);
-    //         auto mime = getMimeForExtension(getExtension(entry->filename).toLowerCase());
-    //         return WebBrowserComponent::Resource{std::move(v), std::move(mime)};
-    //     }
-    // }
-    const void *data{nullptr};
-    int dataSize{0};
-
-    if (filename == "index.html")
+    const auto resource = getWebViewFileAsBytes(resourceToRetrieve);
+    if (!resource.empty())
     {
-        data = AbyssData::index_html;
-        dataSize = AbyssData::index_htmlSize;
-        // data = Abyss::auto fallbackIndexHtml = createAssetInputStream("webviewplugin-gui-fallback.html");
-        // return WebBrowserComponent::Resource{streamToVector(*fallbackIndexHtml), String{"text/html"}};
+        const auto extension = resourceToRetrieve.fromLastOccurrenceOf(".", false, false);
+        return juce::WebBrowserComponent::Resource{std::move(resource), getMimeForExtension(extension)};
     }
 
-    // if (urlToRetrive == "DeathMetalKnob.js")
-    // {
-    //     auto fallbackIndexHtml = createAssetInputStream("webviewplugin-gui-fallback.html");
-    //     return WebBrowserComponent::Resource{streamToVector(*fallbackIndexHtml), String{"text/html"}};
-    // }
-
-    // if (urlToRetrive == "data.txt")
-    // {
-    //     WebBrowserComponent::Resource resource;
-    //     static constexpr char testData[] = "testdata";
-    //     MemoryInputStream stream{testData, numElementsInArray(testData) - 1, false};
-    //     return WebBrowserComponent::Resource{streamToVector(stream), String{"text/html"}};
-    // }
-
-    // if (urlToRetrive == "spectrumData.json")
-    // {
-    //     Array<var> frames;
-
-    //     for (const auto &frame : spectrumDataFrames)
-    //         frames.add(frame);
-
-    //     DynamicObject::Ptr d(new DynamicObject());
-    //     d->setProperty("timeResolutionMs", getTimerInterval());
-    //     d->setProperty("frames", std::move(frames));
-
-    //     const auto s = JSON::toString(d.get());
-    //     MemoryInputStream stream{s.getCharPointer(), s.getNumBytesAsUTF8(), false};
-    //     return WebBrowserComponent::Resource{streamToVector(stream), String{"application/json"}};
-    // }
-
-    auto mimeType = getMimeForExtension(getExtension(filename));
-
-    return WebBrowserComponent::Resource{std::vector<std::byte>((std::byte *)data, (std::byte *)data + dataSize),
-                                         String(mimeType)};
-
-    // return std::nullopt;
+    return std::nullopt;
 }

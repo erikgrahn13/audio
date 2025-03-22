@@ -1,4 +1,4 @@
-import * as Juce from "../../external/juce/modules/juce_gui_extra/native/javascript/index.js";
+import * as Juce from "../juce/index.js";
 
 class DeathMetalSlider extends HTMLElement {
   constructor(deathMetalSlider, options = {}) {
@@ -9,7 +9,6 @@ class DeathMetalSlider extends HTMLElement {
     this.parameterName = this.getAttribute("parameter");
     const sliderState = Juce.getSliderState(this.parameterName);
 
-    console.log(this.parameterName);
     if (!this.parameterName) {
       console.error("Missing data-parameter attribute on slider");
       return;
@@ -20,9 +19,9 @@ class DeathMetalSlider extends HTMLElement {
     this.canvas.height = 20;
     this.centerX = this.canvas.width * 0.5;
     this.centerY = this.canvas.height * 0.5;
-    this.minValue = 0;
-    this.maxValue = 100;
-    this.value = 50;
+    this.minParameterValue = 0.0;
+    this.maxParameterValue = 1.0;
+    this.parameterValue = 0.5;
 
     this.ctx = this.canvas.getContext("2d");
 
@@ -30,8 +29,7 @@ class DeathMetalSlider extends HTMLElement {
     this.draw();
 
     sliderState.valueChangedEvent.addListener(() => {
-      this.canvas.value = sliderState.getNormalisedValue();
-      this.value = this.canvas.value * 100;
+      this.parameterValue = sliderState.getNormalisedValue();
       this.draw();
     });
 
@@ -40,28 +38,23 @@ class DeathMetalSlider extends HTMLElement {
       const rect = this.canvas.getBoundingClientRect();
       const mouseX = e.clientX;
       const mouseY = e.clientY;
+      let xPosition = (this.parameterValue * 100 * (285 - 15)) / 100 + 15;
 
       if (
-        mouseX - rect.left >= this.value - 5 &&
-        mouseX - rect.left <= this.value + 5 &&
+        mouseX - rect.left >= xPosition - 5 &&
+        mouseX - rect.left <= xPosition + 5 &&
         mouseY - rect.top >= this.centerY - 5 &&
         mouseY - rect.top <= this.centerY + 5
       ) {
         this.isDragging = true;
         this.lastMouseX = e.clientX;
       } else {
-        this.value = Math.max(
-          15,
-          Math.min(this.canvas.width - 15, mouseX - rect.left)
-        );
+        this.parameterValue = (mouseX - rect.left) / this.canvas.width;
 
-        let paramValue = ((this.value - 15) / (285 - 15)) * 100;
-        sliderState.setNormalisedValue(paramValue / 100);
-
-        // TODO: Handle param value to plugin here
-        this.draw();
+        sliderState.setNormalisedValue(this.parameterValue);
         this.isDragging = true;
         this.lastMouseX = e.clientX;
+        this.draw();
       }
     });
 
@@ -76,69 +69,44 @@ class DeathMetalSlider extends HTMLElement {
       if (!this.isDragging) return;
 
       const rect = this.canvas.getBoundingClientRect();
-
       if (e.clientX < rect.left) {
-        this.value = 15;
+        this.parameterValue = 0.0;
       } else if (e.clientX > rect.right) {
-        this.value = this.canvas.width - 15;
+        this.parameterValue = 1.0;
       } else {
         let deltaX = e.clientX - this.lastMouseX;
         this.lastMouseX = e.clientX;
 
-        this.value = Math.max(
+        let absolutePosition =
+          (this.parameterValue * 100 * (285 - 15)) / 100 + 15;
+
+        absolutePosition = Math.max(
           15,
-          Math.min(this.canvas.width - 15, this.value + deltaX)
+          Math.min(this.canvas.width - 15, absolutePosition + deltaX)
         );
+
+        this.parameterValue = (absolutePosition - 15) / (285 - 15);
       }
 
-      // TODO: Handle param value to plugin here
-      let paramValue = ((this.value - 15) / (285 - 15)) * 100;
-      sliderState.setNormalisedValue(paramValue / 100);
-
+      sliderState.setNormalisedValue(this.parameterValue);
       this.draw();
     });
 
     this.canvas.addEventListener("wheel", (e) => {
       let deltaX = e.deltaY * 0.1;
 
-      this.value = Math.max(
-        15,
-        Math.min(this.canvas.width - 15, this.value - deltaX)
-      );
+      let absolutePosition =
+        (this.parameterValue * 100 * (285 - 15)) / 100 + 15;
 
-      let paramValue = ((this.value - 15) / (285 - 15)) * 100;
-      sliderState.setNormalisedValue(paramValue / 100);
+      absolutePosition = Math.max(
+        15,
+        Math.min(this.canvas.width - 15, absolutePosition - deltaX)
+      );
+      this.parameterValue = (absolutePosition - 15) / (285 - 15);
+
+      sliderState.setNormalisedValue(this.parameterValue);
       this.draw();
     });
-  }
-
-  isMouseOverThumb(mouseX, mouseY) {
-    const rect = this.canvas.getBoundingClientRect();
-    const relativeX = mouseX - rect.left;
-    const relativeY = mouseY - rect.top;
-
-    console.log(rect);
-
-    // Get current pentagram position
-    const trackWidth = this.canvas.width - this.thumbSize;
-    const thumbX =
-      ((this.value - this.minValue) / (this.maxValue - this.minValue)) *
-      trackWidth;
-    const thumbY = this.canvas.height / 2;
-
-    // Define a rectangular hitbox around the pentagram
-    const hitboxWidth = this.thumbSize * 1.2; // Slightly larger for easier clicking
-    const hitboxHeight = this.thumbSize * 1.2;
-    const hitboxX = thumbX - hitboxWidth / 2;
-    const hitboxY = thumbY - hitboxHeight / 2;
-
-    // Check if the mouse is inside the rectangular bounds
-    return (
-      relativeX >= hitboxX &&
-      relativeX <= hitboxX + hitboxWidth &&
-      relativeY >= hitboxY &&
-      relativeY <= hitboxY + hitboxHeight
-    );
   }
 
   draw() {
@@ -155,18 +123,19 @@ class DeathMetalSlider extends HTMLElement {
     this.ctx.lineCap = "round";
     this.ctx.stroke();
 
-    // this.value = (this.value * this.canvas.width) / this.maxValue;
+    let xPosition = (this.parameterValue * 100 * (285 - 15)) / 100 + 15;
 
     // Draw the white line
+
     this.ctx.beginPath();
     this.ctx.moveTo(10, this.centerY);
-    this.ctx.lineTo(this.value, this.centerY);
+    this.ctx.lineTo(xPosition, this.centerY);
     this.ctx.lineWidth = 10;
     this.ctx.strokeStyle = "white";
     this.ctx.lineCap = "round";
     this.ctx.stroke();
 
-    this.drawPentagram(this.value, this.centerY, 10, 45);
+    this.drawPentagram(xPosition, this.centerY, 10, 45);
   }
 
   drawPentagram(x, y, size, rotation) {

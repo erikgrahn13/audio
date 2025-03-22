@@ -58,14 +58,15 @@ juce_add_plugin(${PROJECT_NAME}
 # this header will be automatically added to the target. The main function of the JuceHeader is to
 # include all your JUCE module headers; if you're happy to include module headers directly, you
 # probably don't need to call this.
-
 juce_generate_juce_header(${PROJECT_NAME})
+
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
     find_package(PkgConfig REQUIRED)
     pkg_check_modules(GTK3 REQUIRED gtk+-3.0)
     pkg_check_modules(WEBKIT REQUIRED webkit2gtk-4.1)
     target_include_directories(${PROJECT_NAME} PRIVATE ${GTK3_INCLUDE_DIRS} ${WEBKIT_INCLUDE_DIRS})
 endif()
+
 # `target_sources` adds source files to a target. We pass the target that needs the sources as the
 # first argument, then a visibility parameter for the sources which should normally be PRIVATE.
 # Finally, we supply a list of source files that will be built into the target. This is a standard
@@ -97,8 +98,78 @@ target_compile_definitions(${PROJECT_NAME}
 # static library. These source files can be of any kind (wav data, images, fonts, icons etc.).
 # Conversion to binary-data will happen when your target is built.
 
-juce_add_binary_data(${PROJECT_NAME}Data "${PROJECT_NAME}Data.h" NAMESPACE ${PROJECT_NAME}Data SOURCES
-    ui/index.html)
+# The things below should probably be moved to a cmake script in a cmake function
+file(REMOVE_RECURSE "${CMAKE_CURRENT_BINARY_DIR}/ui")
+
+if(CMAKE_BUILD_TYPE STREQUAL "Release")
+    file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/ui/" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/ui/")
+    file(COPY "${juce_SOURCE_DIR}/modules/juce_gui_extra/native/javascript/" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/ui/juce/")
+    file(COPY "${CMAKE_SOURCE_DIR}/widgets/" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/ui/widgets/")
+
+    set(WEBVIEW_FILES_ZIP_NAME "webview_files.zip")
+    set(TARGET_WEBVIEW_FILES_ZIP_PATH "${CMAKE_CURRENT_BINARY_DIR}/${WEBVIEW_FILES_ZIP_NAME}")
+
+    add_custom_target(ZipWebViewFiles
+        COMMAND
+        ${CMAKE_COMMAND} -E tar cvf
+        "${TARGET_WEBVIEW_FILES_ZIP_PATH}"
+        --format=zip
+        "${CMAKE_CURRENT_BINARY_DIR}/ui"
+        BYPRODUCTS
+        "${TARGET_WEBVIEW_FILES_ZIP_PATH}"
+        WORKING_DIRECTORY
+        "${CMAKE_CURRENT_BINARY_DIR}"
+        COMMENT "Zipping WebView files..."
+        VERBATIM
+    )
+
+    target_compile_definitions(${PROJECT_NAME} PRIVATE ZIPPED_FILES_PREFIX="ui/")
+
+    juce_add_binary_data(WebViewFiles
+        HEADER_NAME WebViewFiles.h
+        NAMESPACE webview_files
+        SOURCES ${TARGET_WEBVIEW_FILES_ZIP_PATH}
+    )
+
+    add_dependencies(WebViewFiles ZipWebViewFiles)
+    target_link_libraries(${PROJECT_NAME} PRIVATE WebViewFiles)
+
+elseif(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    set(LINK_DEST "${CMAKE_CURRENT_BINARY_DIR}/ui")
+    set(SRC_UI "${CMAKE_CURRENT_SOURCE_DIR}/ui")
+    set(SRC_WIDGETS "${CMAKE_SOURCE_DIR}/widgets")
+    set(SRC_JUCE_JS "${juce_SOURCE_DIR}/modules/juce_gui_extra/native/javascript")
+
+    add_custom_command(
+        OUTPUT "${LINK_DEST}"
+        COMMAND ${CMAKE_COMMAND} -E create_symlink "${SRC_UI}/index.html" "${LINK_DEST}/index.html"
+        COMMAND ${CMAKE_COMMAND} -E create_symlink "${SRC_UI}/style.css" "${LINK_DEST}/style.css"
+        COMMENT "Symlinking UI directory"
+        VERBATIM
+    )
+
+    add_custom_command(
+        OUTPUT "${LINK_DEST}/widgets"
+        COMMAND ${CMAKE_COMMAND} -E make_directory "${LINK_DEST}"
+        COMMAND ${CMAKE_COMMAND} -E create_symlink "${SRC_WIDGETS}" "${LINK_DEST}/widgets"
+        COMMENT "Symlinking widgets directory"
+        VERBATIM
+    )
+
+    add_custom_command(
+        OUTPUT "${LINK_DEST}/juce"
+        COMMAND ${CMAKE_COMMAND} -E make_directory "${LINK_DEST}"
+        COMMAND ${CMAKE_COMMAND} -E create_symlink "${SRC_JUCE_JS}" "${LINK_DEST}/juce"
+        COMMENT "Symlinking JUCE JavaScript directory"
+        VERBATIM
+    )
+
+    add_custom_target(CreateWebviewSymlinks
+        DEPENDS "${LINK_DEST}" "${LINK_DEST}/widgets" "${LINK_DEST}/juce"
+    )
+
+    add_dependencies(${PROJECT_NAME} CreateWebviewSymlinks)
+endif()
 
 # `target_link_libraries` links libraries and JUCE modules to other libraries or executables. Here,
 # we're linking our executable target to the `juce::juce_audio_utils` module. Inter-module
@@ -107,7 +178,6 @@ juce_add_binary_data(${PROJECT_NAME}Data "${PROJECT_NAME}Data.h" NAMESPACE ${PRO
 # here too. This is a standard CMake command.
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
-    ${PROJECT_NAME}Data
 
     # AudioPluginData           # If we'd created a binary data target, we'd link to it here
     juce::juce_audio_utils

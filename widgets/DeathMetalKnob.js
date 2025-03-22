@@ -1,4 +1,4 @@
-import * as Juce from "../../external/juce/modules/juce_gui_extra/native/javascript/index.js";
+import * as Juce from "../juce/index.js";
 
 class DeathMetalKnob extends HTMLElement {
   constructor(deathMetalKnob, options = {}) {
