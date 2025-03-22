@@ -45,7 +45,7 @@ void AbyssAudioProcessorEditor::resized()
     webBrowserComponent.setBounds(bounds);
 }
 
-std::vector<std::byte> streamToVector(juce::InputStream &stream)
+static std::vector<std::byte> streamToVector(juce::InputStream &stream)
 {
     using namespace juce;
     const auto sizeInBytes = static_cast<size_t>(stream.getTotalLength());
@@ -56,7 +56,7 @@ std::vector<std::byte> streamToVector(juce::InputStream &stream)
     return result;
 }
 
-std::vector<std::byte> getWebViewFileAsBytes(const juce::String &filepath)
+static std::vector<std::byte> getWebViewFileAsBytes(const juce::String &filepath)
 {
     std::ignore = filepath;
 #if defined NDEBUG
