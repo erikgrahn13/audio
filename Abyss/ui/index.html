@@ -8,22 +8,10 @@
 
   <body>
     <h1 class="title">Hello Abyss plugin</h1>
-    <button class="myButton">Click me!</button>
-    <canvas
-      class="DeathMetalKnob"
-      data-parameter="denoise"
-      height="60"
-      width="60"
-    ></canvas>
-    <canvas
-      class="DeathMetalKnob"
-      data-parameter="gain"
-      height="100"
-      width="100"
-    ></canvas>
-    <script
-      type="module"
-      src="../../utilities/CustomLookAndFeel/DeathMetalKnob.js"
-    ></script>
+    <death-metal-knob parameter="gain"></death-metal-knob>
+    <death-metal-slider parameter="gain"></death-metal-slider>
+    <script type="module" src="./widgets/DeathMetalKnob.js"></script>
+    <script type="module" src="./widgets/DeathMetalButton.js"></script>
+    <script type="module" src="./widgets/DeathMetalSlider.js"></script>
   </body>
 </html>

@@ -1,17 +1,21 @@
-import * as Juce from "../../external/juce/modules/juce_gui_extra/native/javascript/index.js";
+import * as Juce from "../juce/index.js";
 
-class DeathMetalKnob {
-  constructor(canvasElement, options = {}) {
-    if (!(canvasElement instanceof HTMLCanvasElement)) {
-      console.error("Invalid canvas element provided");
-      return;
-    }
+class DeathMetalKnob extends HTMLElement {
+  constructor(deathMetalKnob, options = {}) {
+    // if (!(canvasElement instanceof HTMLCanvasElement)) {
+    //   console.error("Invalid canvas element provided");
+    //   return;
+    // }
 
-    this.canvas = canvasElement;
-    this.canvas = canvasElement;
-    this.parameterName = this.canvas.dataset.parameter;
+    // this.canvas = canvasElement;
+    super();
+    this.attachShadow({ mode: "open" });
+
+    this.slider = deathMetalKnob;
+    this.canvas = document.createElement("canvas");
+    this.parameterName = this.getAttribute("parameter");
     if (!this.parameterName) {
-      console.error("Missing data-parameter attribute on canvas");
+      console.error("Missing data-parameter attribute on knob");
       return;
     }
 
@@ -66,8 +70,6 @@ class DeathMetalKnob {
     });
 
     this.canvas.addEventListener("wheel", (e) => {
-      console.log("mousewheel event: " + e.clientY);
-      console.log("mousewheel erik: " + e.y);
       let deltaY = e.deltaY * 0.1;
       this.value = Math.max(
         this.minValue,
@@ -78,6 +80,7 @@ class DeathMetalKnob {
       this.draw();
     });
 
+    this.shadowRoot.appendChild(this.canvas);
     this.draw();
   }
 
@@ -197,8 +200,4 @@ class DeathMetalKnob {
   }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  document.querySelectorAll(".DeathMetalKnob").forEach((canvas) => {
-    new DeathMetalKnob(canvas, {});
-  });
-});
+customElements.define("death-metal-knob", DeathMetalKnob);
