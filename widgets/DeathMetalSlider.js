@@ -1,11 +1,10 @@
 import * as Juce from "../juce/index.js";
 
 class DeathMetalSlider extends HTMLElement {
-  constructor(deathMetalSlider, options = {}) {
+  constructor(ptions = {}) {
     super();
     this.attachShadow({ mode: "open" });
 
-    this.slider = deathMetalSlider;
     this.parameterName = this.getAttribute("parameter");
     const sliderState = Juce.getSliderState(this.parameterName);
 
