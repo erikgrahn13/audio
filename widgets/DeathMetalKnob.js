@@ -11,7 +11,6 @@ class DeathMetalKnob extends HTMLElement {
     super();
     this.attachShadow({ mode: "open" });
 
-    this.slider = deathMetalKnob;
     this.canvas = document.createElement("canvas");
     this.parameterName = this.getAttribute("parameter");
     if (!this.parameterName) {
