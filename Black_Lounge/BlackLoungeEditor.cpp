@@ -1,4 +1,5 @@
 #include "BlackLoungeEditor.h"
+#include "BlackLoungeAmp.h"
 #include "BlackLoungeProcessor.h"
 
 //==============================================================================
@@ -6,12 +7,13 @@ BlackLoungeAudioProcessorEditor::BlackLoungeAudioProcessorEditor(BlackLoungeAudi
     : AudioProcessorEditor(&p), processorRef(p)
 {
     juce::ignoreUnused(processorRef);
-    setSize(400, 300);
+    setSize(500, 400);
 
     if (juce::JUCEApplicationBase::isStandaloneApp())
     {
         settingsButton.setLookAndFeel(&fontWebLookAndFeel);
         settingsButton.setButtonText(juce::CharPointer_UTF8(""));
+        // settingsButton.setColour(juce::TextButton::ColourIds::textColourOffId, juce::Colours::red);
         addAndMakeVisible(settingsButton);
         settingsButton.onClick = [] { juce::StandalonePluginHolder::getInstance()->showAudioSettingsDialog(); };
     }
@@ -82,7 +84,7 @@ BlackLoungeAudioProcessorEditor::BlackLoungeAudioProcessorEditor(BlackLoungeAudi
 
     mDenoiserActiveButton.setLookAndFeel(&fontWebLookAndFeel);
     mDenoiserActiveButton.setColour(juce::TextButton::ColourIds::textColourOnId, juce::Colours::white);
-    mDenoiserActiveButton.setColour(juce::TextButton::ColourIds::textColourOffId, juce::Colours::grey);
+    mDenoiserActiveButton.setColour(juce::TextButton::ColourIds::textColourOffId, juce::Colours::white);
     mDenoiserActiveButton.setButtonText(juce::CharPointer_UTF8(""));
     mDenoiserActiveButton.onClick = [this]() {
         if (mDenoiserActiveButton.getToggleState())
@@ -100,6 +102,10 @@ BlackLoungeAudioProcessorEditor::BlackLoungeAudioProcessorEditor(BlackLoungeAudi
     mDenoiserActiveButton.setColour(juce::TextButton::buttonOnColourId, juce::Colours::transparentBlack);
 
     addAndMakeVisible(mDenoiserActiveButton);
+
+    auto imageInputStream =
+        juce::MemoryInputStream(BlackLoungeAmp::background1_png, BlackLoungeAmp::background1_pngSize, false);
+    backgroundImage = juce::ImageFileFormat::loadFrom(imageInputStream);
 }
 
 BlackLoungeAudioProcessorEditor::~BlackLoungeAudioProcessorEditor()
@@ -121,8 +127,20 @@ void BlackLoungeAudioProcessorEditor::paint(juce::Graphics &g)
     // g.setColour(juce::Colours::white);
     // g.setFont(15.0f);
     // g.drawFittedText("Hello World!", getLocalBounds(), juce::Justification::centred, 1);
-    g.setColour(juce::Colours::black);
-    g.fillRect(getLocalBounds());
+    // g.setColour(juce::Colours::black);
+    auto imagebounds = getLocalBounds().toFloat();
+    auto bounds = getLocalBounds().toFloat();
+
+    if (backgroundImage.isValid())
+    {
+        // g.setOpacity(0.0f);
+        imagebounds.removeFromTop(imagebounds.getHeight() / 1 / 6);
+
+        g.drawImage(backgroundImage, imagebounds.removeFromTop(imagebounds.getHeight() * 2 / 3));
+        g.setColour(juce::Colours::black.withAlpha(0.25f)); // Adjust the alpha for darkness
+        g.fillRect(getLocalBounds());
+    }
+    // g.fillRect(getLocalBounds());
     // g.fillRoundedRectangle(getLocalBounds().toFloat(), 20);
 }
 
@@ -135,17 +153,17 @@ void BlackLoungeAudioProcessorEditor::resized()
 
     titleLabel.setBounds(0, 10, bounds.getWidth(), 100);
 
-    denoiserSlider.setBounds(20, bounds.getCentreY(), 80, 80);
-    mDenoiserActiveButton.setBounds(denoiserSlider.getWidth() / 2, bounds.getCentreY() + denoiserSlider.getHeight(), 40,
-                                    40);
+    denoiserSlider.setBounds(40, bounds.getCentreY(), 80, 80);
+    mDenoiserActiveButton.setBounds(denoiserSlider.getWidth() / 2 + 20,
+                                    bounds.getCentreY() + denoiserSlider.getHeight(), 40, 40);
 
-    gainSlider.setBounds(bounds.getCentreX() - 40, bounds.getCentreY(), 80, 80);
-    volumeSlider.setBounds(bounds.getWidth() - 100, bounds.getCentreY(), 80, 80);
+    gainSlider.setBounds(bounds.getCentreX() - 40, bounds.getCentreY() + 40, 80, 80);
+    volumeSlider.setBounds(bounds.getWidth() - 120, bounds.getCentreY() + 40, 80, 80);
 
     // auto knobsArea = bounds.removeFromBottom(bounds.getHeight() / 3);
 
     // volumeSlider.setBounds(bounds.removeFromRight(bounds.getWidth() / 2).reduced(50));
     // thresholdSlider.setBounds(bounds.reduced(50));
 
-    settingsButton.setBounds(bounds.getWidth() - 70, getHeight() - 70, 60, 60);
+    settingsButton.setBounds(bounds.getWidth() - 50, getHeight() - 50, 40, 40);
 }

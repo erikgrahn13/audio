@@ -48,10 +48,11 @@ class FontWebLookAndFeel : public juce::LookAndFeel_V4
         auto bounds = button.getLocalBounds().toFloat();
         std::ignore = isMouseOverButton;
         // Set custom colors or remove highlight effect
-        juce::Colour fillColour = backgroundColour;
-
-        if (isButtonDown)
-            fillColour = backgroundColour; // Keep original background color (no highlight)
+        juce::Colour fillColour = juce::Colours::transparentBlack;
+        std::ignore = backgroundColour;
+        std::ignore = isButtonDown;
+        // if (isButtonDown)
+        // fillColour = backgroundColour; // Keep original background color (no highlight)
         // else if (isMouseOverButton)
         //     fillColour = backgroundColour.brighter(); // Optional: a subtle hover effect
 

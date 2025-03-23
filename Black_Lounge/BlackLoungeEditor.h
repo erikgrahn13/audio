@@ -34,6 +34,8 @@ class BlackLoungeAudioProcessorEditor final : public juce::AudioProcessorEditor
     FontWebLookAndFeel fontWebLookAndFeel;
     DeathMetalLookAndFeel fontDeathMetalLookAndFeel;
 
+    juce::Image backgroundImage;
+
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> mVolumeAttachment;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> mDenoiserAttachment;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> mGainAttachment;
