@@ -1,6 +1,5 @@
 #include "BlackLoungeEditor.h"
 #include "BlackLoungeProcessor.h"
-#include "Fonts.h"
 
 //==============================================================================
 BlackLoungeAudioProcessorEditor::BlackLoungeAudioProcessorEditor(BlackLoungeAudioProcessor &p)
@@ -11,7 +10,8 @@ BlackLoungeAudioProcessorEditor::BlackLoungeAudioProcessorEditor(BlackLoungeAudi
 
     if (juce::JUCEApplicationBase::isStandaloneApp())
     {
-        button.setButtonText("Settings");
+        button.setLookAndFeel(&fontWebLookAndFeel);
+        button.setButtonText(juce::CharPointer_UTF8(""));
         addAndMakeVisible(button);
         button.onClick = [this] { juce::StandalonePluginHolder::getInstance()->showAudioSettingsDialog(); };
         // auto &erik = juce::StandalonePluginHolder::getInstance()->deviceManager;
@@ -48,7 +48,7 @@ void BlackLoungeAudioProcessorEditor::resized()
     auto r = getLocalBounds().reduced(4);
 
     mainScreens.setBounds(getLocalBounds());
-    button.setBounds(10, getHeight() - 30, 100, 20);
+    button.setBounds(10, getHeight() - 70, 60, 60);
 
     // audioSetupComp->setBounds(r.removeFromTop(proportionOfHeight(0.65f)));
 }

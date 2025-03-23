@@ -3,6 +3,7 @@
 #include "AmpView.h"
 #include "BlackLoungeProcessor.h"
 #include "CustomLookAndFeel/CustomStandaloneFilterWindow.h"
+#include "CustomLookAndFeel/FontWebLookAndFeel.h"
 #include "SettingsView.h"
 #include <JuceHeader.h>
 
@@ -27,6 +28,7 @@ class BlackLoungeAudioProcessorEditor final : public juce::AudioProcessorEditor
     juce::TabbedComponent mainScreens{juce::TabbedButtonBar::TabsAtBottom};
     AmpView ampView;
     SettingsView settingsView;
+    FontWebLookAndFeel fontWebLookAndFeel;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(BlackLoungeAudioProcessorEditor)
 };
