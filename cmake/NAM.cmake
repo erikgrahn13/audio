@@ -10,6 +10,15 @@ FetchContent_MakeAvailable(
     nam
 )
 
+FetchContent_Declare(
+    nlohmann-json
+    URL https://github.com/nlohmann/json/releases/download/v3.11.3/json.hpp
+    SOURCE_DIR ${DEPENDENCY_DIR}/nlohmann-json
+    DOWNLOAD_NO_EXTRACT TRUE
+)
+
+FetchContent_MakeAvailable(nlohmann-json)
+
 set(DEPENDENCY_FILES
     ${nam_SOURCE_DIR}/NAM/get_dsp.cpp
     ${nam_SOURCE_DIR}/NAM/dsp.cpp
@@ -31,5 +40,5 @@ target_compile_definitions(nam_dependency
 target_include_directories(nam_dependency SYSTEM PUBLIC
     ${nam_SOURCE_DIR}
     ${nam_SOURCE_DIR}/Dependencies/eigen
-    ${nam_SOURCE_DIR}/Dependencies/nlohmann
+    ${nlohmann-json_SOURCE_DIR}
 )

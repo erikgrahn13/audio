@@ -26,7 +26,6 @@
 #pragma once
 
 #include "CustomLookAndFeel/DeathMetalLookAndFeel.h"
-#include <JuceHeader.h>
 
 #ifndef DOXYGEN
 #include <juce_audio_plugin_client/detail/juce_CreatePluginFilter.h>

@@ -13,7 +13,7 @@ BlackLoungeAudioProcessorEditor::BlackLoungeAudioProcessorEditor(BlackLoungeAudi
         button.setLookAndFeel(&fontWebLookAndFeel);
         button.setButtonText(juce::CharPointer_UTF8(""));
         addAndMakeVisible(button);
-        button.onClick = [this] { juce::StandalonePluginHolder::getInstance()->showAudioSettingsDialog(); };
+        button.onClick = [] { juce::StandalonePluginHolder::getInstance()->showAudioSettingsDialog(); };
         // auto &erik = juce::StandalonePluginHolder::getInstance()->deviceManager;
 
         // mainScreens.setOrientation(juce::TabbedButtonBar::Orientation::TabsAtBottom);
@@ -89,7 +89,7 @@ void BlackLoungeAudioProcessorEditor::paint(juce::Graphics &g)
     // g.setColour(juce::Colours::white);
     // g.setFont(15.0f);
     // g.drawFittedText("Hello World!", getLocalBounds(), juce::Justification::centred, 1);
-    g.setColour(Colours::black);
+    g.setColour(juce::Colours::black);
     g.fillRect(getLocalBounds());
     // g.fillRoundedRectangle(getLocalBounds().toFloat(), 20);
 }
@@ -98,7 +98,6 @@ void BlackLoungeAudioProcessorEditor::resized()
 {
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor.
-    auto r = getLocalBounds().reduced(4);
 
     mainScreens.setBounds(getLocalBounds());
 
