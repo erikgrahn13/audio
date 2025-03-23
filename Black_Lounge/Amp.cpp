@@ -95,7 +95,7 @@ Amp::Amp(const char *ampData, const int ampDataSize) : mAmpData(ampData), mAmpDa
     //         throw std::runtime_error("NAM model initialization failed!");
     //     }
 
-    //     mNoiseGate = std::make_shared<NoiseGate>(-80.0, 0.00001, 0.05, 0.05, 48000);
+    // mNoiseGate = std::make_unique<NoiseGate>(-40.0, 48000);
     // }
     // catch (const std::exception &e)
     // {
@@ -125,28 +125,20 @@ void Amp::prepare()
 
 void Amp::process(NAM_SAMPLE *input, NAM_SAMPLE *output, int numFrames)
 {
+
     if (mNamModel)
     {
         mNamModel->process(input, output, numFrames);
     }
-    // mNamModel->process()
+
+    // for (int i = 0; i < numFrames; ++i)
+    // {
+    //     output[i] *= mNoiseGate->process(input[i]);
+    // }
 }
 
-// Amp::~Amp()
-// {
-// }
-
-// std::shared_ptr<nam::DSP> Amp::getNamModel()
-// {
-//     // return mNamModel;
-// }
-
-// std::shared_ptr<Convolution> Amp::getIR()
-// {
-//     return mIR;
-// }
-
-// std::shared_ptr<NoiseGate> Amp::getNoiseGate()
-// {
-//     return mNoiseGate;
-// }
+void Amp::setThreshold(float threshold)
+{
+    std::ignore = threshold;
+    // mNoiseGate->setThreshold(threshold);
+}

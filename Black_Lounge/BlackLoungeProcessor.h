@@ -3,6 +3,7 @@
 #include "Amp.h"
 #include "BlackLoungeAmp.h"
 #include "NAM/dsp.h"
+#include <JuceHeader.h>
 #include <juce_audio_processors/juce_audio_processors.h>
 
 //==============================================================================
@@ -59,6 +60,16 @@ class BlackLoungeAudioProcessor final : public juce::AudioProcessor
     juce::AudioParameterFloat *mVolumeParameter;
     juce::AudioParameterFloat *mThresholdParameter;
     juce::AudioParameterFloat *mGainParameter;
+    juce::AudioParameterBool *mNoiseGateActiveParameter;
+
+    juce::AudioParameterBool *mAnalyzeParameter;
+
+    juce::dsp::ProcessorChain<juce::dsp::IIR::Filter<float>> mChain;
+    juce::AudioParameterFloat *mTestParameter;
+
+    juce::AudioBuffer<float> analysisBuffer;
+    int analysisBufferPosition{0};
+    bool bufferFilled{false};
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(BlackLoungeAudioProcessor)

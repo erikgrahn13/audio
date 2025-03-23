@@ -17,6 +17,13 @@ BlackLoungeAudioProcessor::BlackLoungeAudioProcessor()
     mVolumeParameter = dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("volume"));
     mThresholdParameter = dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("threshold"));
     mGainParameter = dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("gain"));
+    mNoiseGateActiveParameter = dynamic_cast<juce::AudioParameterBool *>(mParameters.getParameter("noisegate"));
+    mAnalyzeParameter = dynamic_cast<juce::AudioParameterBool *>(mParameters.getParameter("analyze"));
+
+    mTestParameter = dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("test"));
+
+    auto &firstFilter = mChain.get<0>();
+    firstFilter = juce::dsp::IIR::Coefficients<float>::makePeakFilter(48000, 25.f, 0.707f, 1.0f);
 
     mBlackLoungeAmp = std::make_unique<Amp>(BlackLoungeAmp::ironmaster_nam, BlackLoungeAmp::ironmaster_namSize);
 }
@@ -96,6 +103,14 @@ void BlackLoungeAudioProcessor::prepareToPlay(double sampleRate, int samplesPerB
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
     juce::ignoreUnused(sampleRate, samplesPerBlock);
+
+    int numSeconds = 5;
+    int totalSamples = static_cast<int>(sampleRate * numSeconds);
+
+    analysisBuffer.setSize(1, totalSamples);
+    analysisBuffer.clear();
+    analysisBufferPosition = 0;
+    bufferFilled = false;
 }
 
 void BlackLoungeAudioProcessor::releaseResources()
@@ -146,6 +161,10 @@ juce::AudioProcessorValueTreeState::ParameterLayout BlackLoungeAudioProcessor::c
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>("volume", "Volume", -10.f, 10.f, 0.f));
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>("threshold", "Threshold", -100.f, 0.f, -80.f));
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>("gain", "Gain", -20.f, 20.f, 0.f));
+    parameters.push_back(std::make_unique<juce::AudioParameterBool>("noisegate", "NoiseGate", true));
+    parameters.push_back(std::make_unique<juce::AudioParameterBool>("analyze", "Analyze", false));
+
+    parameters.push_back(std::make_unique<juce::AudioParameterFloat>("test", "Test", -24.f, 6.f, 0.f));
 
     return {parameters.begin(), parameters.end()};
 }
@@ -153,22 +172,52 @@ juce::AudioProcessorValueTreeState::ParameterLayout BlackLoungeAudioProcessor::c
 void BlackLoungeAudioProcessor::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages)
 {
     juce::ignoreUnused(midiMessages);
+
+    // if (mAnalyzeParameter->get())
+    // {
+    //     int numSamples = buffer.getNumSamples();
+    //     int remainingSpace = analysisBuffer.getNumSamples() - analysisBufferPosition;
+
+    //     if (numSamples <= remainingSpace)
+    //     {
+    //         analysisBuffer.copyFrom(0, analysisBufferPosition, buffer, 0, 0, numSamples);
+    //         analysisBufferPosition += numSamples;
+
+    //         if (analysisBufferPosition >= analysisBuffer.getNumSamples())
+    //         {
+    //             bufferFilled = true;
+
+    //             // TODO: Get noise reduction profile of the stored data here
+    //         }
+    //     }
+    // }
     std::ignore = buffer;
+    auto value = juce::Decibels::decibelsToGain(mTestParameter->get());
+    auto &filter = mChain.get<0>();
+    auto coeffs = juce::dsp::IIR::Coefficients<float>::makePeakFilter(getSampleRate(), 25.f, 0.707f, value);
+    filter.coefficients = coeffs;
 
-    auto gain = juce::Decibels::decibelsToGain(mGainParameter->get());
-    // auto threshold = juce::Decibels::decibelsToGain(mThresholdParameter->get());
-    auto volume = juce::Decibels::decibelsToGain(mVolumeParameter->get());
+    // juce::ProcessC
+    juce::dsp::AudioBlock<float> block(buffer);
+    auto hej = block.getSingleChannelBlock(0);
+    juce::dsp::ProcessContextReplacing<float> context(hej);
 
-    if (mBlackLoungeAmp)
-    {
-        buffer.applyGain(gain);
-        mBlackLoungeAmp->process(buffer.getWritePointer(0), buffer.getWritePointer(0), buffer.getNumSamples());
+    mChain.process(context);
 
-        buffer.applyGain(volume);
+    // Blow should be included
+    // auto gain = juce::Decibels::decibelsToGain(mGainParameter->get());
+    // auto volume = juce::Decibels::decibelsToGain(mVolumeParameter->get());
 
-        if (buffer.getNumChannels() > 1)
-            buffer.copyFrom(1, 0, buffer.getReadPointer(0), buffer.getNumSamples());
-    }
+    // if (mBlackLoungeAmp)
+    // {
+    //     buffer.applyGain(gain);
+    //     mBlackLoungeAmp->process(buffer.getWritePointer(0), buffer.getWritePointer(0), buffer.getNumSamples());
+
+    //     buffer.applyGain(volume);
+
+    //     if (buffer.getNumChannels() > 1)
+    //         buffer.copyFrom(1, 0, buffer.getReadPointer(0), buffer.getNumSamples());
+    // }
 }
 
 //==============================================================================
