@@ -21,25 +21,24 @@ class BlackLoungeAudioProcessorEditor final : public juce::AudioProcessorEditor
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     BlackLoungeAudioProcessor &processorRef;
-    juce::TextButton button;
+    juce::Label titleLabel;
+    juce::TextButton settingsButton;
     juce::TextButton analyzeButton;
+    juce::TextButton mDenoiserActiveButton;
     juce::Label volumeLabel;
     juce::Slider volumeSlider;
-    juce::Label thresholdLabel;
-    juce::Slider thresholdSlider;
+    juce::Label denoiserLabel;
+    juce::Slider denoiserSlider;
     juce::Label gainLabel;
     juce::Slider gainSlider;
-    juce::TabbedComponent mainScreens{juce::TabbedButtonBar::TabsAtBottom};
     FontWebLookAndFeel fontWebLookAndFeel;
     DeathMetalLookAndFeel fontDeathMetalLookAndFeel;
 
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> mVolumeAttachment;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> mThresholdAttachment;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> mDenoiserAttachment;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> mGainAttachment;
     std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> mAnalyzeAttachment;
-
-    juce::Slider testSlider;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> mTestAttachment;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> mDenoiserActiveAttachment;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(BlackLoungeAudioProcessorEditor)
 };

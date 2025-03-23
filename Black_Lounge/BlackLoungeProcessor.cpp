@@ -17,13 +17,10 @@ BlackLoungeAudioProcessor::BlackLoungeAudioProcessor()
     mVolumeParameter = dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("volume"));
     mThresholdParameter = dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("threshold"));
     mGainParameter = dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("gain"));
-    mNoiseGateActiveParameter = dynamic_cast<juce::AudioParameterBool *>(mParameters.getParameter("noisegate"));
+    mDenoiserActiveParameter = dynamic_cast<juce::AudioParameterBool *>(mParameters.getParameter("denoiserActive"));
     mAnalyzeParameter = dynamic_cast<juce::AudioParameterBool *>(mParameters.getParameter("analyze"));
 
-    mTestParameter = dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("test"));
-
-    auto &firstFilter = mChain.get<0>();
-    firstFilter = juce::dsp::IIR::Coefficients<float>::makePeakFilter(48000, 25.f, 0.707f, 1.0f);
+    mDenoiserParameter = dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("denoiser"));
 
     mBlackLoungeAmp = std::make_unique<Amp>(BlackLoungeAmp::ironmaster_nam, BlackLoungeAmp::ironmaster_namSize);
 }
@@ -155,10 +152,10 @@ juce::AudioProcessorValueTreeState::ParameterLayout BlackLoungeAudioProcessor::c
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>("volume", "Volume", -10.f, 10.f, 0.f));
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>("threshold", "Threshold", -100.f, 0.f, -80.f));
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>("gain", "Gain", -20.f, 20.f, 0.f));
-    parameters.push_back(std::make_unique<juce::AudioParameterBool>("noisegate", "NoiseGate", true));
+    parameters.push_back(std::make_unique<juce::AudioParameterBool>("denoiserActive", "DenoiserActive", true));
     parameters.push_back(std::make_unique<juce::AudioParameterBool>("analyze", "Analyze", false));
 
-    parameters.push_back(std::make_unique<juce::AudioParameterFloat>("test", "Test", -140.f, 0.f, -140.f));
+    parameters.push_back(std::make_unique<juce::AudioParameterFloat>("denoiser", "Denoiser", -140.f, 0.f, -140.f));
 
     return {parameters.begin(), parameters.end()};
 }
@@ -167,14 +164,12 @@ void BlackLoungeAudioProcessor::processBlock(juce::AudioBuffer<float> &buffer, j
 {
     juce::ignoreUnused(midiMessages);
 
-    auto test = mTestParameter->get();
-    // mNoiseReduction.mLowBand.setCutoffFrequency(test);
-    // mNoiseReduction.mHighBand.setCutoffFrequency(test);
-    mNoiseReduction.mNoiseGate.setThreshold(test);
-
-    // auto block = juce::dsp::AudioBlock<float>(buffer);
-    // auto context = juce::dsp::ProcessContextReplacing<float>(block);
-    mNoiseReduction.process(buffer);
+    if (mDenoiserActiveParameter->get())
+    {
+        auto threshold = mDenoiserParameter->get();
+        mNoiseReduction.setThreshold(threshold);
+        mNoiseReduction.process(buffer);
+    }
 
     // if (mAnalyzeParameter->get())
     // {
@@ -194,24 +189,19 @@ void BlackLoungeAudioProcessor::processBlock(juce::AudioBuffer<float> &buffer, j
     //         }
     //     }
     // }
-    // auto freq = mTestParameter->get();
 
-    // Blow should be included
     auto gain = juce::Decibels::decibelsToGain(mGainParameter->get());
     auto volume = juce::Decibels::decibelsToGain(mVolumeParameter->get());
 
     if (mBlackLoungeAmp)
     {
         buffer.applyGain(gain);
-        // mBlackLoungeAmp->process(buffer.getWritePointer(0), buffer.getWritePointer(0), buffer.getNumSamples());
-
         mBlackLoungeAmp->process(buffer);
-
-        buffer.applyGain(volume);
-
-        if (buffer.getNumChannels() > 1)
-            buffer.copyFrom(1, 0, buffer.getReadPointer(0), buffer.getNumSamples());
     }
+
+    buffer.applyGain(volume);
+    if (buffer.getNumChannels() > 1)
+        buffer.copyFrom(1, 0, buffer.getReadPointer(0), buffer.getNumSamples());
 }
 
 //==============================================================================
@@ -228,8 +218,8 @@ juce::AudioProcessorEditor *BlackLoungeAudioProcessor::createEditor()
         topLevel->setUsingNativeTitleBar(true);
     }
 
-    // return new BlackLoungeAudioProcessorEditor(*this);
-    return new juce::GenericAudioProcessorEditor(*this);
+    return new BlackLoungeAudioProcessorEditor(*this);
+    // return new juce::GenericAudioProcessorEditor(*this);
 }
 
 //==============================================================================

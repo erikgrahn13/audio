@@ -60,14 +60,14 @@ class BlackLoungeAudioProcessor final : public juce::AudioProcessor
     juce::AudioParameterFloat *mVolumeParameter;
     juce::AudioParameterFloat *mThresholdParameter;
     juce::AudioParameterFloat *mGainParameter;
-    juce::AudioParameterBool *mNoiseGateActiveParameter;
 
     juce::AudioParameterBool *mAnalyzeParameter;
 
     juce::dsp::ProcessorChain<juce::dsp::IIR::Filter<float>> mChain;
     NoiseReduction mNoiseReduction;
 
-    juce::AudioParameterFloat *mTestParameter;
+    juce::AudioParameterFloat *mDenoiserParameter;
+    juce::AudioParameterBool *mDenoiserActiveParameter;
 
     juce::AudioBuffer<float> analysisBuffer;
     int analysisBufferPosition{0};

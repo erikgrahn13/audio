@@ -10,21 +10,34 @@ BlackLoungeAudioProcessorEditor::BlackLoungeAudioProcessorEditor(BlackLoungeAudi
 
     if (juce::JUCEApplicationBase::isStandaloneApp())
     {
-        button.setLookAndFeel(&fontWebLookAndFeel);
-        button.setButtonText(juce::CharPointer_UTF8(""));
-        addAndMakeVisible(button);
-        button.onClick = [] { juce::StandalonePluginHolder::getInstance()->showAudioSettingsDialog(); };
-        // auto &erik = juce::StandalonePluginHolder::getInstance()->deviceManager;
-
-        // mainScreens.setOrientation(juce::TabbedButtonBar::Orientation::TabsAtBottom);
-
-        // addAndMakeVisible(mainScreens);
+        settingsButton.setLookAndFeel(&fontWebLookAndFeel);
+        settingsButton.setButtonText(juce::CharPointer_UTF8(""));
+        addAndMakeVisible(settingsButton);
+        settingsButton.onClick = [] { juce::StandalonePluginHolder::getInstance()->showAudioSettingsDialog(); };
     }
 
     analyzeButton.setButtonText("Analyze");
     mAnalyzeAttachment.reset(new juce::AudioProcessorValueTreeState::ButtonAttachment(processorRef.getVTSParameters(),
                                                                                       "analyze", analyzeButton));
     addAndMakeVisible(analyzeButton);
+
+    titleLabel.setText("BLACK LOUNGE", juce::NotificationType::dontSendNotification);
+    titleLabel.setJustificationType(juce::Justification::centred);
+
+    auto fontOptions = juce::FontOptions(
+        juce::Typeface::createSystemTypefaceFor(CustomFont::ArtDystopia_ttf, CustomFont::ArtDystopia_ttfSize));
+    fontOptions = fontOptions.withHeight(60.);
+    titleLabel.setFont(juce::Font(fontOptions));
+    // titleLabel.setFont(juce::FontOptions(
+    //     juce::Typeface::createSystemTypefaceFor(CustomFont::ArtDystopia_ttf, CustomFont::ArtDystopia_ttfSize)));
+    // titleLabel.setFont(juce::Font(juce::FontOptions(
+    //     juce::Typeface::createSystemTypefaceFor(CustomFont::ArtDystopia_ttf,
+    //     CustomFont::ArtDystopia_ttfSize), 30.f, juce::Font::plain)));
+
+    // Apply the Font to your Label
+
+    // titleLabel.setLookAndFeel(&fontDeathMetalLookAndFeel);
+    addAndMakeVisible(titleLabel);
 
     auto volumeName = processorRef.getVTSParameters().getParameter("volume")->getName(16).toUpperCase();
     volumeLabel.setText(volumeName, juce::NotificationType::dontSendNotification);
@@ -38,18 +51,18 @@ BlackLoungeAudioProcessorEditor::BlackLoungeAudioProcessorEditor(BlackLoungeAudi
                                                                                      "volume", volumeSlider));
     addAndMakeVisible(volumeSlider);
 
-    auto thresholdName = processorRef.getVTSParameters().getParameter("threshold")->getName(16).toUpperCase();
-    thresholdLabel.setText(thresholdName, juce::NotificationType::dontSendNotification);
-    thresholdLabel.setJustificationType(juce::Justification::centred);
-    thresholdLabel.setLookAndFeel(&fontDeathMetalLookAndFeel);
-    thresholdLabel.attachToComponent(&thresholdSlider, false);
-    thresholdSlider.setLookAndFeel(&fontDeathMetalLookAndFeel);
-    thresholdSlider.setSliderStyle(juce::Slider::RotaryVerticalDrag);
-    thresholdSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
-    mThresholdAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(processorRef.getVTSParameters(),
-                                                                                        "threshold", thresholdSlider));
+    auto denoiserName = processorRef.getVTSParameters().getParameter("denoiser")->getName(16).toUpperCase();
+    denoiserLabel.setText(denoiserName, juce::NotificationType::dontSendNotification);
+    denoiserLabel.setJustificationType(juce::Justification::centred);
+    denoiserLabel.setLookAndFeel(&fontDeathMetalLookAndFeel);
+    denoiserLabel.attachToComponent(&denoiserSlider, false);
+    denoiserSlider.setLookAndFeel(&fontDeathMetalLookAndFeel);
+    denoiserSlider.setSliderStyle(juce::Slider::RotaryVerticalDrag);
+    denoiserSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
+    mDenoiserAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(processorRef.getVTSParameters(),
+                                                                                       "denoiser", denoiserSlider));
 
-    addAndMakeVisible(thresholdSlider);
+    addAndMakeVisible(denoiserSlider);
 
     auto gainName = processorRef.getVTSParameters().getParameter("gain")->getName(16).toUpperCase();
     gainLabel.setText(gainName, juce::NotificationType::dontSendNotification);
@@ -64,20 +77,39 @@ BlackLoungeAudioProcessorEditor::BlackLoungeAudioProcessorEditor(BlackLoungeAudi
 
     addAndMakeVisible(gainSlider);
 
-    testSlider.setSliderStyle(juce::Slider::LinearVertical);
-    mTestAttachment.reset(
-        new juce::AudioProcessorValueTreeState::SliderAttachment(processorRef.getVTSParameters(), "test", testSlider));
-    addAndMakeVisible(testSlider);
+    mDenoiserActiveAttachment.reset(new juce::AudioProcessorValueTreeState::ButtonAttachment(
+        processorRef.getVTSParameters(), "denoiserActive", mDenoiserActiveButton));
+
+    mDenoiserActiveButton.setLookAndFeel(&fontWebLookAndFeel);
+    mDenoiserActiveButton.setColour(juce::TextButton::ColourIds::textColourOnId, juce::Colours::white);
+    mDenoiserActiveButton.setColour(juce::TextButton::ColourIds::textColourOffId, juce::Colours::grey);
+    mDenoiserActiveButton.setButtonText(juce::CharPointer_UTF8(""));
+    mDenoiserActiveButton.onClick = [this]() {
+        if (mDenoiserActiveButton.getToggleState())
+        {
+            mDenoiserActiveButton.setButtonText(juce::CharPointer_UTF8(""));
+        }
+        else
+        {
+            mDenoiserActiveButton.setButtonText(juce::CharPointer_UTF8(""));
+        }
+    };
+    mDenoiserActiveButton.setClickingTogglesState(true);
+    mDenoiserActiveButton.setColour(juce::ComboBox::outlineColourId, juce::Colours::transparentBlack);
+    mDenoiserActiveButton.setColour(juce::TextButton::ColourIds::buttonOnColourId, juce::Colours::transparentBlack);
+    mDenoiserActiveButton.setColour(juce::TextButton::buttonOnColourId, juce::Colours::transparentBlack);
+
+    addAndMakeVisible(mDenoiserActiveButton);
 }
 
 BlackLoungeAudioProcessorEditor::~BlackLoungeAudioProcessorEditor()
 {
-    thresholdLabel.setLookAndFeel(nullptr);
+    denoiserLabel.setLookAndFeel(nullptr);
     gainLabel.setLookAndFeel(nullptr);
     volumeLabel.setLookAndFeel(nullptr);
     gainSlider.setLookAndFeel(nullptr);
     volumeSlider.setLookAndFeel(nullptr);
-    thresholdSlider.setLookAndFeel(nullptr);
+    denoiserSlider.setLookAndFeel(nullptr);
 }
 
 //==============================================================================
@@ -99,11 +131,15 @@ void BlackLoungeAudioProcessorEditor::resized()
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor.
 
-    mainScreens.setBounds(getLocalBounds());
-
     auto bounds = getLocalBounds();
-    gainSlider.setBounds(20, bounds.getCentreY(), 80, 80);
-    thresholdSlider.setBounds(bounds.getCentreX() - 40, bounds.getCentreY(), 80, 80);
+
+    titleLabel.setBounds(0, 10, bounds.getWidth(), 100);
+
+    denoiserSlider.setBounds(20, bounds.getCentreY(), 80, 80);
+    mDenoiserActiveButton.setBounds(denoiserSlider.getWidth() / 2, bounds.getCentreY() + denoiserSlider.getHeight(), 40,
+                                    40);
+
+    gainSlider.setBounds(bounds.getCentreX() - 40, bounds.getCentreY(), 80, 80);
     volumeSlider.setBounds(bounds.getWidth() - 100, bounds.getCentreY(), 80, 80);
 
     // auto knobsArea = bounds.removeFromBottom(bounds.getHeight() / 3);
@@ -111,8 +147,5 @@ void BlackLoungeAudioProcessorEditor::resized()
     // volumeSlider.setBounds(bounds.removeFromRight(bounds.getWidth() / 2).reduced(50));
     // thresholdSlider.setBounds(bounds.reduced(50));
 
-    button.setBounds(10, getHeight() - 70, 60, 60);
-    testSlider.setBounds(getWidth() - 270, getHeight() - 270, 140, 100);
-
-    // audioSetupComp->setBounds(r.removeFromTop(proportionOfHeight(0.65f)));
+    settingsButton.setBounds(bounds.getWidth() - 70, getHeight() - 70, 60, 60);
 }
