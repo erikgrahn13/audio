@@ -1,7 +1,7 @@
 #pragma once
 
 #include "NAM/dsp.h"
-// #include "NoiseGate.h"
+#include <JuceHeader.h>
 #include <deque>
 
 class Amp
@@ -13,7 +13,7 @@ class Amp
     ~Amp();
 
     void prepare();
-    void process(NAM_SAMPLE *input, NAM_SAMPLE *output, int numFrames);
+    void process(juce::AudioBuffer<float> &buffer);
     void setThreshold(float threshold);
     // std::shared_ptr<nam::DSP> getNamModel();
     // void process();

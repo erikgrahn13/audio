@@ -3,6 +3,7 @@
 #include "Amp.h"
 #include "BlackLoungeAmp.h"
 #include "NAM/dsp.h"
+#include "NoiseReduction.h"
 #include <JuceHeader.h>
 #include <juce_audio_processors/juce_audio_processors.h>
 
@@ -45,7 +46,6 @@ class BlackLoungeAudioProcessor final : public juce::AudioProcessor
     //==============================================================================
     void getStateInformation(juce::MemoryBlock &destData) override;
     void setStateInformation(const void *data, int sizeInBytes) override;
-    void doDualMono(juce::AudioBuffer<float> &mainBuffer, float **input);
 
     juce::AudioProcessorValueTreeState &getVTSParameters()
     {
@@ -65,6 +65,8 @@ class BlackLoungeAudioProcessor final : public juce::AudioProcessor
     juce::AudioParameterBool *mAnalyzeParameter;
 
     juce::dsp::ProcessorChain<juce::dsp::IIR::Filter<float>> mChain;
+    NoiseReduction mNoiseReduction;
+
     juce::AudioParameterFloat *mTestParameter;
 
     juce::AudioBuffer<float> analysisBuffer;

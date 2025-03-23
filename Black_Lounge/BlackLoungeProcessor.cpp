@@ -111,6 +111,12 @@ void BlackLoungeAudioProcessor::prepareToPlay(double sampleRate, int samplesPerB
     analysisBuffer.clear();
     analysisBufferPosition = 0;
     bufferFilled = false;
+
+    juce::dsp::ProcessSpec spec;
+    spec.maximumBlockSize = samplesPerBlock;
+    spec.numChannels = getTotalNumInputChannels();
+    spec.sampleRate = sampleRate;
+    mNoiseReduction.prepare(spec);
 }
 
 void BlackLoungeAudioProcessor::releaseResources()
@@ -143,18 +149,6 @@ bool BlackLoungeAudioProcessor::isBusesLayoutSupported(const BusesLayout &layout
 #endif
 }
 
-void BlackLoungeAudioProcessor::doDualMono(juce::AudioBuffer<float> &mainBuffer, float **input)
-{
-    auto channelDataLeft = mainBuffer.getWritePointer(0);
-    auto channelDataRight = mainBuffer.getWritePointer(1);
-
-    for (int sample = 0; sample < mainBuffer.getNumSamples(); ++sample)
-    {
-        channelDataRight[sample] = input[0][sample];
-        channelDataLeft[sample] = input[0][sample];
-    }
-}
-
 juce::AudioProcessorValueTreeState::ParameterLayout BlackLoungeAudioProcessor::createParameters()
 {
     std::vector<std::unique_ptr<juce::RangedAudioParameter>> parameters;
@@ -164,7 +158,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout BlackLoungeAudioProcessor::c
     parameters.push_back(std::make_unique<juce::AudioParameterBool>("noisegate", "NoiseGate", true));
     parameters.push_back(std::make_unique<juce::AudioParameterBool>("analyze", "Analyze", false));
 
-    parameters.push_back(std::make_unique<juce::AudioParameterFloat>("test", "Test", -24.f, 6.f, 0.f));
+    parameters.push_back(std::make_unique<juce::AudioParameterFloat>("test", "Test", -140.f, 0.f, -140.f));
 
     return {parameters.begin(), parameters.end()};
 }
@@ -172,6 +166,15 @@ juce::AudioProcessorValueTreeState::ParameterLayout BlackLoungeAudioProcessor::c
 void BlackLoungeAudioProcessor::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages)
 {
     juce::ignoreUnused(midiMessages);
+
+    auto test = mTestParameter->get();
+    // mNoiseReduction.mLowBand.setCutoffFrequency(test);
+    // mNoiseReduction.mHighBand.setCutoffFrequency(test);
+    mNoiseReduction.mNoiseGate.setThreshold(test);
+
+    // auto block = juce::dsp::AudioBlock<float>(buffer);
+    // auto context = juce::dsp::ProcessContextReplacing<float>(block);
+    mNoiseReduction.process(buffer);
 
     // if (mAnalyzeParameter->get())
     // {
@@ -191,33 +194,24 @@ void BlackLoungeAudioProcessor::processBlock(juce::AudioBuffer<float> &buffer, j
     //         }
     //     }
     // }
-    std::ignore = buffer;
-    auto value = juce::Decibels::decibelsToGain(mTestParameter->get());
-    auto &filter = mChain.get<0>();
-    auto coeffs = juce::dsp::IIR::Coefficients<float>::makePeakFilter(getSampleRate(), 25.f, 0.707f, value);
-    filter.coefficients = coeffs;
-
-    // juce::ProcessC
-    juce::dsp::AudioBlock<float> block(buffer);
-    auto hej = block.getSingleChannelBlock(0);
-    juce::dsp::ProcessContextReplacing<float> context(hej);
-
-    mChain.process(context);
+    // auto freq = mTestParameter->get();
 
     // Blow should be included
-    // auto gain = juce::Decibels::decibelsToGain(mGainParameter->get());
-    // auto volume = juce::Decibels::decibelsToGain(mVolumeParameter->get());
+    auto gain = juce::Decibels::decibelsToGain(mGainParameter->get());
+    auto volume = juce::Decibels::decibelsToGain(mVolumeParameter->get());
 
-    // if (mBlackLoungeAmp)
-    // {
-    //     buffer.applyGain(gain);
-    //     mBlackLoungeAmp->process(buffer.getWritePointer(0), buffer.getWritePointer(0), buffer.getNumSamples());
+    if (mBlackLoungeAmp)
+    {
+        buffer.applyGain(gain);
+        // mBlackLoungeAmp->process(buffer.getWritePointer(0), buffer.getWritePointer(0), buffer.getNumSamples());
 
-    //     buffer.applyGain(volume);
+        mBlackLoungeAmp->process(buffer);
 
-    //     if (buffer.getNumChannels() > 1)
-    //         buffer.copyFrom(1, 0, buffer.getReadPointer(0), buffer.getNumSamples());
-    // }
+        buffer.applyGain(volume);
+
+        if (buffer.getNumChannels() > 1)
+            buffer.copyFrom(1, 0, buffer.getReadPointer(0), buffer.getNumSamples());
+    }
 }
 
 //==============================================================================
@@ -234,7 +228,8 @@ juce::AudioProcessorEditor *BlackLoungeAudioProcessor::createEditor()
         topLevel->setUsingNativeTitleBar(true);
     }
 
-    return new BlackLoungeAudioProcessorEditor(*this);
+    // return new BlackLoungeAudioProcessorEditor(*this);
+    return new juce::GenericAudioProcessorEditor(*this);
 }
 
 //==============================================================================

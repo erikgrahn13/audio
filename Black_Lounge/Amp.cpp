@@ -123,13 +123,13 @@ void Amp::prepare()
 {
 }
 
-void Amp::process(NAM_SAMPLE *input, NAM_SAMPLE *output, int numFrames)
+void Amp::process(juce::AudioBuffer<float> &buffer)
 {
-
-    if (mNamModel)
-    {
-        mNamModel->process(input, output, numFrames);
-    }
+    std::ignore = buffer;
+    // if (mNamModel)
+    // {
+    //     mNamModel->process(input, output, numFrames);
+    // }
 
     // for (int i = 0; i < numFrames; ++i)
     // {
