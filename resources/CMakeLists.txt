@@ -6,4 +6,5 @@
 # Conversion to binary-data will happen when your target is built.
 
 juce_add_binary_data(Fonts HEADER_NAME "Fonts.h" SOURCES fonts/ArtDystopia.ttf
-                                                         fonts/fontaudio.ttf )
+                                                         fonts/fontaudio.ttf
+                                                         fonts/forkawesome-webfont.ttf )

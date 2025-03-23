@@ -47,10 +47,10 @@ class DeathMetalLookAndFeel : public juce::LookAndFeel_V4
         if (slider.isBar())
         {
             g.setColour(slider.findColour(Slider::trackColourId));
-            g.fillRect(slider.isHorizontal() ? Rectangle<float>(static_cast<float>(x), (float)y + 0.5f,
-                                                                sliderPos - (float)x, (float)height - 1.0f)
-                                             : Rectangle<float>((float)x + 0.5f, sliderPos, (float)width - 1.0f,
-                                                                (float)y + ((float)height - sliderPos)));
+            g.fillRect(slider.isHorizontal() ? juce::Rectangle<float>(static_cast<float>(x), (float)y + 0.5f,
+                                                                      sliderPos - (float)x, (float)height - 1.0f)
+                                             : juce::Rectangle<float>((float)x + 0.5f, sliderPos, (float)width - 1.0f,
+                                                                      (float)y + ((float)height - sliderPos)));
 
             drawLinearSliderOutline(g, x, y, width, height, style, slider);
         }
@@ -109,7 +109,7 @@ class DeathMetalLookAndFeel : public juce::LookAndFeel_V4
             if (!isTwoVal)
             {
                 g.setColour(juce::Colours::black);
-                g.fillEllipse(Rectangle<float>(static_cast<float>(thumbWidth), static_cast<float>(thumbWidth))
+                g.fillEllipse(juce::Rectangle<float>(static_cast<float>(thumbWidth), static_cast<float>(thumbWidth))
                                   .withCentre(isThreeVal ? thumbPoint : maxPoint));
 
                 g.setColour(juce::Colours::white);
@@ -151,7 +151,7 @@ class DeathMetalLookAndFeel : public juce::LookAndFeel_V4
                 pentagramPath.closeSubPath();
                 g.strokePath(pentagramPath, juce::PathStrokeType(1));
 
-                g.drawEllipse(Rectangle<float>(static_cast<float>(thumbWidth), static_cast<float>(thumbWidth))
+                g.drawEllipse(juce::Rectangle<float>(static_cast<float>(thumbWidth), static_cast<float>(thumbWidth))
                                   .withCentre(isThreeVal ? thumbPoint : maxPoint)
                                   .reduced(2, 2),
                               1.);
