@@ -136,7 +136,7 @@ bool BlackLoungeAudioProcessor::isBusesLayoutSupported(const BusesLayout &layout
         layouts.getMainOutputChannelSet() != juce::AudioChannelSet::stereo())
         return false;
 
-        // This checks if the input layout matches the output layout
+    // This checks if the input layout matches the output layout
 #if !JucePlugin_IsSynth
     if (layouts.getMainOutputChannelSet() != layouts.getMainInputChannelSet())
         return false;
@@ -150,10 +150,10 @@ juce::AudioProcessorValueTreeState::ParameterLayout BlackLoungeAudioProcessor::c
 {
     std::vector<std::unique_ptr<juce::RangedAudioParameter>> parameters;
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>("volume", "Volume", -10.f, 10.f, 0.f));
-    parameters.push_back(std::make_unique<juce::AudioParameterFloat>("threshold", "Threshold", -100.f, 0.f, -80.f));
+    // parameters.push_back(std::make_unique<juce::AudioParameterFloat>("threshold", "Threshold", -100.f, 0.f, -80.f));
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>("gain", "Gain", -20.f, 20.f, 0.f));
     parameters.push_back(std::make_unique<juce::AudioParameterBool>("denoiserActive", "DenoiserActive", true));
-    parameters.push_back(std::make_unique<juce::AudioParameterBool>("analyze", "Analyze", false));
+    // parameters.push_back(std::make_unique<juce::AudioParameterBool>("analyze", "Analyze", false));
 
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>("denoiser", "Denoiser", -140.f, 0.f, -140.f));
 
@@ -171,32 +171,15 @@ void BlackLoungeAudioProcessor::processBlock(juce::AudioBuffer<float> &buffer, j
         mNoiseReduction.process(buffer);
     }
 
-    // if (mAnalyzeParameter->get())
-    // {
-    //     int numSamples = buffer.getNumSamples();
-    //     int remainingSpace = analysisBuffer.getNumSamples() - analysisBufferPosition;
-
-    //     if (numSamples <= remainingSpace)
-    //     {
-    //         analysisBuffer.copyFrom(0, analysisBufferPosition, buffer, 0, 0, numSamples);
-    //         analysisBufferPosition += numSamples;
-
-    //         if (analysisBufferPosition >= analysisBuffer.getNumSamples())
-    //         {
-    //             bufferFilled = true;
-
-    //             // TODO: Get noise reduction profile of the stored data here
-    //         }
-    //     }
-    // }
-
     auto gain = juce::Decibels::decibelsToGain(mGainParameter->get());
     auto volume = juce::Decibels::decibelsToGain(mVolumeParameter->get());
 
     if (mBlackLoungeAmp)
     {
         buffer.applyGain(gain);
+#if defined NDEBUG
         mBlackLoungeAmp->process(buffer);
+#endif
     }
 
     buffer.applyGain(volume);

@@ -17,6 +17,7 @@ include(Pluginval)
 include(Doxygen)
 include(ASIO)
 include(NAM)
+include(WebView)
 
 set(CMAKE_OSX_DEPLOYMENT_TARGET "12.7" CACHE STRING "Minimum OS X deployment version" FORCE)
 

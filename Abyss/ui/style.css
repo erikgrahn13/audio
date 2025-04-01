@@ -2,4 +2,14 @@ body {
     background-color: black;
     color: blue;
     text-align: center;
+    font-family: DeathMetalFont, sans-serif;
+}
+
+@font-face {
+    font-family: DeathMetalFont;
+    src: url('./fonts/ArtDystopia.ttf') format('truetype');
+  }
+
+h1 {
+    font-family: DeathMetalFont, sans-serif !important;
 }

@@ -14,13 +14,27 @@ class BlackLoungeAudioProcessorEditor final : public juce::AudioProcessorEditor
     ~BlackLoungeAudioProcessorEditor() override;
 
     //==============================================================================
-    void paint(juce::Graphics &) override;
+    // void paint(juce::Graphics &) override;
     void resized() override;
 
   private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     BlackLoungeAudioProcessor &processorRef;
+
+    // Webview stuff
+    juce::WebSliderRelay volumeRelay{"volume"};
+    juce::WebSliderRelay gainRelay{"gain"};
+    juce::WebSliderRelay denoiserRelay{"denoiser"};
+    juce::WebToggleButtonRelay denoiserActiveRelay{"denoiserActive"};
+    juce::WebBrowserComponent webBrowserComponent;
+    std::unique_ptr<juce::WebSliderParameterAttachment> volumeWebAttachment;
+    std::unique_ptr<juce::WebSliderParameterAttachment> gainWebAttachment;
+    std::unique_ptr<juce::WebSliderParameterAttachment> denoiserWebAttachment;
+    std::unique_ptr<juce::WebToggleButtonParameterAttachment> denoiserActiveAttachment;
+
+    std::optional<juce::WebBrowserComponent::Resource> getResource(const juce::String &url);
+
     juce::Label titleLabel;
     juce::TextButton settingsButton;
     juce::TextButton analyzeButton;

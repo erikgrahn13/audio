@@ -86,8 +86,7 @@ target_compile_definitions(${PROJECT_NAME}
     PUBLIC
 
     # JUCE_WEB_BROWSER and JUCE_USE_CURL would be on by default, but you might not need them.
-    JUCE_WEB_BROWSER=1 # If you remove this, add `NEEDS_WEB_BROWSER TRUE` to the `juce_add_plugin` call
-    JUCE_USE_WIN_WEBVIEW2_WITH_STATIC_LINKING=1
+    # If you remove this, add `NEEDS_WEB_BROWSER TRUE` to the `juce_add_plugin` call
     JUCE_USE_CURL=0 # If you remove this, add `NEEDS_CURL TRUE` to the `juce_add_plugin` call
     JUCE_VST3_CAN_REPLACE_VST2=0)
 
@@ -99,77 +98,78 @@ target_compile_definitions(${PROJECT_NAME}
 # Conversion to binary-data will happen when your target is built.
 
 # The things below should probably be moved to a cmake script in a cmake function
-file(REMOVE_RECURSE "${CMAKE_CURRENT_BINARY_DIR}/ui")
+# file(REMOVE_RECURSE "${CMAKE_CURRENT_BINARY_DIR}/ui")
 
-if(CMAKE_BUILD_TYPE STREQUAL "Release")
-    file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/ui/" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/ui/")
-    file(COPY "${juce_SOURCE_DIR}/modules/juce_gui_extra/native/javascript/" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/ui/juce/")
-    file(COPY "${CMAKE_SOURCE_DIR}/widgets/" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/ui/widgets/")
+# if(CMAKE_BUILD_TYPE STREQUAL "Release")
+# file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/ui/" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/ui/")
+# file(COPY "${juce_SOURCE_DIR}/modules/juce_gui_extra/native/javascript/" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/ui/juce/")
+# file(COPY "${CMAKE_SOURCE_DIR}/widgets/" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/ui/widgets/")
 
-    set(WEBVIEW_FILES_ZIP_NAME "webview_files.zip")
-    set(TARGET_WEBVIEW_FILES_ZIP_PATH "${CMAKE_CURRENT_BINARY_DIR}/${WEBVIEW_FILES_ZIP_NAME}")
+# set(WEBVIEW_FILES_ZIP_NAME "webview_files.zip")
+# set(TARGET_WEBVIEW_FILES_ZIP_PATH "${CMAKE_CURRENT_BINARY_DIR}/${WEBVIEW_FILES_ZIP_NAME}")
 
-    add_custom_target(ZipWebViewFiles
-        COMMAND
-        ${CMAKE_COMMAND} -E tar cvf
-        "${TARGET_WEBVIEW_FILES_ZIP_PATH}"
-        --format=zip
-        "${CMAKE_CURRENT_BINARY_DIR}/ui"
-        BYPRODUCTS
-        "${TARGET_WEBVIEW_FILES_ZIP_PATH}"
-        WORKING_DIRECTORY
-        "${CMAKE_CURRENT_BINARY_DIR}"
-        COMMENT "Zipping WebView files..."
-        VERBATIM
-    )
+# add_custom_target(ZipWebViewFiles
+# COMMAND
+# ${CMAKE_COMMAND} -E tar cvf
+# "${TARGET_WEBVIEW_FILES_ZIP_PATH}"
+# --format=zip
+# "${CMAKE_CURRENT_BINARY_DIR}/ui"
+# BYPRODUCTS
+# "${TARGET_WEBVIEW_FILES_ZIP_PATH}"
+# WORKING_DIRECTORY
+# "${CMAKE_CURRENT_BINARY_DIR}"
+# COMMENT "Zipping WebView files..."
+# VERBATIM
+# )
 
-    target_compile_definitions(${PROJECT_NAME} PRIVATE ZIPPED_FILES_PREFIX="ui/")
+# target_compile_definitions(${PROJECT_NAME} PRIVATE ZIPPED_FILES_PREFIX="ui/")
 
-    juce_add_binary_data(WebViewFiles
-        HEADER_NAME WebViewFiles.h
-        NAMESPACE webview_files
-        SOURCES ${TARGET_WEBVIEW_FILES_ZIP_PATH}
-    )
+# juce_add_binary_data(WebViewFiles
+# HEADER_NAME WebViewFiles.h
+# NAMESPACE webview_files
+# SOURCES ${TARGET_WEBVIEW_FILES_ZIP_PATH}
+# )
 
-    add_dependencies(WebViewFiles ZipWebViewFiles)
-    target_link_libraries(${PROJECT_NAME} PRIVATE WebViewFiles)
+# add_dependencies(WebViewFiles ZipWebViewFiles)
+# target_link_libraries(${PROJECT_NAME} PRIVATE WebViewFiles)
 
-elseif(CMAKE_BUILD_TYPE STREQUAL "Debug")
-    set(LINK_DEST "${CMAKE_CURRENT_BINARY_DIR}/ui")
-    set(SRC_UI "${CMAKE_CURRENT_SOURCE_DIR}/ui")
-    set(SRC_WIDGETS "${CMAKE_SOURCE_DIR}/widgets")
-    set(SRC_JUCE_JS "${juce_SOURCE_DIR}/modules/juce_gui_extra/native/javascript")
+# elseif(CMAKE_BUILD_TYPE STREQUAL "Debug")
+# set(LINK_DEST "${CMAKE_CURRENT_BINARY_DIR}/ui")
+# set(SRC_UI "${CMAKE_CURRENT_SOURCE_DIR}/ui")
+# set(SRC_WIDGETS "${CMAKE_SOURCE_DIR}/widgets")
+# set(SRC_JUCE_JS "${juce_SOURCE_DIR}/modules/juce_gui_extra/native/javascript")
 
-    add_custom_command(
-        OUTPUT "${LINK_DEST}"
-        COMMAND ${CMAKE_COMMAND} -E create_symlink "${SRC_UI}/index.html" "${LINK_DEST}/index.html"
-        COMMAND ${CMAKE_COMMAND} -E create_symlink "${SRC_UI}/style.css" "${LINK_DEST}/style.css"
-        COMMENT "Symlinking UI directory"
-        VERBATIM
-    )
+# add_custom_command(
+# OUTPUT "${LINK_DEST}"
+# COMMAND ${CMAKE_COMMAND} -E create_symlink "${SRC_UI}/index.html" "${LINK_DEST}/index.html"
+# COMMAND ${CMAKE_COMMAND} -E create_symlink "${SRC_UI}/style.css" "${LINK_DEST}/style.css"
+# COMMENT "Symlinking UI directory"
+# VERBATIM
+# )
 
-    add_custom_command(
-        OUTPUT "${LINK_DEST}/widgets"
-        COMMAND ${CMAKE_COMMAND} -E make_directory "${LINK_DEST}"
-        COMMAND ${CMAKE_COMMAND} -E create_symlink "${SRC_WIDGETS}" "${LINK_DEST}/widgets"
-        COMMENT "Symlinking widgets directory"
-        VERBATIM
-    )
+# add_custom_command(
+# OUTPUT "${LINK_DEST}/widgets"
+# COMMAND ${CMAKE_COMMAND} -E make_directory "${LINK_DEST}"
+# COMMAND ${CMAKE_COMMAND} -E create_symlink "${SRC_WIDGETS}" "${LINK_DEST}/widgets"
+# COMMENT "Symlinking widgets directory"
+# VERBATIM
+# )
 
-    add_custom_command(
-        OUTPUT "${LINK_DEST}/juce"
-        COMMAND ${CMAKE_COMMAND} -E make_directory "${LINK_DEST}"
-        COMMAND ${CMAKE_COMMAND} -E create_symlink "${SRC_JUCE_JS}" "${LINK_DEST}/juce"
-        COMMENT "Symlinking JUCE JavaScript directory"
-        VERBATIM
-    )
+# add_custom_command(
+# OUTPUT "${LINK_DEST}/juce"
+# COMMAND ${CMAKE_COMMAND} -E make_directory "${LINK_DEST}"
+# COMMAND ${CMAKE_COMMAND} -E create_symlink "${SRC_JUCE_JS}" "${LINK_DEST}/juce"
+# COMMENT "Symlinking JUCE JavaScript directory"
+# VERBATIM
+# )
 
-    add_custom_target(CreateWebviewSymlinks
-        DEPENDS "${LINK_DEST}" "${LINK_DEST}/widgets" "${LINK_DEST}/juce"
-    )
+# add_custom_target(CreateWebviewSymlinks
+# DEPENDS "${LINK_DEST}" "${LINK_DEST}/widgets" "${LINK_DEST}/juce"
+# )
 
-    add_dependencies(${PROJECT_NAME} CreateWebviewSymlinks)
-endif()
+# add_dependencies(${PROJECT_NAME} CreateWebviewSymlinks)
+# endif()
+enable_webview()
 
 # `target_link_libraries` links libraries and JUCE modules to other libraries or executables. Here,
 # we're linking our executable target to the `juce::juce_audio_utils` module. Inter-module
@@ -184,8 +184,7 @@ target_link_libraries(${PROJECT_NAME}
     PUBLIC
     juce::juce_recommended_config_flags
     juce::juce_recommended_lto_flags
-    juce::juce_recommended_warning_flags
-    juce::juce_gui_extra)
+    juce::juce_recommended_warning_flags)
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${juce_SOURCE_DIR}/examples/Assets)
 

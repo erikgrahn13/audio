@@ -53,10 +53,10 @@ class BlackLoungeAudioProcessor final : public juce::AudioProcessor
     }
 
     juce::AudioProcessorValueTreeState::ParameterLayout createParameters();
+    juce::AudioProcessorValueTreeState mParameters;
 
   private:
     std::unique_ptr<Amp> mBlackLoungeAmp;
-    juce::AudioProcessorValueTreeState mParameters;
     juce::AudioParameterFloat *mVolumeParameter;
     juce::AudioParameterFloat *mThresholdParameter;
     juce::AudioParameterFloat *mGainParameter;
