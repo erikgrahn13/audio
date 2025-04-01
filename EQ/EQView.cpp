@@ -5,7 +5,7 @@
 EQView::EQView(AudioPluginAudioProcessor &processor, juce::AudioProcessorValueTreeState &parameters)
     : mProcessor(processor), mParameters(parameters), mAnalyzerCurve(processor),
       deathMetalFont(juce::FontOptions(
-          juce::Typeface::createSystemTypefaceFor(BinaryData::ArtDystopia_ttf, BinaryData::ArtDystopia_ttfSize)))
+          juce::Typeface::createSystemTypefaceFor(CustomFont::ArtDystopia_ttf, CustomFont::ArtDystopia_ttfSize)))
 {
     mHandles.push_back(std::make_unique<Handle>(
         Filter::Type::kHighPass, dynamic_cast<juce::AudioParameterBool *>(mParameters.getParameter("hpf_bypass")),
