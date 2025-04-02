@@ -1,11 +1,12 @@
 #include "AbyssPluginEditor.h"
 #include "AbyssPluginProcessor.h"
 #include "DemoUtilities.h"
-#include "WebViewUtilities.h"
 #include <JuceHeader.h>
 #if defined NDEBUG
 #include <WebViewFiles.h>
 #endif
+#include "WebViewUtilities.h"
+
 //==============================================================================
 AbyssAudioProcessorEditor::AbyssAudioProcessorEditor(AbyssAudioProcessor &p)
     : AudioProcessorEditor(&p), processorRef(p),
