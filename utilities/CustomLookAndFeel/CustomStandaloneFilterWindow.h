@@ -25,7 +25,7 @@
 
 #pragma once
 
-#include "CustomLookAndFeel/DeathMetalLookAndFeel.h"
+// #include "CustomLookAndFeel/DeathMetalLookAndFeel.h"
 
 #ifndef DOXYGEN
 #include <juce_audio_plugin_client/detail/juce_CreatePluginFilter.h>
@@ -600,7 +600,7 @@ class StandalonePluginHolder : private AudioIODeviceCallback, private Timer, pri
         //==============================================================================
         StandalonePluginHolder &owner;
         AudioDeviceSelectorComponent deviceSelector;
-        DeathMetalLookAndFeel deathMetalLookAndFeel;
+        // DeathMetalLookAndFeel deathMetalLookAndFeel;
         Label shouldMuteLabel;
         ToggleButton shouldMuteButton;
         bool isResizing = false;
