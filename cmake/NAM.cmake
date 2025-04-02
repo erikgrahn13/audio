@@ -31,6 +31,8 @@ set(DEPENDENCY_FILES
 
 add_library(nam_dependency STATIC ${DEPENDENCY_FILES})
 
+set_target_properties(nam_dependency PROPERTIES POSITION_INDEPENDENT_CODE ON)
+
 target_compile_definitions(nam_dependency
     PUBLIC
     NAM_SAMPLE_FLOAT
