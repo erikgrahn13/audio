@@ -4,6 +4,7 @@ FetchContent_Declare(
     GIT_TAG v0.2.0
     SOURCE_DIR ${DEPENDENCY_DIR}/nam
     DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+    EXCLUDE_FROM_ALL TRUE
 )
 
 FetchContent_MakeAvailable(
