@@ -1,5 +1,9 @@
 var hierarchy =
 [
+    [ "Amp", "classAmp.html", null ],
+    [ "AudioIODeviceCallback", null, [
+      [ "juce::StandalonePluginHolder", "classjuce_1_1StandalonePluginHolder.html", null ]
+    ] ],
     [ "juce::AudioParameterFloat", null, [
       [ "CustomAudioParameterFloat", "classCustomAudioParameterFloat.html", null ]
     ] ],
@@ -7,12 +11,14 @@ var hierarchy =
       [ "AbyssAudioProcessor", "classAbyssAudioProcessor.html", null ],
       [ "AudioPluginAudioProcessor", "classAudioPluginAudioProcessor.html", null ],
       [ "AudioPluginAudioProcessor", "classAudioPluginAudioProcessor.html", null ],
+      [ "BlackLoungeAudioProcessor", "classBlackLoungeAudioProcessor.html", null ],
       [ "SynthAudioProcessor", "classSynthAudioProcessor.html", null ]
     ] ],
     [ "juce::AudioProcessorEditor", null, [
       [ "AbyssAudioProcessorEditor", "classAbyssAudioProcessorEditor.html", null ],
       [ "AudioPluginAudioProcessorEditor", "classAudioPluginAudioProcessorEditor.html", null ],
       [ "AudioPluginAudioProcessorEditor", "classAudioPluginAudioProcessorEditor.html", null ],
+      [ "BlackLoungeAudioProcessorEditor", "classBlackLoungeAudioProcessorEditor.html", null ],
       [ "SynthAudioProcessorEditor", "classSynthAudioProcessorEditor.html", null ]
     ] ],
     [ "Biquad::Coeffs", "structBiquad_1_1Coeffs.html", null ],
@@ -21,22 +27,35 @@ var hierarchy =
       [ "EQView", "classEQView.html", null ],
       [ "SliderGroup", "classSliderGroup.html", null ]
     ] ],
+    [ "DocumentWindow", null, [
+      [ "juce::StandaloneFilterWindow", "classjuce_1_1StandaloneFilterWindow.html", null ]
+    ] ],
     [ "Filter", "classFilter.html", null ],
     [ "IDsp", "classIDsp.html", [
       [ "IFilter", "classIFilter.html", [
         [ "Biquad", "classBiquad.html", null ]
-      ] ]
+      ] ],
+      [ "NoiseGate", "classNoiseGate.html", null ]
+    ] ],
+    [ "Button::Listener", null, [
+      [ "juce::StandaloneFilterWindow", "classjuce_1_1StandaloneFilterWindow.html", null ]
     ] ],
     [ "juce::AudioProcessorValueTreeState::Listener", null, [
       [ "AudioPluginAudioProcessor", "classAudioPluginAudioProcessor.html", null ],
       [ "AudioPluginAudioProcessorEditor", "classAudioPluginAudioProcessorEditor.html", null ],
       [ "SynthAudioProcessor", "classSynthAudioProcessor.html", null ]
     ] ],
+    [ "Value::Listener", null, [
+      [ "juce::StandalonePluginHolder", "classjuce_1_1StandalonePluginHolder.html", null ]
+    ] ],
     [ "juce::LookAndFeel_V4", null, [
       [ "DeathMetalLookAndFeel", "classDeathMetalLookAndFeel.html", null ],
-      [ "FontAudioLookAndFeel", "classFontAudioLookAndFeel.html", null ]
+      [ "FontAudioLookAndFeel", "classFontAudioLookAndFeel.html", null ],
+      [ "FontWebLookAndFeel", "classFontWebLookAndFeel.html", null ]
     ] ],
+    [ "NoiseReduction", "classNoiseReduction.html", null ],
     [ "Oscillator", "classOscillator.html", null ],
+    [ "juce::StandalonePluginHolder::PluginInOuts", "structjuce_1_1StandalonePluginHolder_1_1PluginInOuts.html", null ],
     [ "juce::SynthesiserSound", null, [
       [ "SynthSound", "classSynthSound.html", null ]
     ] ],
@@ -44,6 +63,7 @@ var hierarchy =
       [ "SynthVoice", "classSynthVoice.html", null ]
     ] ],
     [ "juce::Timer", null, [
-      [ "AnalyzerCurve", "classAnalyzerCurve.html", null ]
+      [ "AnalyzerCurve", "classAnalyzerCurve.html", null ],
+      [ "juce::StandalonePluginHolder", "classjuce_1_1StandalonePluginHolder.html", null ]
     ] ]
 ];

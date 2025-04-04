@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['oscillator_0',['Oscillator',['../classOscillator.html',1,'']]]
+  ['noisegate_0',['NoiseGate',['../classNoiseGate.html',1,'']]],
+  ['noisereduction_1',['NoiseReduction',['../classNoiseReduction.html',1,'']]]
 ];

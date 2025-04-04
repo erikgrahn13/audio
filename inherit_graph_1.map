@@ -1,3 +1,17 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$classFilter.html" title=" " alt="" coords="5,5,60,31"/>
+<area shape="rect" id="Node000000" title=" " alt="" coords="5,5,180,31"/>
+<area shape="rect" id="Node000001" href="$classjuce_1_1StandalonePluginHolder.html" title=" " alt="" coords="228,55,441,80"/>
+<area shape="poly" id="edge1_Node000000_Node000001" title=" " alt="" coords="169,31,272,52,271,57,168,36"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="27,153,159,179"/>
+<area shape="rect" id="Node000004" href="$classAnalyzerCurve.html" title=" " alt="" coords="276,104,393,129"/>
+<area shape="poly" id="edge2_Node000005_Node000004" title=" " alt="" coords="168,148,275,126,276,131,170,153"/>
+<area shape="rect" id="Node000006" href="$classEQView.html" title=" " alt="" coords="299,153,371,179"/>
+<area shape="poly" id="edge3_Node000005_Node000006" title=" " alt="" coords="172,163,298,163,298,169,172,169"/>
+<area shape="rect" id="Node000007" href="$classSliderGroup.html" title=" " alt="" coords="285,203,384,228"/>
+<area shape="poly" id="edge4_Node000005_Node000007" title=" " alt="" coords="169,179,286,203,285,208,168,184"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="33,55,152,80"/>
+<area shape="poly" id="edge5_Node000002_Node000001" title=" " alt="" coords="166,65,228,65,228,70,166,70"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="45,104,140,129"/>
+<area shape="poly" id="edge7_Node000003_Node000001" title=" " alt="" coords="153,102,271,77,272,83,154,107"/>
+<area shape="poly" id="edge6_Node000003_Node000004" title=" " alt="" coords="154,114,276,114,276,119,154,119"/>
 </map>
