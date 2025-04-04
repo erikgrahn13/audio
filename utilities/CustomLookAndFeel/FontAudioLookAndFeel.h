@@ -8,7 +8,7 @@ class FontAudioLookAndFeel : public juce::LookAndFeel_V4
   public:
     FontAudioLookAndFeel()
         : fontAudio(juce::FontOptions(
-              juce::Typeface::createSystemTypefaceFor(BinaryData::fontaudio_ttf, BinaryData::fontaudio_ttfSize)))
+              juce::Typeface::createSystemTypefaceFor(CustomFont::fontaudio_ttf, CustomFont::fontaudio_ttfSize)))
     {
     }
 

@@ -5,5 +5,6 @@
 # static library. These source files can be of any kind (wav data, images, fonts, icons etc.).
 # Conversion to binary-data will happen when your target is built.
 
-juce_add_binary_data(Fonts HEADER_NAME "Fonts.h" SOURCES fonts/ArtDystopia.ttf
-                                                         fonts/fontaudio.ttf )
+juce_add_binary_data(Fonts HEADER_NAME "Fonts.h" NAMESPACE CustomFont SOURCES fonts/ArtDystopia.ttf
+                                                         fonts/fontaudio.ttf
+                                                         fonts/forkawesome-webfont.ttf )

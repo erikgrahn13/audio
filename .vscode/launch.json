@@ -15,15 +15,13 @@
       "preLaunchTask": "CMake: build"
     },
     {
-      "name": "EQ (Linux)",
-      "type": "cppdbg",
+      "name": "Black Lounge (Windows)",
+      "type": "cppvsdbg",
       "request": "launch",
-      "program": "${workspaceRoot}/build/_deps/juce-build/extras/AudioPluginHost/AudioPluginHost_artefacts/Debug/AudioPluginHost",
-      "args": ["${workspaceRoot}/EQ/EQ.filtergraph"],
+      "program": "${workspaceRoot}/build/_deps/juce-build/extras/AudioPluginHost/AudioPluginHost_artefacts/Debug/AudioPluginHost.exe",
+      "args": ["${workspaceRoot}/Black_Lounge/Black_Lounge.filtergraph"],
       "stopAtEntry": false,
-      "cwd": "${workspaceFolder}",
-      "MIMode": "gdb",
-      "miDebuggerPath": "/usr/bin/gdb",
+      "console": "newExternalWindow",
       "preLaunchTask": "CMake: build"
     },
     {

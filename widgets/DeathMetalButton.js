@@ -29,7 +29,6 @@ class DeathMetalButton extends HTMLElement {
 
     toggleState.valueChangedEvent.addListener(() => {
       this.parameterValue = toggleState.getValue();
-      console.log(this.parameterValue);
     });
 
     this.button.textContent = this.textContent.toUpperCase();
@@ -45,9 +44,7 @@ class DeathMetalButton extends HTMLElement {
 
     this.shadowRoot.appendChild(this.button);
 
-    this.button.addEventListener("click", (event) => {
-      console.log(this.button.textContent + "clicked");
-    });
+    this.button.addEventListener("click", (event) => {});
   }
 }
 

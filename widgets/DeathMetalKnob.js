@@ -21,6 +21,13 @@ class DeathMetalKnob extends HTMLElement {
     this.ctx = this.canvas.getContext("2d");
 
     const sliderState = Juce.getSliderState(this.parameterName);
+
+    const size = parseInt(this.getAttribute("size") || 100);
+    this.canvas.width = size;
+    this.canvas.height = size;
+    this.canvas.style.width = `${size}px`;
+    this.canvas.style.height = `${size}px`;
+
     this.isDragging = false;
     this.radius = this.canvas.height * 0.5 - 4;
     this.centerX = this.canvas.width * 0.5;
