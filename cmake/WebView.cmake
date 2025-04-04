@@ -1,8 +1,35 @@
 function(enable_webview)
+    # Ensure at least one argument is provided
+    if(NOT ARGN)
+        message(FATAL_ERROR "enable_webview: You must provide at least one file (e.g., index.html) as an argument.")
+    endif()
+
+    # Ensure index.html is included in the provided arguments
+    set(index_html_found FALSE)
+
+    set(index_html_found FALSE)
+
+    foreach(source IN LISTS ARGN)
+        # Normalize the path to handle relative paths
+        get_filename_component(normalized_source "${source}" ABSOLUTE)
+
+        if(normalized_source MATCHES "index.html$")
+            set(index_html_found TRUE)
+            break()
+        endif()
+    endforeach()
+
+    if(NOT index_html_found)
+        message(FATAL_ERROR "enable_webview: You must provide the  'index.html' as a source file.")
+    endif()
+
     file(REMOVE_RECURSE "${CMAKE_CURRENT_BINARY_DIR}/ui")
 
     if(CMAKE_BUILD_TYPE STREQUAL "Release")
-        file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/ui/" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/ui/")
+        foreach(source IN LISTS ARGN)
+            file(COPY ${source} DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/ui/")
+        endforeach()
+
         file(COPY "${juce_SOURCE_DIR}/modules/juce_gui_extra/native/javascript/" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/ui/juce/")
         file(COPY "${CMAKE_SOURCE_DIR}/widgets/" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/ui/widgets/")
         file(COPY "${CMAKE_SOURCE_DIR}/resources/fonts/" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/ui/fonts/")
@@ -37,21 +64,26 @@ function(enable_webview)
 
     elseif(CMAKE_BUILD_TYPE STREQUAL "Debug")
         set(LINK_DEST "${CMAKE_CURRENT_BINARY_DIR}/ui")
-        set(SRC_UI "${CMAKE_CURRENT_SOURCE_DIR}/ui")
+        set(SRC_UI "${CMAKE_CURRENT_SOURCE_DIR}")
         set(SRC_WIDGETS "${CMAKE_SOURCE_DIR}/widgets")
         set(SRC_JUCE_JS "${juce_SOURCE_DIR}/modules/juce_gui_extra/native/javascript")
 
         add_custom_command(
             OUTPUT "${LINK_DEST}"
             COMMAND ${CMAKE_COMMAND} -E make_directory "${LINK_DEST}"
-            COMMAND ${CMAKE_COMMAND} -E create_symlink "${SRC_UI}/index.html" "${LINK_DEST}/index.html"
-            COMMAND ${CMAKE_COMMAND} -E create_symlink "${SRC_UI}/style.css" "${LINK_DEST}/style.css"
-            COMMAND ${CMAKE_COMMAND} -E create_symlink "${SRC_UI}/resources" "${LINK_DEST}/resources"
-            COMMAND ${CMAKE_COMMAND} -E create_symlink "${SRC_UI}/index.js" "${LINK_DEST}/index.js"
-
-            COMMENT "Symlinking UI directory"
+            COMMENT "Creating directory: ${LINK_DEST}"
             VERBATIM
         )
+
+        foreach(source IN LISTS ARGN)
+            add_custom_command(
+                OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/${source}"
+                COMMAND ${CMAKE_COMMAND} -E create_symlink "${SRC_UI}/${source}" "${CMAKE_CURRENT_BINARY_DIR}/${source}"
+                COMMENT "Symlinking ${source}"
+                VERBATIM
+            )
+            list(APPEND SYMLINK_DEPENDENCIES "${CMAKE_CURRENT_BINARY_DIR}/${source}")
+        endforeach()
 
         add_custom_command(
             OUTPUT "${LINK_DEST}/widgets"
@@ -60,6 +92,7 @@ function(enable_webview)
             COMMENT "Symlinking widgets directory"
             VERBATIM
         )
+        list(APPEND SYMLINK_DEPENDENCIES "${LINK_DEST}/widgets")
 
         add_custom_command(
             OUTPUT "${LINK_DEST}/juce"
@@ -68,6 +101,7 @@ function(enable_webview)
             COMMENT "Symlinking JUCE JavaScript directory"
             VERBATIM
         )
+        list(APPEND SYMLINK_DEPENDENCIES "${LINK_DEST}/juce")
 
         add_custom_command(
             OUTPUT "${LINK_DEST}/fonts"
@@ -76,9 +110,10 @@ function(enable_webview)
             COMMENT "Symlinking fonts directory"
             VERBATIM
         )
+        list(APPEND SYMLINK_DEPENDENCIES "${LINK_DEST}/fonts")
 
         add_custom_target(${PROJECT_NAME}CreateWebviewSymlinks
-            DEPENDS "${LINK_DEST}" "${LINK_DEST}/widgets" "${LINK_DEST}/juce" "${LINK_DEST}/fonts"
+            DEPENDS "${LINK_DEST}" ${SYMLINK_DEPENDENCIES}
         )
 
         add_dependencies(${PROJECT_NAME} ${PROJECT_NAME}CreateWebviewSymlinks)

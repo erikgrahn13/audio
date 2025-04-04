@@ -169,7 +169,10 @@ target_compile_definitions(${PROJECT_NAME}
 
 # add_dependencies(${PROJECT_NAME} CreateWebviewSymlinks)
 # endif()
-enable_webview()
+enable_webview(
+    ui/index.html
+    ui/style.css
+)
 
 # `target_link_libraries` links libraries and JUCE modules to other libraries or executables. Here,
 # we're linking our executable target to the `juce::juce_audio_utils` module. Inter-module
