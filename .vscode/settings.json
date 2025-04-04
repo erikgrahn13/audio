@@ -30,5 +30,10 @@
   "editor.formatOnSave": true,
   "C_Cpp.clang_format_fallbackStyle": "Microsoft", // C++ core guidelines
   "liveServer.settings.NoBrowser": true,
-  "liveServer.settings.useLocalIp": true
+  "liveServer.settings.useLocalIp": true,
+  "cmake.debugConfig": {
+    "[mac]": {
+      "MIMode": "lldb"
+    }
+  }
 }
