@@ -98,7 +98,12 @@ target_compile_definitions(${PROJECT_NAME}
 # Conversion to binary-data will happen when your target is built.
 juce_add_binary_data(BlackLoungeAmp HEADER_NAME "BlackLoungeAmp.h" NAMESPACE BlackLoungeAmp SOURCES ironmaster.nam)
 
-enable_webview()
+enable_webview(
+    ui/index.html
+    ui/style.css
+    ui/index.js
+    ui/resources
+)
 
 # `target_link_libraries` links libraries and JUCE modules to other libraries or executables. Here,
 # we're linking our executable target to the `juce::juce_audio_utils` module. Inter-module
