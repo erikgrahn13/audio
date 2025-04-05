@@ -16,6 +16,8 @@ class BlackLoungeAudioProcessorEditor final : public juce::AudioProcessorEditor
     //==============================================================================
     // void paint(juce::Graphics &) override;
     void resized() override;
+    void nativeFunction(const juce::Array<juce::var> &args,
+                        juce::WebBrowserComponent::NativeFunctionCompletion completion);
 
   private:
     // This reference is provided as a quick way for your editor to

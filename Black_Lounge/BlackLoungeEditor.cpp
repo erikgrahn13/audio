@@ -16,12 +16,19 @@ BlackLoungeAudioProcessorEditor::BlackLoungeAudioProcessorEditor(BlackLoungeAudi
               .withWinWebView2Options(juce::WebBrowserComponent::Options::WinWebView2{}.withUserDataFolder(
                   juce::File::getSpecialLocation(juce::File::SpecialLocationType::tempDirectory)))
               .withNativeIntegrationEnabled()
+              .withInitialisationData("isStandalone", juce::JUCEApplicationBase::isStandaloneApp())
               .withOptionsFrom(volumeRelay)
               .withOptionsFrom(gainRelay)
               .withOptionsFrom(denoiserRelay)
               .withOptionsFrom(denoiserActiveRelay)
+              .withNativeFunction(juce::Identifier{"nativeFunction"},
+                                  [this](const juce::Array<juce::var> &args,
+                                         juce::WebBrowserComponent::NativeFunctionCompletion completion) {
+                                      nativeFunction(args, std::move(completion));
+                                  })
               .withResourceProvider([this](const auto &url) { return getResource(url); },
                                     juce::URL{"http://localhost:5500/"}.getOrigin())}
+
 {
     juce::ignoreUnused(processorRef);
 
@@ -227,4 +234,11 @@ std::optional<juce::WebBrowserComponent::Resource> BlackLoungeAudioProcessorEdit
     }
 
     return std::nullopt;
+}
+
+void BlackLoungeAudioProcessorEditor::nativeFunction(const juce::Array<juce::var> &args,
+                                                     juce::WebBrowserComponent::NativeFunctionCompletion completion)
+{
+    std::ignore = args;
+    juce::StandalonePluginHolder::getInstance()->showAudioSettingsDialog();
 }

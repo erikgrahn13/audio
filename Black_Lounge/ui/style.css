@@ -26,14 +26,15 @@ body {
     src: url('./fonts/fontaudio.ttf') format('truetype');
   }
 
+  @font-face {
+    font-family: "WebFont";
+    src: url('./fonts/forkawesome-webfont.ttf') format('truetype');
+  }
+
 .denoiser-area {
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* gap: 10px; */
-    /* margin-top: 0%; */
-    /* padding-top: 0px; */
-    /* background-color: red; */
 }
 
 .bypass {
@@ -46,13 +47,6 @@ body {
 }
 
 h2 {
-    /* background-color: blue; */
     margin-top: 0px;
     margin-bottom: 10px;
-}
-
-death-metal-knob {
-    /* background-color: green; */
-    /* margin-top: 0px; */
-
 }
