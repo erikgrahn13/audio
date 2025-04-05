@@ -536,6 +536,16 @@ class StandalonePluginHolder : private AudioIODeviceCallback, private Timer, pri
             shouldMuteButton.setClickingTogglesState(true);
             shouldMuteButton.getToggleStateValue().referTo(owner.shouldMuteInput);
 
+            juce::LookAndFeel::getDefaultLookAndFeel().setColour(juce::ComboBox::backgroundColourId,
+                                                                 juce::Colours::black);
+            juce::LookAndFeel::getDefaultLookAndFeel().setColour(juce::ListBox::backgroundColourId,
+                                                                 juce::Colours::black);
+            juce::LookAndFeel::getDefaultLookAndFeel().setColour(juce::TextButton::buttonColourId,
+                                                                 juce::Colours::black);
+            juce::LookAndFeel::getDefaultLookAndFeel().setColour(juce::ScrollBar::thumbColourId, juce::Colours::white);
+            juce::LookAndFeel::getDefaultLookAndFeel().setColour(juce::PopupMenu::backgroundColourId,
+                                                                 juce::Colours::black);
+
             addAndMakeVisible(deviceSelector);
             // deviceSelector.setLookAndFeel(&deathMetalLookAndFeel);
 
