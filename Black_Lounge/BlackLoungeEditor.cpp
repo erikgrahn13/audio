@@ -240,5 +240,6 @@ void BlackLoungeAudioProcessorEditor::nativeFunction(const juce::Array<juce::var
                                                      juce::WebBrowserComponent::NativeFunctionCompletion completion)
 {
     std::ignore = args;
+    std::ignore = completion;
     juce::StandalonePluginHolder::getInstance()->showAudioSettingsDialog();
 }
