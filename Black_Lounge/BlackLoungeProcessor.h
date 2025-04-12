@@ -4,6 +4,7 @@
 #include "BlackLoungeAmp.h"
 #include "NAM/dsp.h"
 #include "NoiseReduction.h"
+#include "RingBuffer.h"
 #include <JuceHeader.h>
 #include <juce_audio_processors/juce_audio_processors.h>
 
@@ -54,8 +55,10 @@ class BlackLoungeAudioProcessor final : public juce::AudioProcessor
 
     juce::AudioProcessorValueTreeState::ParameterLayout createParameters();
     juce::AudioProcessorValueTreeState mParameters;
+    std::unique_ptr<RingBuffer> mRingBuffer;
 
   private:
+    // std::unique_ptr<PitchMPM> mPitchMPM;
     std::unique_ptr<Amp> mBlackLoungeAmp;
     juce::AudioParameterFloat *mVolumeParameter;
     juce::AudioParameterFloat *mThresholdParameter;

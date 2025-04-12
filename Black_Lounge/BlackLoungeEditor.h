@@ -4,16 +4,19 @@
 #include "CustomLookAndFeel/CustomStandaloneFilterWindow.h"
 #include "CustomLookAndFeel/DeathMetalLookAndFeel.h"
 #include "CustomLookAndFeel/FontWebLookAndFeel.h"
+#include "Tuner.h"
 #include <JuceHeader.h>
 
 //==============================================================================
-class BlackLoungeAudioProcessorEditor final : public juce::AudioProcessorEditor
+class BlackLoungeAudioProcessorEditor final : public juce::AudioProcessorEditor, juce::Timer
 {
   public:
     explicit BlackLoungeAudioProcessorEditor(BlackLoungeAudioProcessor &);
     ~BlackLoungeAudioProcessorEditor() override;
 
     //==============================================================================
+    void timerCallback() override;
+
     // void paint(juce::Graphics &) override;
     void resized() override;
     void nativeFunction(const juce::Array<juce::var> &args,
@@ -23,6 +26,8 @@ class BlackLoungeAudioProcessorEditor final : public juce::AudioProcessorEditor
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     BlackLoungeAudioProcessor &processorRef;
+
+    std::unique_ptr<PitchMPM> mPitchMPM;
 
     // Webview stuff
     juce::WebSliderRelay volumeRelay{"volume"};

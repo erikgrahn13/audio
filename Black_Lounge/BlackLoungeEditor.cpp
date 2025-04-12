@@ -55,6 +55,12 @@ BlackLoungeAudioProcessorEditor::BlackLoungeAudioProcessorEditor(BlackLoungeAudi
     setSize(480, 480);
     setResizeLimits(480, 480, 480, 480); // Lock dimensions
 
+    // auto sampleRate = processorRef.getSampleRate();
+    mPitchMPM = std::make_unique<PitchMPM>(processorRef.getSampleRate(), 1024);
+    startTimerHz(30);
+    // mPitchMPM->setBufferSize(1024);
+    // mPitchMPM->setSampleRate(processorRef.getSampleRate());
+
     // if (juce::JUCEApplicationBase::isStandaloneApp())
     // {
     //     settingsButton.setLookAndFeel(&fontWebLookAndFeel);
@@ -165,6 +171,18 @@ BlackLoungeAudioProcessorEditor::~BlackLoungeAudioProcessorEditor()
     gainSlider.setLookAndFeel(nullptr);
     volumeSlider.setLookAndFeel(nullptr);
     denoiserSlider.setLookAndFeel(nullptr);
+}
+
+void BlackLoungeAudioProcessorEditor::timerCallback()
+{
+    if (processorRef.mRingBuffer->getNumReady() >= 1024)
+    {
+        std::array<float, 1024> tempBuffer;
+        processorRef.mRingBuffer->readFromFifo(tempBuffer.data(), 1024);
+
+        float pitch = mPitchMPM->getPitch(tempBuffer.data());
+        DBG(pitch);
+    }
 }
 
 //==============================================================================

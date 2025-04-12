@@ -21,6 +21,10 @@ BlackLoungeAudioProcessor::BlackLoungeAudioProcessor()
     mAnalyzeParameter = dynamic_cast<juce::AudioParameterBool *>(mParameters.getParameter("analyze"));
 
     mDenoiserParameter = dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("denoiser"));
+    // mPitchMPM = std::make_unique<PitchMPM>(44100, 1024);
+
+    // mAudioFifo = std::make_unique<juce::AbstractFifo>();
+    mRingBuffer = std::make_unique<RingBuffer>(4096);
 
     mBlackLoungeAmp = std::make_unique<Amp>(BlackLoungeAmp::ironmaster_nam, BlackLoungeAmp::ironmaster_namSize);
 }
@@ -103,6 +107,11 @@ void BlackLoungeAudioProcessor::prepareToPlay(double sampleRate, int samplesPerB
 
     int numSeconds = 5;
     int totalSamples = static_cast<int>(sampleRate * numSeconds);
+    // mPitchMPM->setBufferSize(1024);
+    // mPitchMPM->setSampleRate(sampleRate);
+
+    // mRingBuffer->setSize(samplesPerBlock * 4);
+    // mRingBuffer->setSize(4096);
 
     analysisBuffer.setSize(1, totalSamples);
     analysisBuffer.clear();
@@ -163,6 +172,12 @@ juce::AudioProcessorValueTreeState::ParameterLayout BlackLoungeAudioProcessor::c
 void BlackLoungeAudioProcessor::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages)
 {
     juce::ignoreUnused(midiMessages);
+
+    const float *input = buffer.getReadPointer(0);
+    mRingBuffer->addToFifo(input, buffer.getNumSamples());
+    // Maybe have a check?
+    // if (ringBuffer.getFreeSpace() >= numSamples)
+    // ringBuffer.addToFifo(input, numSamples);
 
     if (mDenoiserActiveParameter->get())
     {
