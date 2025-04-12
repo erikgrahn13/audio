@@ -31,4 +31,5 @@ if(NOT FETCHCONTENT_FULLY_DISCONNECTED)
 
     add_subdirectory(Abyss)
     add_subdirectory(Black_Lounge)
+    add_subdirectory(Drums)
 endif()
