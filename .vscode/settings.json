@@ -27,7 +27,7 @@
     "**/build": true,
     "**/external": false
   },
-  "editor.formatOnSave": true,
+  // "editor.formatOnSave": true,
   "C_Cpp.clang_format_fallbackStyle": "Microsoft", // C++ core guidelines
   "liveServer.settings.NoBrowser": true,
   "liveServer.settings.useLocalIp": true,
@@ -35,5 +35,13 @@
     "[mac]": {
       "MIMode": "lldb"
     }
+  },
+  "files.associations": {
+    "memory": "cpp",
+    "mutex": "cpp",
+    "shared_mutex": "cpp",
+    "*.mm": "cpp",
+    "tuple": "cpp",
+    "vector": "cpp"
   }
 }
