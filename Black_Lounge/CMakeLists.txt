@@ -71,6 +71,7 @@ target_sources(${PROJECT_NAME}
     BlackLoungeEditor.cpp
     BlackLoungeProcessor.cpp
     Amp.cpp
+    ${audio-fft_SOURCE_DIR}/AudioFFT.cpp
     ${CMAKE_SOURCE_DIR}/utilities/CustomLookAndFeel/CustomStandalone.cpp
 )
 

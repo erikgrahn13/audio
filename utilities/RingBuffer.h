@@ -43,7 +43,8 @@ class RingBuffer
         return mAbstractFifo.getNumReady();
     }
 
-  private:
     juce::AbstractFifo mAbstractFifo;
+
+  private:
     juce::AudioBuffer<float> mAudioBuffer;
 };

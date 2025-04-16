@@ -23,8 +23,9 @@ BlackLoungeAudioProcessor::BlackLoungeAudioProcessor()
     mDenoiserParameter = dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("denoiser"));
     // mPitchMPM = std::make_unique<PitchMPM>(44100, 1024);
 
-    // mAudioFifo = std::make_unique<juce::AbstractFifo>();
-    mRingBuffer = std::make_unique<RingBuffer>(4096);
+    // mAudioFifo = std::make_unique<AudioFifo>();
+    mAudioBuffer = std::make_unique<juce::AudioBuffer<float>>();
+    mRingBuffer = std::make_unique<RingBuffer>(4096 * 4);
 
     mBlackLoungeAmp = std::make_unique<Amp>(BlackLoungeAmp::ironmaster_nam, BlackLoungeAmp::ironmaster_namSize);
 }
@@ -104,11 +105,17 @@ void BlackLoungeAudioProcessor::prepareToPlay(double sampleRate, int samplesPerB
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
     juce::ignoreUnused(sampleRate, samplesPerBlock);
+    // this->sampleRate = sampleRate;
 
     int numSeconds = 5;
     int totalSamples = static_cast<int>(sampleRate * numSeconds);
     // mPitchMPM->setBufferSize(1024);
     // mPitchMPM->setSampleRate(sampleRate);
+    const auto numChannels = getTotalNumOutputChannels();
+    // mAudioFifo->setSize(numChannels, samplesPerBlock * 4);
+    mAudioBuffer->setSize(numChannels, samplesPerBlock * 2);
+    // mPitchMPM->setBufferSize(1024);
+    // mPitchMPM->setSampleRate(static_cast<int>(sampleRate));
 
     // mRingBuffer->setSize(samplesPerBlock * 4);
     // mRingBuffer->setSize(4096);
@@ -172,12 +179,29 @@ juce::AudioProcessorValueTreeState::ParameterLayout BlackLoungeAudioProcessor::c
 void BlackLoungeAudioProcessor::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages)
 {
     juce::ignoreUnused(midiMessages);
+    const auto numSamples = buffer.getNumSamples();
 
     const float *input = buffer.getReadPointer(0);
+
+    // const float *input = buffer.getReadPointer(0);
+
+    // mAudioFifo->write(buffer);
+    // mAudioFifo->read(*mAudioBuffer);
+    // auto test = mPitchMPM->getPitch(mAudioBuffer->getReadPointer(0));
+    // test = 0.46;
+    // DBG(frequency);
+
+    if (mRingBuffer->mAbstractFifo.getFreeSpace() <= numSamples)
+    {
+        int hej;
+        hej = 3;
+    }
+
     mRingBuffer->addToFifo(input, buffer.getNumSamples());
     // Maybe have a check?
-    // if (ringBuffer.getFreeSpace() >= numSamples)
-    // ringBuffer.addToFifo(input, numSamples);
+    // const auto numSamples = buffer.getNumSamples();
+    // if (mRingBuffer->mAbstractFifo.getFreeSpace() >= numSamples)
+    //     mRingBuffer->addToFifo(input, numSamples);
 
     if (mDenoiserActiveParameter->get())
     {

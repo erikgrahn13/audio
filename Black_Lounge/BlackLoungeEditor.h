@@ -27,7 +27,8 @@ class BlackLoungeAudioProcessorEditor final : public juce::AudioProcessorEditor,
     // access the processor object that created it.
     BlackLoungeAudioProcessor &processorRef;
 
-    std::unique_ptr<PitchMPM> mPitchMPM;
+    // std::unique_ptr<PitchMPM> mPitchMPM;
+    Tuner mTuner;
 
     // Webview stuff
     juce::WebSliderRelay volumeRelay{"volume"};
