@@ -119,6 +119,7 @@ target_link_libraries(${PROJECT_NAME}
     nam_dependency
     NoiseReduction
     BlackLoungeAmp
+    pitch_detector
     juce::juce_dsp
 
     # juce::juce_audio_processors

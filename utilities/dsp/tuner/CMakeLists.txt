@@ -1,0 +1,2 @@
+add_library(pitch_detector INTERFACE)
+target_include_directories(pitch_detector INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})

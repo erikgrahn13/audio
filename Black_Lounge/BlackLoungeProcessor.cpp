@@ -1,6 +1,5 @@
 #include "BlackLoungeProcessor.h"
 #include "BlackLoungeEditor.h"
-// #include "architecture.h"
 
 //==============================================================================
 BlackLoungeAudioProcessor::BlackLoungeAudioProcessor()
@@ -15,12 +14,12 @@ BlackLoungeAudioProcessor::BlackLoungeAudioProcessor()
       mParameters(*this, nullptr, juce::Identifier("Parameters"), createParameters())
 {
     mVolumeParameter = dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("volume"));
-    mThresholdParameter = dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("threshold"));
     mGainParameter = dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("gain"));
     mDenoiserActiveParameter = dynamic_cast<juce::AudioParameterBool *>(mParameters.getParameter("denoiserActive"));
-    mAnalyzeParameter = dynamic_cast<juce::AudioParameterBool *>(mParameters.getParameter("analyze"));
-
     mDenoiserParameter = dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("denoiser"));
+
+    mAudioBuffer = std::make_unique<juce::AudioBuffer<float>>();
+    mRingBuffer = std::make_unique<RingBuffer>(4096 * 4);
 
     mBlackLoungeAmp = std::make_unique<Amp>(BlackLoungeAmp::ironmaster_nam, BlackLoungeAmp::ironmaster_namSize);
 }
@@ -101,14 +100,8 @@ void BlackLoungeAudioProcessor::prepareToPlay(double sampleRate, int samplesPerB
     // initialisation that you need..
     juce::ignoreUnused(sampleRate, samplesPerBlock);
 
-    int numSeconds = 5;
-    int totalSamples = static_cast<int>(sampleRate * numSeconds);
-
-    analysisBuffer.setSize(1, totalSamples);
-    analysisBuffer.clear();
-    analysisBufferPosition = 0;
-    bufferFilled = false;
-
+    const auto numChannels = getTotalNumOutputChannels();
+    mAudioBuffer->setSize(numChannels, samplesPerBlock * 2);
     juce::dsp::ProcessSpec spec;
     spec.maximumBlockSize = static_cast<juce::uint32>(samplesPerBlock);
     spec.numChannels = static_cast<juce::uint32>(getTotalNumInputChannels());
@@ -150,11 +143,8 @@ juce::AudioProcessorValueTreeState::ParameterLayout BlackLoungeAudioProcessor::c
 {
     std::vector<std::unique_ptr<juce::RangedAudioParameter>> parameters;
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>("volume", "Volume", -10.f, 10.f, 0.f));
-    // parameters.push_back(std::make_unique<juce::AudioParameterFloat>("threshold", "Threshold", -100.f, 0.f, -80.f));
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>("gain", "Gain", -20.f, 20.f, 0.f));
     parameters.push_back(std::make_unique<juce::AudioParameterBool>("denoiserActive", "DenoiserActive", true));
-    // parameters.push_back(std::make_unique<juce::AudioParameterBool>("analyze", "Analyze", false));
-
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>("denoiser", "Denoiser", -140.f, 0.f, -140.f));
 
     return {parameters.begin(), parameters.end()};
@@ -163,6 +153,10 @@ juce::AudioProcessorValueTreeState::ParameterLayout BlackLoungeAudioProcessor::c
 void BlackLoungeAudioProcessor::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages)
 {
     juce::ignoreUnused(midiMessages);
+
+    const float *input = buffer.getReadPointer(0);
+
+    mRingBuffer->addToFifo(input, buffer.getNumSamples());
 
     if (mDenoiserActiveParameter->get())
     {
