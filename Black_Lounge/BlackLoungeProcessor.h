@@ -1,14 +1,10 @@
 #pragma once
 
-// #include "../build/_deps/audio-fft-src/AudioFFT.h"
 #include "Amp.h"
-// #include "AudioFifo.h"
 #include "BlackLoungeAmp.h"
 #include "NAM/dsp.h"
 #include "NoiseReduction.h"
 #include "RingBuffer.h"
-// #include "Tuner.h"
-// #include "PitchMPM.h"
 #include <JuceHeader.h>
 #include <juce_audio_processors/juce_audio_processors.h>
 
@@ -62,26 +58,15 @@ class BlackLoungeAudioProcessor final : public juce::AudioProcessor
     std::unique_ptr<RingBuffer> mRingBuffer;
 
   private:
-    // std::unique_ptr<PitchMPM> mPitchMPM;
-    // std::unique_ptr<AudioFifo> mAudioFifo;
     std::unique_ptr<juce::AudioBuffer<float>> mAudioBuffer;
-    // std::unique_ptr<PitchMPM> mPitchMPM;
     std::unique_ptr<Amp> mBlackLoungeAmp;
     juce::AudioParameterFloat *mVolumeParameter;
-    juce::AudioParameterFloat *mThresholdParameter;
     juce::AudioParameterFloat *mGainParameter;
 
-    juce::AudioParameterBool *mAnalyzeParameter;
-
-    juce::dsp::ProcessorChain<juce::dsp::IIR::Filter<float>> mChain;
     NoiseReduction mNoiseReduction;
 
     juce::AudioParameterFloat *mDenoiserParameter;
     juce::AudioParameterBool *mDenoiserActiveParameter;
-
-    juce::AudioBuffer<float> analysisBuffer;
-    int analysisBufferPosition{0};
-    bool bufferFilled{false};
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(BlackLoungeAudioProcessor)
