@@ -1,5 +1,7 @@
 <map id="BlackLoungeAudioProcessorEditor" name="BlackLoungeAudioProcessorEditor">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,79,211,119"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="11,5,205,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="111,44,111,79,105,79,105,44"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="84,79,289,119"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,200,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="127,38,168,77,165,80,123,42"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="225,5,319,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="251,42,209,80,205,77,248,38"/>
 </map>

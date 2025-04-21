@@ -1,24 +1,9 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" title=" " alt="" coords="24,76,181,101"/>
-<area shape="rect" id="Node000001" href="$classAbyssAudioProcessor.html" title=" " alt="" coords="270,5,431,31"/>
-<area shape="poly" id="edge14_Node000000_Node000001" title=" " alt="" coords="153,69,247,39,291,28,292,33,249,45,154,74"/>
-<area shape="rect" id="Node000002" href="$classAudioPluginAudioProcessor.html" title=" " alt="" coords="251,104,450,129"/>
-<area shape="poly" id="edge15_Node000000_Node000002" title=" " alt="" coords="196,96,251,103,251,108,195,102"/>
-<area shape="rect" id="Node000010" href="$classBlackLoungeAudioProcessor.html" title=" " alt="" coords="248,55,453,80"/>
-<area shape="poly" id="edge16_Node000000_Node000010" title=" " alt="" coords="195,78,248,73,248,79,195,83"/>
-<area shape="rect" id="Node000009" href="$classSynthAudioProcessor.html" title=" " alt="" coords="271,153,430,179"/>
-<area shape="poly" id="edge17_Node000000_Node000009" title=" " alt="" coords="150,104,249,138,295,151,293,156,247,143,148,109"/>
-<area shape="rect" id="Node000005" title=" " alt="" coords="5,296,200,321"/>
-<area shape="rect" id="Node000006" href="$classAbyssAudioProcessorEditor.html" title=" " alt="" coords="251,268,450,293"/>
-<area shape="poly" id="edge18_Node000005_Node000006" title=" " alt="" coords="213,294,251,289,251,295,214,299"/>
-<area shape="rect" id="Node000004" href="$classAudioPluginAudioProcessorEditor.html" title=" " alt="" coords="251,203,450,243"/>
-<area shape="poly" id="edge19_Node000005_Node000004" title=" " alt="" coords="149,289,247,253,283,241,285,246,249,258,151,294"/>
-<area shape="rect" id="Node000007" href="$classBlackLoungeAudioProcessorEditor.html" title=" " alt="" coords="248,318,453,358"/>
-<area shape="poly" id="edge20_Node000005_Node000007" title=" " alt="" coords="214,319,248,323,247,328,213,324"/>
-<area shape="rect" id="Node000008" href="$classSynthAudioProcessorEditor.html" title=" " alt="" coords="252,383,449,408"/>
-<area shape="poly" id="edge21_Node000005_Node000008" title=" " alt="" coords="144,325,249,367,292,380,291,385,247,373,142,330"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="6,146,199,186"/>
-<area shape="poly" id="edge22_Node000003_Node000002" title=" " alt="" coords="212,141,286,127,287,132,213,147"/>
-<area shape="poly" id="edge24_Node000003_Node000009" title=" " alt="" coords="213,163,271,163,271,169,213,169"/>
-<area shape="poly" id="edge23_Node000003_Node000004" title=" " alt="" coords="203,187,264,201,263,206,202,192"/>
+<area shape="rect" id="Node000000" title=" " alt="" coords="5,55,169,80"/>
+<area shape="rect" id="Node000001" href="$classDeathMetalLookAndFeel.html" title=" " alt="" coords="217,5,399,31"/>
+<area shape="poly" id="edge26_Node000000_Node000001" title=" " alt="" coords="158,49,250,28,251,33,159,54"/>
+<area shape="rect" id="Node000002" href="$classFontAudioLookAndFeel.html" title=" " alt="" coords="223,55,393,80"/>
+<area shape="poly" id="edge27_Node000000_Node000002" title=" " alt="" coords="183,65,223,65,223,70,183,70"/>
+<area shape="rect" id="Node000003" href="$classFontWebLookAndFeel.html" title=" " alt="" coords="227,104,389,129"/>
+<area shape="poly" id="edge28_Node000000_Node000003" title=" " alt="" coords="159,80,251,101,250,107,158,86"/>
 </map>

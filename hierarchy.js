@@ -56,6 +56,7 @@ var hierarchy =
     [ "NoiseReduction", "classNoiseReduction.html", null ],
     [ "Oscillator", "classOscillator.html", null ],
     [ "juce::StandalonePluginHolder::PluginInOuts", "structjuce_1_1StandalonePluginHolder_1_1PluginInOuts.html", null ],
+    [ "RingBuffer", "classRingBuffer.html", null ],
     [ "juce::SynthesiserSound", null, [
       [ "SynthSound", "classSynthSound.html", null ]
     ] ],
@@ -64,6 +65,8 @@ var hierarchy =
     ] ],
     [ "juce::Timer", null, [
       [ "AnalyzerCurve", "classAnalyzerCurve.html", null ],
+      [ "BlackLoungeAudioProcessorEditor", "classBlackLoungeAudioProcessorEditor.html", null ],
       [ "juce::StandalonePluginHolder", "classjuce_1_1StandalonePluginHolder.html", null ]
-    ] ]
+    ] ],
+    [ "Tuner", "classTuner.html", null ]
 ];

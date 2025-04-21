@@ -24,9 +24,11 @@ var annotated_dup =
     [ "NoiseGate", "classNoiseGate.html", null ],
     [ "NoiseReduction", "classNoiseReduction.html", null ],
     [ "Oscillator", "classOscillator.html", null ],
+    [ "RingBuffer", "classRingBuffer.html", null ],
     [ "SliderGroup", "classSliderGroup.html", null ],
     [ "SynthAudioProcessor", "classSynthAudioProcessor.html", null ],
     [ "SynthAudioProcessorEditor", "classSynthAudioProcessorEditor.html", null ],
     [ "SynthSound", "classSynthSound.html", null ],
-    [ "SynthVoice", "classSynthVoice.html", null ]
+    [ "SynthVoice", "classSynthVoice.html", null ],
+    [ "Tuner", "classTuner.html", null ]
 ];
