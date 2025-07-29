@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.22)
 
-project(Audio VERSION 0.1)
+project("Abyss Lounge" VERSION 0.1)
 
 enable_testing()
 set(CMAKE_CXX_STANDARD 23)
@@ -16,8 +16,6 @@ include(JUCE)
 include(Pluginval)
 include(Doxygen)
 include(ASIO)
-
-set(CMAKE_OSX_DEPLOYMENT_TARGET "12.7" CACHE STRING "Minimum OS X deployment version" FORCE)
 
 if(NOT FETCHCONTENT_FULLY_DISCONNECTED)
     include(NAM)
