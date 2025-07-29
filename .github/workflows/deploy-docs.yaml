@@ -16,8 +16,11 @@ jobs:
       - name: Install Ninja
         uses: seanmiddleditch/gha-setup-ninja@master
 
-      - name: Generate documentation
-        run: cmake --workflow --preset Docs
+      - name: Configure Doxygen
+        run: cmake --preset Docs
+
+      - name: Generate Documentation
+        run: cmake --build --preset Docs
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
