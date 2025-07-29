@@ -41,6 +41,8 @@ juce_add_plugin(${PROJECT_NAME}
     # ICON_BIG ...                              # ICON_* arguments specify a path to an image file to use as an icon for the Standalone
     # ICON_SMALL ...
     # COMPANY_NAME ...                          # Specify the name of the plugin's author
+    BUNDLE_ID ${ABYSS_LOUNGE_BUNDLE_ID}.${PROJECT_NAME}
+
     # IS_SYNTH TRUE/FALSE                       # Is this a synth or an effect?
     # NEEDS_MIDI_INPUT TRUE/FALSE               # Does the plugin need midi input?
     # NEEDS_MIDI_OUTPUT TRUE/FALSE              # Does the plugin need midi output?
@@ -58,7 +60,6 @@ juce_add_plugin(${PROJECT_NAME}
 # this header will be automatically added to the target. The main function of the JuceHeader is to
 # include all your JUCE module headers; if you're happy to include module headers directly, you
 # probably don't need to call this.
-
 juce_generate_juce_header(${PROJECT_NAME})
 
 # `target_sources` adds source files to a target. We pass the target that needs the sources as the

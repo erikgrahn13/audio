@@ -1,4 +1,13 @@
 function(enable_pluginval_testing target)
+    get_target_property(bundle_id ${target} JUCE_BUNDLE_ID)
+
+    if(NOT "${bundle_id}" MATCHES "${ABYSS_LOUNGE_BUNDLE_ID}.${target}")
+        message(FATAL_ERROR "❗️ Plugin '${target}': Invalid bundle ID format. \nPlease add BUNDLE_ID \${ABYSS_LOUNGE_BUNDLE_ID}.\${PROJECT_NAME} to jude_add_plugin call for ${target}")
+    endif()
+
+    message(STATUS "✅ ${target}: ${bundle_id}")
+
+    # Pluginval testing
     get_target_property(PLUGIN_PATH ${target} LIBRARY_OUTPUT_DIRECTORY)
     get_target_property(PLUGIN_NAME ${PROJECT_NAME} JUCE_PRODUCT_NAME)
 
