@@ -10,8 +10,7 @@ class AudioPluginAudioProcessorEditor final : public juce::AudioProcessorEditor,
                                               juce::AudioProcessorValueTreeState::Listener
 {
   public:
-    explicit AudioPluginAudioProcessorEditor(AudioPluginAudioProcessor &,
-                                             juce::AudioProcessorValueTreeState &parameters);
+    explicit AudioPluginAudioProcessorEditor(AudioPluginAudioProcessor &);
     ~AudioPluginAudioProcessorEditor() override;
 
     //==============================================================================
@@ -24,7 +23,6 @@ class AudioPluginAudioProcessorEditor final : public juce::AudioProcessorEditor,
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     AudioPluginAudioProcessor &processorRef;
-    juce::AudioProcessorValueTreeState &mParameters;
     EQView mEQView;
     SliderGroup mHPFSliderGroup;
     SliderGroup mLowShelfSliderGroup;

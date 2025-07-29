@@ -2,9 +2,8 @@
 #include "PluginProcessor.h"
 
 //==============================================================================
-AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(AudioPluginAudioProcessor &p,
-                                                                 juce::AudioProcessorValueTreeState &parameters)
-    : AudioProcessorEditor(&p), processorRef(p), mParameters(parameters), mEQView(p, parameters),
+AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(AudioPluginAudioProcessor &p)
+    : AudioProcessorEditor(&p), processorRef(p), mEQView(p, p.mParameters),
       mHPFSliderGroup(p, "hpf_bypass", "hpf_freq", "", "", "hpf_filterOrder"),
       mLowShelfSliderGroup(p, "LowShelf_bypass", "LowShelfFreq", "LowShelfGain", "", ""),
       mLowMidSliderGroup(p, "LowMid_bypass", "LowMidFreq", "LowMidGain", "LowMidQ", ""),
@@ -12,16 +11,15 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(AudioPluginAudi
       mHighShelfSliderGroup(p, "HighShelf_bypass", "HighShelfFreq", "HighShelfGain", "", ""),
       mLPFSliderGroup(p, "lpf_bypass", "lpf_freq", "", "", "lpf_filterOrder")
 {
-    juce::ignoreUnused(processorRef);
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
     addAndMakeVisible(mEQView);
     setSize(800, 500);
 
-    for (int i = 0; i < mParameters.state.getNumChildren(); ++i)
+    for (int i = 0; i < processorRef.mParameters.state.getNumChildren(); ++i)
     {
-        auto paramID = mParameters.state.getChild(i).getProperty("id").toString();
-        mParameters.addParameterListener(paramID, this);
+        auto paramID = processorRef.mParameters.state.getChild(i).getProperty("id").toString();
+        processorRef.mParameters.addParameterListener(paramID, this);
     }
 
     mHPFSliderGroup.setText("1");
@@ -52,10 +50,10 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(AudioPluginAudi
 
 AudioPluginAudioProcessorEditor::~AudioPluginAudioProcessorEditor()
 {
-    for (int i = 0; i < mParameters.state.getNumChildren(); ++i)
+    for (int i = 0; i < processorRef.mParameters.state.getNumChildren(); ++i)
     {
-        auto paramID = mParameters.state.getChild(i).getProperty("id").toString();
-        mParameters.removeParameterListener(paramID, this);
+        auto paramID = processorRef.mParameters.state.getChild(i).getProperty("id").toString();
+        processorRef.mParameters.removeParameterListener(paramID, this);
     }
 }
 

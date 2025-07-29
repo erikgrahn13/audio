@@ -1,13 +1,13 @@
 #pragma once
 
-#include <juce_audio_processors/juce_audio_processors.h>
 #include "Oscillator.h"
 #include "SynthVoice.h"
+#include <juce_audio_processors/juce_audio_processors.h>
 
 //==============================================================================
 class SynthAudioProcessor final : public juce::AudioProcessor, juce::AudioProcessorValueTreeState::Listener
 {
-public:
+  public:
     //==============================================================================
     SynthAudioProcessor();
     ~SynthAudioProcessor() override;
@@ -46,14 +46,14 @@ public:
 
     void parameterChanged(const juce::String &parameter, float newValue) override;
 
-    juce::AudioProcessorValueTreeState parameters;
+    juce::AudioProcessorValueTreeState mParameters;
     juce::MidiKeyboardState keyboardState;
 
-private:
+  private:
     std::atomic<bool> requiresUpdate{false};
     juce::Synthesiser synth;
     static constexpr int numOfVoices = 3;
-    juce::AudioParameterInt* oscTypeParameter;
+    juce::AudioParameterInt *oscTypeParameter;
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(SynthAudioProcessor)

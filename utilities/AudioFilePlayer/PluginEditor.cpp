@@ -2,9 +2,8 @@
 #include "PluginProcessor.h"
 
 //==============================================================================
-AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(AudioPluginAudioProcessor &p,
-                                                                 juce::AudioProcessorValueTreeState &vts)
-    : AudioProcessorEditor(&p), processorRef(p), valueTreeState(vts)
+AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(AudioPluginAudioProcessor &p)
+    : AudioProcessorEditor(&p), processorRef(p)
 {
     juce::ignoreUnused(processorRef);
 
@@ -20,7 +19,7 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(AudioPluginAudi
                                     : playButton.setButtonText(juce::CharPointer_UTF8(""));
     };
     playButton.setButtonText(juce::CharPointer_UTF8(""));
-    playAttachment.reset(new ButtonAttachment(valueTreeState, "play", playButton));
+    playAttachment.reset(new ButtonAttachment(processorRef.mParameters, "play", playButton));
     addAndMakeVisible(&playButton);
 
     loopButton.setLookAndFeel(&fontAudioLookAndFeel);
@@ -29,7 +28,7 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(AudioPluginAudi
 
     loopButton.setButtonText(juce::CharPointer_UTF8(""));
     loopButton.setClickingTogglesState(true);
-    loopAttachment.reset(new ButtonAttachment(valueTreeState, "loop", loopButton));
+    loopAttachment.reset(new ButtonAttachment(processorRef.mParameters, "loop", loopButton));
     addAndMakeVisible(loopButton);
 
     fileName.setText("No file loaded", juce::NotificationType::dontSendNotification);
@@ -41,7 +40,7 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(AudioPluginAudi
     gainSlider.setColour(juce::Slider::trackColourId, juce::Colours::white);
     gainSlider.setColour(juce::Slider::ColourIds::backgroundColourId, juce::Colours::darkgrey);
     gainSlider.setColour(juce::Slider::ColourIds::thumbColourId, juce::Colours::white);
-    gainAttachment.reset(new SliderAttachment(valueTreeState, "gain", gainSlider));
+    gainAttachment.reset(new SliderAttachment(processorRef.mParameters, "gain", gainSlider));
     gainSlider.setLookAndFeel(&deathMetalLookAndFeel);
     addAndMakeVisible(gainSlider);
 

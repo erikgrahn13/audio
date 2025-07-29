@@ -1,15 +1,15 @@
 #pragma once
 
-#include "PluginProcessor.h"
 #include "CustomLookAndFeel/DeathMetalLookAndFeel.h"
 #include "CustomLookAndFeel/FontAudioLookAndFeel.h"
+#include "PluginProcessor.h"
 #include <JuceHeader.h>
 
 //==============================================================================
 class AudioPluginAudioProcessorEditor final : public juce::AudioProcessorEditor
 {
   public:
-    explicit AudioPluginAudioProcessorEditor(AudioPluginAudioProcessor &, juce::AudioProcessorValueTreeState &vts);
+    explicit AudioPluginAudioProcessorEditor(AudioPluginAudioProcessor &);
     ~AudioPluginAudioProcessorEditor() override;
 
     //==============================================================================
@@ -61,8 +61,6 @@ class AudioPluginAudioProcessorEditor final : public juce::AudioProcessorEditor
     juce::TextButton loopButton;
     juce::Label fileName;
     std::unique_ptr<juce::FileChooser> fileChooser;
-
-    juce::AudioProcessorValueTreeState &valueTreeState;
 
     using SliderAttachment = juce::AudioProcessorValueTreeState::SliderAttachment;
     using ButtonAttachment = juce::AudioProcessorValueTreeState::ButtonAttachment;

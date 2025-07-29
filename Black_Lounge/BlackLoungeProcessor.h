@@ -48,11 +48,6 @@ class BlackLoungeAudioProcessor final : public juce::AudioProcessor
     void getStateInformation(juce::MemoryBlock &destData) override;
     void setStateInformation(const void *data, int sizeInBytes) override;
 
-    juce::AudioProcessorValueTreeState &getVTSParameters()
-    {
-        return mParameters;
-    }
-
     juce::AudioProcessorValueTreeState::ParameterLayout createParameters();
     juce::AudioProcessorValueTreeState mParameters;
     std::unique_ptr<RingBuffer> mRingBuffer;

@@ -48,8 +48,8 @@ juce_add_plugin(${PROJECT_NAME}
     # NEEDS_MIDI_OUTPUT TRUE/FALSE              # Does the plugin need midi output?
     # IS_MIDI_EFFECT TRUE/FALSE                 # Is this plugin a MIDI effect?
     # EDITOR_WANTS_KEYBOARD_FOCUS TRUE/FALSE    # Does the editor need keyboard focus?
-    PLUGIN_MANUFACTURER_CODE Juce # A four-character manufacturer id with at least one upper-case character
-    PLUGIN_CODE Dem0 # A unique four-character plugin id with exactly one upper-case character
+    PLUGIN_MANUFACTURER_CODE ${ABYSS_LOUNGE_PLUGIN_MANUFACTURER_CODE} # A four-character manufacturer id with at least one upper-case character
+    PLUGIN_CODE AlEq # A unique four-character plugin id with exactly one upper-case character
 
     # GarageBand 10.3 requires the first letter to be upper-case, and the remaining letters to be lower-case
     FORMATS AU VST3 # The formats to build. Other valid formats are: AAX Unity VST AU AUv3
