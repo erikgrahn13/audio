@@ -71,34 +71,6 @@
       "generators": ["TGZ"]
     }
   ],
-  "workflowPresets": [
-    {
-      "name": "Release",
-      "steps": [
-        {
-          "type": "configure",
-          "name": "Release"
-        },
-        {
-          "type": "build",
-          "name": "Release"
-        }
-      ]
-    },
-    {
-      "name": "Docs",
-      "steps": [
-        {
-          "type": "configure",
-          "name": "Docs"
-        },
-        {
-          "type": "build",
-          "name": "Docs"
-        }
-      ]
-    }
-  ],
   "vendor": {
     "example.com/ExampleIDE/1.0": {
       "autoFormat": false
