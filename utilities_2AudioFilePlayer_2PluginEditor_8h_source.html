@@ -119,16 +119,16 @@ $(function(){initNavTree('utilities_2AudioFilePlayer_2PluginEditor_8h_source.htm
 <div class="contents">
 <div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span> </div>
-<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &quot;PluginProcessor.h&quot;</span></div>
-<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &quot;CustomLookAndFeel/DeathMetalLookAndFeel.h&quot;</span></div>
-<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &quot;CustomLookAndFeel/FontAudioLookAndFeel.h&quot;</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &quot;CustomLookAndFeel/DeathMetalLookAndFeel.h&quot;</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &quot;CustomLookAndFeel/FontAudioLookAndFeel.h&quot;</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &quot;PluginProcessor.h&quot;</span></div>
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &lt;JuceHeader.h&gt;</span></div>
 <div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span> </div>
 <div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="comment">//==============================================================================</span></div>
 <div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="keyword">class </span><a class="code hl_class" href="classAudioPluginAudioProcessorEditor.html">AudioPluginAudioProcessorEditor</a> final : <span class="keyword">public</span> juce::AudioProcessorEditor</div>
 <div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span>{</div>
 <div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span>  <span class="keyword">public</span>:</div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>    <span class="keyword">explicit</span> <a class="code hl_class" href="classAudioPluginAudioProcessorEditor.html">AudioPluginAudioProcessorEditor</a>(<a class="code hl_class" href="classAudioPluginAudioProcessor.html">AudioPluginAudioProcessor</a> &amp;, juce::AudioProcessorValueTreeState &amp;vts);</div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>    <span class="keyword">explicit</span> <a class="code hl_class" href="classAudioPluginAudioProcessorEditor.html">AudioPluginAudioProcessorEditor</a>(<a class="code hl_class" href="classAudioPluginAudioProcessor.html">AudioPluginAudioProcessor</a> &amp;);</div>
 <div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>    <a class="code hl_class" href="classAudioPluginAudioProcessorEditor.html">~AudioPluginAudioProcessorEditor</a>() <span class="keyword">override</span>;</div>
 <div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span> </div>
 <div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>    <span class="comment">//==============================================================================</span></div>
@@ -181,17 +181,15 @@ $(function(){initNavTree('utilities_2AudioFilePlayer_2PluginEditor_8h_source.htm
 <div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>    juce::Label fileName;</div>
 <div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    std::unique_ptr&lt;juce::FileChooser&gt; fileChooser;</div>
 <div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span> </div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>    juce::AudioProcessorValueTreeState &amp;valueTreeState;</div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span> </div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>    <span class="keyword">using </span>SliderAttachment = juce::AudioProcessorValueTreeState::SliderAttachment;</div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>    <span class="keyword">using </span>ButtonAttachment = juce::AudioProcessorValueTreeState::ButtonAttachment;</div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span> </div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>    std::unique_ptr&lt;SliderAttachment&gt; gainAttachment;</div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>    std::unique_ptr&lt;ButtonAttachment&gt; loopAttachment;</div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    std::unique_ptr&lt;ButtonAttachment&gt; playAttachment;</div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span> </div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(<a class="code hl_class" href="classAudioPluginAudioProcessorEditor.html">AudioPluginAudioProcessorEditor</a>)</div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>};</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>    <span class="keyword">using </span>SliderAttachment = juce::AudioProcessorValueTreeState::SliderAttachment;</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>    <span class="keyword">using </span>ButtonAttachment = juce::AudioProcessorValueTreeState::ButtonAttachment;</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span> </div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>    std::unique_ptr&lt;SliderAttachment&gt; gainAttachment;</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>    std::unique_ptr&lt;ButtonAttachment&gt; loopAttachment;</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>    std::unique_ptr&lt;ButtonAttachment&gt; playAttachment;</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span> </div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(<a class="code hl_class" href="classAudioPluginAudioProcessorEditor.html">AudioPluginAudioProcessorEditor</a>)</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>};</div>
 <div class="ttc" id="aclassAudioPluginAudioProcessorEditor_html"><div class="ttname"><a href="classAudioPluginAudioProcessorEditor.html">AudioPluginAudioProcessorEditor</a></div><div class="ttdef"><b>Definition</b> PluginEditor.h:11</div></div>
 <div class="ttc" id="aclassAudioPluginAudioProcessor_html"><div class="ttname"><a href="classAudioPluginAudioProcessor.html">AudioPluginAudioProcessor</a></div><div class="ttdef"><b>Definition</b> PluginProcessor.h:9</div></div>
 <div class="ttc" id="aclassDeathMetalLookAndFeel_html"><div class="ttname"><a href="classDeathMetalLookAndFeel.html">DeathMetalLookAndFeel</a></div><div class="ttdef"><b>Definition</b> DeathMetalLookAndFeel.h:9</div></div>
