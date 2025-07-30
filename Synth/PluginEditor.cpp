@@ -39,7 +39,7 @@ SynthAudioProcessorEditor::SynthAudioProcessorEditor(SynthAudioProcessor &p)
     // Initially select the Sine waveform
     sineButton.setToggleState(true, juce::NotificationType::dontSendNotification);
 
-    auto oscType = processorRef.parameters.getParameter("oscType");
+    auto oscType = processorRef.mParameters.getParameter("oscType");
 
     sineButton.onClick = [&]() {
         if (sineButton.getToggleState())

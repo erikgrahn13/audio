@@ -12,13 +12,13 @@ SynthAudioProcessor::SynthAudioProcessor()
                          .withOutput("Output", juce::AudioChannelSet::stereo(), true)
 #endif
                          ),
-      parameters(*this, nullptr, juce::Identifier("Parameters"),
-                 std::make_unique<juce::AudioParameterInt>("oscType", "Oscillator Type", Oscillator::OscType::SINE,
-                                                           Oscillator::OscType::NUM_TYPES - 1,
-                                                           Oscillator::OscType::SINE))
+      mParameters(*this, nullptr, juce::Identifier("Parameters"),
+                  std::make_unique<juce::AudioParameterInt>("oscType", "Oscillator Type", Oscillator::OscType::SINE,
+                                                            Oscillator::OscType::NUM_TYPES - 1,
+                                                            Oscillator::OscType::SINE))
 {
-    parameters.addParameterListener("oscType", this);
-    oscTypeParameter = static_cast<juce::AudioParameterInt *>(parameters.getParameter("oscType"));
+    mParameters.addParameterListener("oscType", this);
+    oscTypeParameter = static_cast<juce::AudioParameterInt *>(mParameters.getParameter("oscType"));
     synth.addSound(new SynthSound());
 
     for ([[maybe_unused]] auto voice : std::ranges::iota_view{0, numOfVoices})
@@ -130,7 +130,7 @@ bool SynthAudioProcessor::isBusesLayoutSupported(const BusesLayout &layouts) con
         layouts.getMainOutputChannelSet() != juce::AudioChannelSet::stereo())
         return false;
 
-        // This checks if the input layout matches the output layout
+    // This checks if the input layout matches the output layout
 #if !JucePlugin_IsSynth
     if (layouts.getMainOutputChannelSet() != layouts.getMainInputChannelSet())
         return false;
@@ -198,14 +198,21 @@ void SynthAudioProcessor::getStateInformation(juce::MemoryBlock &destData)
     // You should use this method to store your parameters in the memory block.
     // You could do that either as raw data, or use the XML or ValueTree classes
     // as intermediaries to make it easy to save and load complex data.
-    juce::ignoreUnused(destData);
+    copyXmlToBinary(*mParameters.copyState().createXml(), destData);
 }
 
 void SynthAudioProcessor::setStateInformation(const void *data, int sizeInBytes)
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
-    juce::ignoreUnused(data, sizeInBytes);
+    auto xmlState(getXmlFromBinary(data, sizeInBytes));
+    if (xmlState.get() != nullptr)
+    {
+        if (xmlState->hasTagName(mParameters.state.getType()))
+        {
+            mParameters.replaceState(juce::ValueTree::fromXml(*xmlState));
+        }
+    }
 }
 
 //==============================================================================

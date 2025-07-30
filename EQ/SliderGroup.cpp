@@ -21,7 +21,7 @@ SliderGroup::SliderGroup(AudioPluginAudioProcessor &processor, std::string_view 
     if (!bypassParameterID.empty())
     {
         mBypassAttachment.reset(new juce::AudioProcessorValueTreeState::ButtonAttachment(
-            mProcessor.getVTSParameters(), bypassParameterID.data(), mBypassButton));
+            mProcessor.mParameters, bypassParameterID.data(), mBypassButton));
 
         mBypassButton.setLookAndFeel(&fontAudioLookAndFeel);
         mBypassButton.setColour(juce::TextButton::ColourIds::textColourOnId, juce::Colours::white);
@@ -36,7 +36,7 @@ SliderGroup::SliderGroup(AudioPluginAudioProcessor &processor, std::string_view 
     if (!frequencyParameterID.empty())
     {
         mFrequencyAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(
-            mProcessor.getVTSParameters(), frequencyParameterID.data(), mFrequencySlider));
+            mProcessor.mParameters, frequencyParameterID.data(), mFrequencySlider));
         mFrequencySlider.setSliderStyle(juce::Slider::RotaryVerticalDrag);
         mFrequencySlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 100, 20);
         mFrequencySlider.setColour(juce::Slider::textBoxOutlineColourId, juce::Colours::black);
@@ -56,7 +56,7 @@ SliderGroup::SliderGroup(AudioPluginAudioProcessor &processor, std::string_view 
     {
         mGainSlider.setSliderStyle(juce::Slider::RotaryVerticalDrag);
         mGainAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(
-            mProcessor.getVTSParameters(), gainParameterID.data(), mGainSlider));
+            mProcessor.mParameters, gainParameterID.data(), mGainSlider));
         mGainSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 100, 20);
         mGainSlider.setColour(juce::Slider::textBoxOutlineColourId, juce::Colours::black);
 
@@ -71,7 +71,7 @@ SliderGroup::SliderGroup(AudioPluginAudioProcessor &processor, std::string_view 
     else
     {
         auto *filterOrder = dynamic_cast<juce::AudioParameterChoice *>(
-            mProcessor.getVTSParameters().getParameter(filterOrderParameterID.data()));
+            mProcessor.mParameters.getParameter(filterOrderParameterID.data()));
 
         for (int i = 0; i < filterOrder->choices.size(); ++i)
         {
@@ -86,14 +86,14 @@ SliderGroup::SliderGroup(AudioPluginAudioProcessor &processor, std::string_view 
         mFilterOrder.setJustificationType(juce::Justification::centred);
         std::ignore = filterOrderParameterID;
         mFilterOrderAttachment.reset(new juce::AudioProcessorValueTreeState::ComboBoxAttachment(
-            mProcessor.getVTSParameters(), filterOrderParameterID.data(), mFilterOrder));
+            mProcessor.mParameters, filterOrderParameterID.data(), mFilterOrder));
         addAndMakeVisible(mFilterOrder);
     }
 
     if (!QParameterID.empty())
     {
         mQSlider.setSliderStyle(juce::Slider::RotaryVerticalDrag);
-        mQAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(mProcessor.getVTSParameters(),
+        mQAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(mProcessor.mParameters,
                                                                                     QParameterID.data(), mQSlider));
         mQSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 100, 20);
         mQSlider.setColour(juce::Slider::textBoxOutlineColourId, juce::Colours::black);

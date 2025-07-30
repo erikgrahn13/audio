@@ -10,20 +10,22 @@ AudioPluginAudioProcessor::AudioPluginAudioProcessor()
 #endif
                          .withOutput("Output", juce::AudioChannelSet::stereo(), true)
 #endif
-      ), parameters(*this, nullptr, juce::Identifier("Parameters"), {
-        std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"gain",1}, "Gain", -48.0f, 0.0f, 0.0f),
-        std::make_unique<juce::AudioParameterBool>(juce::ParameterID{"loop",1}, "Loop", false),
-        std::make_unique<juce::AudioParameterBool>(juce::ParameterID{"play",1}, "Play", false),
-        std::make_unique<juce::AudioParameterBool>(juce::ParameterID{"stop",1}, "Stop", false)
+                         ),
+      mParameters(
+          *this, nullptr, juce::Identifier("Parameters"),
+          {std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"gain", 1}, "Gain", -48.0f, 0.0f, 0.0f),
+           std::make_unique<juce::AudioParameterBool>(juce::ParameterID{"loop", 1}, "Loop", false),
+           std::make_unique<juce::AudioParameterBool>(juce::ParameterID{"play", 1}, "Play", false),
+           std::make_unique<juce::AudioParameterBool>(juce::ParameterID{"stop", 1}, "Stop", false)
 
-      })
-      
+          })
+
 {
     audioFormatManager.registerBasicFormats();
 
-    gainParameter = dynamic_cast<juce::AudioParameterFloat*>(parameters.getParameter("gain"));
-    loopParameter = dynamic_cast<juce::AudioParameterBool*>(parameters.getParameter("loop"));
-    playParameter = dynamic_cast<juce::AudioParameterBool*>(parameters.getParameter("play"));
+    gainParameter = dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("gain"));
+    loopParameter = dynamic_cast<juce::AudioParameterBool *>(mParameters.getParameter("loop"));
+    playParameter = dynamic_cast<juce::AudioParameterBool *>(mParameters.getParameter("play"));
 }
 
 AudioPluginAudioProcessor::~AudioPluginAudioProcessor()
@@ -120,10 +122,11 @@ bool AudioPluginAudioProcessor::isBusesLayoutSupported(const BusesLayout &layout
     // In this template code we only support mono or stereo.
     // Some plugin hosts, such as certain GarageBand versions, will only
     // load plugins that support stereo bus layouts.
-    if (layouts.getMainOutputChannelSet() != juce::AudioChannelSet::mono() && layouts.getMainOutputChannelSet() != juce::AudioChannelSet::stereo())
+    if (layouts.getMainOutputChannelSet() != juce::AudioChannelSet::mono() &&
+        layouts.getMainOutputChannelSet() != juce::AudioChannelSet::stereo())
         return false;
 
-        // This checks if the input layout matches the output layout
+    // This checks if the input layout matches the output layout
 #if !JucePlugin_IsSynth
     if (layouts.getMainOutputChannelSet() != layouts.getMainInputChannelSet())
         return false;
@@ -150,18 +153,17 @@ bool AudioPluginAudioProcessor::loadFile(juce::File &file)
     return false;
 }
 
-void AudioPluginAudioProcessor::processBlock(juce::AudioBuffer<float> &buffer,
-                                             juce::MidiBuffer &midiMessages)
+void AudioPluginAudioProcessor::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages)
 {
     buffer.clear();
 
-    if(audioFormatReaderSource)
+    if (audioFormatReaderSource)
     {
         audioFormatReaderSource->setLooping(loopParameter->get());
     }
 
     auto currentGain = gainParameter->get();
-    if(juce::approximatelyEqual(currentGain, previousGain))
+    if (juce::approximatelyEqual(currentGain, previousGain))
     {
         buffer.applyGain(currentGain);
     }
@@ -174,7 +176,7 @@ void AudioPluginAudioProcessor::processBlock(juce::AudioBuffer<float> &buffer,
     transportSource.setGain(juce::Decibels::decibelsToGain(currentGain));
     transportSource.getNextAudioBlock(juce::AudioSourceChannelInfo(buffer));
 
-        if(playParameter->get())
+    if (playParameter->get())
     {
         transportSource.start();
     }
@@ -185,7 +187,7 @@ void AudioPluginAudioProcessor::processBlock(juce::AudioBuffer<float> &buffer,
         buffer.clear();
     }
 
-    if(transportSource.getCurrentPosition() >= transportSource.getLengthInSeconds())
+    if (transportSource.getCurrentPosition() >= transportSource.getLengthInSeconds())
     {
         transportSource.stop();
         transportSource.setPosition(0.0);
@@ -230,34 +232,30 @@ bool AudioPluginAudioProcessor::hasEditor() const
 
 juce::AudioProcessorEditor *AudioPluginAudioProcessor::createEditor()
 {
-    return new AudioPluginAudioProcessorEditor(*this, parameters);
+    return new AudioPluginAudioProcessorEditor(*this);
 }
 
 //==============================================================================
 void AudioPluginAudioProcessor::getStateInformation(juce::MemoryBlock &destData)
 {
-    // You should use this method to store your parameters in the memory block.
+    // You should use this method to store your mParameters in the memory block.
     // You could do that either as raw data, or use the XML or ValueTree classes
     // as intermediaries to make it easy to save and load complex data.
-    auto state = parameters.copyState();
-    std::unique_ptr<juce::XmlElement> xml(state.createXml());
-    copyXmlToBinary(*xml, destData);
+    copyXmlToBinary(*mParameters.copyState().createXml(), destData);
 }
 
 void AudioPluginAudioProcessor::setStateInformation(const void *data, int sizeInBytes)
 {
-    // You should use this method to restore your parameters from this memory block,
+    // You should use this method to restore your mParameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
-    std::unique_ptr<juce::XmlElement> xmlState(getXmlFromBinary(data, sizeInBytes));
-
-    if(xmlState.get() != nullptr)
+    auto xmlState(getXmlFromBinary(data, sizeInBytes));
+    if (xmlState.get() != nullptr)
     {
-        if(xmlState->hasTagName(parameters.state.getType()))
+        if (xmlState->hasTagName(mParameters.state.getType()))
         {
-            parameters.replaceState(juce::ValueTree::fromXml(*xmlState));
+            mParameters.replaceState(juce::ValueTree::fromXml(*xmlState));
         }
     }
-    juce::ignoreUnused(data, sizeInBytes);
 }
 
 //==============================================================================

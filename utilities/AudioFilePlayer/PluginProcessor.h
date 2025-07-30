@@ -53,6 +53,8 @@ class AudioPluginAudioProcessor final : public juce::AudioProcessor
         return *audioFormatReaderSource;
     }
 
+    juce::AudioProcessorValueTreeState mParameters;
+
   private:
     juce::AudioTransportSource transportSource;
     juce::AudioFormatManager audioFormatManager;
@@ -63,7 +65,6 @@ class AudioPluginAudioProcessor final : public juce::AudioProcessor
     juce::AudioParameterBool *loopParameter;
     juce::AudioParameterBool *playParameter;
 
-    juce::AudioProcessorValueTreeState parameters;
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AudioPluginAudioProcessor)
 };

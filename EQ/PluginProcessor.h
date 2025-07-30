@@ -54,17 +54,12 @@ class AudioPluginAudioProcessor final : public juce::AudioProcessor, juce::Audio
     void parameterChanged(const juce::String &parameter, float newValue) override;
     void update();
 
-    juce::AudioProcessorValueTreeState &getVTSParameters()
-    {
-        return mParameters;
-    }
-
     juce::AudioBuffer<float> mAudioBuffer;
     juce::AbstractFifo mRingBuffer{1};
     std::atomic<bool> nextFFTBlockReady{false};
+    juce::AudioProcessorValueTreeState mParameters;
 
   private:
-    juce::AudioProcessorValueTreeState mParameters;
     std::vector<FilterTuple> mFilters;
     std::atomic<bool> requiresUpdate{true};
     //==============================================================================
