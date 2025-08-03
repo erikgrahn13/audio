@@ -28,7 +28,7 @@
       "displayName": "Release",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
-        "JUCE_COPY_PLUGIN_AFTER_BUILD": "FALSE"
+        "JUCE_COPY_PLUGIN_AFTER_BUILD": "TRUE"
       }
     },
     {
