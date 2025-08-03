@@ -8,15 +8,15 @@ function(enable_pluginval_testing target)
     message(STATUS "✅ ${target}: ${bundle_id}")
 
     # Pluginval testing
+    get_target_property(PLUGIN_NAME ${PROJECT_NAME} JUCE_PRODUCT_NAME)
+
     if(CMAKE_BUILD_TYPE STREQUAL "Debug")
         get_target_property(PLUGIN_PATH ${target} LIBRARY_OUTPUT_DIRECTORY)
-        get_target_property(PLUGIN_NAME ${PROJECT_NAME} JUCE_PRODUCT_NAME)
     else()
         if(APPLE)
             set(PLUGIN_PATH "/Library/Audio/Plug-Ins/")
         else()
             get_target_property(PLUGIN_PATH ${target} LIBRARY_OUTPUT_DIRECTORY)
-            get_target_property(PLUGIN_NAME ${PROJECT_NAME} JUCE_PRODUCT_NAME)
         endif()
     endif()
 
