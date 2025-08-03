@@ -14,8 +14,11 @@ function(create_installer target)
         set(APP_INSTALL_DIRECTORY "Applications")
         set(VST3_INSTALL_DIRECTORY "Library/Audio/Plug-Ins/VST3")
     elseif(WIN32) # fix correct destinations when inno setup support is added
-        set(APP_INSTALL_DIRECTORY "${CMAKE_BINARY_DIR}/tmp")
-        set(VST3_INSTALL_DIRECTORY "${CMAKE_BINARY_DIR}/tmp")
+        set(APP_INSTALL_DIRECTORY "tmp")
+        set(VST3_INSTALL_DIRECTORY "tmp")
+    elseif(UNIX)
+        set(APP_INSTALL_DIRECTORY "tmp")
+        set(VST3_INSTALL_DIRECTORY "tmp")
     endif()
 
     install(TARGETS ${target}_VST3
