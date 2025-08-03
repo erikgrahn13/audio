@@ -1,0 +1,61 @@
+function(create_installer target)
+    get_target_property(PLUGIN_NAME ${PROJECT_NAME} JUCE_PRODUCT_NAME)
+    get_target_property(BUNDLE_ID ${target} JUCE_BUNDLE_ID)
+
+    set(CPACK_OUTPUT_CONFIG_FILE "${CMAKE_CURRENT_BINARY_DIR}/CPackConfig-${target}.cmake")
+    set(CPACK_PACKAGE_NAME "${PLUGIN_NAME}")
+    set(CPACK_PACKAGE_VERSION "1.0.0")
+    set(CPACK_PRODUCTBUILD_IDENTIFIER "${BUNDLE_ID}")
+    set(CPACK_PACKAGE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
+    set(CPACK_SYSTEM_NAME "")
+    set(CPACK_PACKAGE_FILE_NAME "${target}-${CPACK_PACKAGE_VERSION}")
+
+    install(DIRECTORY "$<TARGET_BUNDLE_DIR:${target}_VST3>"
+        DESTINATION "Library/Audio/Plug-Ins/VST3"
+        COMPONENT ${target}VST3
+        USE_SOURCE_PERMISSIONS
+    )
+
+    install(DIRECTORY "$<TARGET_BUNDLE_DIR:${target}_Standalone>"
+        DESTINATION "Applications"
+        COMPONENT ${target}APP
+        USE_SOURCE_PERMISSIONS
+    )
+
+    set(CPACK_COMPONENTS_ALL ${target}APP ${target}VST3)
+    set(CPACK_COMPONENT_NAME "${target}")
+
+    # Mac installer
+    if(APPLE)
+        include(CPackComponent)
+        set(_entries "")
+        string(APPEND _entries
+            "  <dict>
+            <key>RootRelativeBundlePath</key><string>Applications/${PLUGIN_NAME}.app</string>
+            <key>BundleIsRelocatable</key><false/>
+            <key>BundleHasStrictIdentifier</key><true/>
+            <key>BundleIsVersionChecked</key><true/>
+        </dict>
+        ")
+
+        configure_file("${CMAKE_SOURCE_DIR}/cmake/component.plist.in" "component.plist" @ONLY)
+        cpack_add_component(${target}APP PLIST "${CMAKE_CURRENT_BINARY_DIR}/component.plist")
+
+        install(DIRECTORY "$<TARGET_BUNDLE_DIR:${target}_AU>"
+            DESTINATION "Library/Audio/Plug-Ins/Components"
+            COMPONENT ${target}AU
+            USE_SOURCE_PERMISSIONS
+        )
+        list(APPEND CPACK_COMPONENTS_ALL ${target}AU)
+
+        set(CPACK_COMPONENT_${target}AU_DISPLAY_NAME "${PLUGIN_NAME} AU")
+
+        set(CPACK_PACKAGING_INSTALL_PREFIX "/")
+        set(CPACK_GENERATOR "productbuild")
+    endif()
+
+    # Windows installer
+
+    # Linux installer
+    include(CPack)
+endfunction()

@@ -67,11 +67,8 @@ jobs:
       #   if: matrix.os == 'macos-latest'
       #   run: echo "CMAKE_GENERATOR=Xcode" >> $GITHUB_ENV
 
-      - name: Configure
-        run: cmake --preset Release
-
       - name: Build
-        run: cmake --build --preset Release
+        run: cmake --workflow --preset Release
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
@@ -82,6 +79,7 @@ jobs:
             build/**/CTestTestfile.cmake
             build/**/CMakeCache.txt
             build/**/**/*_artefacts/**
+            build/**/**/*.pkg
             build/_deps/pluginval-src
             !build/_deps/juce-*/
             !**/*_SharedCode.*
@@ -104,11 +102,15 @@ jobs:
         if: matrix.os != 'windows-latest'
         run: chmod -R +x build/_deps/pluginval-src/
 
+      - name: Install plugins (macOS)
+        if: matrix.os == 'macos-latest'
+        run: |
+          find build -name "*.pkg" -exec sudo installer -pkg {} -target / -verbose \;
+        shell: bash
+
       - name: Register AU plugins
         if: matrix.os == 'macos-latest'
         run: |
-          mkdir -p ~/Library/Audio/Plug-Ins/Components
-          find build -name "*.component" -exec cp -r {} ~/Library/Audio/Plug-Ins/Components/ \;
           pgrep -x AudioComponentRegistrar >/dev/null && killall -9 AudioComponentRegistrar; echo "killed AudioComponentRegistrar" || echo "AudioComponentRegistrar Process not found"
         shell: bash
 

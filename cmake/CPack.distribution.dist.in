@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<installer-gui-script minSpecVersion="2">
+    <title>@CPACK_PACKAGE_NAME@</title>
+    <options customize="always" rootVolumeOnly="false"/>
+	<choices-outline>
+		<line choice="@CPACK_COMPONENT_NAME@_VST3Choice"></line>
+		<line choice="@CPACK_COMPONENT_NAME@_AUChoice"></line>
+		<line choice="@CPACK_COMPONENT_NAME@_APPChoice"></line>
+	</choices-outline>
+	<choice id="@CPACK_COMPONENT_NAME@_APPChoice" title="@CPACK_PACKAGE_NAME@ Standalone" start_selected="true" start_enabled="true" start_visible="true">
+		<pkg-ref id="@CPACK_PRODUCTBUILD_IDENTIFIER@.app"/>
+	</choice>
+	<pkg-ref id="@CPACK_PRODUCTBUILD_IDENTIFIER@.app" version="1.0.0" installKBytes="1" auth="Admin" onConclusion="None">file:./Contents/Packages/@CPACK_COMPONENT_NAME@-@CPACK_PACKAGE_VERSION@-@CPACK_COMPONENT_NAME@APP.pkg</pkg-ref>
+	<choice id="@CPACK_COMPONENT_NAME@_AUChoice" title="@CPACK_PACKAGE_NAME@ AU" start_selected="true" start_enabled="true" start_visible="true">
+		<pkg-ref id="@CPACK_PRODUCTBUILD_IDENTIFIER@.au"/>
+	</choice>
+	<pkg-ref id="@CPACK_PRODUCTBUILD_IDENTIFIER@.au" version="1.0.0" installKBytes="1" auth="Admin" onConclusion="None">file:./Contents/Packages/@CPACK_COMPONENT_NAME@-@CPACK_PACKAGE_VERSION@-@CPACK_COMPONENT_NAME@AU.pkg</pkg-ref>
+	<choice id="@CPACK_COMPONENT_NAME@_VST3Choice" title="@CPACK_PACKAGE_NAME@ VST3" start_selected="true" start_enabled="true" start_visible="true">
+		<pkg-ref id="@CPACK_PRODUCTBUILD_IDENTIFIER@.vst3"/>
+	</choice>
+	<pkg-ref id="@CPACK_PRODUCTBUILD_IDENTIFIER@.vst3" version="1.0.0" installKBytes="1" auth="Admin" onConclusion="None">file:./Contents/Packages/@CPACK_COMPONENT_NAME@-@CPACK_PACKAGE_VERSION@-@CPACK_COMPONENT_NAME@VST3.pkg</pkg-ref>
+</installer-gui-script>

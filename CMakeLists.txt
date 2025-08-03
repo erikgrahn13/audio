@@ -16,6 +16,7 @@ include(JUCE)
 include(Pluginval)
 include(Doxygen)
 include(ASIO)
+include(Installer)
 
 if(NOT FETCHCONTENT_FULLY_DISCONNECTED)
     include(NAM)
