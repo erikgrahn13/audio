@@ -10,16 +10,22 @@ function(create_installer target)
     set(CPACK_SYSTEM_NAME "")
     set(CPACK_PACKAGE_FILE_NAME "${target}-${CPACK_PACKAGE_VERSION}")
 
-    install(DIRECTORY "$<TARGET_BUNDLE_DIR:${target}_VST3>"
-        DESTINATION "Library/Audio/Plug-Ins/VST3"
+    if(APPLE)
+        set(APP_INSTALL_DIRECTORY "Applications")
+        set(VST3_INSTALL_DIRECTORY "Library/Audio/Plug-Ins/VST3")
+    elseif(WIN32) # fix correct destinations when inno setup support is added
+        set(APP_INSTALL_DIRECTORY "${CMAKE_BINARY_DIR}/tmp")
+        set(VST3_INSTALL_DIRECTORY "${CMAKE_BINARY_DIR}/tmp")
+    endif()
+
+    install(TARGETS ${target}_VST3
+        DESTINATION ${VST3_INSTALL_DIRECTORY}
         COMPONENT ${target}VST3
-        USE_SOURCE_PERMISSIONS
     )
 
-    install(DIRECTORY "$<TARGET_BUNDLE_DIR:${target}_Standalone>"
-        DESTINATION "Applications"
+    install(TARGETS ${target}_Standalone
+        DESTINATION ${APP_INSTALL_DIRECTORY}
         COMPONENT ${target}APP
-        USE_SOURCE_PERMISSIONS
     )
 
     set(CPACK_COMPONENTS_ALL ${target}APP ${target}VST3)
@@ -41,10 +47,9 @@ function(create_installer target)
         configure_file("${CMAKE_SOURCE_DIR}/cmake/component.plist.in" "component.plist" @ONLY)
         cpack_add_component(${target}APP PLIST "${CMAKE_CURRENT_BINARY_DIR}/component.plist")
 
-        install(DIRECTORY "$<TARGET_BUNDLE_DIR:${target}_AU>"
+        install(TARGETS ${target}_AU
             DESTINATION "Library/Audio/Plug-Ins/Components"
             COMPONENT ${target}AU
-            USE_SOURCE_PERMISSIONS
         )
         list(APPEND CPACK_COMPONENTS_ALL ${target}AU)
 
@@ -52,9 +57,11 @@ function(create_installer target)
 
         set(CPACK_PACKAGING_INSTALL_PREFIX "/")
         set(CPACK_GENERATOR "productbuild")
-    endif()
 
     # Windows installer
+    elseif(WIN32)
+        set(CPACK_GENERATOR "TGZ")
+    endif()
 
     # Linux installer
     include(CPack)
