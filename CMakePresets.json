@@ -102,8 +102,7 @@
       "steps": [
         { "type": "configure", "name": "Release" },
         { "type": "build", "name": "Release" },
-        { "type": "package", "name": "black-lounge" },
-        { "type": "package", "name": "abyss" }
+        { "type": "package", "name": "black-lounge" }
       ]
     }
   ],
