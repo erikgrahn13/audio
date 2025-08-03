@@ -59,7 +59,7 @@ function(create_installer target)
         set(CPACK_GENERATOR "productbuild")
 
     # Windows installer
-    elseif(WIN32)
+    else()
         set(CPACK_GENERATOR "TGZ")
     endif()
 
