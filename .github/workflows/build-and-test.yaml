@@ -52,21 +52,6 @@ jobs:
           for /f "usebackq tokens=*" %%i in (`vswhere -latest -property installationPath`) do set VS_PATH=%%i
           call "%VS_PATH%\VC\Auxiliary\Build\vcvars64.bat"
           set >> %GITHUB_ENV%
-
-      # - name: Setup MSVC Environment
-      #   if: matrix.os == 'windows-latest'
-      #   run: |
-      #     echo "CC=C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Tools/MSVC/14.42.34433/bin/Hostx64/x64/cl.exe" >> $GITHUB_ENV
-      #     echo "CXX=C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Tools/MSVC/14.42.34433/bin/Hostx64/x64/cl.exe" >> $GITHUB_ENV
-
-      # shell: cmd
-      # run: |
-      #   call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
-
-      # - name: Set CMake default generator
-      #   if: matrix.os == 'macos-latest'
-      #   run: echo "CMAKE_GENERATOR=Xcode" >> $GITHUB_ENV
-
       - name: Build
         run: cmake --workflow --preset Release
 
@@ -77,86 +62,21 @@ jobs:
 
           # Install packaged plugins
           find . -name "*.pkg" -exec sudo installer -pkg {} -target / -verbose \;
-
-          # JUCE already copied development plugins during build via COPY_PLUGIN_AFTER_BUILD
-          echo "Plugins ready for testing"
-
-      - name: Register AU plugins (macOS)
-        if: matrix.os == 'macos-latest'
-        run: |
           # Kill AudioComponentRegistrar if running
-          pgrep -x AudioComponentRegistrar >/dev/null && killall -9 AudioComponentRegistrar || true
+           pgrep -x AudioComponentRegistrar >/dev/null && killall -9 AudioComponentRegistrar; echo "killed AudioComponentRegistrar" || echo "AudioComponentRegistrar Process not found"
 
       - name: Run Tests
         run: ctest --preset Release
 
-      # - name: Upload build artifacts
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: build-${{matrix.os}}
-      #     path: |
-      #       CMakePresets.json
-      #       build/**/CTestTestfile.cmake
-      #       build/**/CMakeCache.txt
-      #       build/**/*.ninja
-      #       build/**/**/*_artefacts/**
-      #       build/**/**/*.pkg
-      #       build/_deps/pluginval-src
-      #       !build/_deps/juce-src/
-      #       !build/_deps/juce-subbuild/
-      #       !**/*_SharedCode.*
-
-  # test:
-  #   name: Test
-  #   needs: build
-  #   runs-on: ${{matrix.os}}
-  #   strategy:
-  #     matrix:
-  #       os: [windows-latest, macos-latest, ubuntu-latest]
-
-  #   steps:
-  #     - name: Download Build Artifacts
-  #       uses: actions/download-artifact@v4
-  #       with:
-  #         name: build-${{matrix.os}}
-
-  #     - name: Change permissions
-  #       if: matrix.os != 'windows-latest'
-  #       run: chmod -R +x build/_deps/pluginval-src/
-
-  #     - name: Install plugins (macOS)
-  #       if: matrix.os == 'macos-latest'
-  #       run: |
-  #         # Install packaged plugins first (.pkg files for feature-complete plugins)
-  #         find build -name "*.pkg" -exec sudo installer -pkg {} -target / -verbose \;
-
-  #         # Use cmake install for development plugins (no .pkg files)
-  #         cd build
-
-  #         # Fix absolute paths in cmake_install.cmake files to work in CI
-  #         find . -name "cmake_install.cmake" -exec sed -i '' 's|/Users/runner/work/audio/audio/build|'"$(pwd)"'|g' {} \;
-  #         find . -name "cmake_install.cmake" -exec sed -i '' 's|/home/runner/work/audio/audio/build|'"$(pwd)"'|g' {} \;
-
-  #         # Install development plugins using CMake (only those without .pkg files)
-  #         cmake --install . --config Release
-
-  #         # Verify installations
-  #         echo "Checking installed plugins:"
-  #         ls -la /Library/Audio/Plug-Ins/VST3/ | grep -i "abyss\|lounge" || echo "No system VST3 plugins found"
-  #         ls -la /Library/Audio/Plug-Ins/Components/ | grep -i "abyss\|lounge" || echo "No system AU plugins found"
-  #         ls -la ~/Library/Audio/Plug-Ins/VST3/ | grep -i "abyss\|lounge" || echo "No user VST3 plugins found"
-  #         ls -la ~/Library/Audio/Plug-Ins/Components/ | grep -i "abyss\|lounge" || echo "No user AU plugins found"
-  #       shell: bash
-
-  #     - name: Register AU plugins
-  #       if: matrix.os == 'macos-latest'
-  #       run: |
-  #         pgrep -x AudioComponentRegistrar >/dev/null && killall -9 AudioComponentRegistrar; echo "killed AudioComponentRegistrar" || echo "AudioComponentRegistrar Process not found"
-  #       shell: bash
-
-  #     - name: Run Tests
-  #       run: ctest --preset Release
-
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-${{matrix.os}}
+          path: |
+            build/**/**/*_artefacts/AU
+            build/**/**/*_artefacts/Standalone
+            build/**/**/*_artefacts/VST3
+            build/**/**/*.pkg
   generate-docs:
     name: Verify Doxygen documentation generation
     runs-on: ubuntu-latest
