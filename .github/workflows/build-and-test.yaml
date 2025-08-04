@@ -73,10 +73,9 @@ jobs:
         with:
           name: build-${{matrix.os}}
           path: |
-            build/**/*.vst3
-            build/**/*.component  
-            build/**/*.exe
-            build/**/*.app
+            build/**/*_artefacts/Release/AU/*
+            build/**/*_artefacts/Release/Standalone/*
+            build/**/*_artefacts/Release/VST3/*
             build/**/*.pkg
             !build/**/_CPack_Packages
   generate-docs:
