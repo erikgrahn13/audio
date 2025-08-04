@@ -14,9 +14,17 @@ function(enable_pluginval_testing target)
     get_target_property(PLUGIN_PATH_AU ${target} JUCE_AU_COPY_DIR)
     get_target_property(PLUGIN_IS_COPIED ${target} JUCE_COPY_PLUGIN_AFTER_BUILD)
 
-    if(APPLE AND NOT PLUGIN_IS_COPIED)
-        set(PLUGIN_PATH_AU "/Library/Audio/Plug-Ins/Components")
-        set(PLUGIN_PATH_VST3 "/Library/Audio/Plug-Ins/VST3")
+    if(NOT PLUGIN_IS_COPIED)
+        if(APPLE)
+            set(PLUGIN_PATH_AU "/Library/Audio/Plug-Ins/Components")
+            set(PLUGIN_PATH_VST3 "/Library/Audio/Plug-Ins/VST3")
+        elseif(WIN32) # TODO: this is temporary until an installer for windows is in place
+            get_target_property(PLUGIN_PATH ${target} LIBRARY_OUTPUT_DIRECTORY)
+            set(PLUGIN_PATH_VST3 "${PLUGIN_PATH}/VST3")
+        elseif(UNIX) # TODO: this is temporary until an installer for liunux is in place
+            get_target_property(PLUGIN_PATH ${target} LIBRARY_OUTPUT_DIRECTORY)
+            set(PLUGIN_PATH_VST3 "${PLUGIN_PATH}/VST3")
+        endif()
     endif()
 
     add_test(NAME ${target}_VST3_TEST
