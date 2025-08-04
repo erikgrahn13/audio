@@ -109,23 +109,25 @@ jobs:
       - name: Install plugins (macOS)
         if: matrix.os == 'macos-latest'
         run: |
-          # Install packaged plugins first
+          # Install packaged plugins first (.pkg files for feature-complete plugins)
           find build -name "*.pkg" -exec sudo installer -pkg {} -target / -verbose \;
 
-          # Copy AU plugins that don't have installers to user directory
-          mkdir -p ~/Library/Audio/Plug-Ins/Components
+          # Use cmake install for development plugins (no .pkg files)
+          cd build
 
-          for component in $(find build -name "*.component"); do
-            plugin_build_dir=$(dirname $(dirname $(dirname $component)))
+          # Fix absolute paths in cmake_install.cmake files to work in CI
+          find . -name "cmake_install.cmake" -exec sed -i '' 's|/Users/runner/work/audio/audio/build|'"$(pwd)"'|g' {} \;
+          find . -name "cmake_install.cmake" -exec sed -i '' 's|/home/runner/work/audio/audio/build|'"$(pwd)"'|g' {} \;
 
-            # Check if this build directory has a .pkg file
-            if [ -z "$(find $plugin_build_dir -maxdepth 1 -name "*.pkg")" ]; then
-              echo "Copying $(basename $component) (no installer found)"
-              cp -r "$component" ~/Library/Audio/Plug-Ins/Components/
-            else
-              echo "Skipping $(basename $component) (has installer)"
-            fi
-          done
+          # Install development plugins using CMake (only those without .pkg files)
+          cmake --install . --config Release
+
+          # Verify installations
+          echo "Checking installed plugins:"
+          ls -la /Library/Audio/Plug-Ins/VST3/ | grep -i "abyss\|lounge" || echo "No system VST3 plugins found"
+          ls -la /Library/Audio/Plug-Ins/Components/ | grep -i "abyss\|lounge" || echo "No system AU plugins found"
+          ls -la ~/Library/Audio/Plug-Ins/VST3/ | grep -i "abyss\|lounge" || echo "No user VST3 plugins found"
+          ls -la ~/Library/Audio/Plug-Ins/Components/ | grep -i "abyss\|lounge" || echo "No user AU plugins found"
         shell: bash
 
       - name: Register AU plugins
