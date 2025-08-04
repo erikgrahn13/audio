@@ -73,11 +73,11 @@ jobs:
         with:
           name: build-${{matrix.os}}
           path: |
-            build/**/**/*_artefacts/Release/AU
-            build/**/**/*_artefacts/Release/Standalone
-            build/**/**/*_artefacts/Release/VST3
+            build/**/**/*_artefacts/Release/AU/*
+            build/**/**/*_artefacts/Release/Standalone/*
+            build/**/**/*_artefacts/Release/VST3/*
             build/**/**/*.pkg
-            !build/**/**/*._CPack_Packages
+            !build/**/**/_CPack_Packages
   generate-docs:
     name: Verify Doxygen documentation generation
     runs-on: ubuntu-latest
