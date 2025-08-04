@@ -13,19 +13,19 @@ function(enable_pluginval_testing target)
 
     get_target_property(PLUGIN_PATH_VST3 ${target} LIBRARY_OUTPUT_DIRECTORY)
 
+    if(CMAKE_BUILD_TYPE STREQUAL "Release")
+        if(NOT INSTALLED STREQUAL "INSTALLED-NOTFOUND")
+            set(PLUGIN_PATH_AU "/Library/Audio/Plug-Ins/Components")
+            set(PLUGIN_PATH_VST3 "/Library/Audio/Plug-Ins/VST3")
+        else()
+            set(PLUGIN_PATH_AU "~/Library/Audio/Plug-Ins/Components")
+        endif()
+    endif()
+
     add_test(NAME ${target}_VST3_TEST
         COMMAND ${pluginval_SOURCE_DIR}/${PLUGINVAL_BINARY_PATH} --strictness-level 10 --verbose --skip-gui-tests --validate-in-process ${PLUGIN_PATH_VST3}/${PLUGIN_NAME}.vst3)
 
     if(APPLE AND NOT JUCE_BUILD_EXTRAS)
-        if(CMAKE_BUILD_TYPE STREQUAL "Release")
-            if(NOT INSTALLED STREQUAL "INSTALLED-NOTFOUND")
-                set(PLUGIN_PATH_AU "/Library/Audio/Plug-Ins/Components")
-                set(PLUGIN_PATH_VST3 "/Library/Audio/Plug-Ins/VST3")
-            else()
-                set(PLUGIN_PATH_AU "~/Library/Audio/Plug-Ins/Components")
-            endif()
-        endif()
-
         add_test(NAME ${target}_AU_TEST
             COMMAND ${pluginval_SOURCE_DIR}/${PLUGINVAL_BINARY_PATH} --strictness-level 10 --verbose --skip-gui-tests --validate-in-process ${PLUGIN_PATH_AU}/${PLUGIN_NAME}.component)
     endif(APPLE AND NOT JUCE_BUILD_EXTRAS)
