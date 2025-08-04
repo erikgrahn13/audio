@@ -82,7 +82,10 @@ jobs:
             build/**/**/*_artefacts/**
             build/**/**/*.pkg
             build/_deps/pluginval-src
-            !build/_deps/juce-*/
+            !build/_deps/juce-src/
+            !build/_deps/juce-subbuild/
+            !build/_deps/juce-build/tools/extras/Build/juceaide/juceaide_artefacts
+            !build/_deps/juce-build/tools/extras/Build/juceaide/CMakeFiles
             !**/*_SharedCode.*
 
   test:

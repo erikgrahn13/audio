@@ -1,4 +1,10 @@
 function(create_installer target)
+    get_target_property(PLUGIN_IS_COPIED ${target} JUCE_COPY_PLUGIN_AFTER_BUILD)
+
+    if(PLUGIN_IS_COPIED)
+        message(FATAL_ERROR "Plugin ${target} cant have COPY_PLUGIN_AFTER_BUILD set to TRUE while also call create_installer CMake function")
+    endif()
+
     get_target_property(PLUGIN_NAME ${PROJECT_NAME} JUCE_PRODUCT_NAME)
     get_target_property(BUNDLE_ID ${target} JUCE_BUNDLE_ID)
 
