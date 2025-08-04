@@ -105,7 +105,23 @@ jobs:
       - name: Install plugins (macOS)
         if: matrix.os == 'macos-latest'
         run: |
+          # Install packaged plugins first
           find build -name "*.pkg" -exec sudo installer -pkg {} -target / -verbose \;
+
+          # Copy AU plugins that don't have installers to user directory
+          mkdir -p ~/Library/Audio/Plug-Ins/Components
+
+          for component in $(find build -name "*.component"); do
+            plugin_build_dir=$(dirname $(dirname $(dirname $component)))
+
+            # Check if this build directory has a .pkg file
+            if [ -z "$(find $plugin_build_dir -maxdepth 1 -name "*.pkg")" ]; then
+              echo "Copying $(basename $component) (no installer found)"
+              cp -r "$component" ~/Library/Audio/Plug-Ins/Components/
+            else
+              echo "Skipping $(basename $component) (has installer)"
+            fi
+          done
         shell: bash
 
       - name: Register AU plugins
