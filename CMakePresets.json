@@ -5,7 +5,6 @@
     "minor": 22,
     "patch": 0
   },
-
   "configurePresets": [
     {
       "name": "default",
@@ -20,7 +19,7 @@
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
         "JUCE_BUILD_EXTRAS": "ON",
-        "JUCE_COPY_PLUGIN_AFTER_BUILD": "FALSE"
+        "COPY_AFTER_BUILD": "OFF"
       }
     },
     {
@@ -29,12 +28,12 @@
       "displayName": "Release",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
-        "JUCE_COPY_PLUGIN_AFTER_BUILD": "TRUE"
+        "COPY_AFTER_BUILD": "ON"
       }
     },
     {
       "name": "Docs",
-      "inherits": "default",
+      "inherits": "Release",
       "displayName": "Docs",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
@@ -42,7 +41,6 @@
       }
     }
   ],
-
   "buildPresets": [
     {
       "name": "Release",
@@ -59,16 +57,53 @@
     {
       "name": "Release",
       "configurePreset": "Release",
-      "output": { "outputOnFailure": true },
+      "output": {
+        "outputOnFailure": true
+      },
       "configuration": "Release",
-      "execution": { "noTestsAction": "error", "stopOnFailure": true }
+      "execution": {
+        "noTestsAction": "error",
+        "stopOnFailure": true
+      }
     }
   ],
   "packagePresets": [
     {
-      "name": "default",
-      "configurePreset": "default",
-      "generators": ["TGZ"]
+      "name": "black-lounge",
+      "displayName": "black-lounge",
+      "configurePreset": "Release",
+      "configurations": ["Release"],
+      "configFile": "${sourceDir}/build/Black_Lounge/CPackConfig-BlackLounge.cmake"
+    },
+    {
+      "name": "abyss",
+      "displayName": "abyss",
+      "configurePreset": "Release",
+      "configurations": ["Release"],
+      "configFile": "${sourceDir}/build/Abyss/CPackConfig-Abyss.cmake"
+    }
+  ],
+  "workflowPresets": [
+    {
+      "name": "Docs",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "Docs"
+        },
+        {
+          "type": "build",
+          "name": "Docs"
+        }
+      ]
+    },
+    {
+      "name": "Release",
+      "steps": [
+        { "type": "configure", "name": "Release" },
+        { "type": "build", "name": "Release" },
+        { "type": "package", "name": "black-lounge" }
+      ]
     }
   ],
   "vendor": {

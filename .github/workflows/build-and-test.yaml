@@ -52,69 +52,32 @@ jobs:
           for /f "usebackq tokens=*" %%i in (`vswhere -latest -property installationPath`) do set VS_PATH=%%i
           call "%VS_PATH%\VC\Auxiliary\Build\vcvars64.bat"
           set >> %GITHUB_ENV%
-
-      # - name: Setup MSVC Environment
-      #   if: matrix.os == 'windows-latest'
-      #   run: |
-      #     echo "CC=C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Tools/MSVC/14.42.34433/bin/Hostx64/x64/cl.exe" >> $GITHUB_ENV
-      #     echo "CXX=C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Tools/MSVC/14.42.34433/bin/Hostx64/x64/cl.exe" >> $GITHUB_ENV
-
-      # shell: cmd
-      # run: |
-      #   call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
-
-      # - name: Set CMake default generator
-      #   if: matrix.os == 'macos-latest'
-      #   run: echo "CMAKE_GENERATOR=Xcode" >> $GITHUB_ENV
-
-      - name: Configure
-        run: cmake --preset Release
-
       - name: Build
-        run: cmake --build --preset Release
+        run: cmake --workflow --preset Release
+
+      - name: Install plugins (macOS)
+        if: matrix.os == 'macos-latest'
+        run: |
+          cd build
+
+          # Install packaged plugins
+          find . -name "*.pkg" -exec sudo installer -pkg {} -target / -verbose \;
+          # Kill AudioComponentRegistrar if running
+           pgrep -x AudioComponentRegistrar >/dev/null && killall -9 AudioComponentRegistrar; echo "killed AudioComponentRegistrar" || echo "AudioComponentRegistrar Process not found"
+
+      - name: Run Tests
+        run: ctest --preset Release
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
           name: build-${{matrix.os}}
           path: |
-            CMakePresets.json
-            build/**/CTestTestfile.cmake
-            build/**/CMakeCache.txt
-            build/**/**/*_artefacts/**
-            build/_deps/pluginval-src
-            !build/_deps/juce-*/
-            !**/*_SharedCode.*
-
-  test:
-    name: Test
-    needs: build
-    runs-on: ${{matrix.os}}
-    strategy:
-      matrix:
-        os: [windows-latest, macos-latest, ubuntu-latest]
-
-    steps:
-      - name: Download Build Artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: build-${{matrix.os}}
-
-      - name: Change permissions
-        if: matrix.os != 'windows-latest'
-        run: chmod -R +x build/_deps/pluginval-src/
-
-      - name: Register AU plugins
-        if: matrix.os == 'macos-latest'
-        run: |
-          mkdir -p ~/Library/Audio/Plug-Ins/Components
-          find build -name "*.component" -exec cp -r {} ~/Library/Audio/Plug-Ins/Components/ \;
-          pgrep -x AudioComponentRegistrar >/dev/null && killall -9 AudioComponentRegistrar; echo "killed AudioComponentRegistrar" || echo "AudioComponentRegistrar Process not found"
-        shell: bash
-
-      - name: Run Tests
-        run: ctest --preset Release
-
+            build/**/*_artefacts/Release/AU/*
+            build/**/*_artefacts/Release/Standalone/*
+            build/**/*_artefacts/Release/VST3/*
+            build/**/*.pkg
+            !build/**/_CPack_Packages
   generate-docs:
     name: Verify Doxygen documentation generation
     runs-on: ubuntu-latest

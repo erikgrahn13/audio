@@ -13,7 +13,7 @@ cmake_minimum_required(VERSION 3.22)
 # The top-level CMakeLists.txt file for a project must contain a literal, direct call to the
 # `project()` command. `project()` sets up some helpful variables that describe source/binary
 # directories, and the current project version. This is a standard CMake command.
-project(Black_Lounge VERSION 0.0.1)
+project(BlackLounge VERSION 0.0.1)
 
 # If you've installed JUCE somehow (via a package manager, or directly using the CMake install
 # target), you'll need to tell this project that it depends on the installed copy of JUCE. If you've
@@ -143,4 +143,5 @@ if(JUCE_BUILD_EXTRAS)
     add_dependencies(${PROJECT_NAME} AudioPluginHost AudioFilePlayer_VST3)
 endif()
 
+create_installer(${PROJECT_NAME})
 enable_pluginval_testing(${PROJECT_NAME})
