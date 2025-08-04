@@ -78,6 +78,7 @@ jobs:
             CMakePresets.json
             build/**/CTestTestfile.cmake
             build/**/CMakeCache.txt
+            build/**/cmake_install.cmake
             build/**/**/*_artefacts/**
             build/**/**/*.pkg
             build/_deps/pluginval-src

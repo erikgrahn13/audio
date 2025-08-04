@@ -19,7 +19,7 @@
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
         "JUCE_BUILD_EXTRAS": "ON",
-        "JUCE_COPY_PLUGIN_AFTER_BUILD": "FALSE"
+        "COPY_AFTER_BUILD": "OFF"
       }
     },
     {
@@ -28,7 +28,7 @@
       "displayName": "Release",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
-        "JUCE_COPY_PLUGIN_AFTER_BUILD": "TRUE"
+        "COPY_AFTER_BUILD": "ON"
       }
     },
     {

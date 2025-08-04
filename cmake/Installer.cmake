@@ -68,6 +68,4 @@ function(create_installer target)
 
     # Linux installer
     include(CPack)
-
-    set_property(TARGET ${target} PROPERTY INTENDED_FOR_INSTALL TRUE)
 endfunction()
