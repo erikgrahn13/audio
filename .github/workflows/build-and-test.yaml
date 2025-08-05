@@ -62,7 +62,7 @@ jobs:
 
           # Install packaged plugins
 
-          find . -name "*.pkg" | while read pkg_file; do
+          find . -name "*.pkg" -not -path "*/_CPack_Packages/*" | while read pkg_file; do
             echo "Installing: $pkg_file"
             
             # Install and capture the package name from output
