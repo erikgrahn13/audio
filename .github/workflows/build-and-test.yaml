@@ -61,7 +61,26 @@ jobs:
           cd build
 
           # Install packaged plugins
-          find . -name "*.pkg" -exec sudo installer -pkg {} -target / -verbose \;
+
+          find . -name "*.pkg" -not -path "*/_CPack_Packages/*" | while read pkg_file; do
+            echo "Installing: $pkg_file"
+            
+            # Install and capture the package name from output
+            installer_output=$(sudo installer -pkg "$pkg_file" -target / -verbose 2>&1 | tee /dev/stderr)
+            app_name=$(echo "$installer_output" | grep "Package name is" | sed 's/installer: Package name is //' | xargs)
+            
+            # Quick check if app was installed
+            if [ ! -z "$app_name" ] && [ -d "/Applications/$app_name.app" ]; then
+              echo "✅ $app_name.app installed successfully"
+            elif [ ! -z "$app_name" ]; then
+              echo "❌ $app_name.app not found in /Applications"
+              exit 1
+            else
+              echo "❌ Could not extract app name from installer output"
+              exit 1
+            fi
+          done
+
           # Kill AudioComponentRegistrar if running
            pgrep -x AudioComponentRegistrar >/dev/null && killall -9 AudioComponentRegistrar; echo "killed AudioComponentRegistrar" || echo "AudioComponentRegistrar Process not found"
 

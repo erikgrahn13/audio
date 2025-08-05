@@ -2,6 +2,11 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <array>
-@BUNDLE_ENTRIES@
+    <dict>
+        <key>RootRelativeBundlePath</key><string>Applications/@PLUGIN_NAME@.app</string>
+        <key>BundleIsRelocatable</key><false/>
+        <key>BundleHasStrictIdentifier</key><true/>
+        <key>BundleIsVersionChecked</key><true/>
+    </dict>
 </array>
 </plist>

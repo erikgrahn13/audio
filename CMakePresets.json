@@ -58,7 +58,8 @@
       "name": "Release",
       "configurePreset": "Release",
       "output": {
-        "outputOnFailure": true
+        "outputOnFailure": true,
+        "verbosity": "verbose"
       },
       "configuration": "Release",
       "execution": {

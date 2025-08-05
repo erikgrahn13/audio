@@ -43,19 +43,9 @@ function(create_installer target)
     # Mac installer
     if(APPLE)
         include(CPackComponent)
-        set(_entries "")
-        string(APPEND _entries
-            "  <dict>
-            <key>RootRelativeBundlePath</key><string>Applications/${PLUGIN_NAME}.app</string>
-            <key>BundleIsRelocatable</key><false/>
-            <key>BundleHasStrictIdentifier</key><true/>
-            <key>BundleIsVersionChecked</key><true/>
-        </dict>
-        ")
 
         configure_file("${CMAKE_SOURCE_DIR}/cmake/component.plist.in" "component.plist" @ONLY)
         cpack_add_component(${target}APP PLIST "${CMAKE_CURRENT_BINARY_DIR}/component.plist")
-
         install(TARGETS ${target}_AU
             DESTINATION "Library/Audio/Plug-Ins/Components"
             COMPONENT ${target}AU
