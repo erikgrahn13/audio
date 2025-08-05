@@ -28,11 +28,11 @@ function(enable_pluginval_testing target)
     endif()
 
     add_test(NAME ${target}_VST3_TEST
-        COMMAND ${pluginval_SOURCE_DIR}/${PLUGINVAL_BINARY_PATH} --strictness-level 10 --verbose --skip-gui-tests --validate-in-process ${PLUGIN_PATH_VST3}/${PLUGIN_NAME}.vst3)
+        COMMAND ${pluginval_SOURCE_DIR}/${PLUGINVAL_BINARY_PATH} --strictness-level 10 --skip-gui-tests --validate-in-process ${PLUGIN_PATH_VST3}/${PLUGIN_NAME}.vst3)
 
     if(APPLE AND NOT JUCE_BUILD_EXTRAS)
         add_test(NAME ${target}_AU_TEST
-            COMMAND ${pluginval_SOURCE_DIR}/${PLUGINVAL_BINARY_PATH} --strictness-level 10 --verbose --skip-gui-tests --validate-in-process ${PLUGIN_PATH_AU}/${PLUGIN_NAME}.component)
+            COMMAND ${pluginval_SOURCE_DIR}/${PLUGINVAL_BINARY_PATH} --strictness-level 10 --skip-gui-tests --validate-in-process ${PLUGIN_PATH_AU}/${PLUGIN_NAME}.component)
     endif(APPLE AND NOT JUCE_BUILD_EXTRAS)
 endfunction(enable_pluginval_testing)
 
