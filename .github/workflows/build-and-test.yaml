@@ -66,7 +66,7 @@ jobs:
             echo "Installing: $pkg_file"
             
             # Install and capture the package name from output
-            installer_output=$(sudo installer -pkg "$pkg_file" -target / -verbose 2>&1)
+            installer_output=$(sudo installer -pkg "$pkg_file" -target / -verbose 2>&1 | tee /dev/stderr)
             app_name=$(echo "$installer_output" | grep "Package name is" | sed 's/installer: Package name is //' | xargs)
             
             # Quick check if app was installed
