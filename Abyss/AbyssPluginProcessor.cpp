@@ -76,7 +76,7 @@ void AbyssAudioProcessor::setCurrentProgram(int index)
 const juce::String AbyssAudioProcessor::getProgramName(int index)
 {
     juce::ignoreUnused(index);
-    return {};
+    return "default";
 }
 
 void AbyssAudioProcessor::changeProgramName(int index, const juce::String &newName)
@@ -196,7 +196,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout AbyssAudioProcessor::createP
 {
     juce::AudioProcessorValueTreeState::ParameterLayout layout;
 
-    layout.add(std::make_unique<juce::AudioParameterFloat>("gain", "gain", -80.f, 0.f, -20.f));
+    layout.add(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"gain", 1}, "gain", -80.f, 0.f, -20.f));
 
     return layout;
 }
