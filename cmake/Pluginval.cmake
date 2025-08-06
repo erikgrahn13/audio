@@ -76,4 +76,7 @@ set(SMTG_ENABLE_VST3_PLUGIN_EXAMPLES OFF CACHE BOOL "" FORCE)
 set(SMTG_ENABLE_VSTGUI_SUPPORT OFF CACHE BOOL "" FORCE)
 set(SMTG_RUN_VST_VALIDATOR OFF)
 FetchContent_MakeAvailable(vst3sdk)
-set_property(TARGET validator PROPERTY CXX_STANDARD 17)
+
+if(TARGET validator)
+    set_property(TARGET validator PROPERTY CXX_STANDARD 17)
+endif()
