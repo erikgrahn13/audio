@@ -78,9 +78,11 @@ FetchContent_Declare(
 set(SMTG_ENABLE_VST3_PLUGIN_EXAMPLES OFF CACHE BOOL "" FORCE)
 set(SMTG_ENABLE_VSTGUI_SUPPORT OFF CACHE BOOL "" FORCE)
 set(SMTG_RUN_VST_VALIDATOR OFF)
+set(CMAKE_CXX_STANDARD 17)
 set(SMTG_CXX_STANDARD "17" CACHE STRING "" FORCE)
 add_compile_definitions(_SILENCE_CXX20_U8PATH_DEPRECATION_WARNING)
 FetchContent_MakeAvailable(vst3sdk)
+set(CMAKE_CXX_STANDARD 23)
 
 # if(TARGET sdk_hosting)
 # target_compile_features(sdk_hosting PUBLIC cxx_std_17)
