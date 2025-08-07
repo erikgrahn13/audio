@@ -81,6 +81,10 @@ set(SMTG_RUN_VST_VALIDATOR OFF)
 set(SMTG_CXX_STANDARD "17" CACHE STRING "" FORCE)
 FetchContent_MakeAvailable(vst3sdk)
 
+if(TARGET sdk_hosting)
+    target_compile_features(sdk_hosting PUBLIC cxx_std_17)
+endif()
+
 # if(TARGET validator)
 # target_compile_features(validator PUBLIC cxx_std_23)
 # endif()
