@@ -116,3 +116,4 @@ target_link_libraries(${PROJECT_NAME}
     Fonts)
 
 enable_pluginval_testing(${PROJECT_NAME})
+target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_23)

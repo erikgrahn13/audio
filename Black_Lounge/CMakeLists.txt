@@ -145,3 +145,4 @@ endif()
 
 create_installer(${PROJECT_NAME})
 enable_pluginval_testing(${PROJECT_NAME})
+target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_23)
