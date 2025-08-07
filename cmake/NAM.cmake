@@ -38,7 +38,6 @@ set(DEPENDENCY_FILES
 )
 
 add_library(nam_dependency STATIC ${DEPENDENCY_FILES})
-target_compile_features(nam_dependency PUBLIC cxx_std_23)
 set_target_properties(nam_dependency PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
 target_compile_definitions(nam_dependency

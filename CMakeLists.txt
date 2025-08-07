@@ -4,6 +4,10 @@ project("Abyss Lounge" VERSION 0.1)
 
 enable_testing()
 
+set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
 set(DEPENDENCY_DIR ${CMAKE_CURRENT_LIST_DIR}/external)
 include_directories(${CMAKE_CURRENT_LIST_DIR}/utilities)
 include(FetchContent)

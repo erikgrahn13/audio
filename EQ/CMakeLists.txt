@@ -121,4 +121,3 @@ if(JUCE_BUILD_EXTRAS)
 endif()
 
 enable_pluginval_testing(${PROJECT_NAME})
-target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_23)

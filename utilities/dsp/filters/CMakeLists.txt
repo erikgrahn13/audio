@@ -4,7 +4,6 @@ add_library(Filter STATIC
     ${CMAKE_CURRENT_LIST_DIR}/Filter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/Biquad.cpp
 )
-target_compile_features(Filter PUBLIC cxx_std_23)
 target_compile_options(Filter PRIVATE -fPIC)
 target_include_directories(Filter PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR})
@@ -12,7 +11,6 @@ target_include_directories(Filter PUBLIC
 add_library(NoiseReduction STATIC
     ${CMAKE_CURRENT_LIST_DIR}/NoiseReduction.cpp
 )
-target_compile_features(NoiseReduction PUBLIC cxx_std_23)
 target_link_libraries(NoiseReduction PRIVATE
     juce::juce_dsp
 )

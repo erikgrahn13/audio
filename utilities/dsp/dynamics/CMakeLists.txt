@@ -4,7 +4,6 @@ add_library(NoiseGate STATIC
     ${CMAKE_CURRENT_LIST_DIR}/NoiseGate.cpp
 )
 
-target_compile_features(NoiseGate PUBLIC cxx_std_23)
 target_compile_options(NoiseGate PRIVATE -fPIC)
 target_include_directories(NoiseGate PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
