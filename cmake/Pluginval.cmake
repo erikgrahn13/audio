@@ -34,6 +34,8 @@ function(enable_pluginval_testing target)
         endif()
     endif()
 
+    set(VST3VALIDATOR_BINARY_PATH $<TARGET_FILE:validator>)
+
     add_test(NAME ${target}_VST3_TEST
         COMMAND ${pluginval_SOURCE_DIR}/${PLUGINVAL_BINARY_PATH} --strictness-level 10 --skip-gui-tests --validate-in-process --vst3validator ${VST3VALIDATOR_BINARY_PATH} ${PLUGIN_PATH_VST3}/${PLUGIN_NAME}.vst3)
 
@@ -78,6 +80,6 @@ set(SMTG_ENABLE_VSTGUI_SUPPORT OFF CACHE BOOL "" FORCE)
 set(SMTG_RUN_VST_VALIDATOR OFF)
 FetchContent_MakeAvailable(vst3sdk)
 
-if(TARGET validator)
-    set_property(TARGET validator PROPERTY CXX_STANDARD 17)
-endif()
+# if(TARGET validator)
+# set_property(TARGET validator PROPERTY CXX_STANDARD 17)
+# endif()

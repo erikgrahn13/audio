@@ -15,6 +15,7 @@ FetchContent_Declare(
   URL ${JUCE_URL}
   SOURCE_DIR ${DEPENDENCY_DIR}/juce
   DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+  EXCLUDE_FROM_ALL
 )
 
 FetchContent_MakeAvailable(juce)
