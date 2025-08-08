@@ -4,6 +4,7 @@ FetchContent_Declare(
     SOURCE_DIR ${DEPENDENCY_DIR}/nam
     SOURCE_SUBDIR IGNORE
     DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+    EXCLUDE_FROM_ALL
 )
 FetchContent_MakeAvailable(nam)
 
@@ -13,6 +14,7 @@ FetchContent_Declare(
     URL https://gitlab.com/libeigen/eigen/-/archive/87300c93cae6a8afd9a4f8aa8d9d5c5324cf02e1/eigen-87300c93cae6a8afd9a4f8aa8d9d5c5324cf02e1.zip
     SOURCE_SUBDIR IGNORE
     DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+    EXCLUDE_FROM_ALL
 )
 FetchContent_MakeAvailable(eigen)
 
@@ -21,6 +23,7 @@ FetchContent_Declare(
     URL https://github.com/nlohmann/json/releases/download/v3.11.3/json.hpp
     SOURCE_SUBDIR IGNORE
     DOWNLOAD_NO_EXTRACT TRUE
+    EXCLUDE_FROM_ALL
 )
 FetchContent_MakeAvailable(nlohmann-json)
 
@@ -35,7 +38,6 @@ set(DEPENDENCY_FILES
 )
 
 add_library(nam_dependency STATIC ${DEPENDENCY_FILES})
-
 set_target_properties(nam_dependency PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
 target_compile_definitions(nam_dependency

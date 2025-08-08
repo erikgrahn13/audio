@@ -5,7 +5,7 @@
 class CustomAudioParameterFloat : public juce::AudioParameterFloat
 {
   public:
-    CustomAudioParameterFloat(const juce::String &parameterID, const juce::String &parameterName,
+    CustomAudioParameterFloat(const juce::ParameterID &parameterID, const juce::String &parameterName,
                               NormalisableRange<float> normalisableRange, float defaultValue, int index = -1)
         : juce::AudioParameterFloat(parameterID, parameterName, normalisableRange, defaultValue), mIndex(index)
     {

@@ -7,8 +7,6 @@ function(enable_webview)
     # Ensure index.html is included in the provided arguments
     set(index_html_found FALSE)
 
-    set(index_html_found FALSE)
-
     foreach(source IN LISTS ARGN)
         # Normalize the path to handle relative paths
         get_filename_component(normalized_source "${source}" ABSOLUTE)

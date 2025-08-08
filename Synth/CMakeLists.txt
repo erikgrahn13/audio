@@ -88,8 +88,6 @@ target_compile_definitions(${PROJECT_NAME}
     JUCE_USE_CURL=0 # If you remove this, add `NEEDS_CURL TRUE` to the `juce_add_plugin` call
     JUCE_VST3_CAN_REPLACE_VST2=0)
 
-target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_20)
-
 # If your target needs extra binary assets, you can add them here. The first argument is the name of
 # a new static library target that will include all the binary resources. There is an optional
 # `NAMESPACE` argument that can specify the namespace of the generated binary data class. Finally,

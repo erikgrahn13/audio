@@ -85,7 +85,7 @@ void BlackLoungeAudioProcessor::setCurrentProgram(int index)
 const juce::String BlackLoungeAudioProcessor::getProgramName(int index)
 {
     juce::ignoreUnused(index);
-    return {};
+    return "default";
 }
 
 void BlackLoungeAudioProcessor::changeProgramName(int index, const juce::String &newName)
@@ -142,10 +142,14 @@ bool BlackLoungeAudioProcessor::isBusesLayoutSupported(const BusesLayout &layout
 juce::AudioProcessorValueTreeState::ParameterLayout BlackLoungeAudioProcessor::createParameters()
 {
     std::vector<std::unique_ptr<juce::RangedAudioParameter>> parameters;
-    parameters.push_back(std::make_unique<juce::AudioParameterFloat>("volume", "Volume", -10.f, 10.f, 0.f));
-    parameters.push_back(std::make_unique<juce::AudioParameterFloat>("gain", "Gain", -20.f, 20.f, -6.f));
-    parameters.push_back(std::make_unique<juce::AudioParameterBool>("denoiserActive", "DenoiserActive", true));
-    parameters.push_back(std::make_unique<juce::AudioParameterFloat>("denoiser", "Denoiser", -140.f, 0.f, -140.f));
+    parameters.push_back(
+        std::make_unique<juce::AudioParameterFloat>(ParameterID{"volume", 1}, "Volume", -10.f, 10.f, 0.f));
+    parameters.push_back(
+        std::make_unique<juce::AudioParameterFloat>(ParameterID{"gain", 1}, "Gain", -20.f, 20.f, -6.f));
+    parameters.push_back(
+        std::make_unique<juce::AudioParameterBool>(ParameterID{"denoiserActive", 1}, "DenoiserActive", true));
+    parameters.push_back(
+        std::make_unique<juce::AudioParameterFloat>(ParameterID{"denoiser", 1}, "Denoiser", -140.f, 0.f, -140.f));
 
     return {parameters.begin(), parameters.end()};
 }

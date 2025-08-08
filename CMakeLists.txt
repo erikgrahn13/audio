@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.22)
 project("Abyss Lounge" VERSION 0.1)
 
 enable_testing()
+
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -20,13 +21,14 @@ include(Installer)
 
 if(NOT FETCHCONTENT_FULLY_DISCONNECTED)
     include(NAM)
-    include(WebView)
 
+    include(WebView)
     set(CMAKE_COMPILE_WARNING_AS_ERROR ON)
     add_subdirectory(utilities)
     add_subdirectory(resources)
     add_subdirectory(EQ)
     add_subdirectory(Synth)
-    add_subdirectory(Abyss)
+
+    # add_subdirectory(Abyss)
     add_subdirectory(Black_Lounge)
 endif()

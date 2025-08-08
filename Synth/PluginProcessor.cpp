@@ -13,9 +13,9 @@ SynthAudioProcessor::SynthAudioProcessor()
 #endif
                          ),
       mParameters(*this, nullptr, juce::Identifier("Parameters"),
-                  std::make_unique<juce::AudioParameterInt>("oscType", "Oscillator Type", Oscillator::OscType::SINE,
-                                                            Oscillator::OscType::NUM_TYPES - 1,
-                                                            Oscillator::OscType::SINE))
+                  std::make_unique<juce::AudioParameterInt>(
+                      ParameterID{"oscType", 1}, "Oscillator Type", Oscillator::OscType::SINE,
+                      Oscillator::OscType::NUM_TYPES - 1, Oscillator::OscType::SINE))
 {
     mParameters.addParameterListener("oscType", this);
     oscTypeParameter = static_cast<juce::AudioParameterInt *>(mParameters.getParameter("oscType"));
@@ -93,7 +93,7 @@ void SynthAudioProcessor::setCurrentProgram(int index)
 const juce::String SynthAudioProcessor::getProgramName(int index)
 {
     juce::ignoreUnused(index);
-    return {};
+    return "default";
 }
 
 void SynthAudioProcessor::changeProgramName(int index, const juce::String &newName)
