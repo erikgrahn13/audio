@@ -34,10 +34,14 @@ function(enable_pluginval_testing target)
         endif()
     endif()
 
-    set(VST3VALIDATOR_BINARY_PATH $<TARGET_FILE:validator>)
+    set(ENABLE_VST3VALIDATOR "--vst3validator $<TARGET_FILE:validator>")
+    # TODO: Temporary solution until vst3validator works on Linux with pluginval
+    if (CMAKE_SYSTEM_NAME STREQUAL "Linux")
+        set(ENABLE_VST3VALIDATOR "")
+    endif()
 
     add_test(NAME ${target}_VST3_TEST
-        COMMAND ${pluginval_SOURCE_DIR}/${PLUGINVAL_BINARY_PATH} --strictness-level 10 --skip-gui-tests --validate-in-process --vst3validator ${VST3VALIDATOR_BINARY_PATH} ${PLUGIN_PATH_VST3}/${PLUGIN_NAME}.vst3)
+        COMMAND ${pluginval_SOURCE_DIR}/${PLUGINVAL_BINARY_PATH} --strictness-level 10 --skip-gui-tests --validate-in-process ${ENABLE_VST3VALIDATOR} ${PLUGIN_PATH_VST3}/${PLUGIN_NAME}.vst3)
 
     if(APPLE AND NOT JUCE_BUILD_EXTRAS)
         add_test(NAME ${target}_AU_TEST
