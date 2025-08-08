@@ -61,7 +61,7 @@ function(create_installer target)
         set(CPACK_GENERATOR "productbuild")
 
     # Windows installer
-    else()
+    elseif(WIN32)
         set(CPACK_GENERATOR "INNOSETUP")
         set(CPACK_INNOSETUP_USE_MODERN_WIZARD ON)
 
@@ -79,6 +79,8 @@ function(create_installer target)
             DISPLAY_NAME "${PLUGIN_NAME} VST3"
             INSTALL_TYPES Full
         )
+    else()
+        set(CPACK_GENERATOR "TGZ")
     endif()
 
     # Linux installer
