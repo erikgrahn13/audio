@@ -27,18 +27,15 @@ function(create_installer target)
         set(VST3_INSTALL_DIRECTORY "tmp")
     endif()
 
-    get_target_property(product ${target}_VST3 RUNTIME_OUTPUT_DIRECTORY)
-    install(DIRECTORY ${product}
+    install(TARGETS ${target}_VST3
         DESTINATION ${VST3_INSTALL_DIRECTORY}
         COMPONENT ${target}VST3
     )
-    set(CPACK_COMPONENT_${target}VST3_DISPLAY_NAME "${PLUGIN_NAME} VST3")
 
     install(TARGETS ${target}_Standalone
         DESTINATION ${APP_INSTALL_DIRECTORY}
         COMPONENT ${target}APP
     )
-    set(CPACK_COMPONENT_${target}APP_DISPLAY_NAME "${PLUGIN_NAME} Standalone")
 
     set(CPACK_COMPONENTS_ALL ${target}APP ${target}VST3)
     set(CPACK_COMPONENT_NAME "${target}")
@@ -54,8 +51,6 @@ function(create_installer target)
             COMPONENT ${target}AU
         )
         list(APPEND CPACK_COMPONENTS_ALL ${target}AU)
-
-        set(CPACK_COMPONENT_${target}AU_DISPLAY_NAME "${PLUGIN_NAME} AU")
 
         set(CPACK_PACKAGING_INSTALL_PREFIX "/")
         set(CPACK_GENERATOR "productbuild")
@@ -79,7 +74,7 @@ function(create_installer target)
             DISPLAY_NAME "${PLUGIN_NAME} VST3"
             INSTALL_TYPES Full
         )
-    else()
+    else(UNIX)
         set(CPACK_GENERATOR "TGZ")
     endif()
 
