@@ -34,7 +34,7 @@ function(enable_pluginval_testing target)
         endif()
     endif()
 
-    set(ENABLE_VST3VALIDATOR "--vst3validator $<TARGET_FILE:validator>")
+    set(ENABLE_VST3VALIDATOR --vst3validator $<TARGET_FILE:validator>)
     # TODO: Temporary solution until vst3validator works on Linux with pluginval
     if (CMAKE_SYSTEM_NAME STREQUAL "Linux")
         set(ENABLE_VST3VALIDATOR "")
