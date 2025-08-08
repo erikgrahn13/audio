@@ -19,9 +19,9 @@ function(create_installer target)
     if(APPLE)
         set(APP_INSTALL_DIRECTORY "Applications")
         set(VST3_INSTALL_DIRECTORY "Library/Audio/Plug-Ins/VST3")
-    elseif(WIN32) # fix correct destinations when inno setup support is added
-        set(APP_INSTALL_DIRECTORY "tmp")
-        set(VST3_INSTALL_DIRECTORY "tmp")
+    elseif(WIN32)
+        set(APP_INSTALL_DIRECTORY ".")
+        set(VST3_INSTALL_DIRECTORY ".")
     elseif(UNIX)
         set(APP_INSTALL_DIRECTORY "tmp")
         set(VST3_INSTALL_DIRECTORY "tmp")
@@ -52,13 +52,29 @@ function(create_installer target)
         )
         list(APPEND CPACK_COMPONENTS_ALL ${target}AU)
 
-        set(CPACK_COMPONENT_${target}AU_DISPLAY_NAME "${PLUGIN_NAME} AU")
-
         set(CPACK_PACKAGING_INSTALL_PREFIX "/")
         set(CPACK_GENERATOR "productbuild")
 
     # Windows installer
-    else()
+    elseif(WIN32)
+        set(CPACK_GENERATOR "INNOSETUP")
+        set(CPACK_INNOSETUP_USE_MODERN_WIZARD ON)
+
+        include(CPackComponent)
+
+        set(CPACK_INNOSETUP_${target}VST3_INSTALL_DIRECTORY "{commoncf64}")
+
+        cpack_add_install_type(Full DISPLAY_NAME "Full installation")
+
+        cpack_add_component(${target}APP
+            DISPLAY_NAME "${PLUGIN_NAME} Standalone"
+            INSTALL_TYPES Full
+        )
+        cpack_add_component(${target}VST3
+            DISPLAY_NAME "${PLUGIN_NAME} VST3"
+            INSTALL_TYPES Full
+        )
+    else(UNIX)
         set(CPACK_GENERATOR "TGZ")
     endif()
 
