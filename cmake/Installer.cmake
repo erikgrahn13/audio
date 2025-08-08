@@ -23,11 +23,13 @@ function(create_installer target)
         set(APP_INSTALL_DIRECTORY ".")
         set(VST3_INSTALL_DIRECTORY ".")
     elseif(UNIX)
-        set(APP_INSTALL_DIRECTORY "tmp")
-        set(VST3_INSTALL_DIRECTORY "tmp")
+        set(APP_INSTALL_DIRECTORY ".")
+        set(VST3_INSTALL_DIRECTORY ".")
     endif()
 
-    install(TARGETS ${target}_VST3
+    get_target_property(VST3_DIR ${target}_VST3 JUCE_PLUGIN_ARTEFACT_FILE)
+
+    install(DIRECTORY ${VST3_DIR}
         DESTINATION ${VST3_INSTALL_DIRECTORY}
         COMPONENT ${target}VST3
     )
