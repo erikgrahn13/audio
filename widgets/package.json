@@ -1,0 +1,11 @@
+{
+  "name": "widgets",
+  "version": "1.0.0",
+  "main": "./index.js",
+  "dependencies": {
+     "juce-framework-frontend": "*"
+  },
+  "devDependencies": {
+     "juce-framework-frontend": "*"
+  }
+}

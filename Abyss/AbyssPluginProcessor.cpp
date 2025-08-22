@@ -197,6 +197,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout AbyssAudioProcessor::createP
     juce::AudioProcessorValueTreeState::ParameterLayout layout;
 
     layout.add(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"gain", 1}, "gain", -80.f, 0.f, -20.f));
+    layout.add(std::make_unique<juce::AudioParameterBool>(juce::ParameterID{"bypass", 1}, "bypass", true));
 
     return layout;
 }

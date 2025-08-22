@@ -18,8 +18,10 @@ class AbyssAudioProcessorEditor final : public juce::AudioProcessorEditor
     // access the processor object that created it.
     AbyssAudioProcessor &processorRef;
     juce::WebSliderRelay gainRelay{"gain"};
+    juce::WebToggleButtonRelay bypassRelay{"bypass"};
     juce::WebBrowserComponent webBrowserComponent;
     std::unique_ptr<juce::WebSliderParameterAttachment> gainWebAttachment;
+    std::unique_ptr<juce::WebToggleButtonParameterAttachment> bypassWebAttachment;
 
     std::optional<juce::WebBrowserComponent::Resource> getResource(const juce::String &url);
 

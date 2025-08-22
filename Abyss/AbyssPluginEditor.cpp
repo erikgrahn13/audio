@@ -17,21 +17,25 @@ AbyssAudioProcessorEditor::AbyssAudioProcessorEditor(AbyssAudioProcessor &p)
                   juce::File::getSpecialLocation(juce::File::SpecialLocationType::tempDirectory)))
               .withNativeIntegrationEnabled()
               .withOptionsFrom(gainRelay)
+              .withOptionsFrom(bypassRelay)
               .withResourceProvider([this](const auto &url) { return getResource(url); },
-                                    juce::URL{"http://localhost:5500/"}.getOrigin())}
+                                    juce::URL{"http://localhost:5173/"}.getOrigin())}
 {
 
     auto *gainParam = processorRef.mParameters.getParameter("gain");
     gainWebAttachment = std::make_unique<juce::WebSliderParameterAttachment>(*gainParam, gainRelay, nullptr);
+    auto *bypassParam = processorRef.mParameters.getParameter("bypass");
+    bypassWebAttachment =
+        std::make_unique<juce::WebToggleButtonParameterAttachment>(*bypassParam, bypassRelay, nullptr);
 
 #if !defined NDEBUG
-    webBrowserComponent.goToURL("http://127.0.0.1:5500/build/Abyss/ui/index.html");
+    webBrowserComponent.goToURL("http://127.0.0.1:5173/build/Abyss/ui/index.html");
 #else
     webBrowserComponent.goToURL(WebBrowserComponent::getResourceProviderRoot());
 #endif
 
     addAndMakeVisible(webBrowserComponent);
-
+    setResizable(true, true);
     setSize(400, 300);
 }
 
