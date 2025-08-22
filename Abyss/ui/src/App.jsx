@@ -5,7 +5,7 @@ function App() {
   return (
     <>
       {/* <DeathMetalButton parameterName="bypass"></DeathMetalButton> */}
-      <DeathMetalKnob parameterName="gain" width={60} height={60}></DeathMetalKnob>
+      <DeathMetalKnob parameterName="gain" size={200}></DeathMetalKnob>
     </>
   )
 }

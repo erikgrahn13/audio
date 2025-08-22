@@ -2,14 +2,11 @@ import React, { useState, useEffect, useRef } from "react"
 import * as Juce from "juce-framework-frontend";
 import "./styles.css"
 
-function DeathMetalKnob({ parameterName, width, height }) {
+function DeathMetalKnob({ parameterName, size }) {
 
-  // console.log(`erik1 ${parameterName} ${width} ${height}`)
   const canvasRef = useRef(null);
   const sliderState = Juce.getSliderState(parameterName);
   const [parameter, setParameter] = useState(sliderState.getNormalisedValue());
-  const lastYRef = useRef(0);           // y at pointerdown
-
 
   const startAngleRadians = Math.PI * 1.2 - Math.PI / 2;
   const endAngleRadians = Math.PI * 2.8 - Math.PI / 2;
@@ -19,24 +16,21 @@ function DeathMetalKnob({ parameterName, width, height }) {
   const handleChange = (e) => {
     sliderState.sliderDragStarted();
     isDraggingRef.current = true;
-    lastYRef.current = e.clientY;
+    let lastY = e.clientY;
 
     let paramCurrent = sliderState.getNormalisedValue();
 
     const onMouseMove = (e) => {
       if (!isDraggingRef.current) return;
 
-      let deltaY = e.clientY - lastYRef.current;
-
-      lastYRef.current = e.clientY;
-
+      let deltaY = e.clientY - lastY;
+      lastY = e.clientY;
       paramCurrent = Math.max(0.0, Math.min(1.0, paramCurrent - deltaY * 0.0025));
       sliderState.setNormalisedValue(paramCurrent);
     };
 
     const onMouseUp = (e) => {
       if (!isDraggingRef.current) return;
-      // console.log(`mouse up`);
       sliderState.sliderDragEnded();
       isDraggingRef.current = false;
 
@@ -52,7 +46,7 @@ function DeathMetalKnob({ parameterName, width, height }) {
     let deltaY = e.deltaY * 0.1;
     let paramCurrent = sliderState.getNormalisedValue();
 
-    paramCurrent = Math.max(0.0, Math.min(1.0, paramCurrent - deltaY * 0.0025));
+    paramCurrent = Math.max(0.0, Math.min(1.0, paramCurrent - deltaY * 0.005));
 
     sliderState.sliderDragStarted();
     sliderState.setNormalisedValue(paramCurrent);
@@ -87,13 +81,12 @@ function DeathMetalKnob({ parameterName, width, height }) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.save();
 
-    canvas.width = width;
-    canvas.height = height;
+    canvas.width = size;
+    canvas.height = size;
     const centerX = canvas.width * 0.5;
     const centerY = canvas.height * 0.5;
     const radius = canvas.height * 0.5 - 4;
 
-    // console.log(`erik3 ${startAngleRadians} ${endAngleRadians}`)
     // Do your drawing here
     ctx.fillStyle = "black";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -184,22 +177,6 @@ function DeathMetalKnob({ parameterName, width, height }) {
     ctx.lineTo(radius / 3, radius / 4);
     ctx.stroke();
     ctx.restore();
-
-
-
-    // Draw();
-
-    // const valueListenerId = sliderState.valueChangedEvent.addListener(() => {
-    //   setParameter(sliderState.getNormalisedValue());
-    // });
-    // // const propertiesListenerId = sliderState.propertiesChangedEvent.addListener(
-    // //   () => setProperties(sliderState.properties)
-    // // );
-
-    // return function cleanup() {
-    //   sliderState.valueChangedEvent.removeListener(valueListenerId);
-    //   // sliderState.propertiesChangedEvent.removeListener(propertiesListenerId);
-    // };
   });
 
   function valueToAngle(val) {
@@ -212,12 +189,5 @@ function DeathMetalKnob({ parameterName, width, height }) {
     <canvas ref={canvasRef} width={100} height={100} onMouseDown={handleChange} onWheel={handleWheel}></canvas>
   );
 }
-
-
-function Draw() {
-  console.log("erik5");
-}
-
-
 
 export default DeathMetalKnob;
