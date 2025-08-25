@@ -16,14 +16,14 @@ function DeathMetalKnob({ parameterName, size }) {
   const handleChange = (e) => {
     sliderState.sliderDragStarted();
     isDraggingRef.current = true;
-    let lastY = e.clientY;
+    const lastY = e.clientY;
 
-    let paramCurrent = sliderState.getNormalisedValue();
+    const paramCurrent = sliderState.getNormalisedValue();
 
     const onMouseMove = (e) => {
       if (!isDraggingRef.current) return;
 
-      let deltaY = e.clientY - lastY;
+      const deltaY = e.clientY - lastY;
       lastY = e.clientY;
       paramCurrent = Math.max(0.0, Math.min(1.0, paramCurrent - deltaY * 0.0025));
       sliderState.setNormalisedValue(paramCurrent);
