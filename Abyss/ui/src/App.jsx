@@ -1,4 +1,4 @@
-import { DeathMetalButton, DeathMetalKnob, DeathMetalSlider } from 'widgets'
+import { DeathMetalButton, DeathMetalKnob, DeathMetalSlider } from '@abyss-lounge/widgets'
 
 function App() {
 

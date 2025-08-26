@@ -90,7 +90,7 @@ function DeathMetalSlider({ parameterName, width = 200, height = 24 }) {
 
 
 
-    }, [parameter, width, height]);
+    });
 
     const handleMouseDown = (e) => {
         const el = e.currentTarget; // canvas element
