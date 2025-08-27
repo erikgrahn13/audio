@@ -1,0 +1,64 @@
+/* DeathMetalSwitch.module.css */
+.switch {
+    /* default: horizontal */
+    --track-w: 42px;
+    --track-h: 26px;
+    --thumb: 22px;
+    --pad: 2px;
+
+    position: relative;
+    width: var(--track-w);
+    height: var(--track-h);
+    padding: 0;
+    border: 0;
+    background: none;
+}
+
+.track {
+    position: absolute;
+    inset: 0;
+    border-radius: 999px;
+    background: grey;
+    transition: background 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Canvas thumb: we size it in JS; here we just place it */
+.thumb {
+    position: absolute;
+    top: var(--pad);
+    left: var(--pad);
+    background: transparent;
+    transition: transform 200ms cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1;
+}
+
+/* ON visuals */
+.switch[data-checked="true"] .track {
+    background: white;
+    box-shadow: 0 0 5px yellow;
+}
+
+/* Move thumb when ON (horizontal) */
+.switch[data-orientation="horizontal"][data-checked="true"] .thumb {
+    transform: translateX(calc(var(--track-w) - var(--thumb) - (var(--pad) * 2)));
+}
+
+/* -------- Vertical variant -------- */
+.switch[data-orientation="vertical"] {
+    --track-w: 26px;
+    /* swap dimensions */
+    --track-h: 42px;
+    width: var(--track-w);
+    height: var(--track-h);
+}
+
+/* Start thumb at bottom (OFF) */
+.switch[data-orientation="vertical"] .thumb {
+    top: calc(var(--track-h) - var(--thumb) - var(--pad));
+    left: var(--pad);
+}
+
+/* Move thumb UP when ON (up = ON) */
+.switch[data-orientation="vertical"][data-checked="true"] .thumb {
+    transform: translateY(calc(-1 * (var(--track-h) - var(--thumb) - (var(--pad) * 2))));
+}

@@ -53,7 +53,10 @@ jobs:
           call "%VS_PATH%\VC\Auxiliary\Build\vcvars64.bat"
           set >> %GITHUB_ENV%
       - name: Build
-        run: cmake --workflow --preset Release
+        run: |
+          npm install
+          npm run build --ws
+          cmake --workflow --preset Release
 
       - name: Install plugins (macOS)
         if: matrix.os == 'macos-latest'

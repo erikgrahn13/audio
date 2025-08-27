@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Abyss Title</title>
+    <link rel="stylesheet" href="style.css" />
+    <script type="module" src="./index.js"></script>
+  </head>
+
+  <body>
+    <h1 class="title">BLACK LOUNGE AMP</h1>
+    <h1 id="tuner">> - <</h1>
+    <img src="./resources/background.jpg" alt="" />
+    <div class="knob-area">
+      <div class="denoiser-area">
+        <h2>DENOISER</h2>
+        <death-metal-knob parameter="denoiser" size="60"></death-metal-knob>
+        <button class="bypass" parameter="denoiserActive"></button>
+      </div>
+      <div class="gain-area">
+        <h2>GAIN</h2>
+        <death-metal-knob parameter="gain" size="60"></death-metal-knob>
+      </div>
+      <div class="volum-area">
+        <h2>VOLUME</h2>
+        <death-metal-knob parameter="volume" size="60"></death-metal-knob>
+      </div>
+    </div>
+    <script type="module" src="./widgets/DeathMetalKnob.js"></script>
+    <script type="module" src="./widgets/DeathMetalButton.js"></script>
+    <script type="module" src="./widgets/DeathMetalSlider.js"></script>
+  </body>
+</html>

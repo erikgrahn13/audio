@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react"
 import * as Juce from "juce-framework-frontend";
-import "./styles.css"
 
 function DeathMetalKnob({ parameterName, size }) {
 

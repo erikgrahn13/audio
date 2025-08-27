@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
 import * as Juce from "juce-framework-frontend";
-import "./styles.css";
 
 function DeathMetalSlider({ parameterName, width = 200, height = 24 }) {
     const canvasRef = useRef(null);
@@ -53,9 +52,12 @@ function DeathMetalSlider({ parameterName, width = 200, height = 24 }) {
         const currentValue = pad + (width - 2 * pad) * parameter; // CSS px
         ctx.beginPath();
         ctx.strokeStyle = "white";
+        ctx.shadowColor = "yellow";
+        ctx.shadowBlur = 5;
         ctx.moveTo(pad, centerY);
         ctx.lineTo(currentValue, centerY);
         ctx.stroke();
+        ctx.shadowBlur = 0;
 
         //         // Pentagram
         ctx.save();
@@ -64,7 +66,7 @@ function DeathMetalSlider({ parameterName, width = 200, height = 24 }) {
         ctx.beginPath();
 
         ctx.fillStyle = "black";
-        ctx.arc(0, 0, 10, 0, Math.PI * 2);
+        ctx.arc(0, 0, height / 2 - 1, 0, Math.PI * 2);
         ctx.fill();
 
         ctx.beginPath();

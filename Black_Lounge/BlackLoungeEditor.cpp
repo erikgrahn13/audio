@@ -27,7 +27,7 @@ BlackLoungeAudioProcessorEditor::BlackLoungeAudioProcessorEditor(BlackLoungeAudi
                                       nativeFunction(args, std::move(completion));
                                   })
               .withResourceProvider([this](const auto &url) { return getResource(url); },
-                                    juce::URL{"http://localhost:5500/"}.getOrigin())}
+                                    juce::URL{"http://localhost:5173/"}.getOrigin())}
 
 {
     juce::ignoreUnused(processorRef);
@@ -46,7 +46,7 @@ BlackLoungeAudioProcessorEditor::BlackLoungeAudioProcessorEditor(BlackLoungeAudi
     currentSampleRate = processorRef.getSampleRate();
 
 #if !defined NDEBUG
-    webBrowserComponent.goToURL("http://127.0.0.1:5500/build/Black_Lounge/ui/index.html");
+    webBrowserComponent.goToURL("http://127.0.0.1:5173/build/Black_Lounge/ui/index.html");
 #else
     webBrowserComponent.goToURL(WebBrowserComponent::getResourceProviderRoot());
 #endif

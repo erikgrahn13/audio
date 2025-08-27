@@ -1,5 +1,5 @@
 {
-  "name": "@abyss/ui",
+  "name": "@black-lounge/ui",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -12,8 +12,10 @@
   "dependencies": {
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
-      "juce-framework-frontend": "file:../../external/juce/modules/juce_gui_extra/native/javascript",
-      "@abyss-lounge/components": "file:../../components"
+    "juce-framework-frontend": "file:../../external/juce/modules/juce_gui_extra/native/javascript",
+    "@abyss-lounge/components": "file:../../components",
+    "@abyss-lounge/fonts": "file:../../resources/fonts"
+
   },
   "devDependencies": {
     "@eslint/js": "^9.33.0",

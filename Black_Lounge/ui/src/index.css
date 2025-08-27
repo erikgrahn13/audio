@@ -1,0 +1,10 @@
+@font-face {
+  font-family: "DeathMetalFont";
+  src: url('../fonts/ArtDystopia.ttf') format('truetype');
+}
+
+body {
+  background-color: black;
+  color: white;
+  text-align: center;
+}

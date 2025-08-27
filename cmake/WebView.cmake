@@ -1,31 +1,34 @@
 function(enable_webview)
-    set(WEBVIEW_FILES_ZIP_NAME "webview_files.zip")
-    set(TARGET_WEBVIEW_FILES_ZIP_PATH "${CMAKE_CURRENT_BINARY_DIR}/${WEBVIEW_FILES_ZIP_NAME}")
 
-    add_custom_target(${PROJECT_NAME}ZipWebViewFiles
-        COMMAND
-        ${CMAKE_COMMAND} -E tar cvf
-        "${TARGET_WEBVIEW_FILES_ZIP_PATH}"
-        --format=zip
-        "${CMAKE_CURRENT_SOURCE_DIR}/ui/dist"
-        BYPRODUCTS
-        "${TARGET_WEBVIEW_FILES_ZIP_PATH}"
-        WORKING_DIRECTORY
-        "${CMAKE_CURRENT_SOURCE_DIR}/ui"
-        COMMENT "Zipping WebView files..."
-        VERBATIM
-    )
+    if(CMAKE_BUILD_TYPE STREQUAL "Release")
+        set(WEBVIEW_FILES_ZIP_NAME "webview_files.zip")
+        set(TARGET_WEBVIEW_FILES_ZIP_PATH "${CMAKE_CURRENT_BINARY_DIR}/${WEBVIEW_FILES_ZIP_NAME}")
 
-    target_compile_definitions(${PROJECT_NAME} PRIVATE ZIPPED_FILES_PREFIX="dist/")
+        add_custom_target(${PROJECT_NAME}ZipWebViewFiles
+            COMMAND
+            ${CMAKE_COMMAND} -E tar cvf
+            "${TARGET_WEBVIEW_FILES_ZIP_PATH}"
+            --format=zip
+            "${CMAKE_CURRENT_SOURCE_DIR}/ui/dist"
+            BYPRODUCTS
+            "${TARGET_WEBVIEW_FILES_ZIP_PATH}"
+            WORKING_DIRECTORY
+            "${CMAKE_CURRENT_SOURCE_DIR}/ui"
+            COMMENT "Zipping WebView files..."
+            VERBATIM
+        )
 
-    juce_add_binary_data(${PROJECT_NAME}WebViewFiles
-        HEADER_NAME WebViewFiles.h
-        NAMESPACE webview_files
-        SOURCES ${TARGET_WEBVIEW_FILES_ZIP_PATH}
-    )
+        target_compile_definitions(${PROJECT_NAME} PRIVATE ZIPPED_FILES_PREFIX="dist/")
 
-    add_dependencies(${PROJECT_NAME}WebViewFiles ${PROJECT_NAME}ZipWebViewFiles)
-    target_link_libraries(${PROJECT_NAME} PRIVATE ${PROJECT_NAME}WebViewFiles)
+        juce_add_binary_data(${PROJECT_NAME}WebViewFiles
+            HEADER_NAME WebViewFiles.h
+            NAMESPACE webview_files
+            SOURCES ${TARGET_WEBVIEW_FILES_ZIP_PATH}
+        )
+
+        add_dependencies(${PROJECT_NAME}WebViewFiles ${PROJECT_NAME}ZipWebViewFiles)
+        target_link_libraries(${PROJECT_NAME} PRIVATE ${PROJECT_NAME}WebViewFiles)
+    endif()
 
     target_compile_definitions(${PROJECT_NAME} PUBLIC
         JUCE_WEB_BROWSER=1

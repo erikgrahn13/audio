@@ -1,10 +1,10 @@
-import { DeathMetalButton, DeathMetalKnob, DeathMetalSlider } from '@abyss-lounge/widgets'
+import { DeathMetalSwitch, DeathMetalKnob, DeathMetalSlider } from '@abyss-lounge/components'
 
 function App() {
 
   return (
     <>
-      {/* <DeathMetalButton parameterName="bypass"></DeathMetalButton> */}
+      {/* <DeathMetalSwitch parameterName="bypass"></DeathMetalSwitch> */}
       {/* <DeathMetalKnob parameterName="gain" size={60}></DeathMetalKnob> */}
       <DeathMetalSlider parameterName="gain" width={200}></DeathMetalSlider>
     </>

@@ -1,0 +1,34 @@
+h1,
+h2 {
+  font-family: "DeathMetalFont", sans-serif;
+}
+
+.knob-area {
+  display: flex;
+  justify-content: space-evenly;
+  /* border: 2px white solid; */
+  /* border-radius: 10px; */
+  /* padding-bottom: 20px; */
+
+}
+
+.denoiser-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.death-metal-switch {
+  margin: 40px;
+}
+
+.settings {
+  font-family: "WebFont", sans-serif;
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  font-size: 30px;
+  background-color: black;
+  color: white;
+  border: none;
+}
