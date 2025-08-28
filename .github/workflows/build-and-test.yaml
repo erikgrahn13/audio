@@ -54,6 +54,7 @@ jobs:
           set >> %GITHUB_ENV%
       - name: Build
         run: |
+          cmake --preset Release
           npm install
           npm run build --ws
           cmake --workflow --preset Release
