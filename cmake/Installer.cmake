@@ -27,14 +27,19 @@ function(create_installer target)
         set(VST3_INSTALL_DIRECTORY "tmp")
     endif()
 
-    install(TARGETS ${target}_VST3
+    get_target_property(VST3_PATH ${target}_VST3 JUCE_PLUGIN_ARTEFACT_FILE)
+    get_target_property(APP_PATH ${target}_Standalone JUCE_PLUGIN_ARTEFACT_FILE)
+
+    install(DIRECTORY ${VST3_PATH}
         DESTINATION ${VST3_INSTALL_DIRECTORY}
         COMPONENT ${target}VST3
+        PATTERN "Plugin.ico" EXCLUDE
     )
 
-    install(TARGETS ${target}_Standalone
+    install(DIRECTORY ${APP_PATH}
         DESTINATION ${APP_INSTALL_DIRECTORY}
         COMPONENT ${target}APP
+        PATTERN "icon.ico" EXCLUDE
     )
 
     set(CPACK_COMPONENTS_ALL ${target}APP ${target}VST3)
@@ -62,7 +67,7 @@ function(create_installer target)
 
         include(CPackComponent)
 
-        set(CPACK_INNOSETUP_${target}VST3_INSTALL_DIRECTORY "{commoncf64}")
+        set(CPACK_INNOSETUP_${target}VST3_INSTALL_DIRECTORY "{commoncf64}\\VST3")
 
         cpack_add_install_type(Full DISPLAY_NAME "Full installation")
 
