@@ -14,10 +14,10 @@ function DeathMetalSwitch({ parameterName, orientation = "horizontal", children 
 
     useEffect(() => {
         const parameterListenerId = toggleState.valueChangedEvent.addListener(() => {
-            setParameter(!toggleState.getValue());
+            setParameter(toggleState.getValue());
         }, []);
         return () => toggleState.valueChangedEvent.removeListener(parameterListenerId);
-    });
+    }, [toggleState]);
 
     useEffect(() => {
         const canvas = canvasRef.current;
