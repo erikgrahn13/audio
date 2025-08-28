@@ -24,7 +24,7 @@ jobs:
         if: matrix.os == 'macos-latest'
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: "15.2"
+          xcode-version: latest-stable
 
       - name: Install dependencies (Linux)
         if: matrix.os == 'ubuntu-latest'
