@@ -26,6 +26,12 @@ var NAVTREE =
 [
   [ "FahlGrahn Audio", "index.html", [
     [ "FahlGrahn Audio 🤘", "index.html", "index" ],
+    [ "React + Vite", "md__2doxygen_2Abyss_2ui_2README.html", [
+      [ "Expanding the ESLint configuration", "md__2doxygen_2Abyss_2ui_2README.html#autotoc_md1", null ]
+    ] ],
+    [ "React + Vite", "md__2doxygen_2Black__Lounge_2ui_2README.html", [
+      [ "Expanding the ESLint configuration", "md__2doxygen_2Black__Lounge_2ui_2README.html#autotoc_md3", null ]
+    ] ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
       [ "Class Index", "classes.html", null ],

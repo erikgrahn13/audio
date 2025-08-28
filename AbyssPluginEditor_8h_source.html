@@ -138,13 +138,15 @@ $(function(){initNavTree('AbyssPluginEditor_8h_source.html',''); initResizable(t
 <div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    <span class="comment">// access the processor object that created it.</span></div>
 <div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    <a class="code hl_class" href="classAbyssAudioProcessor.html">AbyssAudioProcessor</a> &amp;processorRef;</div>
 <div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>    juce::WebSliderRelay gainRelay{<span class="stringliteral">&quot;gain&quot;</span>};</div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>    juce::WebBrowserComponent webBrowserComponent;</div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>    std::unique_ptr&lt;juce::WebSliderParameterAttachment&gt; gainWebAttachment;</div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> </div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>    std::optional&lt;juce::WebBrowserComponent::Resource&gt; getResource(<span class="keyword">const</span> juce::String &amp;url);</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>    juce::WebToggleButtonRelay bypassRelay{<span class="stringliteral">&quot;bypass&quot;</span>};</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>    juce::WebBrowserComponent webBrowserComponent;</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>    std::unique_ptr&lt;juce::WebSliderParameterAttachment&gt; gainWebAttachment;</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>    std::unique_ptr&lt;juce::WebToggleButtonParameterAttachment&gt; bypassWebAttachment;</div>
 <div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span> </div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(<a class="code hl_class" href="classAbyssAudioProcessorEditor.html">AbyssAudioProcessorEditor</a>)</div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>};</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>    std::optional&lt;juce::WebBrowserComponent::Resource&gt; getResource(<span class="keyword">const</span> juce::String &amp;url);</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span> </div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(<a class="code hl_class" href="classAbyssAudioProcessorEditor.html">AbyssAudioProcessorEditor</a>)</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>};</div>
 </div>
 <div class="ttc" id="aclassAbyssAudioProcessorEditor_html"><div class="ttname"><a href="classAbyssAudioProcessorEditor.html">AbyssAudioProcessorEditor</a></div><div class="ttdef"><b>Definition</b> AbyssPluginEditor.h:7</div></div>
 <div class="ttc" id="aclassAbyssAudioProcessor_html"><div class="ttname"><a href="classAbyssAudioProcessor.html">AbyssAudioProcessor</a></div><div class="ttdef"><b>Definition</b> AbyssPluginProcessor.h:7</div></div>
