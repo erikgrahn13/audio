@@ -102,6 +102,9 @@ jobs:
             build/**/*.pkg
             build/**/*.exe
             !build/**/_CPack_Packages
+            !build/_deps
+            !build/bin
+            !build/CMakeFiles
   generate-docs:
     name: Verify Doxygen documentation generation
     runs-on: ubuntu-latest
