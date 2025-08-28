@@ -1,8 +1,9 @@
 var searchData=
 [
   ['biquad_0',['Biquad',['../classBiquad.html',1,'']]],
-  ['blackloungeaudioprocessor_1',['BlackLoungeAudioProcessor',['../classBlackLoungeAudioProcessor.html',1,'']]],
-  ['blackloungeaudioprocessoreditor_2',['BlackLoungeAudioProcessorEditor',['../classBlackLoungeAudioProcessorEditor.html',1,'']]],
-  ['blockquote_3',['&lt;/blockquote&gt;',['../index.html#autotoc_md11',1,'']]],
-  ['build_4',['Build',['../index.html#autotoc_md10',1,'']]]
+  ['black_20lounge_20🌭🪚_1',['Black Lounge 🌭🪚',['../index.html#autotoc_md8',1,'']]],
+  ['blackloungeaudioprocessor_2',['BlackLoungeAudioProcessor',['../classBlackLoungeAudioProcessor.html',1,'']]],
+  ['blackloungeaudioprocessoreditor_3',['BlackLoungeAudioProcessorEditor',['../classBlackLoungeAudioProcessorEditor.html',1,'']]],
+  ['blockquote_4',['&lt;/blockquote&gt;',['../index.html#autotoc_md16',1,'']]],
+  ['build_5',['Build',['../index.html#autotoc_md13',1,'']]]
 ];

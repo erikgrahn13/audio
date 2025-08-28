@@ -25,7 +25,7 @@
 var NAVTREE =
 [
   [ "FahlGrahn Audio", "index.html", [
-    [ "FahlGrahn Audio 🤘", "index.html", "index" ],
+    [ "Abyss Lounge 🤘", "index.html", "index" ],
     [ "React + Vite", "md__2doxygen_2Abyss_2ui_2README.html", [
       [ "Expanding the ESLint configuration", "md__2doxygen_2Abyss_2ui_2README.html#autotoc_md1", null ]
     ] ],

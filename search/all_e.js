@@ -1,11 +1,7 @@
 var searchData=
 [
-  ['showaudiosettingsdialog_0',['showAudioSettingsDialog',['../classjuce_1_1StandalonePluginHolder.html#a93aa79fde505e462ba85f926ef2b0968',1,'juce::StandalonePluginHolder']]],
-  ['slidergroup_1',['SliderGroup',['../classSliderGroup.html',1,'']]],
-  ['standalonefilterwindow_2',['StandaloneFilterWindow',['../classjuce_1_1StandaloneFilterWindow.html',1,'juce::StandaloneFilterWindow'],['../classjuce_1_1StandaloneFilterWindow.html#adb1e011e7af140a2dc0397c9f3f6d882',1,'juce::StandaloneFilterWindow::StandaloneFilterWindow()']]],
-  ['standalonepluginholder_3',['StandalonePluginHolder',['../classjuce_1_1StandalonePluginHolder.html',1,'juce::StandalonePluginHolder'],['../classjuce_1_1StandalonePluginHolder.html#af0d6968e78562b0c3b3f3dae0f62f296',1,'juce::StandalonePluginHolder::StandalonePluginHolder()']]],
-  ['synthaudioprocessor_4',['SynthAudioProcessor',['../classSynthAudioProcessor.html',1,'']]],
-  ['synthaudioprocessoreditor_5',['SynthAudioProcessorEditor',['../classSynthAudioProcessorEditor.html',1,'']]],
-  ['synthsound_6',['SynthSound',['../classSynthSound.html',1,'']]],
-  ['synthvoice_7',['SynthVoice',['../classSynthVoice.html',1,'']]]
+  ['react_20vite_0',['React Vite',['../md__2doxygen_2Abyss_2ui_2README.html',1,'React + Vite'],['../md__2doxygen_2Black__Lounge_2ui_2README.html',1,'React + Vite']]],
+  ['release_1',['Release',['../index.html#autotoc_md15',1,'']]],
+  ['resettodefaultstate_2',['resetToDefaultState',['../classjuce_1_1StandaloneFilterWindow.html#a723ad1efa22bf8bbe4c2204fd5313147',1,'juce::StandaloneFilterWindow']]],
+  ['ringbuffer_3',['RingBuffer',['../classRingBuffer.html',1,'']]]
 ];
