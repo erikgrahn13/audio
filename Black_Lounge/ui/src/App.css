@@ -1,0 +1,66 @@
+h1,
+h2 {
+  font-family: "DeathMetalFont2", sans-serif;
+}
+
+.knob-area {
+  display: flex;
+  justify-content: space-evenly;
+  /* border: 2px white solid; */
+  /* border-radius: 10px; */
+  /* padding-bottom: 20px; */
+
+}
+
+.denoiser-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.death-metal-switch {
+  margin: 40px;
+}
+
+.settings {
+  font-family: "WebFont", sans-serif;
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  font-size: 30px;
+  background-color: black;
+  color: white;
+  border: none;
+}
+
+.img-stack {
+  position: relative;
+  width: 250px;
+  height: 250px;
+  margin: 0 auto;
+}
+
+
+.img-stack .base {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.6;
+
+  /* or contain */
+}
+
+.img-stack .overlay {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 70%;
+  /* <-- smaller than base */
+  height: auto;
+  /* keep aspect ratio */
+  transform: translate(-50%, -50%);
+  /* center it */
+  /* object-fit: cover; */
+  /* pointer-events: none; */
+  /* optional: clicks pass through */
+}

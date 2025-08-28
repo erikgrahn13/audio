@@ -24,3 +24,4 @@ set(CMAKE_OSX_DEPLOYMENT_TARGET "12.7" CACHE STRING "Minimum OS X deployment ver
 set_directory_properties(PROPERTIES JUCE_COMPANY_NAME ${CMAKE_PROJECT_NAME})
 set(ABYSS_LOUNGE_BUNDLE_ID "com.abyss-lounge")
 set(ABYSS_LOUNGE_PLUGIN_MANUFACTURER_CODE "Abys")
+set(ABYSS_LOUNGE_ICON "${CMAKE_SOURCE_DIR}/resources/assets/logo_transparent.png")

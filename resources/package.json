@@ -1,0 +1,7 @@
+{
+  "name": "@abyss-lounge/resources",
+  "version": "0.0.1",
+  "type": "module",
+  "sideEffects": ["**/*.css", "**/*.woff2", "**/*.ttf", "**/*.png", "**/*.jpg", "**/*.svg"],
+  "files": ["index.css", "index.ts", "fonts", "assets"]
+}

@@ -29,6 +29,6 @@ if(NOT FETCHCONTENT_FULLY_DISCONNECTED)
     add_subdirectory(EQ)
     add_subdirectory(Synth)
 
-    # add_subdirectory(Abyss)
+    add_subdirectory(Abyss)
     add_subdirectory(Black_Lounge)
 endif()

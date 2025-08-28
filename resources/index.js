@@ -1,0 +1,1 @@
+export { default as logoTransparent } from "./assets/logo_transparent.png";

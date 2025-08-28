@@ -1,0 +1,7 @@
+{
+    "name": "abyss-lounge",
+    "workspaces": [
+        "Abyss/ui",
+        "Black_Lounge/ui"
+    ]
+}
