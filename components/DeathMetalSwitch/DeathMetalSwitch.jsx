@@ -7,12 +7,8 @@ function DeathMetalSwitch({ parameterName, orientation = "horizontal", children 
     const canvasRef = useRef(null);
     const toggleState = Juce.getToggleState(parameterName);
     const [parameter, setParameter] = useState(toggleState.getValue());
-    const [on, setOn] = useState(false);
-
 
     function handleBypass() {
-        console.log("hej");
-        setOn(!on);
         toggleState.setValue(!toggleState.getValue());
     }
 
@@ -42,7 +38,7 @@ function DeathMetalSwitch({ parameterName, orientation = "horizontal", children 
 
 
 
-        //         // Pentagram
+        // Pentagram
         const centerY = size / 2;
         ctx.save();
         ctx.translate(size / 2, centerY);
@@ -75,16 +71,12 @@ function DeathMetalSwitch({ parameterName, orientation = "horizontal", children 
         ctx.arc(0, 0, 10 * 0.9, 0, Math.PI * 2);
         ctx.stroke();
         ctx.restore();
-
-
-
     });
 
     return (
         <>
-            <button className={styles.switch} data-orientation={orientation} type="button" data-checked={on} onClick={handleBypass}>
+            <button className={styles.switch} data-orientation={orientation} type="button" data-checked={parameter} onClick={handleBypass}>
                 <span className={styles.track}></span>
-                {/* <span className={styles.thumb}></span> */}
                 <canvas ref={canvasRef} className={styles.thumb}></canvas>
             </button>
         </>
