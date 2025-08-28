@@ -549,13 +549,13 @@ class StandalonePluginHolder : private AudioIODeviceCallback, private Timer, pri
             addAndMakeVisible(deviceSelector);
             // deviceSelector.setLookAndFeel(&deathMetalLookAndFeel);
 
-            if (owner.getProcessorHasPotentialFeedbackLoop())
-            {
-                // addAndMakeVisible(shouldMuteButton);
-                // addAndMakeVisible(shouldMuteLabel);
+            // if (owner.getProcessorHasPotentialFeedbackLoop())
+            // {
+            //     addAndMakeVisible(shouldMuteButton);
+            //     addAndMakeVisible(shouldMuteLabel);
 
-                // shouldMuteLabel.attachToComponent(&shouldMuteButton, true);
-            }
+            //     shouldMuteLabel.attachToComponent(&shouldMuteButton, true);
+            // }
         }
 
         void paint(Graphics &g) override

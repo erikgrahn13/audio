@@ -7,3 +7,8 @@
     font-family: "DeathMetalFont";
     src: url('./ArtDystopia.ttf') format('truetype');
 }
+
+@font-face {
+    font-family: "DeathMetalFont2";
+    src: url('./mb-forever-raw.regular.ttf') format('truetype');
+}

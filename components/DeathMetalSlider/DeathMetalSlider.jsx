@@ -128,9 +128,20 @@ function DeathMetalSlider({ parameterName, width = 200, height = 24 }) {
         window.addEventListener("mouseup", onUp, { once: true });
     };
 
+    const handleWheel = (e) => {
+        let deltaY = e.deltaY * 0.1;
+        let paramCurrent = sliderState.getNormalisedValue();
+
+        paramCurrent = Math.max(0.0, Math.min(1.0, paramCurrent - deltaY * 0.005));
+
+        sliderState.sliderDragStarted();
+        sliderState.setNormalisedValue(paramCurrent);
+        sliderState.sliderDragEnded();
+    }
+
     return (
         <>
-            <canvas ref={canvasRef} onMouseDown={handleMouseDown} />
+            <canvas ref={canvasRef} onMouseDown={handleMouseDown} onWheel={handleWheel} />
         </>
     );
 }

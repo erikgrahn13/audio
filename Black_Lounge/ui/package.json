@@ -14,7 +14,7 @@
     "react-dom": "^19.1.1",
     "juce-framework-frontend": "file:../../external/juce/modules/juce_gui_extra/native/javascript",
     "@abyss-lounge/components": "file:../../components",
-    "@abyss-lounge/fonts": "file:../../resources/fonts"
+    "@abyss-lounge/resources": "file:../../resources"
 
   },
   "devDependencies": {

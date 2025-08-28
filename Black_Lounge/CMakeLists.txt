@@ -38,7 +38,7 @@ project(BlackLounge VERSION 0.0.1)
 juce_add_plugin(${PROJECT_NAME}
 
     # VERSION ...                               # Set this if the plugin version is different to the project version
-    # ICON_BIG ...                              # ICON_* arguments specify a path to an image file to use as an icon for the Standalone
+    ICON_BIG ${ABYSS_LOUNGE_ICON}                              # ICON_* arguments specify a path to an image file to use as an icon for the Standalone
     # ICON_SMALL ...
     # COMPANY_NAME ...                          # Specify the name of the plugin's author
     BUNDLE_ID ${ABYSS_LOUNGE_BUNDLE_ID}.${PROJECT_NAME}
@@ -100,12 +100,7 @@ target_compile_definitions(${PROJECT_NAME}
 # Conversion to binary-data will happen when your target is built.
 juce_add_binary_data(BlackLoungeAmp HEADER_NAME "BlackLoungeAmp.h" NAMESPACE BlackLoungeAmp SOURCES ironmaster.nam)
 
-enable_webview(
-    ui/index.html
-    ui/style.css
-    ui/index.js
-    ui/resources
-)
+enable_webview()
 
 # `target_link_libraries` links libraries and JUCE modules to other libraries or executables. Here,
 # we're linking our executable target to the `juce::juce_audio_utils` module. Inter-module
@@ -114,8 +109,6 @@ enable_webview(
 # here too. This is a standard CMake command.
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
-    Fonts
-
     # AudioPluginData           # If we'd created a binary data target, we'd link to it here
     juce::juce_audio_utils
     nam_dependency

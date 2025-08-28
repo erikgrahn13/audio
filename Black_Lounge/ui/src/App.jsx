@@ -1,7 +1,8 @@
 // import { useState } from 'react'
 // import reactLogo from './assets/react.svg'
 // import viteLogo from '/vite.svg'
-import ampHead from "./assets/background.jpg"
+import hotDog from "./assets/hotdog.png";
+import chainsaws from "./assets/chainsaws.png"
 import * as Juce from "juce-framework-frontend";
 
 
@@ -74,14 +75,18 @@ function App() {
     <>
       <h1 className="title">BLACK LOUNGE AMP</h1>
       <h1 id="tuner">{pitch}</h1>
-      <img src={ampHead}></img>
+      <div className="img-stack">
+        <img src={chainsaws} height="250px" className="base"></img>
+        <img src={hotDog} height="250px" className="overlay" />
+
+      </div>
       <div className="knob-area">
         <div className="denoiser-area">
           <h2>DENOISER</h2>
-          <DeathMetalKnob parameterName="denoiser" size={60}></DeathMetalKnob>
-          <div style={{ padding: "20px" }}>
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 20 }}>
             <DeathMetalSwitch className="death-metal-switch" parameterName="denoiserActive" size={20} orientation="vertical"></DeathMetalSwitch>
-          </div>
+            <DeathMetalKnob parameterName="denoiser" size={60}></DeathMetalKnob>
+          </span>
         </div>
         <div className="gain-area">
           <h2>GAIN</h2>

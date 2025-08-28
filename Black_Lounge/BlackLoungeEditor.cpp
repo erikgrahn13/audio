@@ -58,6 +58,14 @@ BlackLoungeAudioProcessorEditor::BlackLoungeAudioProcessorEditor(BlackLoungeAudi
     setResizeLimits(480, 540, 480, 540); // Lock dimensions
 
     startTimerHz(30);
+
+    if (juce::JUCEApplicationBase::isStandaloneApp())
+    {
+        if (auto *pluginHolder = juce::StandalonePluginHolder::getInstance())
+        {
+            pluginHolder->getMuteInputValue().setValue(false);
+        }
+    }
 }
 
 BlackLoungeAudioProcessorEditor::~BlackLoungeAudioProcessorEditor()

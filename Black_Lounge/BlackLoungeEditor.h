@@ -2,8 +2,6 @@
 
 #include "BlackLoungeProcessor.h"
 #include "CustomLookAndFeel/CustomStandaloneFilterWindow.h"
-#include "CustomLookAndFeel/DeathMetalLookAndFeel.h"
-#include "CustomLookAndFeel/FontWebLookAndFeel.h"
 #include "Tuner.h"
 #include <JuceHeader.h>
 
