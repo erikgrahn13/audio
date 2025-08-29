@@ -13,7 +13,7 @@ cmake_minimum_required(VERSION 3.22)
 # The top-level CMakeLists.txt file for a project must contain a literal, direct call to the
 # `project()` command. `project()` sets up some helpful variables that describe source/binary
 # directories, and the current project version. This is a standard CMake command.
-project(Drums VERSION 0.0.1)
+project(AbyssDrums VERSION 0.0.1)
 
 # If you've installed JUCE somehow (via a package manager, or directly using the CMake install
 # target), you'll need to tell this project that it depends on the installed copy of JUCE. If you've
@@ -53,7 +53,7 @@ juce_add_plugin(${PROJECT_NAME}
 
     # GarageBand 10.3 requires the first letter to be upper-case, and the remaining letters to be lower-case
     FORMATS AU VST3 Standalone # The formats to build. Other valid formats are: AAX Unity VST AU AUv3
-    PRODUCT_NAME "Drums") # The name of the final executable, which can differ from the target name
+    PRODUCT_NAME "Abyss Drums") # The name of the final executable, which can differ from the target name
 
 # `juce_generate_juce_header` will create a JuceHeader.h for a given target, which will be generated
 # into your build tree. This should be included with `#include <JuceHeader.h>`. The include path for
