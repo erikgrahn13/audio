@@ -38,17 +38,18 @@ project(AbyssDrums VERSION 0.0.1)
 juce_add_plugin(${PROJECT_NAME}
 
     # VERSION ...                               # Set this if the plugin version is different to the project version
-    # ICON_BIG ...                              # ICON_* arguments specify a path to an image file to use as an icon for the Standalone
+    ICON_BIG ${ABYSS_LOUNGE_ICON}                              # ICON_* arguments specify a path to an image file to use as an icon for the Standalone
     # ICON_SMALL ...
     # COMPANY_NAME ...                          # Specify the name of the plugin's author
-    # IS_SYNTH TRUE/FALSE                       # Is this a synth or an effect?
-    # NEEDS_MIDI_INPUT TRUE/FALSE               # Does the plugin need midi input?
+    BUNDLE_ID ${ABYSS_LOUNGE_BUNDLE_ID}.${PROJECT_NAME}
+    IS_SYNTH TRUE                       # Is this a synth or an effect?
+    NEEDS_MIDI_INPUT TRUE               # Does the plugin need midi input?
     # NEEDS_MIDI_OUTPUT TRUE/FALSE              # Does the plugin need midi output?
     # IS_MIDI_EFFECT TRUE/FALSE                 # Is this plugin a MIDI effect?
     # EDITOR_WANTS_KEYBOARD_FOCUS TRUE/FALSE    # Does the editor need keyboard focus?
     # COPY_PLUGIN_AFTER_BUILD TRUE/FALSE        # Should the plugin be installed to a default location after building?
-    PLUGIN_MANUFACTURER_CODE Juce # A four-character manufacturer id with at least one upper-case character
-    PLUGIN_CODE Dem0 # A unique four-character plugin id with exactly one upper-case character
+    PLUGIN_MANUFACTURER_CODE ${ABYSS_LOUNGE_PLUGIN_MANUFACTURER_CODE} # A four-character manufacturer id with at least one upper-case character
+    PLUGIN_CODE Abdr # A unique four-character plugin id with exactly one upper-case character
     NEEDS_WEBVIEW2 TRUE
 
     # GarageBand 10.3 requires the first letter to be upper-case, and the remaining letters to be lower-case
@@ -83,7 +84,6 @@ target_compile_definitions(${PROJECT_NAME}
     PUBLIC
 
     # JUCE_WEB_BROWSER and JUCE_USE_CURL would be on by default, but you might not need them.
-    JUCE_WEB_BROWSER=0 # If you remove this, add `NEEDS_WEB_BROWSER TRUE` to the `juce_add_plugin` call
     JUCE_USE_CURL=0 # If you remove this, add `NEEDS_CURL TRUE` to the `juce_add_plugin` call
     JUCE_VST3_CAN_REPLACE_VST2=0
     JUCE_USE_CUSTOM_PLUGIN_STANDALONE_APP=1

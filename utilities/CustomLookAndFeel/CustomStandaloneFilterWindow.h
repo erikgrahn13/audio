@@ -527,8 +527,13 @@ class StandalonePluginHolder : private AudioIODeviceCallback, private Timer, pri
       public:
         SettingsComponent(StandalonePluginHolder &pluginHolder, AudioDeviceManager &deviceManagerToUse,
                           int maxAudioInputChannels, int maxAudioOutputChannels)
+            #if !JucePlugin_IsSynth
             : owner(pluginHolder), deviceSelector(deviceManagerToUse, 0, maxAudioInputChannels, 0,
                                                   maxAudioOutputChannels, false, false, false, false),
+            #else
+            : owner(pluginHolder), deviceSelector(deviceManagerToUse, 0, maxAudioInputChannels, 0,
+                                                  maxAudioOutputChannels, true, (pluginHolder.processor.get() != nullptr && pluginHolder.processor->producesMidi()), true, false),
+            #endif
               shouldMuteLabel("Feedback Loop:", "Feedback Loop:"), shouldMuteButton("Mute audio input")
         {
             setOpaque(true);

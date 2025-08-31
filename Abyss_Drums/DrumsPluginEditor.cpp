@@ -18,6 +18,7 @@ DrumsAudioProcessorEditor::DrumsAudioProcessorEditor(DrumsAudioProcessor &p)
                            .withWinWebView2Options(juce::WebBrowserComponent::Options::WinWebView2{}.withUserDataFolder(
                                juce::File::getSpecialLocation(juce::File::SpecialLocationType::tempDirectory)))
                            .withNativeIntegrationEnabled()
+                           .withInitialisationData("isStandalone", juce::JUCEApplicationBase::isStandaloneApp())
                            .withInitialisationData("kickSamples", [this]() {
                             juce::Array<juce::var> sampleVarList;
                             for (int i = 0; i < KickSamples::namedResourceListSize; ++i)
@@ -35,13 +36,18 @@ DrumsAudioProcessorEditor::DrumsAudioProcessorEditor(DrumsAudioProcessor &p)
                                                       juce::WebBrowserComponent::NativeFunctionCompletion completion) {
                                                    nativeFunction(args, std::move(completion));
                                                })
+                            .withNativeFunction(juce::Identifier{"openSettingsView"},
+                                                                           [this](const juce::Array<juce::var> &args,
+                                                      juce::WebBrowserComponent::NativeFunctionCompletion completion) {
+                                                   openSettingsView(args, std::move(completion));
+                                               })
                            .withResourceProvider([this](const auto &url) { return getResource(url); },
-                                                 juce::URL{"http://localhost:5500/"}.getOrigin())}
+                                                 juce::URL{"http://localhost:5173/"}.getOrigin())}
 {
     juce::ignoreUnused(processorRef);
 
 #if !defined NDEBUG
-    webViewComponent.goToURL("http://127.0.0.1:5500/build/Drums/ui/index.html");
+    webViewComponent.goToURL("http://127.0.0.1:5173/build/Drums/ui/index.html");
 #else
     webViewComponent.goToURL(WebViewComponent::getResourceProviderRoot());
 #endif
@@ -49,7 +55,7 @@ DrumsAudioProcessorEditor::DrumsAudioProcessorEditor(DrumsAudioProcessor &p)
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
     setResizable(true, true);
-    setSize(400, 300);
+    setSize(1400, 800);
 }
 
 DrumsAudioProcessorEditor::~DrumsAudioProcessorEditor()
@@ -67,18 +73,34 @@ void DrumsAudioProcessorEditor::resized()
     webViewComponent.setBounds(bounds);
 }
 
+void DrumsAudioProcessorEditor::openSettingsView(const juce::Array<juce::var> &args,
+                                                 juce::WebBrowserComponent::NativeFunctionCompletion completion)
+{
+    std::ignore = args;
+    std::ignore = completion;
+    juce::StandalonePluginHolder::getInstance()->showAudioSettingsDialog();
+}
+
 void DrumsAudioProcessorEditor::nativeFunction(const juce::Array<juce::var> &args,
                                                juce::WebBrowserComponent::NativeFunctionCompletion completion)
 {
-    // std::ignore = args;
     std::ignore = completion;
-    int hej = 2;
-    hej = 3;
-
     const int drumType = args[0].toString().getIntValue();
     const int index = args[1].toString().getIntValue();
 
+    // auto adjustedIndex = drumType == 1 ? index - 100 : index;
+
     processorRef.updatePreviewSample(drumType, index);
+}
+
+void DrumsAudioProcessorEditor::loadSample(const juce::Array<juce::var> &args,
+                                           juce::WebBrowserComponent::NativeFunctionCompletion completion)
+{
+    std::ignore = completion;
+    std::ignore = args;
+
+    // processorRef.loadSampleInToSlot(drumType, index, slot);
+
 }
 
 std::optional<juce::WebBrowserComponent::Resource> DrumsAudioProcessorEditor::getResource(const juce::String &url)

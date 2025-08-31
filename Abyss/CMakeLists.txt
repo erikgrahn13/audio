@@ -50,7 +50,7 @@ juce_add_plugin(${PROJECT_NAME}
     # EDITOR_WANTS_KEYBOARD_FOCUS TRUE/FALSE    # Does the editor need keyboard focus?
     COPY_PLUGIN_AFTER_BUILD ${COPY_AFTER_BUILD} # Should the plugin be installed to a default location after building?
     PLUGIN_MANUFACTURER_CODE ${ABYSS_LOUNGE_PLUGIN_MANUFACTURER_CODE} # A four-character manufacturer id with at least one upper-case character
-    PLUGIN_CODE AbyS # A unique four-character plugin id with exactly one upper-case character
+    PLUGIN_CODE Abys # A unique four-character plugin id with exactly one upper-case character
     NEEDS_WEBVIEW2 TRUE # GarageBand 10.3 requires the first letter to be upper-case, and the remaining letters to be lower-case
     FORMATS AU VST3 Standalone # The formats to build. Other valid formats are: AAX Unity VST AU AUv3
     PRODUCT_NAME ${PROJECT_NAME}) # The name of the final executable, which can differ from the target name

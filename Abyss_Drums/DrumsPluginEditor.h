@@ -13,7 +13,12 @@ class DrumsAudioProcessorEditor final : public juce::AudioProcessorEditor
 
     //==============================================================================
     void resized() override;
+    
+    void openSettingsView(const juce::Array<juce::var> &args,
+                        juce::WebBrowserComponent::NativeFunctionCompletion completion);
     void nativeFunction(const juce::Array<juce::var> &args,
+                        juce::WebBrowserComponent::NativeFunctionCompletion completion);
+    void loadSample(const juce::Array<juce::var> &args,
                         juce::WebBrowserComponent::NativeFunctionCompletion completion);
 
   private:

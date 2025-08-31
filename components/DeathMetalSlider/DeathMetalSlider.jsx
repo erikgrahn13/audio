@@ -1,149 +1,206 @@
-import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import * as Juce from "juce-framework-frontend";
 
-function DeathMetalSlider({ parameterName, width = 200, height = 24 }) {
-    const canvasRef = useRef(null);
-    const sliderState = Juce.getSliderState(parameterName);
-    const [parameter, setParameter] = useState(sliderState.getNormalisedValue());
+function DeathMetalSlider({ parameterName, orientation = "horizontal", width = 200, height = 24 }) {
+  const canvasRef = useRef(null);
+  const sliderState = Juce.getSliderState(parameterName);
+  const [parameter, setParameter] = useState(sliderState.getNormalisedValue());
 
-    const pad = 10; // matches your drawing
+  const pad = 10;
 
-    // Keep React state in sync with JUCE
-    useEffect(() => {
-        const id = sliderState.valueChangedEvent.addListener(() => {
-            setParameter(sliderState.getNormalisedValue());
-        });
-        return () => sliderState.valueChangedEvent.removeListener(id);
-    }, [sliderState]);
-
-    // Draw using CSS-pixel coordinates (DPR aware)
-    useEffect(() => {
-        const canvas = canvasRef.current;
-        if (!canvas) return;
-
-        const dpr = window.devicePixelRatio || 1;
-        // CSS size
-        canvas.style.width = `${width}px`;
-        canvas.style.height = `${height}px`;
-        // Buffer size
-        canvas.width = Math.round(width * dpr);
-        canvas.height = Math.round(height * dpr);
-
-        const ctx = canvas.getContext("2d");
-        ctx.setTransform(dpr, 0, 0, dpr, 0, 0); // 1 unit == 1 CSS px
-
-        // background
-        ctx.clearRect(0, 0, width, height);
-        ctx.fillStyle = "black";
-        ctx.fillRect(0, 0, width, height);
-
-        // track
-        const centerY = height / 2;
-        ctx.lineWidth = 10;
-        ctx.lineCap = "round";
-
-        ctx.beginPath();
-        ctx.strokeStyle = "grey";
-        ctx.moveTo(pad, centerY);
-        ctx.lineTo(width - pad, centerY);
-        ctx.stroke();
-
-        // value line
-        const currentValue = pad + (width - 2 * pad) * parameter; // CSS px
-        ctx.beginPath();
-        ctx.strokeStyle = "white";
-        ctx.shadowColor = "yellow";
-        ctx.shadowBlur = 5;
-        ctx.moveTo(pad, centerY);
-        ctx.lineTo(currentValue, centerY);
-        ctx.stroke();
-        ctx.shadowBlur = 0;
-
-        //         // Pentagram
-        ctx.save();
-        ctx.translate(currentValue, centerY);
-        ctx.rotate(45);
-        ctx.beginPath();
-
-        ctx.fillStyle = "black";
-        ctx.arc(0, 0, height / 2 - 1, 0, Math.PI * 2);
-        ctx.fill();
-
-        ctx.beginPath();
-        for (let i = 0; i < 5; ++i) {
-            const angle = (Math.PI / 180) * (180 + i * 144);
-            const px = Math.cos(angle) * 10;
-            const py = Math.sin(angle) * 10;
-
-            i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
-        }
-        ctx.closePath();
-
-        ctx.strokeStyle = "white";
-        ctx.shadowBlur = 0;
-        ctx.lineCap = "butt";
-        ctx.lineWidth = 2;
-        ctx.stroke();
-
-        ctx.beginPath();
-        ctx.arc(0, 0, 10 * 0.9, 0, Math.PI * 2);
-        ctx.stroke();
-        ctx.restore();
-
-
-
+  // Keep in sync with JUCE
+  useEffect(() => {
+    const id = sliderState.valueChangedEvent.addListener(() => {
+      setParameter(sliderState.getNormalisedValue());
     });
+    return () => sliderState.valueChangedEvent.removeListener(id);
+  }, [sliderState]);
 
-    const handleMouseDown = (e) => {
-        const el = e.currentTarget; // canvas element
-        const x = e.nativeEvent.offsetX; // CSS px inside canvas
+  // Draw
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
 
+    const dpr = window.devicePixelRatio || 1;
+    canvas.style.width = `${width}px`;
+    canvas.style.height = `${height}px`;
+    canvas.width = Math.round(width * dpr);
+    canvas.height = Math.round(height * dpr);
+
+    const ctx = canvas.getContext("2d");
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    // bg
+    ctx.clearRect(0, 0, width, height);
+    ctx.fillStyle = "black";
+    ctx.fillRect(0, 0, width, height);
+
+    ctx.lineWidth = 10;
+    ctx.lineCap = "round";
+
+    if (orientation === "horizontal") {
+      const cy = height / 2;
+      const span = Math.max(1, width - 2 * pad);
+      const xVal = pad + span * parameter;
+
+      // track
+      ctx.beginPath();
+      ctx.strokeStyle = "grey";
+      ctx.moveTo(pad, cy);
+      ctx.lineTo(width - pad, cy);
+      ctx.stroke();
+
+      // value
+      ctx.beginPath();
+      ctx.strokeStyle = "white";
+      ctx.shadowColor = "yellow";
+      ctx.shadowBlur = 5;
+      ctx.moveTo(pad, cy);
+      ctx.lineTo(xVal, cy);
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+
+      // === Classic pentagram look (unchanged) ===
+      const circleR = height / 2 - 1;      // same as your original
+      const starR = 10;                     // same as your original
+      const rot = 45 % (2 * Math.PI);       // reproduces your previous visual rotation (~58°)
+
+      ctx.save();
+      ctx.translate(xVal, cy);
+      ctx.rotate(rot);
+
+      // black circle
+      ctx.beginPath();
+      ctx.fillStyle = "black";
+      ctx.arc(0, 0, circleR, 0, Math.PI * 2);
+      ctx.fill();
+
+      // star
+      ctx.beginPath();
+      for (let i = 0; i < 5; ++i) {
+        const angle = (Math.PI / 180) * (180 + i * 144);
+        const px = Math.cos(angle) * starR;
+        const py = Math.sin(angle) * starR;
+        i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+      }
+      ctx.closePath();
+
+      ctx.strokeStyle = "white";
+      ctx.lineCap = "butt";
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.arc(0, 0, starR * 0.9, 0, Math.PI * 2);
+      ctx.stroke();
+
+      ctx.restore();
+    } else {
+      // vertical: 0 at bottom → 1 at top
+      const cx = width / 2;
+      const span = Math.max(1, height - 2 * pad);
+      const yVal = height - pad - span * parameter; // invert
+
+      // track
+      ctx.beginPath();
+      ctx.strokeStyle = "grey";
+      ctx.moveTo(cx, pad);
+      ctx.lineTo(cx, height - pad);
+      ctx.stroke();
+
+      // value
+      ctx.beginPath();
+      ctx.strokeStyle = "white";
+      ctx.shadowColor = "yellow";
+      ctx.shadowBlur = 5;
+      ctx.moveTo(cx, height - pad);
+      ctx.lineTo(cx, yVal);
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+
+      // === Classic pentagram look (unchanged) ===
+      const circleR = width / 2 - 1;        // note: use cross-axis (width) to keep same visual size
+      const starR = 10;                      // same as your original
+      const rot = 45 % (2 * Math.PI);        // same effective rotation as before
+
+      ctx.save();
+      ctx.translate(cx, yVal);
+      ctx.rotate(rot);
+
+      // black circle
+      ctx.beginPath();
+      ctx.fillStyle = "black";
+      ctx.arc(0, 0, circleR, 0, Math.PI * 2);
+      ctx.fill();
+
+      // star
+      ctx.beginPath();
+      for (let i = 0; i < 5; ++i) {
+        const angle = (Math.PI / 180) * (180 + i * 144);
+        const px = Math.cos(angle) * starR;
+        const py = Math.sin(angle) * starR;
+        i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+      }
+      ctx.closePath();
+
+      ctx.strokeStyle = "white";
+      ctx.lineCap = "butt";
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.arc(0, 0, starR * 0.9, 0, Math.PI * 2);
+      ctx.stroke();
+
+      ctx.restore();
+    }
+  }, [width, height, parameter, orientation]);
+
+  // Input
+  const handleMouseDown = (e) => {
+    const el = e.currentTarget;
+    const rect = el.getBoundingClientRect();
+
+    const toNorm = (clientX, clientY) => {
+      if (orientation === "horizontal") {
         const span = Math.max(1, width - 2 * pad);
-        let t = (x - pad) / span;            // map to [0..1]
-        t = Math.max(0, Math.min(1, t));     // clamp
-
-        // start drag
-        sliderState.sliderDragStarted?.();
-        sliderState.setNormalisedValue(t);
-        setParameter(t); // immediate visual update
-
-        // For exactness: this will equal the click position (within fp error)
-        // console.log("offsetX", x, "drawX", pad + span * t);
-
-        // drag move
-        const rect = el.getBoundingClientRect(); // measure once
-        const onMove = (ev) => {
-            const xCss = ev.clientX - rect.left;   // CSS px
-            let nt = (xCss - pad) / span;
-            nt = Math.max(0, Math.min(1, nt));
-            sliderState.setNormalisedValue(nt);
-            setParameter(nt);
-        };
-        const onUp = () => {
-            sliderState.sliderDragEnded?.();
-            window.removeEventListener("mousemove", onMove);
-            window.removeEventListener("mouseup", onUp);
-        };
-        window.addEventListener("mousemove", onMove);
-        window.addEventListener("mouseup", onUp, { once: true });
+        const xCss = clientX - rect.left;
+        return Math.max(0, Math.min(1, (xCss - pad) / span));
+      } else {
+        const span = Math.max(1, height - 2 * pad);
+        const yCss = clientY - rect.top;
+        return Math.max(0, Math.min(1, 1 - (yCss - pad) / span));
+      }
     };
 
-    const handleWheel = (e) => {
-        let deltaY = e.deltaY * 0.1;
-        let paramCurrent = sliderState.getNormalisedValue();
+    const start = toNorm(e.clientX, e.clientY);
+    sliderState.sliderDragStarted?.();
+    sliderState.setNormalisedValue(start);
+    setParameter(start);
 
-        paramCurrent = Math.max(0.0, Math.min(1.0, paramCurrent - deltaY * 0.005));
+    const onMove = (ev) => {
+      const v = toNorm(ev.clientX, ev.clientY);
+      sliderState.setNormalisedValue(v);
+      setParameter(v);
+    };
+    const onUp = () => {
+      sliderState.sliderDragEnded?.();
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mouseup", onUp);
+    };
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mouseup", onUp, { once: true });
+  };
 
-        sliderState.sliderDragStarted();
-        sliderState.setNormalisedValue(paramCurrent);
-        sliderState.sliderDragEnded();
-    }
+  const handleWheel = (e) => {
+    let v = sliderState.getNormalisedValue();
+    v = Math.max(0, Math.min(1, v - Math.sign(e.deltaY) * 0.005));
+    sliderState.sliderDragStarted?.();
+    sliderState.setNormalisedValue(v);
+    sliderState.sliderDragEnded?.();
+  };
 
-    return (
-        <>
-            <canvas ref={canvasRef} onMouseDown={handleMouseDown} onWheel={handleWheel} />
-        </>
-    );
+  return <canvas ref={canvasRef} onMouseDown={handleMouseDown} onWheel={handleWheel} style={{ cursor: "pointer" }} />;
 }
 
 export default DeathMetalSlider;

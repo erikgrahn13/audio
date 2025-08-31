@@ -1,0 +1,9 @@
+/* button{
+    box-shadow: 0 0 5px yellow;
+} */
+
+.slot:active,
+.slot:focus-visible {
+  box-shadow: 0 6px 20px rgba(0,0,0,0.35), 0 0 0 2px rgba(99,179,237,0.9);
+  transform: translateY(1px);
+}
