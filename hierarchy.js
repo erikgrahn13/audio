@@ -12,6 +12,7 @@ var hierarchy =
       [ "AudioPluginAudioProcessor", "classAudioPluginAudioProcessor.html", null ],
       [ "AudioPluginAudioProcessor", "classAudioPluginAudioProcessor.html", null ],
       [ "BlackLoungeAudioProcessor", "classBlackLoungeAudioProcessor.html", null ],
+      [ "DrumsAudioProcessor", "classDrumsAudioProcessor.html", null ],
       [ "SynthAudioProcessor", "classSynthAudioProcessor.html", null ]
     ] ],
     [ "juce::AudioProcessorEditor", null, [
@@ -19,6 +20,7 @@ var hierarchy =
       [ "AudioPluginAudioProcessorEditor", "classAudioPluginAudioProcessorEditor.html", null ],
       [ "AudioPluginAudioProcessorEditor", "classAudioPluginAudioProcessorEditor.html", null ],
       [ "BlackLoungeAudioProcessorEditor", "classBlackLoungeAudioProcessorEditor.html", null ],
+      [ "DrumsAudioProcessorEditor", "classDrumsAudioProcessorEditor.html", null ],
       [ "SynthAudioProcessorEditor", "classSynthAudioProcessorEditor.html", null ]
     ] ],
     [ "Biquad::Coeffs", "structBiquad_1_1Coeffs.html", null ],
@@ -57,6 +59,9 @@ var hierarchy =
     [ "Oscillator", "classOscillator.html", null ],
     [ "juce::StandalonePluginHolder::PluginInOuts", "structjuce_1_1StandalonePluginHolder_1_1PluginInOuts.html", null ],
     [ "RingBuffer", "classRingBuffer.html", null ],
+    [ "juce::Synthesiser", null, [
+      [ "DrumSampler", "classDrumSampler.html", null ]
+    ] ],
     [ "juce::SynthesiserSound", null, [
       [ "SynthSound", "classSynthSound.html", null ]
     ] ],

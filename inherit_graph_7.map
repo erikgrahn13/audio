@@ -1,9 +1,9 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
 <area shape="rect" id="Node000000" title=" " alt="" coords="5,55,169,80"/>
 <area shape="rect" id="Node000001" href="$classDeathMetalLookAndFeel.html" title=" " alt="" coords="217,5,399,31"/>
-<area shape="poly" id="edge26_Node000000_Node000001" title=" " alt="" coords="158,49,250,28,251,33,159,54"/>
+<area shape="poly" id="edge28_Node000000_Node000001" title=" " alt="" coords="158,49,250,28,251,33,159,54"/>
 <area shape="rect" id="Node000002" href="$classFontAudioLookAndFeel.html" title=" " alt="" coords="223,55,393,80"/>
-<area shape="poly" id="edge27_Node000000_Node000002" title=" " alt="" coords="183,65,223,65,223,70,183,70"/>
+<area shape="poly" id="edge29_Node000000_Node000002" title=" " alt="" coords="183,65,223,65,223,70,183,70"/>
 <area shape="rect" id="Node000003" href="$classFontWebLookAndFeel.html" title=" " alt="" coords="227,104,389,129"/>
-<area shape="poly" id="edge28_Node000000_Node000003" title=" " alt="" coords="159,80,251,101,250,107,158,86"/>
+<area shape="poly" id="edge30_Node000000_Node000003" title=" " alt="" coords="159,80,251,101,250,107,158,86"/>
 </map>

@@ -118,44 +118,44 @@ $(function(){initNavTree('index.html',''); initResizable(true); });
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><p><a class="anchor" id="md__2doxygen_2README"></a></p>
-<h2><a class="anchor" id="autotoc_md5"></a>
+<h2><a class="anchor" id="autotoc_md7"></a>
 A collection of the most evil and metal audio plugins ever created! 🤘</h2>
-<h2><a class="anchor" id="autotoc_md6"></a>
+<h2><a class="anchor" id="autotoc_md8"></a>
 Visit the <a href="https://erikgrahn13.github.io/audio/">home page</a> for this project. 🍻</h2>
 <p>This is an onging project, and more plugins will be added in time!</p>
 <hr  />
-<h2><a class="anchor" id="autotoc_md8"></a>
+<h2><a class="anchor" id="autotoc_md10"></a>
 Black Lounge 🌭🪚</h2>
 <p><img src="docs/images/Black_Lounge.png" alt="Black Lounge" class="inline"/></p>
-<p>A guitar amplifier in honor of the Black Lounge studios in Sweden.</p><ul>
+<p>A guitar amplifier in honor of the legendary Black Lounge Studios owned by Jonas Kjellgren.</p><ul>
 <li>Includes a tuner visible to the user all the time.</li>
 <li>A built-in denoiser with a knob to adjust the threshold that can be toggled on and off.</li>
 <li>A gain knob to be able to boost and attenuate the level that going in to the amplifier.</li>
 <li>A volume knob to be able to adjust the overall output volume.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md9"></a>
+<h2><a class="anchor" id="autotoc_md11"></a>
 EQ 🎛️📈</h2>
 <p><img src="docs/images/EQ.png" alt="EQ" class="inline"/></p>
 <p>A 7-band EQ that displays the fft of the processed signal of the plugin.</p>
 <hr  />
-<h2><a class="anchor" id="autotoc_md11"></a>
+<h2><a class="anchor" id="autotoc_md13"></a>
 AudioFilePlayer 🎶</h2>
 <p><img src="docs/images/AudioFilePlayer.png" alt="AudioFilePlayer" class="inline"/></p>
 <p>A plugin that can load an audio file to be played back. Contains a volume control and the possibility to loop the audio file. Only used for testing purposes when running VST3 effects in <b>AudioPluginHost</b>.</p>
 <hr  />
-<h1><a class="anchor" id="autotoc_md13"></a>
+<h1><a class="anchor" id="autotoc_md15"></a>
 Build</h1>
 <p>This plugins is built using the <a href="https://juce.com">Juce</a> framework together with <a href="https://react.dev/">React</a> for the ui using the webview technology supported in Juce.</p>
 <p>It utilizes CMake presets but can also be built using plain CMake. The Debug preset is the preferred preset to work with during development. Juce together with other dependencies are fetched automatically during cmake configure step with the help of the <a href="https://cmake.org/cmake/help/latest/module/FetchContent.html">FetchContent</a> module in CMake.</p>
 <p>The React ui is built with Vite and needs to be installed before building any plugins with CMake can be done. Since Juce is fetched with FetchContent during the configuration step, CMake needs to be configured before React can be installed. During development you should run the dev server of the webview to be able to have hot reloading available.</p>
-<h3><a class="anchor" id="autotoc_md14"></a>
+<h3><a class="anchor" id="autotoc_md16"></a>
 Development</h3>
 <div class="fragment"><div class="line">$ cmake --preset Debug</div>
 <div class="line">$ npm install</div>
 <div class="line">$ cd &lt;plugin&gt;/ui</div>
 <div class="line">$ npm run dev # needs to be invoked inside the plugin ui folder where the React application resides</div>
 <div class="line">$ cmake --build build  --target &lt;plugin&gt;</div>
-</div><!-- fragment --><h3><a class="anchor" id="autotoc_md15"></a>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md17"></a>
 Release</h3>
 <div class="fragment"><div class="line">$ cmake --preset Release</div>
 <div class="line">$ npm install</div>
@@ -164,7 +164,7 @@ Release</h3>
 </div><!-- fragment --><blockquote class="doxtable">
 <p>&zwj;💡 <b>Note:</b> Documentation is generated using Doxygen and uses the latest version of available official docker image from <a href="https://github.com/doxygen/doxygen/releases">Doxygen</a>. Therefore, to be able to build the docs target you need to have docker installed and have the daemon running. </p>
 </blockquote>
-<h1><a class="anchor" id="autotoc_md16"></a>
+<h1><a class="anchor" id="autotoc_md18"></a>
 </h1>
 <p>The building of the plugins also builds the AudioPluginHost provided by JUCE so the plugins can be loaded in to a host. The mechanism for setting that up is already provided as debug configurations in launch.json. </p>
 </div></div><!-- PageDoc -->
