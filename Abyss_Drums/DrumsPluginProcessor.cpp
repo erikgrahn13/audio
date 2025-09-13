@@ -78,7 +78,7 @@ void DrumsAudioProcessor::setCurrentProgram(int index)
 const juce::String DrumsAudioProcessor::getProgramName(int index)
 {
     juce::ignoreUnused(index);
-    return {};
+    return "default";
 }
 
 void DrumsAudioProcessor::changeProgramName(int index, const juce::String &newName)
