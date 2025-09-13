@@ -14,41 +14,6 @@ DrumsAudioProcessor::DrumsAudioProcessor()
 #endif
       )
 {
-    // std::unique_ptr<AudioFormatReader> audioReader (wavFormat.createReaderFor (createAssetInputStream ("cello.wav").release(), true));
-    // auto test = wavFormat.createReaderFor(std::unique_ptr<juce::MemoryInputStream>(DrumSamples::reverb_ir_wav, DrumSamples::reverb_ir_wavSize, false), true);
-    // auto memoryInputStream  = std::unique_ptr<juce::MemoryInputStream>(DrumSamples::reverb_ir_wav, DrumSamples::reverb_ir_wavSize, false);
-    // auto memoryInputStream = std::make_unique<juce::MemoryInputStream>(DrumSamples::reverb_ir_wav, DrumSamples::reverb_ir_wavSize, false);
-    // auto *reader = wavFormat.createReaderFor(memoryInputStream.get(), true);
-
-    // for(int i = 0; i < DrumSamples::namedResourceListSize; ++i)
-    // {
-    //     int dataSizeInBytes;
-
-    //     auto *sampleData = DrumSamples::getNamedResource(DrumSamples::namedResourceList[i], dataSizeInBytes);
-
-    //     auto* reader = wavFormat.createReaderFor(
-    //         new juce::MemoryInputStream(sampleData, dataSizeInBytes, false),
-    //         true); // "true" = JUCE will delete it
-
-    //         juce::AudioSampleBuffer buffer(reader->numChannels, static_cast<int>(reader->lengthInSamples));
-    //         reader->read(&buffer, 0, static_cast<int>(reader->lengthInSamples), 0, true, true);
-    //         drumSamples.push_back(std::move(buffer));
-    //         delete reader;
-        
-    // }
-    
-    // auto* reader = wavFormat.createReaderFor(
-    //     new juce::MemoryInputStream(DrumSamples::reverb_ir_wav, DrumSamples::reverb_ir_wavSize, false),
-    //     true); // "true" = JUCE will delete it
-
-
-
-
-    // auto newSource = std::make_unique<juce::AudioFormatReaderSource>(reader, true);
-    // transportSource.setSource(newSource.get(), 0, nullptr, reader->sampleRate);
-    // audioFormatReaderSource.reset(newSource.release());
-    // previewSynth.addVoice(new juce::SamplerVoice());
-
 
 }
 
@@ -124,20 +89,18 @@ void DrumsAudioProcessor::changeProgramName(int index, const juce::String &newNa
 //==============================================================================
 void DrumsAudioProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
 {
-    // Use this method as the place to do any pre-playback
-    // initialisation that you need..
-    // juce::ignoreUnused(sampleRate, samplesPerBlock);
-    // transportSource.prepareToPlay(samplesPerBlock, sampleRate);
-
-    std::ignore = samplesPerBlock;
-    previewSynth.clearVoices();
-
-    for(int i = 0; i < 4; ++i)
+    if(previewResampler)
     {
-        previewSynth.addVoice(new SamplerVoice());
+        previewResampler->prepareToPlay(samplesPerBlock, sampleRate);
     }
-    previewSynth.setCurrentPlaybackSampleRate(sampleRate);
 
+    loadedDrumSamples.clearVoices();
+
+    for (int i = 0; i < 32; ++i)
+    {
+        loadedDrumSamples.addVoice(new juce::SamplerVoice());
+    }
+    loadedDrumSamples.setCurrentPlaybackSampleRate(sampleRate);
 }
 
 void DrumsAudioProcessor::releaseResources()
@@ -172,41 +135,33 @@ bool DrumsAudioProcessor::isBusesLayoutSupported(const BusesLayout &layouts) con
 
 void DrumsAudioProcessor::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages)
 {
-    juce::ignoreUnused(midiMessages);
-
     juce::ScopedNoDenormals noDenormals;
 
-    // if (shouldTrigger.exchange(false)) {
-    //     // if(!transportSource.isPlaying())
-    //     // {
-    //     //     transportSource.stop();
-    //     // }
-    //     transportSource.setPosition(0.0);
-    //     transportSource.start();
-    // }
-    // if (shouldTrigger.exchange(false)) {
-    //     if (!transportSource.isPlaying()) {
-    //         transportSource.setPosition(0.0);
-    //         transportSource.start();
-    //     } else {
-    //         transportSource.stop();
-    //         transportSource.setPosition(0.0);
-    //         transportSource.start(); // restart cleanly if already playing
-    //     }
-    // }
+    juce::MidiBuffer filtered;
+    for (const auto meta : midiMessages)
+    {
+        const auto &m = meta.getMessage();
+        if (m.isNoteOff())
+            continue;
 
-    // transportSource.getNextAudioBlock(juce::AudioSourceChannelInfo(buffer));
-    // if (!transportSource.isPlaying() && transportSource.getCurrentPosition() >= transportSource.getLengthInSeconds()) {
-    //     transportSource.stop();
-    // }
+        filtered.addEvent(m, meta.samplePosition);
+    }
+    midiMessages.swapWith(filtered);
 
-    previewSynth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
-//     for (int i = 0; i < numSamples; ++i)
-// {
-//     float g = gain.getNextValue();
-//     for (int channel = 0; channel < outputBuffer.getNumChannels(); ++channel)
-//         outputBuffer.getWritePointer(channel, startSample)[i] *= g;
-// }
+    buffer.clear();
+
+    if(previewResampler)
+    {
+        juce::SpinLock::ScopedTryLockType tl (previewLock);
+        if (tl.isLocked())
+        {
+            juce::AudioSourceChannelInfo channelInfo(buffer);
+            previewResampler->getNextAudioBlock(channelInfo);
+        }
+    }
+
+
+    loadedDrumSamples.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
 
 }
 
@@ -228,6 +183,11 @@ void DrumsAudioProcessor::getStateInformation(juce::MemoryBlock &destData)
     // You could do that either as raw data, or use the XML or ValueTree classes
     // as intermediaries to make it easy to save and load complex data.
     juce::ignoreUnused(destData);
+
+    juce::XmlElement state("DrumState");
+    state.setAttribute("DrumType", mDrumType);
+    state.setAttribute("DrumIndex", mDrumIndex);
+    copyXmlToBinary(state, destData);
 }
 
 void DrumsAudioProcessor::setStateInformation(const void *data, int sizeInBytes)
@@ -235,93 +195,116 @@ void DrumsAudioProcessor::setStateInformation(const void *data, int sizeInBytes)
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
     juce::ignoreUnused(data, sizeInBytes);
+    auto xmlState(getXmlFromBinary(data, sizeInBytes));
+
+    if (xmlState.get() != nullptr)
+    {
+        if (xmlState->hasTagName("DrumState"))
+        {
+            const auto drumType = xmlState->getIntAttribute("DrumType");
+            const auto drumIndex = xmlState->getIntAttribute("DrumIndex");
+
+            loadDrumSample(drumType, drumIndex);
+            mDrumType = drumType;
+            mDrumIndex = drumIndex;
+        }
+    }
 }
 
-void DrumsAudioProcessor::updatePreviewSample(int drumType, int index)
+void DrumsAudioProcessor::playPreviewSample(int drumType, int index)
 {
-    // if(index != previewSampleIndex.load())
-    // {
-    //     const char* name = DrumSamples::namedResourceList[index];
-    //     int dataSize = 0;
-    //     const void* data = DrumSamples::getNamedResource(name, dataSize);
-    
-    //     if (data != nullptr && dataSize > 0)
-    //     {
-    //         auto* reader = wavFormat.createReaderFor(
-    //             new juce::MemoryInputStream(data, dataSize, false),
-    //             true);
-    
-    //         if (reader != nullptr)
-    //         {
-    //             auto newSource = std::make_unique<juce::AudioFormatReaderSource>(reader, true);
-    
-    //             transportSource.stop();
-    //             transportSource.setSource(nullptr); // Clear existing source
-    
-    //             transportSource.setSource(newSource.get(), 0, nullptr, reader->sampleRate);
-    
-    //             // Keep the new source alive
-    //             audioFormatReaderSource = std::move(newSource);
-    //         }
-    //     }
-    //     previewSampleIndex.store(index);
-    // }
-    // shouldTrigger.store(true);
+    int dataSize = 0;
 
-    if(drumType != previousDrumTypeIndex)
+    const char *name;
+    const void *data;
+    if (drumType == 0) // Kicks
     {
-        int dataSize = 0;
-
-        const char* name;
-        const void* data;
-        if(drumType == 0) // Kicks
-        {
-            name =  KickSamples::namedResourceList[index];
-            data = KickSamples::getNamedResource(name, dataSize);
-        }
-        else if(drumType == 1) // Snare
-        {
-            name =  SnareSamples::namedResourceList[index];
-            data = SnareSamples::getNamedResource(name, dataSize);
-        }
-        else{
-            name = nullptr;
-            data = nullptr;
-        }
-        // const char* name = KickSamples::namedResourceList[index];
-        // const void* data = KickSamples::getNamedResource(name, dataSize);
-
-        if (data != nullptr && dataSize > 0)
-        {
-            auto* reader = wavFormat.createReaderFor(
-                new juce::MemoryInputStream(data, (size_t) dataSize, false),
-                true);
-
-            if (reader != nullptr)
-            {
-                juce::BigInteger allNotes;
-                allNotes.setRange(0, 128, true);
-
-                auto* sound = new juce::SamplerSound(
-                    name, *reader, allNotes, 60, 0.0, 0.0, 5.0); // name, reader, midiNoteRange, rootNote, attack, release, maxLength
-
-                previewSynth.clearSounds(); // Only one preview sound at a time
-                previewSynth.addSound(sound);
-
-
-                delete reader;
-
-                // Trigger MIDI note 60 (Middle C)
-                // juce::MidiMessage on = juce::MidiMessage::noteOn(1, 60, (juce::uint8) 127);
-            }
-        }
-        previousSampleIndex = index;
+        name = KickSamples::namedResourceList[index];
+        data = KickSamples::getNamedResource(name, dataSize);
     }
-    // previewSynth.allNotesOff(1, false);
-    // previewSynth.getVoice(0)->stopNote(0.0, false);
-    // previewSynth.noteOff(1, 60, 0.0f, false); // fade out previous voice cleanly
-    previewSynth.noteOn(1, 60, 1.0f);
+    else if (drumType == 1) // Snare
+    {
+        name = SnareSamples::namedResourceList[index];
+        data = SnareSamples::getNamedResource(name, dataSize);
+    }
+    else
+    {
+        name = nullptr;
+        data = nullptr;
+    }
 
+    if (data != nullptr && dataSize > 0)
+    {
+        auto *reader = wavFormat.createReaderFor(new juce::MemoryInputStream(data, (size_t)dataSize, false), true);
+
+        if (reader != nullptr)
+        {
+            juce::BigInteger allNotes;
+            allNotes.setRange(0, 128, true);
+            
+            audioFormatReaderSource.reset();
+            audioFormatReaderSource = std::make_unique<juce::AudioFormatReaderSource>(reader, true);
+            
+            const juce::SpinLock::ScopedLockType g (previewLock);
+            previewResampler.reset();
+            previewResampler = std::make_unique<juce::ResamplingAudioSource>(audioFormatReaderSource.get(), false);
+            previewResampler->setResamplingRatio(reader->sampleRate / getSampleRate());
+
+            previewResampler->prepareToPlay(getBlockSize(), getSampleRate());
+            audioFormatReaderSource->setNextReadPosition(0);
+        }
+    }
+}
+
+void DrumsAudioProcessor::loadDrumSample(int drumType, int index)
+{
+
+    int dataSize = 0;
+
+    const char *name;
+    const void *data;
+    juce::BigInteger note;
+
+    if (drumType == 0) // Kicks
+    {
+        note.setBit(36); // C1 is kick drums
+        name = KickSamples::namedResourceList[index];
+        data = KickSamples::getNamedResource(name, dataSize);
+    }
+    else if (drumType == 1) // Snare
+    {
+        note.setBit(38); // D1 is snare drums
+        name = SnareSamples::namedResourceList[index];
+        data = SnareSamples::getNamedResource(name, dataSize);
+    }
+    else
+    {
+        // TODO: handle Toms later, need to come up with a plain how to handle toms
+        name = nullptr;
+        data = nullptr;
+    }
+
+    if (data != nullptr && dataSize > 0)
+    {
+        auto *reader = wavFormat.createReaderFor(new juce::MemoryInputStream(data, (size_t)dataSize, false), true);
+
+        if (reader != nullptr)
+        {
+            const double maxLenSecs = reader->lengthInSamples / reader->sampleRate;
+
+            auto *sound =
+                new juce::SamplerSound(name, *reader, note, note.getHighestBit(), 0.0, 0.003,
+                                maxLenSecs); // name, reader, midiNoteRange, rootNote, attack, release, maxLength
+
+            loadedDrumSamples.removeSound(0);
+            loadedDrumSamples.addSound(sound);
+            mDrumType = drumType;
+            mDrumIndex = index;
+
+
+            delete reader;
+        }
+    }
 }
 
 //==============================================================================

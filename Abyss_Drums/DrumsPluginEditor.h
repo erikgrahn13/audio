@@ -16,9 +16,9 @@ class DrumsAudioProcessorEditor final : public juce::AudioProcessorEditor
     
     void openSettingsView(const juce::Array<juce::var> &args,
                         juce::WebBrowserComponent::NativeFunctionCompletion completion);
-    void nativeFunction(const juce::Array<juce::var> &args,
+    void playPreviewSample(const juce::Array<juce::var> &args,
                         juce::WebBrowserComponent::NativeFunctionCompletion completion);
-    void loadSample(const juce::Array<juce::var> &args,
+    void loadDrumSample(const juce::Array<juce::var> &args,
                         juce::WebBrowserComponent::NativeFunctionCompletion completion);
 
   private:

@@ -1,61 +1,75 @@
 import './App.css'
 import DrumTypes from "./components/DrymType/DrumType";
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
 import DrumSample from './components/DrumSample/DrumSample';
 import Slots from "./components/Slots/Slots"
 import Droppable from './components/Droppable/Droppable';
-import React, { useState } from 'react';
-import { DeathMetalSlider } from "@abyss-lounge/components";
+import React, {useState, useEffect} from 'react';
 import * as Juce from "juce-framework-frontend";
 
 
 
 import { DndContext, PointerSensor, useSensor, useSensors, DragOverlay, defaultDropAnimationSideEffects } from "@dnd-kit/core"
 
+const data = window.__JUCE__.initialisationData;
+const openSettingsView = Juce.getNativeFunction("openSettingsView");
+const loadDrumSample = Juce.getNativeFunction("loadDrumSample");
 
+// Get sample arrays
+const kickSamples = data?.kickSamples?.[0] || [];
+const snareSamples = data?.snareSamples?.[0] || [];
 
 function App() {
-  const data = window.__JUCE__.initialisationData;
-  const openSettingsView = Juce.getNativeFunction("openSettingsView");
-  
-  const handleSettings = (e) => {
-    openSettingsView("one", 2, null).then((result) => { });
+
+  const handleSettings = () => {
+    openSettingsView("one", 2, null);
   }
 
-  const [isDropped, setIsDropped] = useState(false);
   const [activeId, setActiveId] = useState(null);
   const [activeLabel, setActiveLabel] = useState("");
-  const [loadedSample1, setLoadedSample1] = useState({
-    name: null,
-    index: 0,
-    type: null
-  });
-  const [loadedSample2, setLoadedSample2] = useState({
-    name: null,
-    index: 0,
-    type: null
-  });
-  const [loadedSample3, setLoadedSample3] = useState({
-    name: null,
-    index: 0,
-    type: null
-  });
-  const [loadedSample4, setLoadedSample4] = useState({
-    name: null,
-    index: 0,
-    type: null
-  });
-  const [loadedSample5, setLoadedSample5] = useState({
-    name: null,
-    index: 0,
-    type: null
+  const [loadedSample1, setLoadedSample1] = useState(() => {
+    try {
+      const saved = sessionStorage.getItem('slot1');
+      if (saved) {
+        return JSON.parse(saved);
+      }
+    } catch (error) {
+      console.error('Failed to parse saved slot data:', error);
+    }
+    
+    // Initialize with values from C++
+    const loadedSampleArray = data.loadedSample || [];
+    const currentDrumType = loadedSampleArray[0];
+    console.log(`Can1 ${loadedSampleArray}`);
+    
+    let sampleName = null;
+    if (currentDrumType[0] === 0 && kickSamples[currentDrumType[1]]) {
+      // Kick sample
+      sampleName = kickSamples[currentDrumType[1]].replace(/_wav$/i, '');
+    } else if (currentDrumType[0] === 1 && snareSamples[currentDrumType[1]]) {
+      // Snare sample
+      sampleName = snareSamples[currentDrumType[1]].replace(/_wav$/i, '');
+    }
+
+    return {
+      name: sampleName,
+      index: currentDrumType[1],
+      type: currentDrumType[0]
+    };
   });
 
+  // Function to update slot state and persist it
+  const updateSlot1 = (newState) => {
+    setLoadedSample1(newState);
+    try {
+      sessionStorage.setItem('slot1', JSON.stringify(newState));
+    } catch (error) {
+      console.error('Failed to save slot data:', error);
+    }
+  };
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
-      activationConstraint: { distance: 0 }, // pixels before drag starts
+      activationConstraint: { distance: 2 }, // pixels before drag starts
     })
   );
 
@@ -65,60 +79,21 @@ function App() {
   }
 
   function handleDragEnd(event) {
-    console.log(`erik4 ${event.over.id}`);
     if (event.over && event.over.id === 'slot1') {
-      console.log(`erik ${event.active.data?.current?.index}`);
-      const data = event.active.data?.current;
-      setLoadedSample1({
-        name: data.label,
-        index: data.index,
-        type: data.type
+      const dragData = event.active.data?.current;
+      const newSlotState = {
+        name: dragData.label,
+        index: dragData.index,
+        type: dragData.type
+      };
 
-      });
+      updateSlot1(newSlotState);
+      loadDrumSample(dragData.type, dragData.index, 0);
     }
-    else if (event.over && event.over.id === 'slot2') {
-      console.log(`erik ${event.active.data?.current?.index}`);
-      const data = event.active.data?.current;
-      setLoadedSample2({
-        name: data.label,
-        index: data.index,
-        type: data.type
-
-      });
+    else {
+      setActiveId(null);
+      setActiveLabel("");
     }
-    else if (event.over && event.over.id === 'slot3') {
-      console.log(`erik ${event.active.data?.current?.index}`);
-      const data = event.active.data?.current;
-      setLoadedSample3({
-        name: data.label,
-        index: data.index,
-        type: data.type
-
-      });
-    }
-    else if (event.over && event.over.id === 'slot4') {
-      console.log(`erik ${event.active.data?.current?.index}`);
-      const data = event.active.data?.current;
-      setLoadedSample4({
-        name: data.label,
-        index: data.index,
-        type: data.type
-
-      });
-    }
-    else if (event.over && event.over.id === 'slot5') {
-      const data = event.active.data?.current;
-      console.log(`erik5 ${data.name} ${data.index} ${data.type}`);
-      setLoadedSample5({
-        name: data.label,
-        index: data.index,
-        type: data.type
-
-      });
-    }
-
-    setActiveId(null);
-    setActiveLabel("");
   };
 
   const dropAnimation = {
@@ -128,69 +103,30 @@ function App() {
     }),
   };
 
+
+
   return (
     <>
       <DndContext autoScroll={false} sensors={sensors} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-        <div style={{ display: "flex", flexDirection: "column", minHeight: '100vh' }}>
+        <div style={{ display: "flex", flexDirection: "column" }}>
           <DrumTypes></DrumTypes>
-          <div style={{
-            position: 'relative',
-            flex: '1 1 auto',
-            display: 'flex',
-            // flexDirection: 'column',
-            border: '1px solid white',
-            borderRadius: 10,
-            marginBottom: 20,
-            gap: 20,
-            padding: '16px 16px 96px 16px', // bottom padding ~= bar height
-          }}>
-            <div style={{ border: "1px solid white", borderRadius: 12 }}>
-              <button>M</button>
-              <button>S</button>
-              <DeathMetalSlider orientation='vertical' width={24} height={200}></DeathMetalSlider>
-              <br />
-              <Droppable id="slot1">
-                <Slots name={loadedSample1.name} index={loadedSample1.index} type={loadedSample1.type} />
-              </Droppable>
-            </div>
-            <div style={{ border: "1px solid white", borderRadius: 12 }}>
-              <DeathMetalSlider orientation='vertical' width={24} height={200}></DeathMetalSlider>
-              <br />
-              <Droppable id="slot2">
-                <Slots name={loadedSample2.name} index={loadedSample2.index} type={loadedSample2.type} />
-              </Droppable>
-            </div>
-            <div style={{ border: "1px solid white", borderRadius: 12 }}>
-              <DeathMetalSlider orientation='vertical' width={24} height={200}></DeathMetalSlider>
-              <br />
-              <Droppable id="slot3">
-                <Slots name={loadedSample3.name} index={loadedSample3.index} type={loadedSample3.type} />
-              </Droppable>
-            </div>
-            <div style={{ border: "1px solid white", borderRadius: 12 }}>
-              <DeathMetalSlider orientation='vertical' width={24} height={200}></DeathMetalSlider>
-              <br />
-              <Droppable id="slot4">
-                <Slots name={loadedSample4.name} index={loadedSample4.index} type={loadedSample4.type} />
-              </Droppable>
-            </div>
-            <div style={{ border: "1px solid white", borderRadius: 12 }}>
-              <DeathMetalSlider orientation='vertical' width={24} height={200}></DeathMetalSlider>
-              <br />
-              <Droppable id="slot5">
-                <Slots name={loadedSample5.name} index={loadedSample5.index} type={loadedSample5.type} />
-              </Droppable>
-            </div>
-
-          </div>
+          <Droppable id="slot1">
+            <Slots name={loadedSample1.name} index={loadedSample1.index} type={loadedSample1.type} />
+          </Droppable>
+          {data.isStandalone[0] && <button style={{
+            bottom: "20px", right: "20px",
+            fontFamily: "WebFont, sans-serif",
+            fontSize: "30px",
+            backgroundColor: "black",
+            color: "white",
+            border: "none",
+            position: "absolute"
+          }} className="settings" onClick={handleSettings}></button>}
         </div>
-
-        {/* </div> */}
         <DragOverlay dropAnimation={dropAnimation} >
           {activeId ? <DrumSample name={activeLabel || activeId} /> : null}
         </DragOverlay>
       </DndContext>
-      {data.isStandalone[0] && <button className="settings" onClick={handleSettings}></button>}
     </>
   )
 }

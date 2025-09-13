@@ -2,10 +2,9 @@
 
 #include <JuceHeader.h>
 #include <juce_audio_processors/juce_audio_processors.h>
+#include "DrumSampler.h"
 
-#pragma once
 
-#include <JuceHeader.h>
 
 
 //==============================================================================
@@ -47,24 +46,20 @@ class DrumsAudioProcessor final : public juce::AudioProcessor
     //==============================================================================
     void getStateInformation(juce::MemoryBlock &destData) override;
     void setStateInformation(const void *data, int sizeInBytes) override;
-    std::atomic<bool> shouldTrigger { false };
-    std::atomic<int> previewSampleIndex { -1};
-    std::atomic<bool> shouldLoadPreviewSample { false };
 
-    void updatePreviewSample(int drumType, int index);
+    void playPreviewSample(int drumType, int index);
+    void loadDrumSample(int drumType, int index);
+    int mDrumType{-1};
+    int mDrumIndex{-1};
 
   private:
     //==============================================================================
 
-    int previousSampleIndex { -1 };
-    int previousDrumTypeIndex { -1 };
-    bool toggleNote{false};
-    // juce::SmoothedValue<float> gain;
     juce::WavAudioFormat wavFormat;
-    juce::Synthesiser previewSynth;
-    juce::AudioTransportSource transportSource;
+    DrumSampler loadedDrumSamples;
     std::unique_ptr<juce::AudioFormatReaderSource> audioFormatReaderSource;
-    std::vector<juce::AudioSampleBuffer> drumSamples;
+    std::unique_ptr<juce::ResamplingAudioSource>   previewResampler;
+    juce::SpinLock previewLock;
 
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(DrumsAudioProcessor)

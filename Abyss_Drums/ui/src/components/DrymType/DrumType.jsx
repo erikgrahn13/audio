@@ -22,7 +22,7 @@ import {
 
 const kickSamples = window.__JUCE__?.initialisationData?.kickSamples[0];
 const snareSamples = window.__JUCE__?.initialisationData?.snareSamples[0];
-const nativeFunction = Juce.getNativeFunction("nativeFunction");
+const playPreviewSample = Juce.getNativeFunction("playPreviewSample");
 
 
 export default function DrumColumns() {
@@ -30,41 +30,32 @@ export default function DrumColumns() {
   const lockedRef = useRef(false);
   const [selectedId, setSelectedId] = useState(null);
 
-  useDndMonitor({
-    onDragStart() {
-      lockedRef.current = true;
-      if (paperRef.current) paperRef.current.style.overflowY = "hidden";
-
-    },
-    onDragEnd() {
-      lockedRef.current = false;
-      if (paperRef.current) paperRef.current.style.overflowY = "auto";
-
-    },
-    onDragCancel() {
-      lockedRef.current = false;
-      if (paperRef.current) paperRef.current.style.overflowY = "auto";
-    },
-  });
-
   function handleKick(event, itemId) {
-    nativeFunction(0, itemId); // 0 is kicks
+    playPreviewSample(0, itemId); // 0 is kicks
   }
 
   function handleSnare(event, itemId) {
-    nativeFunction(1, itemId); // 1 is snares
+    playPreviewSample(1, itemId); // 1 is snares
   }
 
   return (
-    <Box sx={{ height: '50vh', display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr 1fr' }, gap: 1, p: 1 }}>
-      <Paper ref={paperRef} sx={{ bgcolor: "black", color: "white", overflowY: "auto", border: "1px white solid" }}>
-        <List dense subheader={<ListSubheader sx={{ bgcolor: "black", color: "white" }}>Kicks</ListSubheader>}>
+    <Box sx={{ height: '52vh', minHeight: "410px", display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 1, p: 1 }}>
+      <Paper ref={paperRef} sx={{
+        bgcolor: "black", color: "white", overflowY: "auto", border: "1px white solid", "&::-webkit-scrollbar": { width: 8 },
+        "&::-webkit-scrollbar-track": { background: "black" },
+        "&::-webkit-scrollbar-thumb": {
+          backgroundColor: "gray",
+          borderRadius: 8,
+          // border: "1px solid white",
+        },
+      }}>
+        <List dense subheader={<ListSubheader sx={{ bgcolor: "black", color: "white", fontFamily: "DeathMetalFont2" }}>Kicks</ListSubheader>} sx={{ fontFamily: "DeathMetalFont2" }}>
           {kickSamples.map((name, i) => {
             const id = `kick-${i}`;
             return (
-              <Draggable key={id} id={id} data={{ label: name, index: i, type: 0 }}> 
+              <Draggable key={id} id={id} data={{ label: name, index: i, type: 0 }}>
                 <DrumSample
-                  name={name}
+                  name={name.replace(/_wav$/i, '')}
                   selected={selectedId === id}
                   onClick={() => {
                     setSelectedId(id);        // highlight this row
@@ -77,14 +68,22 @@ export default function DrumColumns() {
         </List>
       </Paper>
 
-      <Paper ref={paperRef} sx={{ bgcolor: "black", color: "white", overflowY: "auto", border: "1px white solid" }}>
-        <List dense subheader={<ListSubheader sx={{ bgcolor: "black", color: "white" }}>Snares</ListSubheader>}>
+      <Paper ref={paperRef} sx={{
+        bgcolor: "black", color: "white", overflowY: "auto", border: "1px white solid", "&::-webkit-scrollbar": { width: 8 },
+        "&::-webkit-scrollbar-track": { background: "black" },
+        "&::-webkit-scrollbar-thumb": {
+          backgroundColor: "gray",
+          borderRadius: 8,
+          // border: "2px solid black",
+        },
+      }}>
+        <List dense subheader={<ListSubheader sx={{ bgcolor: "black", color: "white", fontFamily: "DeathMetalFont2" }}>Snares</ListSubheader>} sx={{ fontFamily: "DeathMetalFont2" }}>
           {snareSamples.map((name, i) => {
             const id = `snare-${i}`;
             return (
-              <Draggable key={id} id={id} data={{ label: name, index: i, type: 1 }}> 
+              <Draggable key={id} id={id} data={{ label: name, index: i, type: 1 }}>
                 <DrumSample
-                  name={name}
+                  name={name.replace(/_wav$/i, '')}
                   selected={selectedId === id}
                   onClick={() => {
                     setSelectedId(id);        // highlight this row
@@ -94,16 +93,6 @@ export default function DrumColumns() {
               </Draggable>
             );
           })}
-        </List>
-      </Paper>
-
-      <Paper sx={{ bgcolor: "black", color: "white", overflowY: 'auto', border: "1px white solid" }}>
-        <List dense subheader={<ListSubheader sx={{ bgcolor: "black", color: "white" }}>Snares</ListSubheader>}>
-          {snareSamples.map((name, i) => (
-            <ListItemButton key={`snare-${i}`} onClick={() => handleSnare(name, i)}>
-              <ListItemText primary={name} />
-            </ListItemButton>
-          ))}
         </List>
       </Paper>
     </Box>

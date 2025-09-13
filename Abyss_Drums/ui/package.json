@@ -17,7 +17,9 @@
     "@mui/x-tree-view": "^8.10.2",
     "juce-framework-frontend": "file:../../external/juce/modules/juce_gui_extra/native/javascript",
     "react": "^19.1.1",
-    "react-dom": "^19.1.1"
+    "react-dom": "^19.1.1",
+    "@abyss-lounge/resources": "file:../../resources"
+
   },
   "devDependencies": {
     "@eslint/js": "^9.33.0",

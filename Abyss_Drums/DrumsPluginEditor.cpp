@@ -31,10 +31,22 @@ DrumsAudioProcessorEditor::DrumsAudioProcessorEditor(DrumsAudioProcessor &p)
                             sampleVarList.add(SnareSamples::namedResourceList[i]);
                             return juce::var(sampleVarList);
                         }())
-                          .withNativeFunction(juce::Identifier{"nativeFunction"},
+                        .withInitialisationData("loadedSample", [this]() {
+                            juce::Array<juce::var> loadedSample;
+                            loadedSample.add(processorRef.mDrumType);
+                            loadedSample.add(processorRef.mDrumIndex);
+                            
+                            return juce::var(loadedSample);
+                        }())
+                          .withNativeFunction(juce::Identifier{"playPreviewSample"},
                                                [this](const juce::Array<juce::var> &args,
                                                       juce::WebBrowserComponent::NativeFunctionCompletion completion) {
-                                                   nativeFunction(args, std::move(completion));
+                                                   playPreviewSample(args, std::move(completion));
+                                               })
+                            .withNativeFunction(juce::Identifier{"loadDrumSample"},
+                                               [this](const juce::Array<juce::var> &args,
+                                                      juce::WebBrowserComponent::NativeFunctionCompletion completion) {
+                                                   loadDrumSample(args, std::move(completion));
                                                })
                             .withNativeFunction(juce::Identifier{"openSettingsView"},
                                                                            [this](const juce::Array<juce::var> &args,
@@ -47,15 +59,16 @@ DrumsAudioProcessorEditor::DrumsAudioProcessorEditor(DrumsAudioProcessor &p)
     juce::ignoreUnused(processorRef);
 
 #if !defined NDEBUG
-    webViewComponent.goToURL("http://127.0.0.1:5173/build/Drums/ui/index.html");
+    webViewComponent.goToURL("http://localhost:5173/");
 #else
-    webViewComponent.goToURL(WebViewComponent::getResourceProviderRoot());
+    webViewComponent.goToURL(WebBrowserComponent::getResourceProviderRoot());
 #endif
     addAndMakeVisible(webViewComponent);
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
-    setResizable(true, true);
-    setSize(1400, 800);
+    setResizable(true, false);
+    setSize(500, 560);
+    setResizeLimits(500, 560, 500, 560);
 }
 
 DrumsAudioProcessorEditor::~DrumsAudioProcessorEditor()
@@ -81,26 +94,24 @@ void DrumsAudioProcessorEditor::openSettingsView(const juce::Array<juce::var> &a
     juce::StandalonePluginHolder::getInstance()->showAudioSettingsDialog();
 }
 
-void DrumsAudioProcessorEditor::nativeFunction(const juce::Array<juce::var> &args,
+void DrumsAudioProcessorEditor::playPreviewSample(const juce::Array<juce::var> &args,
                                                juce::WebBrowserComponent::NativeFunctionCompletion completion)
 {
     std::ignore = completion;
     const int drumType = args[0].toString().getIntValue();
     const int index = args[1].toString().getIntValue();
 
-    // auto adjustedIndex = drumType == 1 ? index - 100 : index;
-
-    processorRef.updatePreviewSample(drumType, index);
+    processorRef.playPreviewSample(drumType, index);
 }
 
-void DrumsAudioProcessorEditor::loadSample(const juce::Array<juce::var> &args,
+void DrumsAudioProcessorEditor::loadDrumSample(const juce::Array<juce::var> &args,
                                            juce::WebBrowserComponent::NativeFunctionCompletion completion)
 {
     std::ignore = completion;
-    std::ignore = args;
+    const int drumType = args[0].toString().getIntValue();
+    const int index = args[1].toString().getIntValue();
 
-    // processorRef.loadSampleInToSlot(drumType, index, slot);
-
+    processorRef.loadDrumSample(drumType, index);
 }
 
 std::optional<juce::WebBrowserComponent::Resource> DrumsAudioProcessorEditor::getResource(const juce::String &url)

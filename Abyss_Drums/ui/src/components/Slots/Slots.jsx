@@ -1,31 +1,31 @@
 import * as Juce from "juce-framework-frontend";
-// import "./Slots.module.css"
 
-const nativeFunction = Juce.getNativeFunction("nativeFunction");
+const playPreviewSample = Juce.getNativeFunction("playPreviewSample");
 
 
-function Slots({isOver, setNodeRef, name, index, type, children}) {
+function Slots({ isOver, setNodeRef, name, index, type }) {
 
   function handleClick() {
-    console.log(`slot clicked ${name} ${index} ${type}`);
-    if(!name) return;
-    nativeFunction(type, index); // 0 is kicks
-
+    if (!name) return;
+    playPreviewSample(type, index);
   }
 
   return (
-    <button ref={setNodeRef} 
-    style={{width: 120,
-            height: 120,
-            backgroundColor: isOver ? "white" : "gray",
-            border: "none",
-            borderRadius: "12px",
-    }} onClick={handleClick}
-        onMouseDown={(e) => { e.currentTarget.style.boxShadow = '0 0 5px yellow'; }}
-         onMouseUp={(e) => { e.currentTarget.style.boxShadow = ''; }}
-         onMouseLeave={(e) => { e.currentTarget.style.boxShadow = ''; }}
-        >
-      {name ?? ""} 
+    <button ref={setNodeRef}
+      style={{
+        padding: 40,
+        margin: "10px 80px 0px 80px",
+        backgroundColor: isOver ? "white" : "gray",
+        fontFamily: "DeathMetalFont2",
+        borderRadius: "12px",
+      }} onMouseDown={(e) => { 
+        e.currentTarget.style.boxShadow = '0 0 5px yellow'; 
+        handleClick();
+      }}
+      onMouseUp={(e) => { e.currentTarget.style.boxShadow = ''; }}
+      onMouseLeave={(e) => { e.currentTarget.style.boxShadow = ''; }}
+    >
+      {name?.replace(/_wav$/i, '') ?? ""}
     </button>
   );
 }

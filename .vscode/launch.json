@@ -4,6 +4,18 @@
   // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [
+    
+    {
+      "name": "Abyss Drums (Windows)",
+      "type": "cppvsdbg",
+      "request": "launch",
+      "program": "${workspaceRoot}/build/_deps/juce-build/extras/AudioPluginHost/AudioPluginHost_artefacts/Debug/AudioPluginHost.exe",
+      "args": ["${workspaceRoot}/Abyss_Drums/Abyss_Drums.filtergraph"],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}",
+      "console": "newExternalWindow",
+      "preLaunchTask": "CMake: build",
+    },
     {
       "name": "EQ (Windows)",
       "type": "cppvsdbg",
@@ -11,6 +23,7 @@
       "program": "${workspaceRoot}/build/_deps/juce-build/extras/AudioPluginHost/AudioPluginHost_artefacts/Debug/AudioPluginHost.exe",
       "args": ["${workspaceRoot}/EQ/EQ.filtergraph"],
       "stopAtEntry": false,
+      "cwd": "${workspaceFolder}",
       "console": "newExternalWindow",
       "preLaunchTask": "CMake: build"
     },
@@ -21,6 +34,7 @@
       "program": "${workspaceRoot}/build/_deps/juce-build/extras/AudioPluginHost/AudioPluginHost_artefacts/Debug/AudioPluginHost.exe",
       "args": ["${workspaceRoot}/Black_Lounge/Black_Lounge.filtergraph"],
       "stopAtEntry": false,
+      "cwd": "${workspaceFolder}",
       "console": "newExternalWindow",
       "preLaunchTask": "CMake: build"
     },
