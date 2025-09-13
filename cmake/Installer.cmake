@@ -67,7 +67,7 @@ function(create_installer target)
 
         include(CPackComponent)
 
-        set(CPACK_INNOSETUP_${target}VST3_INSTALL_DIRECTORY "{commoncf64}\\VST3")
+        set(CPACK_INNOSETUP_${target}VST3_INSTALL_DIRECTORY "{commoncf64}/VST3")
 
         cpack_add_install_type(Full DISPLAY_NAME "Full installation")
 
