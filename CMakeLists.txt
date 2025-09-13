@@ -23,7 +23,6 @@ if(NOT FETCHCONTENT_FULLY_DISCONNECTED)
     include(NAM)
 
     include(WebView)
-    set(CMAKE_COMPILE_WARNING_AS_ERROR ON)
     add_subdirectory(utilities)
     add_subdirectory(resources)
     add_subdirectory(EQ)

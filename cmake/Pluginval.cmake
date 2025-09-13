@@ -8,6 +8,12 @@ function(enable_pluginval_testing target)
 
     message(STATUS "✅ ${target}: ${bundle_id}")
 
+    if(MSVC)
+        target_compile_options(${target} PRIVATE /WX)
+    else()
+        target_compile_options(${target} PRIVATE -Werror)
+    endif()
+
     # Pluginval testing
     get_target_property(PLUGIN_NAME ${PROJECT_NAME} JUCE_PRODUCT_NAME)
 
