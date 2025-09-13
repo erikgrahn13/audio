@@ -307,6 +307,13 @@ void DrumsAudioProcessor::loadDrumSample(int drumType, int index)
     }
 }
 
+void DrumsAudioProcessor::clearSample()
+{
+    loadedDrumSamples.removeSound(0);
+    mDrumType = -1;
+    mDrumIndex = -1;
+}
+
 //==============================================================================
 // This creates new instances of the plugin..
 juce::AudioProcessor *JUCE_CALLTYPE createPluginFilter()
