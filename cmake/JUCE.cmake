@@ -20,6 +20,15 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(juce)
 
+file(GLOB_RECURSE JUCE_SOURCES
+    ${juce_SOURCE_DIR}/modules/**/*.cpp
+    ${juce_SOURCE_DIR}/modules/**/*.mm
+)
+
+foreach(juce_file IN LISTS JUCE_SOURCES)
+    set_source_files_properties(${juce_file} PROPERTIES COMPILE_FLAGS "-Wno-error")
+endforeach()
+
 set(CMAKE_OSX_DEPLOYMENT_TARGET "12.7" CACHE STRING "Minimum OS X deployment version" FORCE)
 set_directory_properties(PROPERTIES JUCE_COMPANY_NAME ${CMAKE_PROJECT_NAME})
 set(ABYSS_LOUNGE_BUNDLE_ID "com.abyss-lounge")
