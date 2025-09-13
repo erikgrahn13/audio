@@ -29,7 +29,7 @@ AbyssAudioProcessorEditor::AbyssAudioProcessorEditor(AbyssAudioProcessor &p)
         std::make_unique<juce::WebToggleButtonParameterAttachment>(*bypassParam, bypassRelay, nullptr);
 
 #if !defined NDEBUG
-    webBrowserComponent.goToURL("http://127.0.0.1:5173/build/Abyss/ui/index.html");
+    webBrowserComponent.goToURL("http://localhost:5173/");
 #else
     webBrowserComponent.goToURL(WebBrowserComponent::getResourceProviderRoot());
 #endif
@@ -52,66 +52,6 @@ void AbyssAudioProcessorEditor::resized()
     webBrowserComponent.setBounds(bounds);
 }
 
-// #if defined NDEBUG
-// static std::vector<std::byte> streamToVector(juce::InputStream &stream)
-// {
-//     using namespace juce;
-//     const auto sizeInBytes = static_cast<size_t>(stream.getTotalLength());
-//     std::vector<std::byte> result(sizeInBytes);
-//     stream.setPosition(0);
-//     [[maybe_unused]] const auto bytesRead = stream.read(result.data(), result.size());
-//     jassert(bytesRead == static_cast<ssize_t>(sizeInBytes));
-//     return result;
-// }
-
-// #endif
-
-// static std::vector<std::byte> getWebViewFileAsBytes(const juce::String &filepath)
-// {
-//     std::ignore = filepath;
-// #if defined NDEBUG
-//     juce::MemoryInputStream zipStream{webview_files::webview_files_zip, webview_files::webview_files_zipSize, false};
-//     juce::ZipFile zipFile{zipStream};
-
-//     if (auto *zipEntry = zipFile.getEntry(ZIPPED_FILES_PREFIX + filepath))
-//     {
-//         const std::unique_ptr<juce::InputStream> entryStream{zipFile.createStreamForEntry(*zipEntry)};
-
-//         if (entryStream == nullptr)
-//         {
-//             jassertfalse;
-//             return {};
-//         }
-
-//         return streamToVector(*entryStream);
-//     }
-// #endif
-
-//     return {};
-// }
-
-// static const char *getMimeForExtension(const String &extension)
-// {
-//     static const std::unordered_map<String, const char *> mimeMap = {{{"htm"}, "text/html"},
-//                                                                      {{"html"}, "text/html"},
-//                                                                      {{"txt"}, "text/plain"},
-//                                                                      {{"jpg"}, "image/jpeg"},
-//                                                                      {{"jpeg"}, "image/jpeg"},
-//                                                                      {{"svg"}, "image/svg+xml"},
-//                                                                      {{"ico"}, "image/vnd.microsoft.icon"},
-//                                                                      {{"json"}, "application/json"},
-//                                                                      {{"png"}, "image/png"},
-//                                                                      {{"css"}, "text/css"},
-//                                                                      {{"map"}, "application/json"},
-//                                                                      {{"js"}, "text/javascript"},
-//                                                                      {{"woff2"}, "font/woff2"}};
-
-//     if (const auto it = mimeMap.find(extension.toLowerCase()); it != mimeMap.end())
-//         return it->second;
-
-//     jassertfalse;
-//     return "";
-// }
 
 std::optional<juce::WebBrowserComponent::Resource> AbyssAudioProcessorEditor::getResource(const juce::String &url)
 {

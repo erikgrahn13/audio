@@ -2,6 +2,7 @@
     "name": "abyss-lounge",
     "workspaces": [
         "Abyss/ui",
-        "Black_Lounge/ui"
+        "Black_Lounge/ui",
+        "Abyss_Drums/ui"
     ]
 }

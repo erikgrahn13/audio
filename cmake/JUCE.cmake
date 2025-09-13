@@ -1,11 +1,11 @@
 
 
 if(WIN32)
-  set(JUCE_URL "https://github.com/juce-framework/JUCE/releases/download/8.0.7/juce-8.0.7-windows.zip")
+  set(JUCE_URL "https://github.com/juce-framework/JUCE/releases/download/8.0.9/juce-8.0.9-windows.zip")
 elseif(APPLE)
-  set(JUCE_URL "https://github.com/juce-framework/JUCE/releases/download/8.0.7/juce-8.0.7-osx.zip")
+  set(JUCE_URL "https://github.com/juce-framework/JUCE/releases/download/8.0.9/juce-8.0.9-osx.zip")
 elseif(UNIX)
-  set(JUCE_URL "https://github.com/juce-framework/JUCE/releases/download/8.0.7/juce-8.0.7-linux.zip")
+  set(JUCE_URL "https://github.com/juce-framework/JUCE/releases/download/8.0.9/juce-8.0.9-linux.zip")
 else()
   message(FATAL_ERROR "Not supported platform")
 endif()
@@ -19,6 +19,15 @@ FetchContent_Declare(
 )
 
 FetchContent_MakeAvailable(juce)
+
+file(GLOB_RECURSE JUCE_SOURCES
+    ${juce_SOURCE_DIR}/modules/**/*.cpp
+    ${juce_SOURCE_DIR}/modules/**/*.mm
+)
+
+foreach(juce_file IN LISTS JUCE_SOURCES)
+    set_source_files_properties(${juce_file} PROPERTIES COMPILE_FLAGS "-Wno-error")
+endforeach()
 
 set(CMAKE_OSX_DEPLOYMENT_TARGET "12.7" CACHE STRING "Minimum OS X deployment version" FORCE)
 set_directory_properties(PROPERTIES JUCE_COMPANY_NAME ${CMAKE_PROJECT_NAME})

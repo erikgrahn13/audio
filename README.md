@@ -10,7 +10,7 @@ This is an onging project, and more plugins will be added in time!
 ### Black Lounge 🌭🪚
 ![Black Lounge](docs/images/Black_Lounge.png)
 
-A guitar amplifier in honor of the Black Lounge studios in Sweden.
+A guitar amplifier in honor of the legendary Black Lounge Studios owned by Jonas Kjellgren.
 - Includes a tuner visible to the user all the time.
 - A built-in denoiser with a knob to adjust the threshold that can be toggled on and off.
 - A gain knob to be able to boost and attenuate the level that going in to the amplifier. 
