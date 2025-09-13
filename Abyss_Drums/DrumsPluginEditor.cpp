@@ -48,6 +48,11 @@ DrumsAudioProcessorEditor::DrumsAudioProcessorEditor(DrumsAudioProcessor &p)
                                                       juce::WebBrowserComponent::NativeFunctionCompletion completion) {
                                                    loadDrumSample(args, std::move(completion));
                                                })
+                            .withNativeFunction(juce::Identifier{"clearSample"},
+                                                [this](const juce::Array<juce::var> &args,
+                                                    juce::WebBrowserComponent::NativeFunctionCompletion completion) {
+                                                    clearSample(args, std::move(completion));
+                                               })
                             .withNativeFunction(juce::Identifier{"openSettingsView"},
                                                                            [this](const juce::Array<juce::var> &args,
                                                       juce::WebBrowserComponent::NativeFunctionCompletion completion) {
@@ -112,6 +117,14 @@ void DrumsAudioProcessorEditor::loadDrumSample(const juce::Array<juce::var> &arg
     const int index = args[1].toString().getIntValue();
 
     processorRef.loadDrumSample(drumType, index);
+}
+
+void DrumsAudioProcessorEditor::clearSample(const juce::Array<juce::var> &args,
+                                           juce::WebBrowserComponent::NativeFunctionCompletion completion)
+{
+    std::ignore = args;
+    std::ignore = completion;
+    processorRef.clearSample();
 }
 
 std::optional<juce::WebBrowserComponent::Resource> DrumsAudioProcessorEditor::getResource(const juce::String &url)

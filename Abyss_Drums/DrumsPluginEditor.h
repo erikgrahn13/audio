@@ -20,6 +20,8 @@ class DrumsAudioProcessorEditor final : public juce::AudioProcessorEditor
                         juce::WebBrowserComponent::NativeFunctionCompletion completion);
     void loadDrumSample(const juce::Array<juce::var> &args,
                         juce::WebBrowserComponent::NativeFunctionCompletion completion);
+    void clearSample(const juce::Array<juce::var> &args,
+                        juce::WebBrowserComponent::NativeFunctionCompletion completion);
 
   private:
     // This reference is provided as a quick way for your editor to

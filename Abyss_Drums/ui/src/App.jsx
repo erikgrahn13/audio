@@ -111,7 +111,7 @@ function App() {
         <div style={{ display: "flex", flexDirection: "column" }}>
           <DrumTypes></DrumTypes>
           <Droppable id="slot1">
-            <Slots name={loadedSample1.name} index={loadedSample1.index} type={loadedSample1.type} />
+            <Slots name={loadedSample1.name} index={loadedSample1.index} type={loadedSample1.type}  onClear={() => updateSlot1({ name: "", index: 0, type: null })} />
           </Droppable>
           {data.isStandalone[0] && <button style={{
             bottom: "20px", right: "20px",
