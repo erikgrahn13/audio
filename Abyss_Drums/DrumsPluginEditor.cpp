@@ -19,13 +19,13 @@ DrumsAudioProcessorEditor::DrumsAudioProcessorEditor(DrumsAudioProcessor &p)
                                juce::File::getSpecialLocation(juce::File::SpecialLocationType::tempDirectory)))
                            .withNativeIntegrationEnabled()
                            .withInitialisationData("isStandalone", juce::JUCEApplicationBase::isStandaloneApp())
-                           .withInitialisationData("kickSamples", [this]() {
+                           .withInitialisationData("kickSamples", []() {
                             juce::Array<juce::var> sampleVarList;
                             for (int i = 0; i < KickSamples::namedResourceListSize; ++i)
                             sampleVarList.add(KickSamples::namedResourceList[i]);
                             return juce::var(sampleVarList);
                         }())
-                        .withInitialisationData("snareSamples", [this]() {
+                        .withInitialisationData("snareSamples", []() {
                             juce::Array<juce::var> sampleVarList;
                             for (int i = 0; i < SnareSamples::namedResourceListSize; ++i)
                             sampleVarList.add(SnareSamples::namedResourceList[i]);
