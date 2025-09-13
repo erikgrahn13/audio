@@ -49,6 +49,7 @@ class DrumsAudioProcessor final : public juce::AudioProcessor
 
     void playPreviewSample(int drumType, int index);
     void loadDrumSample(int drumType, int index);
+    void clearSample();
     int mDrumType{-1};
     int mDrumIndex{-1};
 
