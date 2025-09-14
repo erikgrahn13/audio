@@ -27,8 +27,10 @@ class DrumsAudioProcessorEditor final : public juce::AudioProcessorEditor
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     DrumsAudioProcessor &processorRef;
+    juce::WebToggleButtonRelay flipPhaseRelay{"flipPhase"};
 
     juce::WebBrowserComponent webViewComponent;
+    std::unique_ptr<juce::WebToggleButtonParameterAttachment> flipPhaseAttachment;
 
     std::optional<juce::WebBrowserComponent::Resource> getResource(const juce::String &url);
 

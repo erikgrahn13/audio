@@ -18,6 +18,7 @@ DrumsAudioProcessorEditor::DrumsAudioProcessorEditor(DrumsAudioProcessor &p)
                            .withWinWebView2Options(juce::WebBrowserComponent::Options::WinWebView2{}.withUserDataFolder(
                                juce::File::getSpecialLocation(juce::File::SpecialLocationType::tempDirectory)))
                            .withNativeIntegrationEnabled()
+                           .withOptionsFrom(flipPhaseRelay)
                            .withInitialisationData("isStandalone", juce::JUCEApplicationBase::isStandaloneApp())
                            .withInitialisationData("kickSamples", []() {
                             juce::Array<juce::var> sampleVarList;
@@ -62,6 +63,9 @@ DrumsAudioProcessorEditor::DrumsAudioProcessorEditor(DrumsAudioProcessor &p)
                                                  juce::URL{"http://localhost:5173/"}.getOrigin())}
 {
     juce::ignoreUnused(processorRef);
+
+    auto *flipPhaseParam = processorRef.apvts.getParameter("flipPhase");
+    flipPhaseAttachment = std::make_unique<juce::WebToggleButtonParameterAttachment>(*flipPhaseParam, flipPhaseRelay, nullptr);
 
 #if !defined NDEBUG
     webViewComponent.goToURL("http://localhost:5173/");
