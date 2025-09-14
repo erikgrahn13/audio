@@ -5,6 +5,7 @@ import Slots from "./components/Slots/Slots"
 import Droppable from './components/Droppable/Droppable';
 import React, {useState, useEffect} from 'react';
 import * as Juce from "juce-framework-frontend";
+import { DeathMetalSwitch } from "@abyss-lounge/components"
 
 
 
@@ -110,6 +111,15 @@ function App() {
       <DndContext autoScroll={false} sensors={sensors} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
         <div style={{ display: "flex", flexDirection: "column" }}>
           <DrumTypes></DrumTypes>
+          <div style={{
+                bottom: "80px",
+                left: "20px",
+                position: "absolute",
+                fontFamily: "DeathMetalFont2"
+            }}>
+              PHASE
+            <DeathMetalSwitch className="death-metal-switch" parameterName="flipPhase" size={20} orientation="horizontal" style={{ top: "30px", left: "0px", position: "absolute" }}></DeathMetalSwitch>
+          </div>
           <Droppable id="slot1">
             <Slots name={loadedSample1.name} index={loadedSample1.index} type={loadedSample1.type}  onClear={() => updateSlot1({ name: "", index: 0, type: null })} />
           </Droppable>

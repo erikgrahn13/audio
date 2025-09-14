@@ -2,7 +2,7 @@ import * as Juce from "juce-framework-frontend";
 import React, { useEffect, useState, useRef } from "react"
 import styles from "./DeathMetalSwitch.module.css"
 
-function DeathMetalSwitch({ parameterName, orientation = "horizontal", children }) {
+function DeathMetalSwitch({ parameterName, orientation = "horizontal", style = {}, children }) {
 
     const canvasRef = useRef(null);
     const toggleState = Juce.getToggleState(parameterName);
@@ -75,7 +75,14 @@ function DeathMetalSwitch({ parameterName, orientation = "horizontal", children 
 
     return (
         <>
-            <button className={styles.switch} data-orientation={orientation} type="button" data-checked={parameter} onClick={handleBypass}>
+            <button
+                className={styles.switch}
+                data-orientation={orientation}
+                type="button"
+                data-checked={parameter}
+                onClick={handleBypass}
+                style={style}
+            >
                 <span className={styles.track}></span>
                 <canvas ref={canvasRef} className={styles.thumb}></canvas>
             </button>

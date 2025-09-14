@@ -12,8 +12,10 @@ DrumsAudioProcessor::DrumsAudioProcessor()
 #endif
                          .withOutput("Output", juce::AudioChannelSet::stereo(), true)
 #endif
-      )
+      ),
+      apvts(*this, nullptr, juce::Identifier("Parameters"), createParameters())
 {
+    mFlipPhase = dynamic_cast<juce::AudioParameterBool *>(apvts.getParameter("flipPhase"));
 
 }
 
@@ -161,8 +163,12 @@ void DrumsAudioProcessor::processBlock(juce::AudioBuffer<float> &buffer, juce::M
     }
 
 
-    loadedDrumSamples.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
 
+    loadedDrumSamples.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
+    if(mFlipPhase->get())
+    {
+        buffer.applyGain(-1);
+    }
 }
 
 //==============================================================================
@@ -319,4 +325,12 @@ void DrumsAudioProcessor::clearSample()
 juce::AudioProcessor *JUCE_CALLTYPE createPluginFilter()
 {
     return new DrumsAudioProcessor();
+}
+
+juce::AudioProcessorValueTreeState::ParameterLayout DrumsAudioProcessor::createParameters()
+{
+    juce::AudioProcessorValueTreeState::ParameterLayout layout;
+    layout.add(std::make_unique<juce::AudioParameterBool>(juce::ParameterID{"flipPhase", 1}, "flipPhase", false));
+
+    return layout;
 }

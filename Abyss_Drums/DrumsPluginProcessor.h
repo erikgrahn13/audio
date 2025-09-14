@@ -52,10 +52,13 @@ class DrumsAudioProcessor final : public juce::AudioProcessor
     void clearSample();
     int mDrumType{-1};
     int mDrumIndex{-1};
+    juce::AudioProcessorValueTreeState apvts;
 
   private:
     //==============================================================================
 
+    juce::AudioProcessorValueTreeState::ParameterLayout createParameters();
+    juce::AudioParameterBool *mFlipPhase;
     juce::WavAudioFormat wavFormat;
     DrumSampler loadedDrumSamples;
     std::unique_ptr<juce::AudioFormatReaderSource> audioFormatReaderSource;
