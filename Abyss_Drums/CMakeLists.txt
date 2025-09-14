@@ -98,12 +98,6 @@ target_compile_definitions(${PROJECT_NAME}
 
 file(GLOB KICK_SAMPLES "${CMAKE_CURRENT_SOURCE_DIR}/samples/Kicks/*.wav")
 file(GLOB SNARE_SAMPLES "${CMAKE_CURRENT_SOURCE_DIR}/samples/Snares/*.wav")
-# message("erik1 ${SAMPLES}")
-# foreach(file ${SAMPLES})
-#     message(STATUS "Found source file: ${file}")
-# endforeach()
-
-
 
 juce_add_binary_data(KickSamples HEADER_NAME "KickSamples.h" NAMESPACE KickSamples SOURCES "${KICK_SAMPLES}")
 juce_add_binary_data(SnareSamples HEADER_NAME "SnareSamples.h" NAMESPACE SnareSamples SOURCES "${SNARE_SAMPLES}")

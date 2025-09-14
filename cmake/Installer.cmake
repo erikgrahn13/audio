@@ -1,4 +1,4 @@
-function(create_installer target)
+function(create_installer target INSTALL_IMAGE)
     get_target_property(PLUGIN_IS_COPIED ${target} JUCE_COPY_PLUGIN_AFTER_BUILD)
 
     if(PLUGIN_IS_COPIED)
@@ -64,7 +64,14 @@ function(create_installer target)
     elseif(WIN32)
         set(CPACK_GENERATOR "INNOSETUP")
         set(CPACK_INNOSETUP_USE_MODERN_WIZARD ON)
+        set(CPACK_INNOSETUP_IGNORE_LICENSE_PAGE ON)
+                
+        set(CPACK_PACKAGE_ICON ${INSTALL_IMAGE})
+        set(CPACK_INNOSETUP_SETUP_WizardImageFile ${INSTALL_IMAGE})
+        set(CPACK_INNOSETUP_SETUP_DisableWelcomePage NO)
+        set(CPACK_INNOSETUP_SETUP_SetupIconFile "${CMAKE_SOURCE_DIR}/resources/assets/logo_transparent.ico")
 
+        
         include(CPackComponent)
 
         set(CPACK_INNOSETUP_${target}VST3_INSTALL_DIRECTORY "{commoncf64}/VST3")
@@ -79,7 +86,7 @@ function(create_installer target)
             DISPLAY_NAME "${PLUGIN_NAME} VST3"
             INSTALL_TYPES Full
         )
-    else(UNIX)
+    else()
         set(CPACK_GENERATOR "TGZ")
     endif()
 

@@ -9,27 +9,13 @@ function(enable_pluginval_testing target)
     message(STATUS "✅ ${target}: ${bundle_id}")
 
     get_target_property(MY_SOURCES ${target} SOURCES)
-    message("erik ${MY_SOURCES}")
-
-      set(_werror_opts
+    set(_werror_opts
       "$<$<CXX_COMPILER_ID:MSVC>:/WX>;$<$<AND:$<NOT:$<CXX_COMPILER_ID:MSVC>>,$<COMPILE_LANGUAGE:CXX>>:-Werror>"
-  )
+    )
 
   set_source_files_properties(${MY_SOURCES} PROPERTIES
     COMPILE_OPTIONS "${_werror_opts}"
   )
-
-
-    # set_source_files_properties(${MY_SOURCES} PROPERTIES COMPILE_OPTIONS
-    # "$<$<CXX_COMPILER_ID:MSVC>:/WX>"
-    # "$<$<AND:$<NOT:$<CXX_COMPILER_ID:MSVC>>,$<COMPILE_LANGUAGE:CXX>>:-Werror>"
-    # )
-
-    # if(MSVC)
-    #     target_compile_options(${target} PRIVATE /WX)
-    # else()
-    #     target_compile_options(${target} PRIVATE -Werror)
-    # endif()
 
     # Pluginval testing
     get_target_property(PLUGIN_NAME ${PROJECT_NAME} JUCE_PRODUCT_NAME)
