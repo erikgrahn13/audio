@@ -73,11 +73,56 @@ jobs:
               Write-Host "Installing: $($_.Name)"
               Write-Host "Full path: $installerPath"
               
+              # Check what's in VST3 directory before installation
+              $vst3Dir = "C:\Program Files\Common Files\VST3"
+              Write-Host "VST3 directory contents before installation:"
+              if (Test-Path $vst3Dir) {
+                Get-ChildItem $vst3Dir | ForEach-Object { Write-Host "  $($_.Name)" }
+              } else {
+                Write-Host "  VST3 directory does not exist"
+              }
+              
               # Try different silent installation approaches for better compatibility
               Write-Host "Attempting silent installation..."
               
               # Run with elevated privileges to avoid UAC prompts in CI
               $process = Start-Process -FilePath $installerPath -ArgumentList "/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART", "/CLOSEAPPLICATIONS" -Wait -PassThru -Verb RunAs
+              
+              # Check what's in VST3 directory after installation
+              Write-Host "VST3 directory contents after installation:"
+              if (Test-Path $vst3Dir) {
+                Get-ChildItem $vst3Dir -Recurse | ForEach-Object { 
+                  if ($_.PSIsContainer) {
+                    Write-Host "  [DIR]  $($_.FullName)"
+                  } else {
+                    Write-Host "  [FILE] $($_.FullName) ($($_.Length) bytes)"
+                  }
+                }
+              } else {
+                Write-Host "  VST3 directory still does not exist"
+              }
+              
+              # Also check other common plugin directories
+              $programFiles = "C:\Program Files"
+              $programFilesX86 = "C:\Program Files (x86)"
+              Write-Host "Searching for Black Lounge files in Program Files..."
+              
+              @($programFiles, $programFilesX86) | ForEach-Object {
+                if (Test-Path $_) {
+                  Get-ChildItem $_ -Recurse -Filter "*Black*Lounge*" -ErrorAction SilentlyContinue | ForEach-Object {
+                    Write-Host "  Found: $($_.FullName)"
+                  }
+                }
+              }
+              
+              # Check for installation logs
+              $logPattern = $env:TEMP + "\Setup Log*.txt"
+              Write-Host "Checking for installer logs in: $logPattern"
+              Get-ChildItem $env:TEMP -Filter "Setup Log*.txt" -ErrorAction SilentlyContinue | ForEach-Object {
+                Write-Host "Found log: $($_.FullName)"
+                Write-Host "Log contents:"
+                Get-Content $_.FullName -Tail 20 | ForEach-Object { Write-Host "  $_" }
+              }
               
               if ($process.ExitCode -eq 0) {
                 Write-Host "✅ $($_.Name) installed successfully"
