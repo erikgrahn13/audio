@@ -62,13 +62,24 @@ jobs:
             "$innoDir" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
             Write-Host "Added Inno Setup to PATH for current and future steps"
             
-            # Show version
-            & $isccPath 2>&1 | Select-String "Inno Setup" | ForEach-Object { Write-Host "Installed: $_" }
+            # Show version (capture output and exit code separately to avoid failing the step)
+            try {
+              $versionOutput = & $isccPath 2>&1
+              $versionLine = $versionOutput | Select-String "Inno Setup" | Select-Object -First 1
+              if ($versionLine) {
+                Write-Host "Installed: $versionLine"
+              } else {
+                Write-Host "Version output: $versionOutput"
+              }
+            } catch {
+              Write-Host "Could not get version info, but ISCC.exe exists and should work"
+            }
           } else {
             Write-Host "Warning: ISCC.exe not found at expected location"
           }
           
           Remove-Item $output -Force -ErrorAction SilentlyContinue
+          Write-Host "Inno Setup installation step completed successfully"
 
       - name: Add msbuild to PATH
         if: matrix.os == 'windows-latest'
