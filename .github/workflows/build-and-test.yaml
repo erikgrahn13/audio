@@ -73,6 +73,11 @@ jobs:
               Write-Host "Installing: $($_.Name)"
               Write-Host "Full path: $installerPath"
               
+              # Check installer file properties
+              $fileInfo = Get-ItemProperty $installerPath
+              Write-Host "Installer size: $($fileInfo.Length) bytes"
+              Write-Host "Installer modified: $($fileInfo.LastWriteTime)"
+              
               # Check what's in VST3 directory before installation
               $vst3Dir = "C:\Program Files\Common Files\VST3"
               Write-Host "VST3 directory contents before installation:"
@@ -85,8 +90,15 @@ jobs:
               # Try different silent installation approaches for better compatibility
               Write-Host "Attempting silent installation..."
               
-              # Run with elevated privileges to avoid UAC prompts in CI
-              $process = Start-Process -FilePath $installerPath -ArgumentList "/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART", "/CLOSEAPPLICATIONS" -Wait -PassThru -Verb RunAs
+              # First try without elevation (CI runners may not need it)
+              Write-Host "Trying installation without elevation first..."
+              $process = Start-Process -FilePath $installerPath -ArgumentList "/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART", "/CLOSEAPPLICATIONS", "/LOG" -Wait -PassThru
+              
+              # If that fails, try with elevation
+              if ($process.ExitCode -ne 0 -and $process.ExitCode -ne 1) {
+                Write-Host "First attempt failed, trying with elevation..."
+                $process = Start-Process -FilePath $installerPath -ArgumentList "/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART", "/CLOSEAPPLICATIONS", "/LOG" -Wait -PassThru -Verb RunAs
+              }
               
               # Check what's in VST3 directory after installation
               Write-Host "VST3 directory contents after installation:"
@@ -116,11 +128,20 @@ jobs:
               }
               
               # Check for installation logs
+              Write-Host "Checking for installer logs..."
+              
+              # Check for Inno Setup log files (created by /LOG parameter)
               $logPattern = $env:TEMP + "\Setup Log*.txt"
-              Write-Host "Checking for installer logs in: $logPattern"
               Get-ChildItem $env:TEMP -Filter "Setup Log*.txt" -ErrorAction SilentlyContinue | ForEach-Object {
-                Write-Host "Found log: $($_.FullName)"
-                Write-Host "Log contents:"
+                Write-Host "Found Inno Setup log: $($_.FullName)"
+                Write-Host "Log contents (last 30 lines):"
+                Get-Content $_.FullName -Tail 30 | ForEach-Object { Write-Host "  $_" }
+              }
+              
+              # Also check for any other log files that might be created
+              Get-ChildItem $env:TEMP -Filter "*setup*" -ErrorAction SilentlyContinue | Where-Object { $_.Name -like "*log*" } | ForEach-Object {
+                Write-Host "Found setup-related log: $($_.FullName)"
+                Write-Host "Log contents (last 20 lines):"
                 Get-Content $_.FullName -Tail 20 | ForEach-Object { Write-Host "  $_" }
               }
               
