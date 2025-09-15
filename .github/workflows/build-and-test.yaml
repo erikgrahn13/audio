@@ -38,7 +38,19 @@ jobs:
         run: |
           Register-PackageSource -ProviderName NuGet -Name nugetRepository -Location https://www.nuget.org/api/v2 -Force
           Install-Package Microsoft.Web.WebView2 -Scope CurrentUser -RequiredVersion 1.0.1901.177 -Source nugetRepository -Force
-          choco install innosetup --no-progress -y
+
+          # Download and install latest Inno Setup (6.5+) which supports PNG images
+          Write-Host "Downloading latest Inno Setup from official source..."
+          $url = "https://jrsoftware.org/download.php/is.exe?site=1"
+          $output = "$env:TEMP\innosetup-installer.exe"
+            
+          Invoke-WebRequest -Uri $url -OutFile $output -UseBasicParsing
+          Write-Host "✅ Inno Setup downloaded"
+            
+          Write-Host "Installing Inno Setup..."
+          $installProcess = Start-Process -FilePath $output -ArgumentList "/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART" -Wait -PassThru
+          Write-Host "Inno Setup installer exit code: $($installProcess.ExitCode)"
+          Write-Host "✅ Inno Setup installation completed"
 
       - name: Add msbuild to PATH
         if: matrix.os == 'windows-latest'
@@ -59,35 +71,69 @@ jobs:
           npm install
           npm run build --ws
           cmake --workflow --preset Release
+      
+      - name: Install plugins (Windows)
+        if: matrix.os == 'windows-latest'
+        shell: pwsh
+        run: |
+          cd build
+          
+          # Install all .exe files from the installers directory
+          if (Test-Path "installers") {
+            Get-ChildItem -Path "installers" -Filter "*.exe" | ForEach-Object {
+              $installerPath = $_.FullName
+              Write-Host "Installing: $($_.Name)"
+              Write-Host "Full path: $installerPath"
 
+              $process = Start-Process -FilePath $installerPath -ArgumentList "/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART", "/CLOSEAPPLICATIONS", "/LOG" -Wait -PassThru
+
+              # Check for installation logs
+              Write-Host "Checking for installer logs..."
+
+              # Check for Inno Setup log files (created by /LOG parameter)
+              $logPattern = $env:TEMP + "\Setup Log*.txt"
+              Get-ChildItem $env:TEMP -Filter "Setup Log*.txt" -ErrorAction SilentlyContinue | ForEach-Object {
+                Write-Host "Found Inno Setup log: $($_.FullName)"
+                Write-Host "Log contents (last 30 lines):"
+                Get-Content $_.FullName -Tail 30 | ForEach-Object { Write-Host "  $_" }
+              }
+            }
+          } else {
+            Write-Host "No installers directory found"
+            exit 0
+          }
       - name: Install plugins (macOS)
         if: matrix.os == 'macos-latest'
         run: |
           cd build
 
-          # Install packaged plugins
-
-          find . -name "*.pkg" -not -path "*/_CPack_Packages/*" | while read pkg_file; do
-            echo "Installing: $pkg_file"
-            
-            # Install and capture the package name from output
-            installer_output=$(sudo installer -pkg "$pkg_file" -target / -verbose 2>&1 | tee /dev/stderr)
-            app_name=$(echo "$installer_output" | grep "Package name is" | sed 's/installer: Package name is //' | xargs)
-            
-            # Quick check if app was installed
-            if [ ! -z "$app_name" ] && [ -d "/Applications/$app_name.app" ]; then
-              echo "✅ $app_name.app installed successfully"
-            elif [ ! -z "$app_name" ]; then
-              echo "❌ $app_name.app not found in /Applications"
-              exit 1
-            else
-              echo "❌ Could not extract app name from installer output"
-              exit 1
-            fi
-          done
+          # Install all .pkg files from the installers directory
+          if [ -d "installers" ]; then
+            find installers -name "*.pkg" -maxdepth 1 | while read pkg_file; do
+              echo "Installing: $pkg_file"
+              
+              # Install and capture the package name from output
+              installer_output=$(sudo installer -pkg "$pkg_file" -target / -verbose 2>&1 | tee /dev/stderr)
+              app_name=$(echo "$installer_output" | grep "Package name is" | sed 's/installer: Package name is //' | xargs)
+              
+              # Quick check if app was installed
+              if [ ! -z "$app_name" ] && [ -d "/Applications/$app_name.app" ]; then
+                echo "✅ $app_name.app installed successfully"
+              elif [ ! -z "$app_name" ]; then
+                echo "❌ $app_name.app not found in /Applications"
+                exit 1
+              else
+                echo "❌ Could not extract app name from installer output"
+                exit 1
+              fi
+            done
+          else
+            echo "No installers directory found"
+            exit 0
+          fi
 
           # Kill AudioComponentRegistrar if running
-           pgrep -x AudioComponentRegistrar >/dev/null && killall -9 AudioComponentRegistrar; echo "killed AudioComponentRegistrar" || echo "AudioComponentRegistrar Process not found"
+          pgrep -x AudioComponentRegistrar >/dev/null && killall -9 AudioComponentRegistrar; echo "killed AudioComponentRegistrar" || echo "AudioComponentRegistrar Process not found"
 
       - name: Run Tests
         run: ctest --preset Release
