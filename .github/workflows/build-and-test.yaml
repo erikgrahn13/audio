@@ -59,35 +59,68 @@ jobs:
           npm install
           npm run build --ws
           cmake --workflow --preset Release
+      
+      - name: Install plugins (Windows)
+        if: matrix.os == 'windows-latest'
+        shell: pwsh
+        run: |
+          cd build
+          
+          # Install all .exe files from the installers directory
+          if (Test-Path "installers") {
+            Get-ChildItem -Path "installers" -Filter "*.exe" | ForEach-Object {
+              $installerPath = $_.FullName
+              Write-Host "Installing: $($_.Name)"
+              
+              # Run installer silently (Inno Setup supports /VERYSILENT)
+              $process = Start-Process -FilePath $installerPath -ArgumentList "/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART" -Wait -PassThru
+              
+              if ($process.ExitCode -eq 0) {
+                Write-Host "✅ $($_.Name) installed successfully"
+              } else {
+                Write-Host "❌ $($_.Name) installation failed with exit code: $($process.ExitCode)"
+                exit 1
+              }
+            }
+          } else {
+            Write-Host "No installers directory found"
+            exit 0
+          }
+
+
 
       - name: Install plugins (macOS)
         if: matrix.os == 'macos-latest'
         run: |
           cd build
 
-          # Install packaged plugins
-
-          find . -name "*.pkg" -not -path "*/_CPack_Packages/*" | while read pkg_file; do
-            echo "Installing: $pkg_file"
-            
-            # Install and capture the package name from output
-            installer_output=$(sudo installer -pkg "$pkg_file" -target / -verbose 2>&1 | tee /dev/stderr)
-            app_name=$(echo "$installer_output" | grep "Package name is" | sed 's/installer: Package name is //' | xargs)
-            
-            # Quick check if app was installed
-            if [ ! -z "$app_name" ] && [ -d "/Applications/$app_name.app" ]; then
-              echo "✅ $app_name.app installed successfully"
-            elif [ ! -z "$app_name" ]; then
-              echo "❌ $app_name.app not found in /Applications"
-              exit 1
-            else
-              echo "❌ Could not extract app name from installer output"
-              exit 1
-            fi
-          done
+          # Install all .pkg files from the installers directory
+          if [ -d "installers" ]; then
+            find installers -name "*.pkg" -maxdepth 1 | while read pkg_file; do
+              echo "Installing: $pkg_file"
+              
+              # Install and capture the package name from output
+              installer_output=$(sudo installer -pkg "$pkg_file" -target / -verbose 2>&1 | tee /dev/stderr)
+              app_name=$(echo "$installer_output" | grep "Package name is" | sed 's/installer: Package name is //' | xargs)
+              
+              # Quick check if app was installed
+              if [ ! -z "$app_name" ] && [ -d "/Applications/$app_name.app" ]; then
+                echo "✅ $app_name.app installed successfully"
+              elif [ ! -z "$app_name" ]; then
+                echo "❌ $app_name.app not found in /Applications"
+                exit 1
+              else
+                echo "❌ Could not extract app name from installer output"
+                exit 1
+              fi
+            done
+          else
+            echo "No installers directory found"
+            exit 0
+          fi
 
           # Kill AudioComponentRegistrar if running
-           pgrep -x AudioComponentRegistrar >/dev/null && killall -9 AudioComponentRegistrar; echo "killed AudioComponentRegistrar" || echo "AudioComponentRegistrar Process not found"
+          pgrep -x AudioComponentRegistrar >/dev/null && killall -9 AudioComponentRegistrar; echo "killed AudioComponentRegistrar" || echo "AudioComponentRegistrar Process not found"
 
       - name: Run Tests
         run: ctest --preset Release
