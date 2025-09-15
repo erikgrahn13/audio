@@ -76,8 +76,8 @@ jobs:
               # Try different silent installation approaches for better compatibility
               Write-Host "Attempting silent installation..."
               
-              # First try with standard Inno Setup flags
-              $process = Start-Process -FilePath $installerPath -ArgumentList "/SILENT", "/NORESTART", "/CLOSEAPPLICATIONS" -Wait -PassThru -NoNewWindow
+              # Run with elevated privileges to avoid UAC prompts in CI
+              $process = Start-Process -FilePath $installerPath -ArgumentList "/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART", "/CLOSEAPPLICATIONS" -Wait -PassThru -Verb RunAs
               
               if ($process.ExitCode -eq 0) {
                 Write-Host "✅ $($_.Name) installed successfully"
