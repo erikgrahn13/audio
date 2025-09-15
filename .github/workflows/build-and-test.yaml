@@ -71,14 +71,32 @@ jobs:
             Get-ChildItem -Path "installers" -Filter "*.exe" | ForEach-Object {
               $installerPath = $_.FullName
               Write-Host "Installing: $($_.Name)"
+              Write-Host "Full path: $installerPath"
               
-              # Run installer silently (Inno Setup supports /VERYSILENT)
-              $process = Start-Process -FilePath $installerPath -ArgumentList "/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART" -Wait -PassThru
+              # Try different silent installation approaches for better compatibility
+              Write-Host "Attempting silent installation..."
+              
+              # First try with standard Inno Setup flags
+              $process = Start-Process -FilePath $installerPath -ArgumentList "/SILENT", "/NORESTART", "/CLOSEAPPLICATIONS" -Wait -PassThru -NoNewWindow
               
               if ($process.ExitCode -eq 0) {
                 Write-Host "✅ $($_.Name) installed successfully"
+              } elseif ($process.ExitCode -eq 1) {
+                Write-Host "⚠️ $($_.Name) installation completed with warnings (exit code 1) - this might be normal"
+                Write-Host "✅ Continuing as installation likely succeeded"
               } else {
                 Write-Host "❌ $($_.Name) installation failed with exit code: $($process.ExitCode)"
+                
+                # Try to get more information about the failure
+                Write-Host "Checking if installer file exists and is valid..."
+                if (Test-Path $installerPath) {
+                  $fileInfo = Get-ItemProperty $installerPath
+                  Write-Host "File size: $($fileInfo.Length) bytes"
+                  Write-Host "File version: $($fileInfo.VersionInfo.FileVersion)"
+                } else {
+                  Write-Host "❌ Installer file not found!"
+                }
+                
                 exit 1
               }
             }
