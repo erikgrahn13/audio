@@ -21,14 +21,12 @@ include(Installer)
 
 if(NOT FETCHCONTENT_FULLY_DISCONNECTED)
     include(NAM)
-
     include(WebView)
     add_subdirectory(utilities)
     add_subdirectory(resources)
-    # add_subdirectory(EQ)
-    # add_subdirectory(Synth)
-
-    # add_subdirectory(Abyss)
+    add_subdirectory(EQ)
+    add_subdirectory(Synth)
+    add_subdirectory(Abyss)
     add_subdirectory(Black_Lounge)
-    # add_subdirectory(Abyss_Drums)
+    add_subdirectory(Abyss_Drums)
 endif()

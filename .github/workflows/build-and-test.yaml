@@ -84,64 +84,12 @@ jobs:
               $installerPath = $_.FullName
               Write-Host "Installing: $($_.Name)"
               Write-Host "Full path: $installerPath"
-              
-              # Check installer file properties
-              $fileInfo = Get-ItemProperty $installerPath
-              Write-Host "Installer size: $($fileInfo.Length) bytes"
-              Write-Host "Installer modified: $($fileInfo.LastWriteTime)"
-              
-              # Check what's in VST3 directory before installation
-              $vst3Dir = "C:\Program Files\Common Files\VST3"
-              Write-Host "VST3 directory contents before installation:"
-              if (Test-Path $vst3Dir) {
-                Get-ChildItem $vst3Dir | ForEach-Object { Write-Host "  $($_.Name)" }
-              } else {
-                Write-Host "  VST3 directory does not exist"
-              }
-              
-              # Try different silent installation approaches for better compatibility
-              Write-Host "Attempting silent installation..."
-              
-              # First try without elevation (CI runners may not need it)
-              Write-Host "Trying installation without elevation first..."
+
               $process = Start-Process -FilePath $installerPath -ArgumentList "/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART", "/CLOSEAPPLICATIONS", "/LOG" -Wait -PassThru
-              
-              # If that fails, try with elevation
-              if ($process.ExitCode -ne 0 -and $process.ExitCode -ne 1) {
-                Write-Host "First attempt failed, trying with elevation..."
-                $process = Start-Process -FilePath $installerPath -ArgumentList "/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART", "/CLOSEAPPLICATIONS", "/LOG" -Wait -PassThru -Verb RunAs
-              }
-              
-              # Check what's in VST3 directory after installation
-              Write-Host "VST3 directory contents after installation:"
-              if (Test-Path $vst3Dir) {
-                Get-ChildItem $vst3Dir -Recurse | ForEach-Object { 
-                  if ($_.PSIsContainer) {
-                    Write-Host "  [DIR]  $($_.FullName)"
-                  } else {
-                    Write-Host "  [FILE] $($_.FullName) ($($_.Length) bytes)"
-                  }
-                }
-              } else {
-                Write-Host "  VST3 directory still does not exist"
-              }
-              
-              # Also check other common plugin directories
-              $programFiles = "C:\Program Files"
-              $programFilesX86 = "C:\Program Files (x86)"
-              Write-Host "Searching for Black Lounge files in Program Files..."
-              
-              @($programFiles, $programFilesX86) | ForEach-Object {
-                if (Test-Path $_) {
-                  Get-ChildItem $_ -Recurse -Filter "*Black*Lounge*" -ErrorAction SilentlyContinue | ForEach-Object {
-                    Write-Host "  Found: $($_.FullName)"
-                  }
-                }
-              }
-              
+
               # Check for installation logs
               Write-Host "Checking for installer logs..."
-              
+
               # Check for Inno Setup log files (created by /LOG parameter)
               $logPattern = $env:TEMP + "\Setup Log*.txt"
               Get-ChildItem $env:TEMP -Filter "Setup Log*.txt" -ErrorAction SilentlyContinue | ForEach-Object {
@@ -149,42 +97,11 @@ jobs:
                 Write-Host "Log contents (last 30 lines):"
                 Get-Content $_.FullName -Tail 30 | ForEach-Object { Write-Host "  $_" }
               }
-              
-              # Also check for any other log files that might be created
-              Get-ChildItem $env:TEMP -Filter "*setup*" -ErrorAction SilentlyContinue | Where-Object { $_.Name -like "*log*" } | ForEach-Object {
-                Write-Host "Found setup-related log: $($_.FullName)"
-                Write-Host "Log contents (last 20 lines):"
-                Get-Content $_.FullName -Tail 20 | ForEach-Object { Write-Host "  $_" }
-              }
-              
-              if ($process.ExitCode -eq 0) {
-                Write-Host "✅ $($_.Name) installed successfully"
-              } elseif ($process.ExitCode -eq 1) {
-                Write-Host "⚠️ $($_.Name) installation completed with warnings (exit code 1) - this might be normal"
-                Write-Host "✅ Continuing as installation likely succeeded"
-              } else {
-                Write-Host "❌ $($_.Name) installation failed with exit code: $($process.ExitCode)"
-                
-                # Try to get more information about the failure
-                Write-Host "Checking if installer file exists and is valid..."
-                if (Test-Path $installerPath) {
-                  $fileInfo = Get-ItemProperty $installerPath
-                  Write-Host "File size: $($fileInfo.Length) bytes"
-                  Write-Host "File version: $($fileInfo.VersionInfo.FileVersion)"
-                } else {
-                  Write-Host "❌ Installer file not found!"
-                }
-                
-                exit 1
-              }
             }
           } else {
             Write-Host "No installers directory found"
             exit 0
           }
-
-
-
       - name: Install plugins (macOS)
         if: matrix.os == 'macos-latest'
         run: |

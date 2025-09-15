@@ -24,8 +24,6 @@ function(enable_pluginval_testing target)
     get_target_property(PLUGIN_PATH_AU ${target} JUCE_AU_COPY_DIR)
     get_target_property(PLUGIN_IS_COPIED ${target} JUCE_COPY_PLUGIN_AFTER_BUILD)
 
-    message("erik2 ${PLUGIN_PATH_VST3}")
-
     if(NOT PLUGIN_IS_COPIED)
         if(APPLE)
             set(PLUGIN_PATH_AU "/Library/Audio/Plug-Ins/Components")
