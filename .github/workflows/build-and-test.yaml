@@ -36,69 +36,8 @@ jobs:
         if: matrix.os == 'windows-latest'
         shell: pwsh
         run: |
-          # Set error action to stop on errors for better debugging
-          $ErrorActionPreference = "Stop"
-          
-          try {
-            Write-Host "Setting up NuGet package source..."
-            Register-PackageSource -ProviderName NuGet -Name nugetRepository -Location https://www.nuget.org/api/v2 -Force
-            Write-Host "✅ NuGet package source registered"
-            
-            Write-Host "Installing WebView2..."
-            Install-Package Microsoft.Web.WebView2 -Scope CurrentUser -RequiredVersion 1.0.1901.177 -Source nugetRepository -Force
-            Write-Host "✅ WebView2 installed"
-            
-            # Download and install latest Inno Setup (6.5+) which supports PNG images
-            Write-Host "Downloading latest Inno Setup from official source..."
-            $url = "https://jrsoftware.org/download.php/is.exe?site=1"
-            $output = "$env:TEMP\innosetup-installer.exe"
-            
-            Invoke-WebRequest -Uri $url -OutFile $output -UseBasicParsing
-            Write-Host "✅ Inno Setup downloaded"
-            
-            Write-Host "Installing Inno Setup..."
-            $installProcess = Start-Process -FilePath $output -ArgumentList "/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART" -Wait -PassThru
-            Write-Host "Inno Setup installer exit code: $($installProcess.ExitCode)"
-            Write-Host "✅ Inno Setup installation completed"
-          
-          # Verify installation and add to PATH
-          $isccPath = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
-          if (Test-Path $isccPath) {
-            Write-Host "Found ISCC at: $isccPath"
-            $innoDir = Split-Path $isccPath -Parent
-            
-            # Add to current session PATH
-            $env:PATH = "$innoDir;$env:PATH"
-            
-            # Add to GitHub Actions environment PATH so it persists to next steps
-            "$innoDir" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-            Write-Host "Added Inno Setup to PATH for current and future steps"
-            
-            # Show version (capture output and exit code separately to avoid failing the step)
-            try {
-              $versionOutput = & $isccPath 2>&1
-              $versionLine = $versionOutput | Select-String "Inno Setup" | Select-Object -First 1
-              if ($versionLine) {
-                Write-Host "Installed: $versionLine"
-              } else {
-                Write-Host "Version output: $versionOutput"
-              }
-            } catch {
-              Write-Host "Could not get version info, but ISCC.exe exists and should work"
-            }
-          } else {
-            Write-Host "Warning: ISCC.exe not found at expected location"
-          }
-          
-            Remove-Item $output -Force -ErrorAction SilentlyContinue
-            Write-Host "✅ Inno Setup installation step completed successfully"
-            
-          } catch {
-            Write-Host "❌ Error in dependency installation step: $_"
-            Write-Host "Error details: $($_.Exception.Message)"
-            Write-Host "Stack trace: $($_.ScriptStackTrace)"
-            exit 1
-          }
+          Register-PackageSource -ProviderName NuGet -Name nugetRepository -Location https://www.nuget.org/api/v2 -Force
+          Install-Package Microsoft.Web.WebView2 -Scope CurrentUser -RequiredVersion 1.0.1901.177 -Source nugetRepository -Force
 
       - name: Add msbuild to PATH
         if: matrix.os == 'windows-latest'
