@@ -54,8 +54,13 @@ jobs:
           if (Test-Path $isccPath) {
             Write-Host "Found ISCC at: $isccPath"
             $innoDir = Split-Path $isccPath -Parent
+            
+            # Add to current session PATH
             $env:PATH = "$innoDir;$env:PATH"
-            Write-Host "Added Inno Setup to PATH"
+            
+            # Add to GitHub Actions environment PATH so it persists to next steps
+            "$innoDir" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+            Write-Host "Added Inno Setup to PATH for current and future steps"
             
             # Show version
             & $isccPath 2>&1 | Select-String "Inno Setup" | ForEach-Object { Write-Host "Installed: $_" }
