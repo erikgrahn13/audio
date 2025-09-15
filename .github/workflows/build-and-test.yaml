@@ -47,10 +47,10 @@ jobs:
           Invoke-WebRequest -Uri $url -OutFile $output -UseBasicParsing
           Write-Host "✅ Inno Setup downloaded"
             
-          # Write-Host "Installing Inno Setup..."
-          # $installProcess = Start-Process -FilePath $output -ArgumentList "/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART" -Wait -PassThru
-          # Write-Host "Inno Setup installer exit code: $($installProcess.ExitCode)"
-          # Write-Host "✅ Inno Setup installation completed"
+          Write-Host "Installing Inno Setup..."
+          $installProcess = Start-Process -FilePath $output -ArgumentList "/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART" -Wait -PassThru
+          Write-Host "Inno Setup installer exit code: $($installProcess.ExitCode)"
+          Write-Host "✅ Inno Setup installation completed"
 
       - name: Add msbuild to PATH
         if: matrix.os == 'windows-latest'
