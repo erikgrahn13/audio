@@ -142,37 +142,72 @@ jobs:
           
           # Install all .tar.gz files from the installers directory
           if [ -d "installers" ]; then
-            find installers -name "*.tar.gz" -maxdepth 1 | while read tarball_file; do
-              echo "Installing: $tarball_file"
-              
-              # Extract the tarball to system directories
-              sudo tar -xzf "$tarball_file" -C / --strip-components=1
-              
-              # Extract plugin name from filename (remove path and version)
-              plugin_name=$(basename "$tarball_file" | sed 's/-[0-9].*\.tar\.gz$//')
-              
-              # Verify VST3 plugin installation
-              vst3_installed=false
-              if [ -d "/usr/lib/vst3" ]; then
-                find /usr/lib/vst3 -name "*.vst3" -type d | while read vst3_plugin; do
-                  vst3_name=$(basename "$vst3_plugin" .vst3)
-                  echo "Found VST3 plugin: $vst3_name"
-                  if [[ "$vst3_name" == *"$plugin_name"* ]] || [[ "$plugin_name" == *"$vst3_name"* ]]; then
-                    echo "✅ VST3 plugin installed successfully: $vst3_plugin"
-                    vst3_installed=true
+            for tarball_file in installers/*.tar.gz; do
+              if [ -f "$tarball_file" ]; then
+                echo "Installing: $tarball_file"
+                
+                # Extract the tarball to system directories
+                sudo tar -xzf "$tarball_file" -C / --strip-components=1
+                
+                # Extract plugin name from filename (remove path and version)
+                plugin_name=$(basename "$tarball_file" | sed 's/-[0-9].*\.tar\.gz$//')
+                echo "Looking for plugin: $plugin_name"
+                
+                # Verify VST3 plugin installation
+                echo "Checking VST3 installation..."
+                vst3_found=false
+                if [ -d "/usr/lib/vst3" ]; then
+                  echo "VST3 directory exists, listing contents:"
+                  ls -la /usr/lib/vst3/
+                  
+                  for vst3_plugin in /usr/lib/vst3/*.vst3; do
+                    if [ -d "$vst3_plugin" ]; then
+                      vst3_name=$(basename "$vst3_plugin" .vst3)
+                      echo "Found VST3 plugin: $vst3_name"
+                      echo "✅ VST3 plugin installed successfully: $vst3_plugin"
+                      vst3_found=true
+                    fi
+                  done
+                else
+                  echo "❌ /usr/lib/vst3 directory not found"
+                fi
+                
+                # Verify standalone app installation
+                echo "Checking standalone app installation..."
+                standalone_found=false
+                if [ -d "/usr/local/bin" ]; then
+                  echo "Standalone apps directory exists, checking for executable:"
+                  
+                  # Check for exact matches and pattern matches
+                  for app_path in "/usr/local/bin/$plugin_name" "/usr/local/bin/"*"$plugin_name"* "/usr/local/bin/"*"$(echo $plugin_name | tr '[:upper:]' '[:lower:]')"*; do
+                    if [ -f "$app_path" ] && [ -x "$app_path" ]; then
+                      echo "✅ Standalone app installed successfully: $app_path"
+                      standalone_found=true
+                      break
+                    fi
+                  done
+                  
+                  if [ "$standalone_found" = false ]; then
+                    echo "Searching for any files matching pattern in /usr/local/bin/:"
+                    ls -la /usr/local/bin/ | grep -i "$plugin_name" || echo "No matching files found"
                   fi
-                done
-              fi
-              
-              # Verify standalone app installation
-              standalone_installed=false
-              if [ -d "/usr/local/bin" ]; then
-                find /usr/local/bin -name "*$plugin_name*" -o -name "*$(echo $plugin_name | tr '[:upper:]' '[:lower:]')*" | while read standalone_app; do
-                  if [ -x "$standalone_app" ]; then
-                    echo "✅ Standalone app installed successfully: $standalone_app"
-                    standalone_installed=true
-                  fi
-                done
+                else
+                  echo "❌ /usr/local/bin directory not found"
+                fi
+                
+                # Summary
+                if [ "$vst3_found" = true ] && [ "$standalone_found" = true ]; then
+                  echo "✅ All components installed successfully for $plugin_name"
+                elif [ "$vst3_found" = true ]; then
+                  echo "⚠️  VST3 installed but standalone app not found for $plugin_name"
+                elif [ "$standalone_found" = true ]; then
+                  echo "⚠️  Standalone app installed but VST3 not found for $plugin_name"
+                else
+                  echo "❌ Installation verification failed for $plugin_name"
+                  exit 1
+                fi
+                
+                echo "----------------------------------------"
               fi
             done
           else
