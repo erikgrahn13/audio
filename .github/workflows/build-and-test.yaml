@@ -146,8 +146,8 @@ jobs:
               if [ -f "$tarball_file" ]; then
                 echo "Installing: $tarball_file"
                 
-                # Extract the tarball to system directories
-                sudo tar -xzf "$tarball_file" -C / --strip-components=1
+                # Extract the tarball to user home directory (no sudo needed)
+                tar -xzf "$tarball_file" -C ~ --strip-components=1
                 
                 # Extract plugin name from filename (remove path and version)
                 plugin_name=$(basename "$tarball_file" | sed 's/-[0-9].*\.tar\.gz$//')
@@ -156,11 +156,11 @@ jobs:
                 # Verify VST3 plugin installation
                 echo "Checking VST3 installation..."
                 vst3_found=false
-                if [ -d "/usr/lib/vst3" ]; then
+                if [ -d "$HOME/.vst3" ]; then
                   echo "VST3 directory exists, listing contents:"
-                  ls -la /usr/lib/vst3/
+                  ls -la "$HOME/.vst3/"
                   
-                  for vst3_plugin in /usr/lib/vst3/*.vst3; do
+                  for vst3_plugin in "$HOME/.vst3"/*.vst3; do
                     if [ -d "$vst3_plugin" ]; then
                       vst3_name=$(basename "$vst3_plugin" .vst3)
                       echo "Found VST3 plugin: $vst3_name"
@@ -169,20 +169,20 @@ jobs:
                     fi
                   done
                 else
-                  echo "❌ /usr/lib/vst3 directory not found"
+                  echo "❌ ~/.vst3 directory not found"
                 fi
                 
                 # Verify standalone app installation
                 echo "Checking standalone app installation..."
                 standalone_found=false
-                if [ -d "/usr/local/bin" ]; then
+                if [ -d "$HOME/.local/bin" ]; then
                   echo "Standalone apps directory exists, checking for executable:"
-                  echo "All files in /usr/local/bin/:"
-                  ls -la /usr/local/bin/
+                  echo "All files in ~/.local/bin/:"
+                  ls -la "$HOME/.local/bin/"
                   
                   # Look for the actual plugin file (with or without execute permissions)
                   # We'll check both for the file existence and execute permissions separately
-                  for app_path in /usr/local/bin/*; do
+                  for app_path in "$HOME/.local/bin"/*; do
                     if [ -f "$app_path" ]; then
                       app_name=$(basename "$app_path")
                       
@@ -212,10 +212,10 @@ jobs:
                   if [ "$standalone_found" = false ]; then
                     echo "No matching executable found for plugin: $plugin_name"
                     echo "Available executables:"
-                    find /usr/local/bin -type f -executable 2>/dev/null || echo "None found"
+                    find "$HOME/.local/bin" -type f -executable 2>/dev/null || echo "None found"
                   fi
                 else
-                  echo "❌ /usr/local/bin directory not found"
+                  echo "❌ ~/.local/bin directory not found"
                 fi
                 
                 # Summary
