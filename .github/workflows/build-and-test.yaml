@@ -134,6 +134,51 @@ jobs:
 
           # Kill AudioComponentRegistrar if running
           pgrep -x AudioComponentRegistrar >/dev/null && killall -9 AudioComponentRegistrar; echo "killed AudioComponentRegistrar" || echo "AudioComponentRegistrar Process not found"
+        
+      - name: Install plugins (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          cd build
+          
+          # Install all .tar.gz files from the installers directory
+          if [ -d "installers" ]; then
+            find installers -name "*.tar.gz" -maxdepth 1 | while read tarball_file; do
+              echo "Installing: $tarball_file"
+              
+              # Extract the tarball to system directories
+              sudo tar -xzf "$tarball_file" -C / --strip-components=1
+              
+              # Extract plugin name from filename (remove path and version)
+              plugin_name=$(basename "$tarball_file" | sed 's/-[0-9].*\.tar\.gz$//')
+              
+              # Verify VST3 plugin installation
+              vst3_installed=false
+              if [ -d "/usr/lib/vst3" ]; then
+                find /usr/lib/vst3 -name "*.vst3" -type d | while read vst3_plugin; do
+                  vst3_name=$(basename "$vst3_plugin" .vst3)
+                  echo "Found VST3 plugin: $vst3_name"
+                  if [[ "$vst3_name" == *"$plugin_name"* ]] || [[ "$plugin_name" == *"$vst3_name"* ]]; then
+                    echo "✅ VST3 plugin installed successfully: $vst3_plugin"
+                    vst3_installed=true
+                  fi
+                done
+              fi
+              
+              # Verify standalone app installation
+              standalone_installed=false
+              if [ -d "/usr/local/bin" ]; then
+                find /usr/local/bin -name "*$plugin_name*" -o -name "*$(echo $plugin_name | tr '[:upper:]' '[:lower:]')*" | while read standalone_app; do
+                  if [ -x "$standalone_app" ]; then
+                    echo "✅ Standalone app installed successfully: $standalone_app"
+                    standalone_installed=true
+                  fi
+                done
+              fi
+            done
+          else
+            echo "No installers directory found"
+            exit 0
+          fi
 
       - name: Run Tests
         run: ctest --preset Release
@@ -146,8 +191,7 @@ jobs:
             build/**/*_artefacts/Release/AU/*
             build/**/*_artefacts/Release/Standalone/*
             build/**/*_artefacts/Release/VST3/*
-            build/**/*.pkg
-            build/**/*.exe
+            build/installers
             !build/**/_CPack_Packages
             !build/_deps/**
             !build/bin/**

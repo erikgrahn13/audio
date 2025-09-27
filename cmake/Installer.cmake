@@ -24,8 +24,8 @@ function(create_installer target INSTALL_IMAGE)
         set(APP_INSTALL_DIRECTORY ".")
         set(VST3_INSTALL_DIRECTORY ".")
     elseif(UNIX)
-        set(APP_INSTALL_DIRECTORY "tmp")
-        set(VST3_INSTALL_DIRECTORY "tmp")
+        set(APP_INSTALL_DIRECTORY "usr/local/bin")
+        set(VST3_INSTALL_DIRECTORY "usr/lib/vst3")
     endif()
 
     get_target_property(VST3_PATH ${target}_VST3 JUCE_PLUGIN_ARTEFACT_FILE)
@@ -41,6 +41,9 @@ function(create_installer target INSTALL_IMAGE)
         DESTINATION ${APP_INSTALL_DIRECTORY}
         COMPONENT ${target}APP
         PATTERN "icon.ico" EXCLUDE
+        PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE
+                   GROUP_READ GROUP_EXECUTE
+                   WORLD_READ WORLD_EXECUTE
     )
 
     set(CPACK_COMPONENTS_ALL ${target}APP ${target}VST3)
