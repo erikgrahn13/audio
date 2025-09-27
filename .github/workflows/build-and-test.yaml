@@ -177,19 +177,33 @@ jobs:
                 standalone_found=false
                 if [ -d "/usr/local/bin" ]; then
                   echo "Standalone apps directory exists, checking for executable:"
+                  echo "All files in /usr/local/bin/:"
+                  ls -la /usr/local/bin/
                   
-                  # Check for exact matches and pattern matches
-                  for app_path in "/usr/local/bin/$plugin_name" "/usr/local/bin/"*"$plugin_name"* "/usr/local/bin/"*"$(echo $plugin_name | tr '[:upper:]' '[:lower:]')"*; do
+                  # Check for any executable file (not just specific patterns)
+                  # This handles cases where plugin names have spaces or different formatting
+                  for app_path in /usr/local/bin/*; do
                     if [ -f "$app_path" ] && [ -x "$app_path" ]; then
-                      echo "✅ Standalone app installed successfully: $app_path"
-                      standalone_found=true
-                      break
+                      app_name=$(basename "$app_path")
+                      echo "Found executable: $app_name"
+                      
+                      # Check if this could be our plugin (flexible matching)
+                      # Remove spaces and convert to lowercase for comparison
+                      plugin_name_clean=$(echo "$plugin_name" | tr -d ' ' | tr '[:upper:]' '[:lower:]')
+                      app_name_clean=$(echo "$app_name" | tr -d ' ' | tr '[:upper:]' '[:lower:]')
+                      
+                      if [[ "$app_name_clean" == *"$plugin_name_clean"* ]] || [[ "$plugin_name_clean" == *"$app_name_clean"* ]]; then
+                        echo "✅ Standalone app installed successfully: $app_path"
+                        standalone_found=true
+                        break
+                      fi
                     fi
                   done
                   
                   if [ "$standalone_found" = false ]; then
-                    echo "Searching for any files matching pattern in /usr/local/bin/:"
-                    ls -la /usr/local/bin/ | grep -i "$plugin_name" || echo "No matching files found"
+                    echo "No matching executable found for plugin: $plugin_name"
+                    echo "Available executables:"
+                    find /usr/local/bin -type f -executable 2>/dev/null || echo "None found"
                   fi
                 else
                   echo "❌ /usr/local/bin directory not found"
