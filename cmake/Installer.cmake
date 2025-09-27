@@ -37,13 +37,9 @@ function(create_installer target INSTALL_IMAGE)
         PATTERN "Plugin.ico" EXCLUDE
     )
 
-    install(DIRECTORY ${APP_PATH}
+    install(PROGRAMS ${APP_PATH}
         DESTINATION ${APP_INSTALL_DIRECTORY}
         COMPONENT ${target}APP
-        PATTERN "icon.ico" EXCLUDE
-        PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE
-                   GROUP_READ GROUP_EXECUTE
-                   WORLD_READ WORLD_EXECUTE
     )
 
     set(CPACK_COMPONENTS_ALL ${target}APP ${target}VST3)
