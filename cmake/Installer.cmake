@@ -24,8 +24,8 @@ function(create_installer target INSTALL_IMAGE)
         set(APP_INSTALL_DIRECTORY ".")
         set(VST3_INSTALL_DIRECTORY ".")
     elseif(UNIX)
-        set(APP_INSTALL_DIRECTORY "tmp")
-        set(VST3_INSTALL_DIRECTORY "tmp")
+        set(APP_INSTALL_DIRECTORY ".")
+        set(VST3_INSTALL_DIRECTORY ".")
     endif()
 
     get_target_property(VST3_PATH ${target}_VST3 JUCE_PLUGIN_ARTEFACT_FILE)
@@ -37,10 +37,9 @@ function(create_installer target INSTALL_IMAGE)
         PATTERN "Plugin.ico" EXCLUDE
     )
 
-    install(DIRECTORY ${APP_PATH}
+    install(PROGRAMS ${APP_PATH}
         DESTINATION ${APP_INSTALL_DIRECTORY}
         COMPONENT ${target}APP
-        PATTERN "icon.ico" EXCLUDE
     )
 
     set(CPACK_COMPONENTS_ALL ${target}APP ${target}VST3)
@@ -89,6 +88,19 @@ function(create_installer target INSTALL_IMAGE)
         )
     else()
         set(CPACK_GENERATOR "TGZ")
+        configure_file("${CMAKE_SOURCE_DIR}/cmake/install.sh.in" "install.sh" @ONLY)
+        
+        # Add the install script to the tarball
+        install(FILES "${CMAKE_CURRENT_BINARY_DIR}/install.sh"
+            DESTINATION .
+            PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE
+                       GROUP_READ GROUP_EXECUTE
+                       WORLD_READ WORLD_EXECUTE
+            COMPONENT ${target}SCRIPT
+        )
+        
+        # Include the script component in the package
+        list(APPEND CPACK_COMPONENTS_ALL ${target}SCRIPT)
     endif()
 
     # Linux installer

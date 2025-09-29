@@ -134,6 +134,80 @@ jobs:
 
           # Kill AudioComponentRegistrar if running
           pgrep -x AudioComponentRegistrar >/dev/null && killall -9 AudioComponentRegistrar; echo "killed AudioComponentRegistrar" || echo "AudioComponentRegistrar Process not found"
+        
+      - name: Install plugins (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          cd build
+          
+          # Install all .tar.gz files from the installers directory
+          if [ -d "installers" ]; then
+            for tarball_file in installers/*.tar.gz; do
+              if [ -f "$tarball_file" ]; then
+                echo "Processing: $tarball_file"
+                
+                # Extract the tarball
+                tar -xzf "$tarball_file"
+                
+                # Get the extracted directory name
+                extracted_dir=$(basename "$tarball_file" .tar.gz)
+                
+                # Change to extracted directory and run install script
+                cd "$extracted_dir"
+                
+                if [ -f "install.sh" ]; then
+                  echo "Running install script for $(basename "$tarball_file")..."
+                  echo "=========================================="
+                  ./install.sh
+                  echo "=========================================="
+                  echo "Install script completed."
+                else
+                  echo "❌ No install.sh found in $extracted_dir"
+                  exit 1
+                fi
+                
+                # Go back to build directory
+                cd ..
+                
+                # Extract plugin name for verification
+                plugin_name=$(basename "$tarball_file" | sed 's/-[0-9].*\.tar\.gz$//')
+                
+                # Simple verification - just check if files exist
+                echo "Verifying installation..."
+                vst3_found=false
+                standalone_found=false
+                
+                # Check for VST3
+                if find "$HOME/.vst3" -name "*.vst3" -type d 2>/dev/null | grep -q .; then
+                  vst3_found=true
+                  echo "✅ VST3 plugin found in ~/.vst3"
+                else
+                  echo "❌ No VST3 plugin found in ~/.vst3"
+                fi
+                
+                # Check for standalone
+                if find "$HOME/.local/bin" -name "*" -type f -executable 2>/dev/null | grep -qi "$plugin_name\|black.*lounge"; then
+                  standalone_found=true
+                  echo "✅ Standalone app found in ~/.local/bin"
+                else
+                  echo "❌ No standalone app found in ~/.local/bin"
+                fi
+                
+                # Final verification
+                if [ "$vst3_found" = true ] && [ "$standalone_found" = true ]; then
+                  echo "✅ Installation verification passed for $plugin_name"
+                else
+                  echo "❌ Installation verification failed for $plugin_name"
+                  exit 1
+                fi
+                
+                echo "----------------------------------------"
+              fi
+            done
+          else
+            echo "No installers directory found"
+            exit 0
+          fi
 
       - name: Run Tests
         run: ctest --preset Release
@@ -146,8 +220,7 @@ jobs:
             build/**/*_artefacts/Release/AU/*
             build/**/*_artefacts/Release/Standalone/*
             build/**/*_artefacts/Release/VST3/*
-            build/**/*.pkg
-            build/**/*.exe
+            build/installers
             !build/**/_CPack_Packages
             !build/_deps/**
             !build/bin/**

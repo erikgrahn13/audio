@@ -40,8 +40,10 @@ function(enable_pluginval_testing target)
                 set(PLUGIN_PATH_VST3 "${PLUGIN_PATH}/VST3")
             endif()
         elseif(UNIX) # TODO: this is temporary until an installer for liunux is in place
-            get_target_property(PLUGIN_PATH ${target} LIBRARY_OUTPUT_DIRECTORY)
-            set(PLUGIN_PATH_VST3 "${PLUGIN_PATH}/VST3")
+            if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+                get_target_property(PLUGIN_PATH ${target} LIBRARY_OUTPUT_DIRECTORY)
+                set(PLUGIN_PATH_VST3 "${PLUGIN_PATH}/VST3")
+            endif()
         endif()
     endif()
 
