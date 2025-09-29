@@ -144,87 +144,58 @@ jobs:
           if [ -d "installers" ]; then
             for tarball_file in installers/*.tar.gz; do
               if [ -f "$tarball_file" ]; then
-                echo "Installing: $tarball_file"
+                echo "Processing: $tarball_file"
                 
-                # Extract the tarball to user home directory (no sudo needed)
-                tar -xzf "$tarball_file" -C ~ --strip-components=1
+                # Extract the tarball
+                tar -xzf "$tarball_file"
                 
-                # Extract plugin name from filename (remove path and version)
+                # Get the extracted directory name
+                extracted_dir=$(basename "$tarball_file" .tar.gz)
+                
+                # Change to extracted directory and run install script
+                cd "$extracted_dir"
+                
+                if [ -f "install.sh" ]; then
+                  echo "Running install script for $(basename "$tarball_file")..."
+                  echo "=========================================="
+                  ./install.sh
+                  echo "=========================================="
+                  echo "Install script completed."
+                else
+                  echo "❌ No install.sh found in $extracted_dir"
+                  exit 1
+                fi
+                
+                # Go back to build directory
+                cd ..
+                
+                # Extract plugin name for verification
                 plugin_name=$(basename "$tarball_file" | sed 's/-[0-9].*\.tar\.gz$//')
-                echo "Looking for plugin: $plugin_name"
                 
-                # Verify VST3 plugin installation
-                echo "Checking VST3 installation..."
+                # Simple verification - just check if files exist
+                echo "Verifying installation..."
                 vst3_found=false
-                if [ -d "$HOME/.vst3" ]; then
-                  echo "VST3 directory exists, listing contents:"
-                  ls -la "$HOME/.vst3/"
-                  
-                  for vst3_plugin in "$HOME/.vst3"/*.vst3; do
-                    if [ -d "$vst3_plugin" ]; then
-                      vst3_name=$(basename "$vst3_plugin" .vst3)
-                      echo "Found VST3 plugin: $vst3_name"
-                      echo "✅ VST3 plugin installed successfully: $vst3_plugin"
-                      vst3_found=true
-                    fi
-                  done
-                else
-                  echo "❌ ~/.vst3 directory not found"
-                fi
-                
-                # Verify standalone app installation
-                echo "Checking standalone app installation..."
                 standalone_found=false
-                if [ -d "$HOME/.local/bin" ]; then
-                  echo "Standalone apps directory exists, checking for executable:"
-                  echo "All files in ~/.local/bin/:"
-                  ls -la "$HOME/.local/bin/"
-                  
-                  # Look for the actual plugin file (with or without execute permissions)
-                  # We'll check both for the file existence and execute permissions separately
-                  for app_path in "$HOME/.local/bin"/*; do
-                    if [ -f "$app_path" ]; then
-                      app_name=$(basename "$app_path")
-                      
-                      # Check if this could be our plugin (flexible matching)
-                      # Remove spaces and convert to lowercase for comparison
-                      plugin_name_clean=$(echo "$plugin_name" | tr -d ' ' | tr '[:upper:]' '[:lower:]')
-                      app_name_clean=$(echo "$app_name" | tr -d ' ' | tr '[:upper:]' '[:lower:]')
-                      
-                      if [[ "$app_name_clean" == *"$plugin_name_clean"* ]] || [[ "$plugin_name_clean" == *"$app_name_clean"* ]]; then
-                        echo "Found plugin file: $app_name"
-                        
-                        # Check if it has execute permissions
-                        if [ -x "$app_path" ]; then
-                          echo "✅ Standalone app installed successfully with execute permissions: $app_path"
-                          standalone_found=true
-                        else
-                          echo "⚠️  Plugin file found but lacks execute permissions: $app_path"
-                          echo "File permissions: $(ls -l "$app_path")"
-                          # This is still considered a partial success since the file is there
-                          standalone_found=true
-                        fi
-                        break
-                      fi
-                    fi
-                  done
-                  
-                  if [ "$standalone_found" = false ]; then
-                    echo "No matching executable found for plugin: $plugin_name"
-                    echo "Available executables:"
-                    find "$HOME/.local/bin" -type f -executable 2>/dev/null || echo "None found"
-                  fi
+                
+                # Check for VST3
+                if find "$HOME/.vst3" -name "*.vst3" -type d 2>/dev/null | grep -q .; then
+                  vst3_found=true
+                  echo "✅ VST3 plugin found in ~/.vst3"
                 else
-                  echo "❌ ~/.local/bin directory not found"
+                  echo "❌ No VST3 plugin found in ~/.vst3"
                 fi
                 
-                # Summary
+                # Check for standalone
+                if find "$HOME/.local/bin" -name "*" -type f -executable 2>/dev/null | grep -qi "$plugin_name\|black.*lounge"; then
+                  standalone_found=true
+                  echo "✅ Standalone app found in ~/.local/bin"
+                else
+                  echo "❌ No standalone app found in ~/.local/bin"
+                fi
+                
+                # Final verification
                 if [ "$vst3_found" = true ] && [ "$standalone_found" = true ]; then
-                  echo "✅ All components installed successfully for $plugin_name"
-                elif [ "$vst3_found" = true ]; then
-                  echo "⚠️  VST3 installed but standalone app not found for $plugin_name"
-                elif [ "$standalone_found" = true ]; then
-                  echo "⚠️  Standalone app installed but VST3 not found for $plugin_name"
+                  echo "✅ Installation verification passed for $plugin_name"
                 else
                   echo "❌ Installation verification failed for $plugin_name"
                   exit 1

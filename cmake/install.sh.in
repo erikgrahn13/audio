@@ -1,0 +1,112 @@
+#!/bin/bash
+
+# @PLUGIN_NAME@ Audio Plugin Installer
+# Version @CPACK_PACKAGE_VERSION@
+
+set -e  # Exit on any error
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+echo -e "${BLUE}========================================${NC}"
+echo -e "${BLUE}  @PLUGIN_NAME@ Audio Plugin Installer${NC}"
+echo -e "${BLUE}  Version @CPACK_PACKAGE_VERSION@${NC}"
+echo -e "${BLUE}========================================${NC}"
+echo ""
+
+# Check what components are available
+VST3_FILE="@PLUGIN_NAME@.vst3"
+STANDALONE_FILE="@PLUGIN_NAME@"
+
+echo -e "${YELLOW}Checking available components...${NC}"
+
+VST3_AVAILABLE=false
+STANDALONE_AVAILABLE=false
+
+if [ -d "$VST3_FILE" ]; then
+    VST3_AVAILABLE=true
+    echo -e "${GREEN}✓${NC} VST3 plugin found: $VST3_FILE"
+else
+    echo -e "${RED}✗${NC} VST3 plugin not found: $VST3_FILE"
+fi
+
+if [ -f "$STANDALONE_FILE" ]; then
+    STANDALONE_AVAILABLE=true
+    echo -e "${GREEN}✓${NC} Standalone app found: $STANDALONE_FILE"
+else
+    echo -e "${RED}✗${NC} Standalone app not found: $STANDALONE_FILE"
+fi
+
+if [ "$VST3_AVAILABLE" = false ] && [ "$STANDALONE_AVAILABLE" = false ]; then
+    echo -e "${RED}❌ No plugin components found! Installation cannot proceed.${NC}"
+    exit 1
+fi
+
+echo ""
+echo -e "${YELLOW}Installing to user directories (no admin privileges required)${NC}"
+echo ""
+
+# Install VST3 plugin
+if [ "$VST3_AVAILABLE" = true ]; then
+    echo -e "${YELLOW}Installing VST3 plugin...${NC}"
+    mkdir -p ~/.vst3
+    
+    if cp -r "$VST3_FILE" ~/.vst3/; then
+        echo -e "${GREEN}✓${NC} VST3 plugin installed to: ~/.vst3/$VST3_FILE"
+    else
+        echo -e "${RED}❌ Failed to install VST3 plugin${NC}"
+        exit 1
+    fi
+else
+    echo -e "${YELLOW}⚠️  Skipping VST3 installation (component not available)${NC}"
+fi
+
+# Install standalone app
+if [ "$STANDALONE_AVAILABLE" = true ]; then
+    echo -e "${YELLOW}Installing standalone application...${NC}"
+    mkdir -p ~/.local/bin
+    
+    if cp "$STANDALONE_FILE" ~/.local/bin/; then
+        chmod +x ~/.local/bin/"$STANDALONE_FILE"
+        echo -e "${GREEN}✓${NC} Standalone app installed to: ~/.local/bin/$STANDALONE_FILE"
+    else
+        echo -e "${RED}❌ Failed to install standalone application${NC}"
+        exit 1
+    fi
+else
+    echo -e "${YELLOW}⚠️  Skipping standalone installation (component not available)${NC}"
+fi
+
+echo ""
+echo -e "${GREEN}========================================${NC}"
+echo -e "${GREEN}  Installation completed successfully!${NC}"
+echo -e "${GREEN}========================================${NC}"
+echo ""
+
+# Post-installation information
+echo -e "${BLUE}Installation Summary:${NC}"
+if [ "$VST3_AVAILABLE" = true ]; then
+    echo -e "• VST3 plugin: ${GREEN}~/.vst3/$VST3_FILE${NC}"
+    echo -e "  ${YELLOW}→${NC} Will appear in your DAW's plugin list"
+fi
+
+if [ "$STANDALONE_AVAILABLE" = true ]; then
+    echo -e "• Standalone app: ${GREEN}~/.local/bin/$STANDALONE_FILE${NC}"
+    
+    # Check if ~/.local/bin is in PATH
+    if [[ ":$PATH:" == *":$HOME/.local/bin:"* ]]; then
+        echo -e "  ${YELLOW}→${NC} Ready to run from terminal: ${GREEN}$STANDALONE_FILE${NC}"
+    else
+        echo -e "  ${YELLOW}→${NC} To run from anywhere, add ~/.local/bin to your PATH:"
+        echo -e "    ${BLUE}echo 'export PATH=\"\$HOME/.local/bin:\$PATH\"' >> ~/.bashrc${NC}"
+        echo -e "    ${BLUE}echo 'export PATH=\"\$HOME/.local/bin:\$PATH\"' >> ~/.zshrc${NC}"
+        echo -e "  ${YELLOW}→${NC} Or run directly: ${GREEN}~/.local/bin/$STANDALONE_FILE${NC}"
+    fi
+fi
+
+echo ""
+echo -e "${BLUE}Thank you for installing @PLUGIN_NAME@!${NC}"
