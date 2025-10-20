@@ -55,6 +55,12 @@ jobs:
         with:
           msbuild-architecture: x64
 
+      - name: Enter MSVC dev environment
+        if: runner.os == 'Windows'
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
+          
       - name: Build
         run: |
           cmake --preset Release
