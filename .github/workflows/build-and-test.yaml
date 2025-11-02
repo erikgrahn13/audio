@@ -17,9 +17,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install Ninja
-        uses: seanmiddleditch/gha-setup-ninja@master
-
       - name: Set up Xcode
         if: matrix.os == 'macos-latest'
         uses: maxim-lobanov/setup-xcode@v1
@@ -58,13 +55,12 @@ jobs:
         with:
           msbuild-architecture: x64
 
-      - name: Setup MSVC Environment and Export Variables
-        if: matrix.os == 'windows-latest'
-        shell: cmd
-        run: |
-          for /f "usebackq tokens=*" %%i in (`vswhere -latest -property installationPath`) do set VS_PATH=%%i
-          call "%VS_PATH%\VC\Auxiliary\Build\vcvars64.bat"
-          set >> %GITHUB_ENV%
+      - name: Enter MSVC dev environment
+        if: runner.os == 'Windows'
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
+          
       - name: Build
         run: |
           cmake --preset Release
@@ -231,10 +227,7 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Install Ninja
-        uses: seanmiddleditch/gha-setup-ninja@master
-
+        
       - name: Configure Doxygen
         run: cmake --preset Docs
 
