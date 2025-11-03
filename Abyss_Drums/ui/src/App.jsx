@@ -113,7 +113,7 @@ function App() {
           <DrumTypes></DrumTypes>
           <div style={{
                 bottom: "80px",
-                left: "20px",
+                left: "60px",
                 position: "absolute",
                 fontFamily: "DeathMetalFont2"
             }}>
@@ -124,7 +124,7 @@ function App() {
             <Slots name={loadedSample1.name} index={loadedSample1.index} type={loadedSample1.type}  onClear={() => updateSlot1({ name: "", index: 0, type: null })} />
           </Droppable>
           {data.isStandalone[0] && <button style={{
-            bottom: "20px", right: "20px",
+            bottom: "10px", right: "10px",
             fontFamily: "WebFont, sans-serif",
             fontSize: "30px",
             backgroundColor: "black",
