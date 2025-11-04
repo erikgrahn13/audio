@@ -43,3 +43,23 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Linux" AND NOT FETCHCONTENT_FULLY_DISCONNECTED)
     pkg_check_modules(WEBKIT REQUIRED webkit2gtk-4.1)
     include_directories(${GTK3_INCLUDE_DIRS} ${WEBKIT_INCLUDE_DIRS})
 endif()
+
+if(WIN32)
+    FetchContent_Declare(
+        wil
+        URL https://www.nuget.org/api/v2/package/Microsoft.Windows.ImplementationLibrary/1.0.211019.2
+        DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+    )
+
+    # Microsoft.Web.WebView2
+    FetchContent_Declare(
+        webview2
+        URL https://www.nuget.org/api/v2/package/Microsoft.Web.WebView2/1.0.1072.54
+        DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+        SOURCE_DIR ${CMAKE_BINARY_DIR}/_deps/Microsoft.Web.WebView2
+    )
+
+    FetchContent_MakeAvailable(wil webview2)
+
+    set(JUCE_WEBVIEW2_PACKAGE_LOCATION "${CMAKE_BINARY_DIR}/_deps" CACHE PATH "Path to WebView2 package" FORCE)
+endif()
