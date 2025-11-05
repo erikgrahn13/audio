@@ -1,5 +1,8 @@
 import * as Juce from "juce-framework-frontend";
 import React, {useState} from "react";
+import { Button } from "@mui/material";
+import KickDrum from "../../assets/kick-drum.png";
+import SnareDrum from "../../assets/snare10.png";
 
 const playPreviewSample = Juce.getNativeFunction("playPreviewSample");
 const clearSample = Juce.getNativeFunction("clearSample");
@@ -8,7 +11,6 @@ const clearSample = Juce.getNativeFunction("clearSample");
 function Slots({ isOver, setNodeRef, name, index, type, onClear }) {
 
   const [menuOpen, setMenuOpen] = useState(false);
-  const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
 
   function handleClick() {
     if (!name || name === "") return;
@@ -18,34 +20,98 @@ function Slots({ isOver, setNodeRef, name, index, type, onClear }) {
   function handleRightClick(e) {
     e.preventDefault();
     setMenuOpen(true);
-    setMenuPosition({ x: e.clientX, y: e.clientY });
   }
 
   function handleCloseMenu() {
     setMenuOpen(false);
   }
 
+  // Function to get the appropriate image based on type
+  const getImageForType = () => {
+    // Safely convert to string and lowercase
+    let lowerType = '';
+    if (type !== null && type !== undefined) {
+      lowerType = String(type).toLowerCase();
+    }
+    
+    switch(lowerType) {
+      case 'kick':
+      case 'kick_drum':
+      case 'kickdrum':
+      case '0': // in case type is numeric
+        return KickDrum;
+      case 'snare':
+      case 'snare_drum':
+      case 'snaredrum':
+      case '1': // in case type is numeric
+        return SnareDrum;
+      default:
+        return KickDrum; // Always return an image
+    }
+  };
+
   return (
-    <>
-      <button ref={setNodeRef}
-        style={{
-          padding: 40,
-          margin: "10px 80px 0px 80px",
-          backgroundColor: isOver ? "white" : "gray",
-          fontFamily: "DeathMetalFont2",
+    <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+      <Button 
+        ref={setNodeRef}
+        variant="contained"
+        sx={{
+          padding: "0px",
+          margin: "10px",
+          backgroundColor: isOver ? "#131313ff" : "black",
           borderRadius: "12px",
-        }} onMouseDown={(e) => { 
+          borderColor: "white",
+          borderWidth: "1px",
+          borderStyle: "solid",
+          width: "160px",
+          height: "100px",
+          minWidth: "120px",
+          minHeight: "100px",
+          maxWidth: "160px",
+          maxHeight: "120px",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          transition: 'box-shadow 0.001s ease',
+          justifyContent: "center",
+          '&:hover': {
+            // backgroundColor: isOver ? "#131313ff" : "#555",
+          },
+          '&:active': {
+            boxShadow: '0 0 5px yellow',
+          }
+        }} 
+        onMouseDown={(e) => { 
             if(e.button === 0) {
-              e.currentTarget.style.boxShadow = '0 0 5px yellow'; 
               handleClick();
             }
         }}
         onContextMenu={handleRightClick}
-        onMouseUp={(e) => { e.currentTarget.style.boxShadow = ''; }}
-        onMouseLeave={(e) => { e.currentTarget.style.boxShadow = ''; }}
+        disableRipple
       >
-        {name?.replace(/_wav$/i, '') ?? ""}
-      </button>
+        {name && (
+          <img 
+            src={getImageForType()} 
+            alt={type || 'drum'}
+            style={{
+              width: "80px",
+              height: "80px",
+              marginBottom: "0px",
+              objectFit: "contain",
+            }}
+          />
+        )}
+        {name && (
+          <span style={{ 
+            fontFamily: "DeathMetalFont2",
+            fontSize: "12px",
+            textAlign: "center",
+            wordBreak: "break-word"
+          }}>
+            {name.replace(/_wav$/i, '')}
+          </span>
+        )}
+      </Button>
 {menuOpen && (
   <>
     {/* Overlay to block interaction */}
@@ -78,8 +144,15 @@ function Slots({ isOver, setNodeRef, name, index, type, onClear }) {
       autoFocus // Focuses the modal
     >
       <div style={{ marginBottom: "24px", fontFamily: "DeathMetalFont2", }}>CLEAR SOUND?</div>
-      <button
-        style={{ marginRight: "16px", padding: "8px 24px", fontFamily: "DeathMetalFont2", }}
+      <Button
+        variant="contained"
+        sx={{ 
+          marginRight: "16px", 
+          padding: "8px 24px", 
+          fontFamily: "DeathMetalFont2",
+          backgroundColor: "#d32f2f",
+          '&:hover': { backgroundColor: "#b71c1c" }
+        }}
         onClick={() => {
           setMenuOpen(false);
           clearSample();
@@ -87,18 +160,24 @@ function Slots({ isOver, setNodeRef, name, index, type, onClear }) {
         }}
       >
         YES
-      </button>
-      <button
-        style={{ padding: "8px 24px", fontFamily: "DeathMetalFont2", }}
+      </Button>
+      <Button
+        variant="outlined"
+        sx={{ 
+          padding: "8px 24px", 
+          fontFamily: "DeathMetalFont2",
+          borderColor: "gray",
+          color: "black",
+          '&:hover': { borderColor: "#555", backgroundColor: "#f5f5f5" }
+        }}
         onClick={handleCloseMenu}
       >
         NO
-      </button>
+      </Button>
     </div>
   </>
 )}
-    </>
-    
+    </div>
   );
 }
 
