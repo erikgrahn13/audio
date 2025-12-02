@@ -2,6 +2,10 @@ cmake_minimum_required(VERSION 3.22)
 
 project("Abyss Lounge" VERSION 0.1)
 
+if(WIN32)
+    add_compile_definitions(NOMINMAX WIN32_LEAN_AND_MEAN)
+endif()
+
 enable_testing()
 
 set(CMAKE_CXX_STANDARD 23)
