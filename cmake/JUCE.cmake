@@ -1,11 +1,11 @@
 
 
 if(WIN32)
-  set(JUCE_URL "https://github.com/juce-framework/JUCE/releases/download/8.0.9/juce-8.0.9-windows.zip")
+  set(JUCE_URL "https://github.com/juce-framework/JUCE/releases/download/8.0.11/juce-8.0.11-windows.zip")
 elseif(APPLE)
-  set(JUCE_URL "https://github.com/juce-framework/JUCE/releases/download/8.0.9/juce-8.0.9-osx.zip")
+  set(JUCE_URL "https://github.com/juce-framework/JUCE/releases/download/8.0.11/juce-8.0.11-osx.zip")
 elseif(UNIX)
-  set(JUCE_URL "https://github.com/juce-framework/JUCE/releases/download/8.0.9/juce-8.0.9-linux.zip")
+  set(JUCE_URL "https://github.com/juce-framework/JUCE/releases/download/8.0.11/juce-8.0.11-linux.zip")
 else()
   message(FATAL_ERROR "Not supported platform")
 endif()
