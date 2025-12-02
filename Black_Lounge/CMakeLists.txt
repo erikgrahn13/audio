@@ -126,12 +126,6 @@ target_link_libraries(${PROJECT_NAME}
     juce::juce_recommended_warning_flags
 )
 
-if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
-    target_compile_definitions(${PROJECT_NAME}
-        PRIVATE
-        NOMINMAX WIN32_LEAN_AND_MEAN)
-endif()
-
 if(JUCE_BUILD_EXTRAS)
     add_dependencies(${PROJECT_NAME} AudioPluginHost AudioFilePlayer_VST3)
 endif()
