@@ -182,10 +182,11 @@ $(function(){initNavTree('BlackLoungeProcessor_8h_source.html',''); initResizabl
 <div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span> </div>
 <div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    juce::AudioParameterFloat *mDenoiserParameter;</div>
 <div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>    juce::AudioParameterBool *mDenoiserActiveParameter;</div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span> </div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>    <span class="comment">//==============================================================================</span></div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(<a class="code hl_class" href="classBlackLoungeAudioProcessor.html">BlackLoungeAudioProcessor</a>)</div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>};</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>    juce::dsp::ProcessorChain&lt;juce::dsp::IIR::Filter&lt;float&gt;&gt; toneShaping;</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span> </div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>    <span class="comment">//==============================================================================</span></div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(<a class="code hl_class" href="classBlackLoungeAudioProcessor.html">BlackLoungeAudioProcessor</a>)</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>};</div>
 </div>
 <div class="ttc" id="aclassBlackLoungeAudioProcessor_html"><div class="ttname"><a href="classBlackLoungeAudioProcessor.html">BlackLoungeAudioProcessor</a></div><div class="ttdef"><b>Definition</b> BlackLoungeProcessor.h:13</div></div>
 <div class="ttc" id="aclassNoiseReduction_html"><div class="ttname"><a href="classNoiseReduction.html">NoiseReduction</a></div><div class="ttdef"><b>Definition</b> NoiseReduction.h:6</div></div>
