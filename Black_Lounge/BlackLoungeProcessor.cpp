@@ -98,7 +98,6 @@ void BlackLoungeAudioProcessor::prepareToPlay(double sampleRate, int samplesPerB
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
-    juce::ignoreUnused(sampleRate, samplesPerBlock);
 
     const auto numChannels = getTotalNumOutputChannels();
     mAudioBuffer->setSize(numChannels, samplesPerBlock * 2);
@@ -107,6 +106,10 @@ void BlackLoungeAudioProcessor::prepareToPlay(double sampleRate, int samplesPerB
     spec.numChannels = static_cast<juce::uint32>(getTotalNumInputChannels());
     spec.sampleRate = sampleRate;
     mNoiseReduction.prepare(spec);
+    toneShaping.prepare(spec);
+    
+    // Set filter coefficients now that we have the actual sample rate
+    toneShaping.get<0>().coefficients = juce::dsp::IIR::Coefficients<float>::makeHighShelf(sampleRate, 1800.f, 0.707f, juce::Decibels::decibelsToGain(6.f));
 }
 
 void BlackLoungeAudioProcessor::releaseResources()
@@ -158,7 +161,8 @@ void BlackLoungeAudioProcessor::processBlock(juce::AudioBuffer<float> &buffer, j
 {
     juce::ignoreUnused(midiMessages);
 
-    const float *input = buffer.getReadPointer(0);
+    auto *input = buffer.getWritePointer(0);
+    auto *output = buffer.getWritePointer(0);
 
     mRingBuffer->addToFifo(input, buffer.getNumSamples());
 
@@ -176,9 +180,13 @@ void BlackLoungeAudioProcessor::processBlock(juce::AudioBuffer<float> &buffer, j
     {
         buffer.applyGain(gain);
 #if defined NDEBUG
-        mBlackLoungeAmp->process(buffer);
+        mBlackLoungeAmp->process(input, output, buffer.getNumSamples());
 #endif
     }
+
+    juce::dsp::AudioBlock<float> block(buffer);
+    juce::dsp::ProcessContextReplacing<float> context(block);
+    toneShaping.process(context);
 
     buffer.applyGain(volume);
     if (buffer.getNumChannels() > 1)

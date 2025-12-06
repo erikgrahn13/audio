@@ -1,7 +1,7 @@
 #pragma once
 
 #include "NAM/dsp.h"
-#include <JuceHeader.h>
+// #include <JuceHeader.h>
 #include <deque>
 
 class Amp
@@ -13,7 +13,7 @@ class Amp
     ~Amp();
 
     void prepare();
-    void process(juce::AudioBuffer<float> &buffer);
+    void process(float *input, float* output, int numSamples);
 
   private:
     const char *mAmpData;

@@ -72,7 +72,6 @@ target_sources(${PROJECT_NAME}
     PRIVATE
     BlackLoungeEditor.cpp
     BlackLoungeProcessor.cpp
-    Amp.cpp
     ${CMAKE_SOURCE_DIR}/utilities/CustomLookAndFeel/CustomStandalone.cpp
 )
 
@@ -111,10 +110,11 @@ target_link_libraries(${PROJECT_NAME}
     PRIVATE
     # AudioPluginData           # If we'd created a binary data target, we'd link to it here
     juce::juce_audio_utils
-    nam_dependency
     NoiseReduction
     BlackLoungeAmp
+    Amp
     pitch_detector
+    # BasicPitchCNN
     juce::juce_dsp
 
     # juce::juce_audio_processors
