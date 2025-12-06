@@ -62,6 +62,7 @@ class BlackLoungeAudioProcessor final : public juce::AudioProcessor
 
     juce::AudioParameterFloat *mDenoiserParameter;
     juce::AudioParameterBool *mDenoiserActiveParameter;
+    juce::dsp::ProcessorChain<juce::dsp::IIR::Filter<float>> toneShaping;
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(BlackLoungeAudioProcessor)

@@ -59,13 +59,10 @@ void Amp::prepare()
 {
 }
 
-void Amp::process(juce::AudioBuffer<float> &buffer)
+void Amp::process (float* input, float *output, int numSamples)
 {
-    std::ignore = buffer;
-    float *input = buffer.getWritePointer(0);
-    float *output = buffer.getWritePointer(0);
     if (mNamModel)
     {
-        mNamModel->process(input, output, buffer.getNumSamples());
+        mNamModel->process(input, output, numSamples);
     }
 }
