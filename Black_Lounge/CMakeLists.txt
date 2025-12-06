@@ -114,7 +114,7 @@ target_link_libraries(${PROJECT_NAME}
     BlackLoungeAmp
     Amp
     pitch_detector
-    BasicPitchCNN
+    # BasicPitchCNN
     juce::juce_dsp
 
     # juce::juce_audio_processors
