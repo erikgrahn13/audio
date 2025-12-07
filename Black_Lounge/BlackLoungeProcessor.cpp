@@ -109,7 +109,7 @@ void BlackLoungeAudioProcessor::prepareToPlay(double sampleRate, int samplesPerB
     toneShaping.prepare(spec);
     
     // Set filter coefficients now that we have the actual sample rate
-    toneShaping.get<0>().coefficients = juce::dsp::IIR::Coefficients<float>::makeHighShelf(sampleRate, 1800.f, 0.707f, juce::Decibels::decibelsToGain(6.f));
+    toneShaping.get<0>().coefficients = juce::dsp::IIR::Coefficients<float>::makeHighShelf(sampleRate, 1800.f, 0.707f, juce::Decibels::decibelsToGain(9.f));
 }
 
 void BlackLoungeAudioProcessor::releaseResources()
