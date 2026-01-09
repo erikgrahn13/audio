@@ -3,7 +3,6 @@
 #include "CustomLookAndFeel/DeathMetalLookAndFeel.h"
 #include "CustomLookAndFeel/FontAudioLookAndFeel.h"
 #include "PluginProcessor.h"
-#include <JuceHeader.h>
 
 class SliderGroup : public juce::Component
 {

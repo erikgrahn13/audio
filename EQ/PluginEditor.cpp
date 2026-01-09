@@ -61,7 +61,7 @@ AudioPluginAudioProcessorEditor::~AudioPluginAudioProcessorEditor()
 void AudioPluginAudioProcessorEditor::paint(juce::Graphics &g)
 {
     // (Our component is opaque, so we must completely fill the background with a solid colour)
-    g.setColour(Colours::black);
+    g.setColour(juce::Colours::black);
     g.fillRoundedRectangle(getLocalBounds().toFloat(), 20);
 }
 

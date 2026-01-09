@@ -1,7 +1,6 @@
 #pragma once
 
 #include <Fonts.h>
-#include <JuceHeader.h>
 
 class FontAudioLookAndFeel : public juce::LookAndFeel_V4
 {

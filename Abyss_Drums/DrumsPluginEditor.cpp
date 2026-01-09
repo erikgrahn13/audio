@@ -2,7 +2,6 @@
 #include "KickSamples.h"
 #include "SnareSamples.h"
 #include "DrumsPluginProcessor.h"
-#include <JuceHeader.h>
 #if defined NDEBUG
 #include <WebViewFiles.h>
 #endif
@@ -70,7 +69,7 @@ DrumsAudioProcessorEditor::DrumsAudioProcessorEditor(DrumsAudioProcessor &p)
 #if !defined NDEBUG
     webViewComponent.goToURL("http://localhost:5173/");
 #else
-    webViewComponent.goToURL(WebBrowserComponent::getResourceProviderRoot());
+    webViewComponent.goToURL(juce::WebBrowserComponent::getResourceProviderRoot());
 #endif
     addAndMakeVisible(webViewComponent);
     // Make sure that before the constructor has finished, you've set the

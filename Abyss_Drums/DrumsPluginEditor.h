@@ -1,7 +1,6 @@
 #pragma once
 
 #include "DrumsPluginProcessor.h"
-#include <JuceHeader.h>
 #include "CustomLookAndFeel/CustomStandaloneFilterWindow.h"
 
 //==============================================================================

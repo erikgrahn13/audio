@@ -5,7 +5,6 @@
 #include "NAM/dsp.h"
 #include "NoiseReduction.h"
 #include "RingBuffer.h"
-#include <JuceHeader.h>
 #include <juce_audio_processors/juce_audio_processors.h>
 
 //==============================================================================

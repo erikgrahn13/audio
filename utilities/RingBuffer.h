@@ -1,4 +1,4 @@
-#include <JuceHeader.h>
+#pragma once
 
 class RingBuffer
 {

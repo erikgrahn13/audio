@@ -1,7 +1,6 @@
 #pragma once
 
 #include "NAM/dsp.h"
-// #include <JuceHeader.h>
 #include <deque>
 
 class Amp

@@ -146,13 +146,13 @@ juce::AudioProcessorValueTreeState::ParameterLayout BlackLoungeAudioProcessor::c
 {
     std::vector<std::unique_ptr<juce::RangedAudioParameter>> parameters;
     parameters.push_back(
-        std::make_unique<juce::AudioParameterFloat>(ParameterID{"volume", 1}, "Volume", -10.f, 10.f, 0.f));
+        std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"volume", 1}, "Volume", -10.f, 10.f, 0.f));
     parameters.push_back(
-        std::make_unique<juce::AudioParameterFloat>(ParameterID{"gain", 1}, "Gain", -20.f, 20.f, -6.f));
+        std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"gain", 1}, "Gain", -20.f, 20.f, -6.f));
     parameters.push_back(
-        std::make_unique<juce::AudioParameterBool>(ParameterID{"denoiserActive", 1}, "DenoiserActive", true));
+        std::make_unique<juce::AudioParameterBool>(juce::ParameterID{"denoiserActive", 1}, "DenoiserActive", true));
     parameters.push_back(
-        std::make_unique<juce::AudioParameterFloat>(ParameterID{"denoiser", 1}, "Denoiser", -140.f, 0.f, -140.f));
+        std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"denoiser", 1}, "Denoiser", -140.f, 0.f, -140.f));
 
     return {parameters.begin(), parameters.end()};
 }
@@ -162,24 +162,24 @@ void BlackLoungeAudioProcessor::processBlock(juce::AudioBuffer<float> &buffer, j
     juce::ignoreUnused(midiMessages);
 
     auto *input = buffer.getWritePointer(0);
-    auto *output = buffer.getWritePointer(0);
-
+    
     mRingBuffer->addToFifo(input, buffer.getNumSamples());
-
+    
     if (mDenoiserActiveParameter->get())
     {
         auto threshold = mDenoiserParameter->get();
         mNoiseReduction.setThreshold(threshold);
         mNoiseReduction.process(buffer);
     }
-
+    
     auto gain = juce::Decibels::decibelsToGain(mGainParameter->get());
     auto volume = juce::Decibels::decibelsToGain(mVolumeParameter->get());
-
+    
     if (mBlackLoungeAmp)
     {
         buffer.applyGain(gain);
-#if defined NDEBUG
+        #if defined NDEBUG
+        auto *output = buffer.getWritePointer(0);
         mBlackLoungeAmp->process(input, output, buffer.getNumSamples());
 #endif
     }

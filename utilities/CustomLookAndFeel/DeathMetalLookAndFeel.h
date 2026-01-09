@@ -1,7 +1,7 @@
 #pragma once
 
+#include <juce_gui_basics/juce_gui_basics.h>
 #include <Fonts.h>
-#include <JuceHeader.h>
 #include <cmath>
 #include <numbers>
 
@@ -63,10 +63,10 @@ class DeathMetalLookAndFeel : public juce::LookAndFeel_V4
 
             auto trackWidth = juce::jmin(6.0f, slider.isHorizontal() ? (float)height * 0.25f : (float)width * 0.25f);
 
-            Point<float> startPoint(slider.isHorizontal() ? (float)x : (float)x + (float)width * 0.5f,
+            juce::Point<float> startPoint(slider.isHorizontal() ? (float)x : (float)x + (float)width * 0.5f,
                                     slider.isHorizontal() ? (float)y + (float)height * 0.5f : (float)(height + y));
 
-            Point<float> endPoint(slider.isHorizontal() ? (float)(width + x) : startPoint.x,
+            juce::Point<float> endPoint(slider.isHorizontal() ? (float)(width + x) : startPoint.x,
                                   slider.isHorizontal() ? startPoint.y : (float)y);
 
             juce::Path backgroundTrack;

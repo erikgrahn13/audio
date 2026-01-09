@@ -3,7 +3,6 @@
 #include "BlackLoungeProcessor.h"
 #include "CustomLookAndFeel/CustomStandaloneFilterWindow.h"
 #include "Tuner.h"
-#include <JuceHeader.h>
 
 //==============================================================================
 class BlackLoungeAudioProcessorEditor final : public juce::AudioProcessorEditor, juce::Timer

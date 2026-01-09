@@ -25,6 +25,8 @@
 
 #pragma once
 
+#include <juce_audio_utils/juce_audio_utils.h>
+#include <juce_gui_extra/juce_gui_extra.h>
 // #include "CustomLookAndFeel/DeathMetalLookAndFeel.h"
 
 #ifndef DOXYGEN
@@ -44,7 +46,7 @@ namespace juce
 
     @tags{Audio}
 */
-class StandalonePluginHolder : private AudioIODeviceCallback, private Timer, private Value::Listener
+class StandalonePluginHolder : private juce::AudioIODeviceCallback, private Timer, private Value::Listener
 {
   public:
     //==============================================================================

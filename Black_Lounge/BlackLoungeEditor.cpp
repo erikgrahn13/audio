@@ -1,7 +1,6 @@
 #include "BlackLoungeEditor.h"
 #include "BlackLoungeAmp.h"
 #include "BlackLoungeProcessor.h"
-#include <JuceHeader.h>
 #if defined NDEBUG
 #include <WebViewFiles.h>
 #endif
@@ -48,7 +47,7 @@ BlackLoungeAudioProcessorEditor::BlackLoungeAudioProcessorEditor(BlackLoungeAudi
 #if !defined NDEBUG
     webBrowserComponent.goToURL("http://127.0.0.1:5173/build/Black_Lounge/ui/index.html");
 #else
-    webBrowserComponent.goToURL(WebBrowserComponent::getResourceProviderRoot());
+    webBrowserComponent.goToURL(juce::WebBrowserComponent::getResourceProviderRoot());
 #endif
 
     addAndMakeVisible(webBrowserComponent);

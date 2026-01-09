@@ -102,7 +102,7 @@ void EQView::paint(juce::Graphics &g)
         {
             std::string str =
                 std::to_string(dynamic_cast<CustomAudioParameterFloat *>(handle->mFreqParameter)->getIndex());
-            Rectangle<int> r;
+            juce::Rectangle<int> r;
 
             auto pos = handle->getPosition();
             r.setBounds(pos.getX() + reducedSize, pos.getY() + reducedSize / 3, 20, 20);
@@ -180,7 +180,7 @@ void EQView::drawTextLabels(juce::Graphics &g)
         juce::TextLayout textLayout;
         textLayout.createLayout(attributedStr, std::numeric_limits<float>::max()); // No width constraint
         auto textWidth = textLayout.getWidth();
-        Rectangle<int> r;
+        juce::Rectangle<int> r;
 
         r.setSize(static_cast<int>(textWidth), reducedSize);
         r.setCentre(static_cast<int>(xs[i]), 0);
@@ -192,7 +192,7 @@ void EQView::drawTextLabels(juce::Graphics &g)
 
     for (auto gaindB : gainsdB)
     {
-        auto y = jmap(static_cast<float>(gaindB), -18.f, 18.f, static_cast<float>(size.getBottom()),
+        auto y = juce::jmap(static_cast<float>(gaindB), -18.f, 18.f, static_cast<float>(size.getBottom()),
                       static_cast<float>(size.getTopLeft().getY()));
         std::string str;
         if (gaindB > 0.f)
@@ -204,7 +204,7 @@ void EQView::drawTextLabels(juce::Graphics &g)
             str = std::to_string(gaindB);
         }
 
-        Rectangle<int> r;
+        juce::Rectangle<int> r;
 
         r.setSize(reducedSize, reducedSize);
         r.setX(getX());
@@ -334,10 +334,10 @@ void EQView::Handle::paint(juce::Graphics &g)
         return;
     }
 
-    g.setColour(Colours::black);
+    g.setColour(juce::Colours::black);
     g.fillEllipse(juce::Rectangle<float>(handleSize, handleSize));
 
-    g.setColour(Colours::white);
+    g.setColour(juce::Colours::white);
 
     juce::Point<float> point1 = getLocalBounds().getCentre().toFloat();
     point1.setX(point1.getX() + (handleSize / 2) * ::sinf(0. * static_cast<float>(std::numbers::pi) / 180.));

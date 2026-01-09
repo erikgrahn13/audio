@@ -5,7 +5,6 @@
 #include "PluginProcessor.h"
 #include <Filter.h>
 #include <Fonts.h>
-#include <JuceHeader.h>
 #include <array>
 
 // extern "C" {
