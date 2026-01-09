@@ -315,59 +315,59 @@ juce::AudioProcessorValueTreeState::ParameterLayout AudioPluginAudioProcessor::c
     auto result = attributes.withStringFromValueFunction([](float value, int) { return juce::String(value, 2); });
     // attributes.withLabel("Hz");
     // attributes.
-    parameters.push_back(std::make_unique<juce::AudioParameterBool>(ParameterID{"hpf_bypass", 1}, "HPF_bypass", true));
-    parameters.push_back(std::make_unique<juce::AudioParameterBool>(ParameterID{"lpf_bypass", 1}, "LPF_bypass", true));
+    parameters.push_back(std::make_unique<juce::AudioParameterBool>(juce::ParameterID{"hpf_bypass", 1}, "HPF_bypass", true));
+    parameters.push_back(std::make_unique<juce::AudioParameterBool>(juce::ParameterID{"lpf_bypass", 1}, "LPF_bypass", true));
     parameters.push_back(
-        std::make_unique<juce::AudioParameterBool>(ParameterID{"LowShelf_bypass", 1}, "LowShelf_bypass", true));
+        std::make_unique<juce::AudioParameterBool>(juce::ParameterID{"LowShelf_bypass", 1}, "LowShelf_bypass", true));
     parameters.push_back(
-        std::make_unique<juce::AudioParameterBool>(ParameterID{"HighShelf_bypass", 1}, "HighShelf_bypass", true));
+        std::make_unique<juce::AudioParameterBool>(juce::ParameterID{"HighShelf_bypass", 1}, "HighShelf_bypass", true));
     parameters.push_back(
-        std::make_unique<juce::AudioParameterBool>(ParameterID{"LowMid_bypass", 1}, "LowMid_bypass", true));
+        std::make_unique<juce::AudioParameterBool>(juce::ParameterID{"LowMid_bypass", 1}, "LowMid_bypass", true));
     parameters.push_back(
-        std::make_unique<juce::AudioParameterBool>(ParameterID{"HighMid_bypass", 1}, "HighMid_bypass", true));
+        std::make_unique<juce::AudioParameterBool>(juce::ParameterID{"HighMid_bypass", 1}, "HighMid_bypass", true));
 
     parameters.push_back(std::make_unique<juce::AudioParameterChoice>(
-        ParameterID{"hpf_filterOrder", 1}, "hpf_filterOrder",
+        juce::ParameterID{"hpf_filterOrder", 1}, "hpf_filterOrder",
         juce::StringArray{"6DB/OCT", "12DB/OCT", "18DB/OCT", "24DB/OCT"}, 1));
     parameters.push_back(std::make_unique<juce::AudioParameterChoice>(
-        ParameterID{"lpf_filterOrder", 1}, "lpf_filterOrder",
+        juce::ParameterID{"lpf_filterOrder", 1}, "lpf_filterOrder",
         juce::StringArray{"6DB/OCT", "12DB/OCT", "18DB/OCT", "24DB/OCT"}, 1));
 
     // High Pass
     parameters.push_back(
-        std::make_unique<CustomAudioParameterFloat>(ParameterID{"hpf_freq", 1}, "HPF_Freq", logRange, 20.f, 1));
+        std::make_unique<CustomAudioParameterFloat>(juce::ParameterID{"hpf_freq", 1}, "HPF_Freq", logRange, 20.f, 1));
 
     // Low Pass
     parameters.push_back(
-        std::make_unique<CustomAudioParameterFloat>(ParameterID{"lpf_freq", 1}, "LPF_Freq", logRange, 20000.f, 6));
+        std::make_unique<CustomAudioParameterFloat>(juce::ParameterID{"lpf_freq", 1}, "LPF_Freq", logRange, 20000.f, 6));
 
     // Low Shelving
-    parameters.push_back(std::make_unique<CustomAudioParameterFloat>(ParameterID{"LowShelfFreq", 1}, "LowShelfFreq",
+    parameters.push_back(std::make_unique<CustomAudioParameterFloat>(juce::ParameterID{"LowShelfFreq", 1}, "LowShelfFreq",
                                                                      logRange, 100.f, 2));
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>(
-        ParameterID{"LowShelfGain", 1}, "LowShelfGain", juce::NormalisableRange<float>(-18.f, 18.f, 0.1f), 0.f));
+        juce::ParameterID{"LowShelfGain", 1}, "LowShelfGain", juce::NormalisableRange<float>(-18.f, 18.f, 0.1f), 0.f));
 
     // High Shelving
-    parameters.push_back(std::make_unique<CustomAudioParameterFloat>(ParameterID{"HighShelfFreq", 1}, "HighShelfFreq",
+    parameters.push_back(std::make_unique<CustomAudioParameterFloat>(juce::ParameterID{"HighShelfFreq", 1}, "HighShelfFreq",
                                                                      logRange, 6000.f, 5));
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>(
-        ParameterID{"HighShelfGain", 1}, "HighShelfGain", juce::NormalisableRange<float>(-18.f, 18.f, 0.1f), 0.f));
+        juce::ParameterID{"HighShelfGain", 1}, "HighShelfGain", juce::NormalisableRange<float>(-18.f, 18.f, 0.1f), 0.f));
 
     // Low Mid Peak
     parameters.push_back(
-        std::make_unique<CustomAudioParameterFloat>(ParameterID{"LowMidFreq", 1}, "LowMidFreq", logRange, 600.f, 3));
+        std::make_unique<CustomAudioParameterFloat>(juce::ParameterID{"LowMidFreq", 1}, "LowMidFreq", logRange, 600.f, 3));
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>(
-        ParameterID{"LowMidGain", 1}, "LowMidGain", juce::NormalisableRange<float>(-18.f, 18.f, 0.1f), 0.f));
+        juce::ParameterID{"LowMidGain", 1}, "LowMidGain", juce::NormalisableRange<float>(-18.f, 18.f, 0.1f), 0.f));
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>(
-        ParameterID{"LowMidQ", 1}, "LowMidQ", juce::NormalisableRange<float>(0.1f, 10.f, 0.1f), 1.f));
+        juce::ParameterID{"LowMidQ", 1}, "LowMidQ", juce::NormalisableRange<float>(0.1f, 10.f, 0.1f), 1.f));
 
     // High Mid Peak
     parameters.push_back(
-        std::make_unique<CustomAudioParameterFloat>(ParameterID{"HighMidFreq", 1}, "HighMidFreq", logRange, 5000.f, 4));
+        std::make_unique<CustomAudioParameterFloat>(juce::ParameterID{"HighMidFreq", 1}, "HighMidFreq", logRange, 5000.f, 4));
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>(
-        ParameterID{"HighMidGain", 1}, "HighMidGain", juce::NormalisableRange<float>(-18.f, 18.f, 0.1f), 0.f));
+        juce::ParameterID{"HighMidGain", 1}, "HighMidGain", juce::NormalisableRange<float>(-18.f, 18.f, 0.1f), 0.f));
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>(
-        ParameterID{"HighMidQ", 1}, "HighMidQ", juce::NormalisableRange<float>(0.1f, 10.f, 0.1f), 1.f));
+        juce::ParameterID{"HighMidQ", 1}, "HighMidQ", juce::NormalisableRange<float>(0.1f, 10.f, 0.1f), 1.f));
 
     return {parameters.begin(), parameters.end()};
 }

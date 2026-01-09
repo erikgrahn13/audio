@@ -1,7 +1,8 @@
 #pragma once
 
-#include <JuceHeader.h>
 #include <juce_audio_processors/juce_audio_processors.h>
+#include <juce_audio_devices/juce_audio_devices.h>
+#include <juce_audio_formats/juce_audio_formats.h>
 
 //==============================================================================
 class AudioPluginAudioProcessor final : public juce::AudioProcessor

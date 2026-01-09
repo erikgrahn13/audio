@@ -1,7 +1,7 @@
 #pragma once
 
 #include "PluginProcessor.h"
-#include <JuceHeader.h>
+#include <juce_dsp/juce_dsp.h>
 
 class AnalyzerCurve : public juce::Component, juce::Timer
 {

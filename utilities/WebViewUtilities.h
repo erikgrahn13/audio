@@ -1,4 +1,3 @@
-#include <JuceHeader.h>
 #include <vector>
 
 #if defined NDEBUG
@@ -39,9 +38,9 @@ static std::vector<std::byte> getWebViewFileAsBytes(const juce::String &filepath
     return {};
 }
 
-static const char *getMimeForExtension(const String &extension)
+static const char *getMimeForExtension(const juce::String &extension)
 {
-    static const std::unordered_map<String, const char *> mimeMap = {{{"htm"}, "text/html"},
+    static const std::unordered_map<juce::String, const char *> mimeMap = {{{"htm"}, "text/html"},
                                                                      {{"html"}, "text/html"},
                                                                      {{"txt"}, "text/plain"},
                                                                      {{"jpg"}, "image/jpeg"},

@@ -1,5 +1,5 @@
 #include "Oscillator.h"
-#include <JuceHeader.h>
+#include <juce_core/juce_core.h>
 #include <cmath>
 #include <numbers>
 
