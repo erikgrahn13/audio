@@ -1,7 +1,7 @@
 var hierarchy =
 [
     [ "Amp", "classAmp.html", null ],
-    [ "AudioIODeviceCallback", null, [
+    [ "juce::AudioIODeviceCallback", null, [
       [ "juce::StandalonePluginHolder", "classjuce_1_1StandalonePluginHolder.html", null ]
     ] ],
     [ "juce::AudioParameterFloat", null, [

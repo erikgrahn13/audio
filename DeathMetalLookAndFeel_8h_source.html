@@ -119,8 +119,8 @@ $(function(){initNavTree('DeathMetalLookAndFeel_8h_source.html',''); initResizab
 <div class="contents">
 <div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span> </div>
-<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &lt;Fonts.h&gt;</span></div>
-<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &lt;JuceHeader.h&gt;</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &lt;juce_gui_basics/juce_gui_basics.h&gt;</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &lt;Fonts.h&gt;</span></div>
 <div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &lt;cmath&gt;</span></div>
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &lt;numbers&gt;</span></div>
 <div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span> </div>
@@ -183,10 +183,10 @@ $(function(){initNavTree('DeathMetalLookAndFeel_8h_source.html',''); initResizab
 <div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span> </div>
 <div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>            <span class="keyword">auto</span> trackWidth = juce::jmin(6.0f, slider.isHorizontal() ? (<span class="keywordtype">float</span>)height * 0.25f : (<span class="keywordtype">float</span>)width * 0.25f);</div>
 <div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span> </div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>            Point&lt;float&gt; startPoint(slider.isHorizontal() ? (<span class="keywordtype">float</span>)x : (<span class="keywordtype">float</span>)x + (<span class="keywordtype">float</span>)width * 0.5f,</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>            juce::Point&lt;float&gt; startPoint(slider.isHorizontal() ? (<span class="keywordtype">float</span>)x : (<span class="keywordtype">float</span>)x + (<span class="keywordtype">float</span>)width * 0.5f,</div>
 <div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>                                    slider.isHorizontal() ? (<span class="keywordtype">float</span>)y + (<span class="keywordtype">float</span>)height * 0.5f : (<span class="keywordtype">float</span>)(height + y));</div>
 <div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span> </div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>            Point&lt;float&gt; endPoint(slider.isHorizontal() ? (<span class="keywordtype">float</span>)(width + x) : startPoint.x,</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>            juce::Point&lt;float&gt; endPoint(slider.isHorizontal() ? (<span class="keywordtype">float</span>)(width + x) : startPoint.x,</div>
 <div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>                                  slider.isHorizontal() ? startPoint.y : (<span class="keywordtype">float</span>)y);</div>
 <div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span> </div>
 <div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>            juce::Path backgroundTrack;</div>
