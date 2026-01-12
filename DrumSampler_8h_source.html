@@ -118,36 +118,38 @@ $(function(){initNavTree('DrumSampler_8h_source.html',''); initResizable(true); 
 </div><!--header-->
 <div class="contents">
 <div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
-<div class="foldopen" id="foldopen00002" data-start="{" data-end="};">
-<div class="line"><a id="l00002" name="l00002"></a><span class="lineno"><a class="line" href="classDrumSampler.html">    2</a></span><span class="keyword">class </span><a class="code hl_class" href="classDrumSampler.html">DrumSampler</a> : <span class="keyword">public</span> juce::Synthesiser</div>
-<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span>{</div>
-<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span>    <span class="keywordtype">void</span> noteOn(<span class="keywordtype">int</span> midiChannel, <span class="keywordtype">int</span> midiNoteNumber, <span class="keywordtype">float</span> velocity)<span class="keyword"> override</span></div>
-<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="keyword">    </span>{</div>
-<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span>        <span class="keyword">const</span> juce::ScopedLock sl(lock);</div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span> </div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span>        <span class="keywordflow">for</span> (<span class="keyword">auto</span> *sound : sounds)</div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span>        {</div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span>            <span class="keywordflow">if</span> (sound-&gt;appliesToNote(midiNoteNumber) &amp;&amp; sound-&gt;appliesToChannel(midiChannel))</div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span>            {</div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>                <span class="comment">// If hitting a note that&#39;s still ringing, stop it first (it could be</span></div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>                <span class="comment">// still playing because of the sustain or sostenuto pedal).</span></div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>                <span class="keywordflow">for</span> (<span class="keyword">auto</span> *voice : voices)</div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>                {</div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>                    <span class="keywordflow">if</span> ((voice-&gt;getCurrentlyPlayingNote() == midiNoteNumber) &amp;&amp; voice-&gt;isPlayingChannel(midiChannel) &amp;&amp;</div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>                        (voice-&gt;getCurrentlyPlayingSound().get() == sound))</div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>                    {</div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>                        stopVoice(voice, 1.0f, <span class="keyword">true</span>);</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>                    }</div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>                }</div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span> </div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>                startVoice(findFreeVoice(sound, midiChannel, midiNoteNumber, isNoteStealingEnabled()), sound,</div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>                           midiChannel, midiNoteNumber, velocity);</div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>            }</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>        }</div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>    }</div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>};</div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#include &lt;juce_audio_basics/juce_audio_basics.h&gt;</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span> </div>
+<div class="foldopen" id="foldopen00004" data-start="{" data-end="};">
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno"><a class="line" href="classDrumSampler.html">    4</a></span><span class="keyword">class </span><a class="code hl_class" href="classDrumSampler.html">DrumSampler</a> : <span class="keyword">public</span> juce::Synthesiser</div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span>{</div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span>    <span class="keywordtype">void</span> noteOn(<span class="keywordtype">int</span> midiChannel, <span class="keywordtype">int</span> midiNoteNumber, <span class="keywordtype">float</span> velocity)<span class="keyword"> override</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="keyword">    </span>{</div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span>        <span class="keyword">const</span> juce::ScopedLock sl(lock);</div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span>        <span class="keywordflow">for</span> (<span class="keyword">auto</span> *sound : sounds)</div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span>        {</div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>            <span class="keywordflow">if</span> (sound-&gt;appliesToNote(midiNoteNumber) &amp;&amp; sound-&gt;appliesToChannel(midiChannel))</div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>            {</div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>                <span class="comment">// If hitting a note that&#39;s still ringing, stop it first (it could be</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>                <span class="comment">// still playing because of the sustain or sostenuto pedal).</span></div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>                <span class="keywordflow">for</span> (<span class="keyword">auto</span> *voice : voices)</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>                {</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>                    <span class="keywordflow">if</span> ((voice-&gt;getCurrentlyPlayingNote() == midiNoteNumber) &amp;&amp; voice-&gt;isPlayingChannel(midiChannel) &amp;&amp;</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>                        (voice-&gt;getCurrentlyPlayingSound().get() == sound))</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>                    {</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>                        stopVoice(voice, 1.0f, <span class="keyword">true</span>);</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>                    }</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>                }</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>                startVoice(findFreeVoice(sound, midiChannel, midiNoteNumber, isNoteStealingEnabled()), sound,</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>                           midiChannel, midiNoteNumber, velocity);</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>            }</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>        }</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>    }</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>};</div>
 </div>
-<div class="ttc" id="aclassDrumSampler_html"><div class="ttname"><a href="classDrumSampler.html">DrumSampler</a></div><div class="ttdef"><b>Definition</b> DrumSampler.h:3</div></div>
+<div class="ttc" id="aclassDrumSampler_html"><div class="ttname"><a href="classDrumSampler.html">DrumSampler</a></div><div class="ttdef"><b>Definition</b> DrumSampler.h:5</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
