@@ -1,4 +1,6 @@
 #pragma once
+#include <juce_audio_basics/juce_audio_basics.h>
+
 class DrumSampler : public juce::Synthesiser
 {
     void noteOn(int midiChannel, int midiNoteNumber, float velocity) override
