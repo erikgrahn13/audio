@@ -3,7 +3,7 @@
 ### A collection of the most evil and metal audio plugins ever created! 🤘
 ### Visit the [home page](https://erikgrahn13.github.io/audio/) for this project. 🍻
 
-This is an onging project, and more plugins will be added in time!
+This is an onging project and more plugins will be added in the future!
 
 ---
 
@@ -24,17 +24,9 @@ A guitar amplifier in honor of the legendary Black Lounge Studios owned by Jonas
 
 ---
 
-### AudioFilePlayer 🎶
-
-  ![AudioFilePlayer](docs/images/AudioFilePlayer.png)
-
-  A plugin that can load an audio file to be played back. Contains a volume control and the possibility to loop the audio file. Only used for testing purposes when running VST3 effects in **AudioPluginHost**.
-
----
-
 ## Build
 
-This plugins is built using the [Juce](https://juce.com) framework together with [React](https://react.dev/) for the ui using the webview technology supported in Juce.
+These plugins are built with the [Juce](https://juce.com) framework together with [React](https://react.dev/) for the ui using the webview technology supported in Juce.
 
 It utilizes CMake presets but can also be built using plain CMake. The Debug preset is the preferred preset to work with during development. Juce together with other dependencies are fetched automatically during cmake configure step with the help of the [FetchContent](https://cmake.org/cmake/help/latest/module/FetchContent.html) module in CMake.
 
@@ -44,9 +36,9 @@ The React ui is built with Vite and needs to be installed before building any pl
 ```bash
 $ cmake --preset Debug
 $ npm install
-$ cd <plugin>/ui
+$ cd <plugin_path>/ui
 $ npm run dev # needs to be invoked inside the plugin ui folder where the React application resides
-$ cmake --build build  --target <plugin>
+$ cmake --build build  --target <plugin_target>
 ```
 
 #### Release
@@ -54,7 +46,7 @@ $ cmake --build build  --target <plugin>
 $ cmake --preset Release
 $ npm install
 $ npm run build -ws # Invoked from the root of the project and will build all React projects
-$ cmake --build build  --target <plugin>
+$ cmake --build build  --target <plugin_target>
 ```
 
 > 💡 **Note:**
