@@ -13,7 +13,6 @@ var searchData=
   ['askusertosavestate_10',['askUserToSaveState',['../classjuce_1_1StandalonePluginHolder.html#aa950137559934707a902a050e3b1fa86',1,'juce::StandalonePluginHolder']]],
   ['audio_20home_20page_20a_20for_20this_20project_20🍻_11',['Visit the &lt;a href=&quot;https://erikgrahn13.github.io/audio/&quot; &gt;home page&lt;/a&gt; for this project. 🍻',['../index.html#autotoc_md8',1,'']]],
   ['audio_20plugins_20ever_20created_20🤘_12',['A collection of the most evil and metal audio plugins ever created! 🤘',['../index.html#autotoc_md7',1,'']]],
-  ['audiofileplayer_20🎶_13',['AudioFilePlayer 🎶',['../index.html#autotoc_md13',1,'']]],
-  ['audiopluginaudioprocessor_14',['AudioPluginAudioProcessor',['../classAudioPluginAudioProcessor.html',1,'']]],
-  ['audiopluginaudioprocessoreditor_15',['AudioPluginAudioProcessorEditor',['../classAudioPluginAudioProcessorEditor.html',1,'']]]
+  ['audiopluginaudioprocessor_13',['AudioPluginAudioProcessor',['../classAudioPluginAudioProcessor.html',1,'']]],
+  ['audiopluginaudioprocessoreditor_14',['AudioPluginAudioProcessorEditor',['../classAudioPluginAudioProcessorEditor.html',1,'']]]
 ];

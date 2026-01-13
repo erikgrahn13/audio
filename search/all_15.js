@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['🎶_0',['AudioFilePlayer 🎶',['../index.html#autotoc_md13',1,'']]]
+  ['🤘_0',['🤘',['../index.html#autotoc_md7',1,'A collection of the most evil and metal audio plugins ever created! 🤘'],['../index.html',1,'Abyss Lounge 🤘']]]
 ];
