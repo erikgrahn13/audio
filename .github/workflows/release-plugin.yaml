@@ -1,0 +1,72 @@
+name: Release plugin
+
+on:
+  workflow_dispatch:
+    inputs:
+      plugin:
+        description: "Which plugin to release"
+        required: true
+        type: choice
+        options:
+          - plugin-a
+          - plugin-b
+          - plugin-c
+      version:
+        description: "Version (e.g. 1.2.3)"
+        required: true
+        type: string
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set variables
+        id: vars
+        run: |
+          echo "PLUGIN=${{ inputs.plugin }}" >> $GITHUB_OUTPUT
+          echo "VERSION=${{ inputs.version }}" >> $GITHUB_OUTPUT
+          echo "TAG=${{ inputs.plugin }}-v${{ inputs.version }}" >> $GITHUB_OUTPUT
+
+      # 🔧 Build only the selected plugin
+      # Replace this with your real build command
+      - name: Build plugin
+        run: |
+          cd plugins/${{ steps.vars.outputs.PLUGIN }}
+          # Example build command:
+          ./build.sh
+          # Make sure final artifact(s) end up in something like:
+          #   dist/
+      
+      # 🏷️ Create a tag (optional – you can also create tags yourself)
+      - name: Create tag
+        run: |
+          git tag ${{ steps.vars.outputs.TAG }}
+          git push origin ${{ steps.vars.outputs.TAG }}
+
+      # 🧾 Create GitHub Release
+      - name: Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.vars.outputs.TAG }}
+          release_name: "${{ steps.vars.outputs.PLUGIN }} v${{ steps.vars.outputs.VERSION }}"
+          body: "Release of ${{ steps.vars.outputs.PLUGIN }} v${{ steps.vars.outputs.VERSION }}"
+          draft: false
+          prerelease: false
+
+      # 📦 Upload plugin artifact(s) only
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: plugins/${{ steps.vars.outputs.PLUGIN }}/dist/plugin.zip
+          asset_name: ${{ steps.vars.outputs.PLUGIN }}-${{ steps.vars.outputs.VERSION }}.zip
+          asset_content_type: application/zip
