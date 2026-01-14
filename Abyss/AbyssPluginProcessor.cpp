@@ -13,6 +13,23 @@ AbyssAudioProcessor::AbyssAudioProcessor()
                          ),
       mParameters(*this, nullptr, juce::Identifier("Parameters"), createParameters())
 {
+    mVolumeParameter = dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("volume"));
+    mGainParameter = dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("gain"));
+    mDenoiserActiveParameter = dynamic_cast<juce::AudioParameterBool *>(mParameters.getParameter("denoiserActive"));
+    mDenoiserParameter = dynamic_cast<juce::AudioParameterFloat *>(mParameters.getParameter("denoiser"));
+    mLoadedModelParameter = dynamic_cast<juce::AudioParameterChoice *>(mParameters.getParameter("loadedModel"));
+
+    mRingBuffer = std::make_unique<RingBuffer>(4096 * 4);
+
+    
+    // Pre-load all models (happens once at startup, not real-time)
+    loadAllModels();
+    
+    // Set initial active model
+    mActiveModelIndex.store(mLoadedModelParameter->getIndex());
+    
+    // Listen for parameter changes
+    mParameters.addParameterListener("loadedModel", this);
 }
 
 AbyssAudioProcessor::~AbyssAudioProcessor()
@@ -89,13 +106,17 @@ void AbyssAudioProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
-    juce::ignoreUnused(sampleRate, samplesPerBlock);
+    juce::dsp::ProcessSpec spec;
+    spec.maximumBlockSize = static_cast<juce::uint32>(samplesPerBlock);
+    spec.numChannels = static_cast<juce::uint32>(getTotalNumInputChannels());
+    spec.sampleRate = sampleRate;
+    mNoiseReduction.prepare(spec);
 }
 
 void AbyssAudioProcessor::releaseResources()
 {
     // When playback stops, you can use this as an opportunity to free up any
-    // spare memory, etc.
+     // spare memory, etc.
 }
 
 bool AbyssAudioProcessor::isBusesLayoutSupported(const BusesLayout &layouts) const
@@ -127,8 +148,8 @@ void AbyssAudioProcessor::processBlock(juce::AudioBuffer<float> &buffer, juce::M
     juce::ignoreUnused(midiMessages);
 
     juce::ScopedNoDenormals noDenormals;
-    auto totalNumInputChannels = getTotalNumInputChannels();
-    auto totalNumOutputChannels = getTotalNumOutputChannels();
+    // auto totalNumInputChannels = getTotalNumInputChannels();
+    // auto totalNumOutputChannels = getTotalNumOutputChannels();
 
     // In case we have more outputs than inputs, this code clears any output
     // channels that didn't contain input data, (because these aren't
@@ -136,12 +157,35 @@ void AbyssAudioProcessor::processBlock(juce::AudioBuffer<float> &buffer, juce::M
     // This is here to avoid people getting screaming feedback
     // when they first compile a plugin, but obviously you don't need to keep
     // this code if your algorithm always overwrites all the output channels.
+    mRingBuffer->addToFifo(buffer.getWritePointer(0), buffer.getNumSamples());
 
-    auto *param = mParameters.getParameter("gain");
-    auto value = param->getValue();
+    
+    if (mDenoiserActiveParameter->get())
+    {
+        auto threshold = mDenoiserParameter->get();
+        mNoiseReduction.setThreshold(threshold);
+        mNoiseReduction.process(buffer);
+    }
 
-    for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
-        buffer.clear(i, 0, buffer.getNumSamples());
+    auto volume = juce::Decibels::decibelsToGain(mVolumeParameter->get());
+    
+    // Get the currently active model (real-time safe atomic read)
+    int activeIndex = mActiveModelIndex.load();
+    if (auto* activeModel = mModels[activeIndex].get())
+    {
+#if defined NDEBUG
+        auto gain = juce::Decibels::decibelsToGain(mGainParameter->get());
+        auto *input = buffer.getWritePointer(0);
+        auto *output = buffer.getWritePointer(0);
+
+        buffer.applyGain(gain);
+        activeModel->process(input, output, buffer.getNumSamples());
+#endif
+    }
+
+
+    // for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
+        // buffer.clear(i, 0, buffer.getNumSamples());
 
     // This is the place where you'd normally do the guts of your plugin's
     // audio processing...
@@ -149,13 +193,10 @@ void AbyssAudioProcessor::processBlock(juce::AudioBuffer<float> &buffer, juce::M
     // the samples and the outer loop is handling the channels.
     // Alternatively, you can process the samples with the channels
     // interleaved by keeping the same state.
-    buffer.applyGain(value);
-    for (int channel = 0; channel < totalNumInputChannels; ++channel)
-    {
-        auto *channelData = buffer.getWritePointer(channel);
-        juce::ignoreUnused(channelData);
-        // ..do something to the data...
-    }
+
+    buffer.applyGain(volume);
+    if (buffer.getNumChannels() > 1)
+        buffer.copyFrom(1, 0, buffer.getReadPointer(0), buffer.getNumSamples());
 }
 
 //==============================================================================
@@ -167,6 +208,7 @@ bool AbyssAudioProcessor::hasEditor() const
 juce::AudioProcessorEditor *AbyssAudioProcessor::createEditor()
 {
     return new AbyssAudioProcessorEditor(*this);
+    // return new juce::GenericAudioProcessorEditor(*this);
 }
 
 //==============================================================================
@@ -192,12 +234,40 @@ void AbyssAudioProcessor::setStateInformation(const void *data, int sizeInBytes)
     }
 }
 
+void AbyssAudioProcessor::parameterChanged(const juce::String& parameterID, float newValue)
+{
+    if (parameterID == "loadedModel")
+    {
+        int modelIndex = static_cast<int>(newValue * (mLoadedModelParameter->choices.size() - 1) + 0.5f);
+        // Real-time safe: just atomically switch the active model index
+        mActiveModelIndex.store(modelIndex);
+    }
+}
+
+void AbyssAudioProcessor::loadAllModels()
+{
+    // Load all models at startup (not real-time, so allocations are fine)
+    mModels[0] = std::make_unique<Amp>(AbyssAmp::abyss1_nam, AbyssAmp::abyss1_namSize);
+    
+    // Load second model (using abyss1 as placeholder until you add abyss2)
+    mModels[1] = std::make_unique<Amp>(AbyssAmp::abyss1_nam, AbyssAmp::abyss1_namSize);
+    // When you have abyss2:
+    // mModels[1] = std::make_unique<Amp>(AbyssAmp::abyss2_nam, AbyssAmp::abyss2_namSize);
+    
+    // Add more models here as needed (update kNumModels constant in header)
+}
+
 juce::AudioProcessorValueTreeState::ParameterLayout AbyssAudioProcessor::createParameters()
 {
     juce::AudioProcessorValueTreeState::ParameterLayout layout;
 
-    layout.add(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"gain", 1}, "gain", -80.f, 0.f, -20.f));
-    layout.add(std::make_unique<juce::AudioParameterBool>(juce::ParameterID{"bypass", 1}, "bypass", true));
+    // layout.add(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{"gain", 1}, "gain", -80.f, 0.f, -20.f));
+    // layout.add(std::make_unique<juce::AudioParameterBool>(juce::ParameterID{"bypass", 1}, "bypass", true));
+    layout.add(std::make_unique<juce::AudioParameterFloat>(ParameterID{"volume", 1}, "Volume", -10.f, 20.f, 18.f));
+    layout.add(std::make_unique<juce::AudioParameterFloat>(ParameterID{"gain", 1}, "Gain", -20.f, 20.f, 0.f));
+    layout.add(std::make_unique<juce::AudioParameterBool>(ParameterID{"denoiserActive", 1}, "DenoiserActive", true));
+    layout.add(std::make_unique<juce::AudioParameterFloat>(ParameterID{"denoiser", 1}, "Denoiser", -140.f, 0.f, -140.f));
+    layout.add(std::make_unique<juce::AudioParameterChoice>(ParameterID{"loadedModel", 1}, "LoadedModel", juce::StringArray{"ABYSS1", "ABYSS2"}, 0));
 
     return layout;
 }

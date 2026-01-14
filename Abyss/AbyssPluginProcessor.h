@@ -2,8 +2,14 @@
 
 #include <juce_audio_processors/juce_audio_processors.h>
 
+#include "Amp.h"
+#include "AbyssAmp.h"
+#include "NoiseReduction.h"
+#include "RingBuffer.h"
+
 //==============================================================================
-class AbyssAudioProcessor final : public juce::AudioProcessor
+class AbyssAudioProcessor final : public juce::AudioProcessor,
+                                      public juce::AudioProcessorValueTreeState::Listener
 {
   public:
     //==============================================================================
@@ -42,10 +48,30 @@ class AbyssAudioProcessor final : public juce::AudioProcessor
     void getStateInformation(juce::MemoryBlock &destData) override;
     void setStateInformation(const void *data, int sizeInBytes) override;
 
+    // AudioProcessorValueTreeState::Listener
+    void parameterChanged(const juce::String& parameterID, float newValue) override;
+
     juce::AudioProcessorValueTreeState::ParameterLayout createParameters();
     juce::AudioProcessorValueTreeState mParameters;
+    std::unique_ptr<RingBuffer> mRingBuffer;
 
   private:
+    void loadAllModels();
+    
+    static constexpr int kNumModels = 2; // Update when you add more models
+    std::array<std::unique_ptr<Amp>, kNumModels> mModels;
+    std::atomic<int> mActiveModelIndex{0};
+
+
+    NoiseReduction mNoiseReduction;
+
+    juce::AudioParameterFloat *mVolumeParameter;
+    juce::AudioParameterFloat *mGainParameter;
+    juce::AudioParameterFloat *mDenoiserParameter;
+    juce::AudioParameterBool *mDenoiserActiveParameter;
+
+    juce::AudioParameterChoice *mLoadedModelParameter;
+
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AbyssAudioProcessor)
 };
