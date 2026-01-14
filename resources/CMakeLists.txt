@@ -7,4 +7,5 @@
 
 juce_add_binary_data(Fonts HEADER_NAME "Fonts.h" NAMESPACE CustomFont SOURCES fonts/ArtDystopia.ttf
                                                          fonts/fontaudio.ttf
-                                                         fonts/forkawesome-webfont.ttf )
+                                                         fonts/forkawesome-webfont.ttf
+                                                         fonts/mb-forever-raw.regular.ttf )
