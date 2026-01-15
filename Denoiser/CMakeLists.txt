@@ -94,6 +94,7 @@ target_compile_definitions(${PROJECT_NAME}
 # Conversion to binary-data will happen when your target is built.
 
 # juce_add_binary_data(AudioPluginData SOURCES ...)
+juce_add_binary_data(DenoiserBackgroundImage HEADER_NAME "DenoiserBackgroundImage.h" NAMESPACE Denoiser SOURCES assets/background.png)
 
 # `target_link_libraries` links libraries and JUCE modules to other libraries or executables. Here,
 # we're linking our executable target to the `juce::juce_audio_utils` module. Inter-module
@@ -105,6 +106,7 @@ target_link_libraries(${PROJECT_NAME}
     PRIVATE
         # AudioPluginData           # If we'd created a binary data target, we'd link to it here
         juce::juce_audio_utils
+        DenoiserBackgroundImage
         NoiseReduction
         Fonts
     PUBLIC
