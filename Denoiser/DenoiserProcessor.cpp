@@ -77,7 +77,7 @@ void DenoiserAudioProcessor::setCurrentProgram (int index)
 const juce::String DenoiserAudioProcessor::getProgramName (int index)
 {
     juce::ignoreUnused (index);
-    return {};
+    return "default";
 }
 
 void DenoiserAudioProcessor::changeProgramName (int index, const juce::String& newName)
