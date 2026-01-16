@@ -28,7 +28,9 @@
       "displayName": "Release",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
-        "COPY_AFTER_BUILD": "ON"
+        "COPY_AFTER_BUILD": "ON",
+        "JUCE_BUILD_EXTRAS": "OFF"
+
       }
     },
     {
