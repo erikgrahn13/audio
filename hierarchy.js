@@ -12,6 +12,7 @@ var hierarchy =
       [ "AudioPluginAudioProcessor", "classAudioPluginAudioProcessor.html", null ],
       [ "AudioPluginAudioProcessor", "classAudioPluginAudioProcessor.html", null ],
       [ "BlackLoungeAudioProcessor", "classBlackLoungeAudioProcessor.html", null ],
+      [ "DenoiserAudioProcessor", "classDenoiserAudioProcessor.html", null ],
       [ "DrumsAudioProcessor", "classDrumsAudioProcessor.html", null ],
       [ "SynthAudioProcessor", "classSynthAudioProcessor.html", null ]
     ] ],
@@ -20,6 +21,7 @@ var hierarchy =
       [ "AudioPluginAudioProcessorEditor", "classAudioPluginAudioProcessorEditor.html", null ],
       [ "AudioPluginAudioProcessorEditor", "classAudioPluginAudioProcessorEditor.html", null ],
       [ "BlackLoungeAudioProcessorEditor", "classBlackLoungeAudioProcessorEditor.html", null ],
+      [ "DenoiserAudioProcessorEditor", "classDenoiserAudioProcessorEditor.html", null ],
       [ "DrumsAudioProcessorEditor", "classDrumsAudioProcessorEditor.html", null ],
       [ "SynthAudioProcessorEditor", "classSynthAudioProcessorEditor.html", null ]
     ] ],

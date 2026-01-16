@@ -15,6 +15,8 @@ var annotated_dup =
     [ "BlackLoungeAudioProcessorEditor", "classBlackLoungeAudioProcessorEditor.html", null ],
     [ "CustomAudioParameterFloat", "classCustomAudioParameterFloat.html", null ],
     [ "DeathMetalLookAndFeel", "classDeathMetalLookAndFeel.html", null ],
+    [ "DenoiserAudioProcessor", "classDenoiserAudioProcessor.html", null ],
+    [ "DenoiserAudioProcessorEditor", "classDenoiserAudioProcessorEditor.html", null ],
     [ "DrumSampler", "classDrumSampler.html", null ],
     [ "DrumsAudioProcessor", "classDrumsAudioProcessor.html", null ],
     [ "DrumsAudioProcessorEditor", "classDrumsAudioProcessorEditor.html", null ],
