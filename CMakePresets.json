@@ -84,6 +84,13 @@
       "configurePreset": "Release",
       "configurations": ["Release"],
       "configFile": "${sourceDir}/build/Abyss/CPackConfig-Abyss.cmake"
+    },
+    {
+      "name": "denoiser",
+      "displayName": "denoiser",
+      "configurePreset": "Release",
+      "configurations": ["Release"],
+      "configFile": "${sourceDir}/build/Denoiser/CPackConfig-Denoiser.cmake"
     }
   ],
   "workflowPresets": [

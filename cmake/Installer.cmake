@@ -28,21 +28,25 @@ function(create_installer target INSTALL_IMAGE)
         set(VST3_INSTALL_DIRECTORY ".")
     endif()
 
-    get_target_property(VST3_PATH ${target}_VST3 JUCE_PLUGIN_ARTEFACT_FILE)
-    get_target_property(APP_PATH ${target}_Standalone JUCE_PLUGIN_ARTEFACT_FILE)
+    if(TARGET ${target}_VST3)
+        get_target_property(VST3_PATH ${target}_VST3 JUCE_PLUGIN_ARTEFACT_FILE)
+        install(DIRECTORY ${VST3_PATH}
+            DESTINATION ${VST3_INSTALL_DIRECTORY}
+            COMPONENT ${target}VST3
+            PATTERN "Plugin.ico" EXCLUDE
+        )
+        list(APPEND CPACK_COMPONENTS_ALL ${target}VST3)
+    endif()
+    
+    if(TARGET ${target}_Standalone)
+        get_target_property(APP_PATH ${target}_Standalone JUCE_PLUGIN_ARTEFACT_FILE)
+        install(PROGRAMS ${APP_PATH}
+            DESTINATION ${APP_INSTALL_DIRECTORY}
+            COMPONENT ${target}APP
+        )
+        list(APPEND CPACK_COMPONENTS_ALL ${target}APP)
+    endif()
 
-    install(DIRECTORY ${VST3_PATH}
-        DESTINATION ${VST3_INSTALL_DIRECTORY}
-        COMPONENT ${target}VST3
-        PATTERN "Plugin.ico" EXCLUDE
-    )
-
-    install(PROGRAMS ${APP_PATH}
-        DESTINATION ${APP_INSTALL_DIRECTORY}
-        COMPONENT ${target}APP
-    )
-
-    set(CPACK_COMPONENTS_ALL ${target}APP ${target}VST3)
     set(CPACK_COMPONENT_NAME "${target}")
 
     # Mac installer
@@ -65,13 +69,11 @@ function(create_installer target INSTALL_IMAGE)
         set(CPACK_GENERATOR "INNOSETUP")
         set(CPACK_INNOSETUP_USE_MODERN_WIZARD ON)
         set(CPACK_INNOSETUP_IGNORE_LICENSE_PAGE ON)
-                
-        set(CPACK_PACKAGE_ICON ${INSTALL_IMAGE})
-        set(CPACK_INNOSETUP_SETUP_WizardImageFile ${INSTALL_IMAGE})
+        set(CPACK_INNOSETUP_SETUP_WizardStyle dark)
+        set(CPACK_INNOSETUP_SETUP_WizardBackImageFile ${INSTALL_IMAGE})
         set(CPACK_INNOSETUP_SETUP_DisableWelcomePage NO)
         set(CPACK_INNOSETUP_SETUP_SetupIconFile "${CMAKE_SOURCE_DIR}/resources/assets/logo_transparent.ico")
 
-        
         include(CPackComponent)
 
         set(CPACK_INNOSETUP_${target}VST3_INSTALL_DIRECTORY "{commoncf64}/VST3")

@@ -130,5 +130,5 @@ if(JUCE_BUILD_EXTRAS)
     add_dependencies(${PROJECT_NAME} AudioPluginHost AudioFilePlayer_VST3)
 endif()
 
-create_installer(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/ui/src/assets/hotdog.png)
+create_installer(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/ui/src/assets/background.png)
 enable_pluginval_testing(${PROJECT_NAME})
