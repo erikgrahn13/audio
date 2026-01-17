@@ -30,25 +30,25 @@ jobs:
           echo "Detected version: $VERSION"
 
       # Download pre-built artifacts from the build-and-test workflow
-      - name: Download Windows installer
+      - name: Download Windows builds
         uses: dawidd6/action-download-artifact@v3
         with:
           workflow: build-and-test.yaml
-          name: ${{ inputs.plugin }}-windows
+          name: build-windows-latest
           path: artifacts/windows
 
-      - name: Download macOS installer
+      - name: Download macOS builds
         uses: dawidd6/action-download-artifact@v3
         with:
           workflow: build-and-test.yaml
-          name: ${{ inputs.plugin }}-macos
+          name: build-macos-latest
           path: artifacts/macos
 
-      - name: Download Linux installer
+      - name: Download Linux builds
         uses: dawidd6/action-download-artifact@v3
         with:
           workflow: build-and-test.yaml
-          name: ${{ inputs.plugin }}-linux
+          name: build-ubuntu-latest
           path: artifacts/linux
 
       # Create GitHub Release and upload assets
@@ -65,9 +65,9 @@ jobs:
             - **macOS**: Download and run the `.pkg` installer
             - **Linux**: Download the `.tar.gz` and run `./install.sh`
           files: |
-            artifacts/windows/*.exe
-            artifacts/macos/*.pkg
-            artifacts/linux/*.tar.gz
+            artifacts/windows/${{ inputs.plugin }}*.exe
+            artifacts/macos/${{ inputs.plugin }}*.pkg
+            artifacts/linux/${{ inputs.plugin }}*.tar.gz
           draft: false
           prerelease: false
         env:
