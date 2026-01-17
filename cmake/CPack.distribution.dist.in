@@ -3,5 +3,4 @@
     <title>@CPACK_PACKAGE_NAME@</title>
     <options allow-external-scripts="no" customize="always" rootVolumeOnly="false"/>
 @CPACK_PACKAGEMAKER_CHOICES@
-	<background-darkAqua file="@CPACK_PRODUCTBUILD_BACKGROUND@" alignment="@CPACK_PRODUCTBUILD_BACKGROUND_ALIGNMENT@" scaling="@CPACK_PRODUCTBUILD_BACKGROUND_SCALING@" mime-type="@CPACK_PRODUCTBUILD_BACKGROUND_MIME_TYPE@"/>
 </installer-gui-script>
