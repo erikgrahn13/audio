@@ -8,13 +8,10 @@ on:
         required: true
         type: choice
         options:
-          - plugin-a
-          - plugin-b
-          - plugin-c
-      version:
-        description: "Version (e.g. 1.2.3)"
-        required: true
-        type: string
+          - Denoiser
+          - BlackLounge
+          - Abyss
+          - AbyssDrums
 
 jobs:
   release:
@@ -24,49 +21,54 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set variables
-        id: vars
+      # Extract version from CMakeLists.txt
+      - name: Extract version from CMakeLists.txt
+        id: get_version
         run: |
-          echo "PLUGIN=${{ inputs.plugin }}" >> $GITHUB_OUTPUT
-          echo "VERSION=${{ inputs.version }}" >> $GITHUB_OUTPUT
-          echo "TAG=${{ inputs.plugin }}-v${{ inputs.version }}" >> $GITHUB_OUTPUT
+          VERSION=$(grep -oP 'project\(\s*${{ inputs.plugin }}\s+VERSION\s+\K[0-9]+\.[0-9]+\.[0-9]+' ${{ inputs.plugin }}/CMakeLists.txt)
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+          echo "Detected version: $VERSION"
 
-      # 🔧 Build only the selected plugin
-      # Replace this with your real build command
-      - name: Build plugin
-        run: |
-          cd plugins/${{ steps.vars.outputs.PLUGIN }}
-          # Example build command:
-          ./build.sh
-          # Make sure final artifact(s) end up in something like:
-          #   dist/
-      
-      # 🏷️ Create a tag (optional – you can also create tags yourself)
-      - name: Create tag
-        run: |
-          git tag ${{ steps.vars.outputs.TAG }}
-          git push origin ${{ steps.vars.outputs.TAG }}
-
-      # 🧾 Create GitHub Release
-      - name: Create GitHub Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # Download pre-built artifacts from the build-and-test workflow
+      - name: Download Windows installer
+        uses: dawidd6/action-download-artifact@v3
         with:
-          tag_name: ${{ steps.vars.outputs.TAG }}
-          release_name: "${{ steps.vars.outputs.PLUGIN }} v${{ steps.vars.outputs.VERSION }}"
-          body: "Release of ${{ steps.vars.outputs.PLUGIN }} v${{ steps.vars.outputs.VERSION }}"
+          workflow: build-and-test.yaml
+          name: ${{ inputs.plugin }}-windows
+          path: artifacts/windows
+
+      - name: Download macOS installer
+        uses: dawidd6/action-download-artifact@v3
+        with:
+          workflow: build-and-test.yaml
+          name: ${{ inputs.plugin }}-macos
+          path: artifacts/macos
+
+      - name: Download Linux installer
+        uses: dawidd6/action-download-artifact@v3
+        with:
+          workflow: build-and-test.yaml
+          name: ${{ inputs.plugin }}-linux
+          path: artifacts/linux
+
+      # Create GitHub Release and upload assets
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ inputs.plugin }}-v${{ steps.get_version.outputs.VERSION }}
+          name: ${{ inputs.plugin }} v${{ steps.get_version.outputs.VERSION }}
+          body: |
+            Release of **${{ inputs.plugin }}** version ${{ steps.get_version.outputs.VERSION }}
+
+            ## Installation
+            - **Windows**: Download and run the `.exe` installer
+            - **macOS**: Download and run the `.pkg` installer
+            - **Linux**: Download the `.tar.gz` and run `./install.sh`
+          files: |
+            artifacts/windows/*.exe
+            artifacts/macos/*.pkg
+            artifacts/linux/*.tar.gz
           draft: false
           prerelease: false
-
-      # 📦 Upload plugin artifact(s) only
-      - name: Upload Release Asset
-        uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: plugins/${{ steps.vars.outputs.PLUGIN }}/dist/plugin.zip
-          asset_name: ${{ steps.vars.outputs.PLUGIN }}-${{ steps.vars.outputs.VERSION }}.zip
-          asset_content_type: application/zip
