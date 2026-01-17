@@ -28,6 +28,7 @@ function(create_installer target INSTALL_IMAGE)
         set(VST3_INSTALL_DIRECTORY ".")
     endif()
 
+    set(CPACK_COMPONENTS_ALL)
     include(CPackComponent)
 
     if(TARGET ${target}_VST3)
@@ -108,6 +109,12 @@ function(create_installer target INSTALL_IMAGE)
         # Include the script component in the package
         list(APPEND CPACK_COMPONENTS_ALL ${target}SCRIPT)
     endif()
+
+    # Explicitly set which components to include (prevents other targets' components from being included)
+    set(CPACK_COMPONENTS_ALL ${CPACK_COMPONENTS_ALL})
+    
+    # Install only from this target's subdirectory to avoid installing other targets' components
+    set(CPACK_INSTALL_CMAKE_PROJECTS "${CMAKE_CURRENT_BINARY_DIR};${PROJECT_NAME};ALL;/")
 
     # Linux installer
     include(CPack)

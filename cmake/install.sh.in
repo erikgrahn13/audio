@@ -22,23 +22,15 @@ echo ""
 VST3_FILE="@PLUGIN_NAME@.vst3"
 STANDALONE_FILE="@PLUGIN_NAME@"
 
-echo -e "${YELLOW}Checking available components...${NC}"
-
 VST3_AVAILABLE=false
 STANDALONE_AVAILABLE=false
 
 if [ -d "$VST3_FILE" ]; then
     VST3_AVAILABLE=true
-    echo -e "${GREEN}✓${NC} VST3 plugin found: $VST3_FILE"
-else
-    echo -e "${RED}✗${NC} VST3 plugin not found: $VST3_FILE"
 fi
 
 if [ -f "$STANDALONE_FILE" ]; then
     STANDALONE_AVAILABLE=true
-    echo -e "${GREEN}✓${NC} Standalone app found: $STANDALONE_FILE"
-else
-    echo -e "${RED}✗${NC} Standalone app not found: $STANDALONE_FILE"
 fi
 
 if [ "$VST3_AVAILABLE" = false ] && [ "$STANDALONE_AVAILABLE" = false ]; then
@@ -46,7 +38,6 @@ if [ "$VST3_AVAILABLE" = false ] && [ "$STANDALONE_AVAILABLE" = false ]; then
     exit 1
 fi
 
-echo ""
 echo -e "${YELLOW}Installing to user directories (no admin privileges required)${NC}"
 echo ""
 
@@ -61,8 +52,6 @@ if [ "$VST3_AVAILABLE" = true ]; then
         echo -e "${RED}❌ Failed to install VST3 plugin${NC}"
         exit 1
     fi
-else
-    echo -e "${YELLOW}⚠️  Skipping VST3 installation (component not available)${NC}"
 fi
 
 # Install standalone app
@@ -77,8 +66,6 @@ if [ "$STANDALONE_AVAILABLE" = true ]; then
         echo -e "${RED}❌ Failed to install standalone application${NC}"
         exit 1
     fi
-else
-    echo -e "${YELLOW}⚠️  Skipping standalone installation (component not available)${NC}"
 fi
 
 echo ""
