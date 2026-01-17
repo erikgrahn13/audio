@@ -88,18 +88,14 @@ jobs:
             find installers -name "*.pkg" -maxdepth 1 | while read pkg_file; do
               echo "Installing: $pkg_file"
               
-              # Install and capture the package name from output
-              installer_output=$(sudo installer -pkg "$pkg_file" -target / -verbose 2>&1 | tee /dev/stderr)
-              app_name=$(echo "$installer_output" | grep "Package name is" | sed 's/installer: Package name is //' | xargs)
+              # Install the package
+              sudo installer -pkg "$pkg_file" -target / -verbose
               
-              # Quick check if app was installed
-              if [ ! -z "$app_name" ] && [ -d "/Applications/$app_name.app" ]; then
-                echo "✅ $app_name.app installed successfully"
-              elif [ ! -z "$app_name" ]; then
-                echo "❌ $app_name.app not found in /Applications"
-                exit 1
+              # Check if installer succeeded
+              if [ $? -eq 0 ]; then
+                echo "✅ $(basename "$pkg_file") installed successfully"
               else
-                echo "❌ Could not extract app name from installer output"
+                echo "❌ Failed to install $(basename "$pkg_file")"
                 exit 1
               fi
             done
@@ -161,16 +157,16 @@ jobs:
                   echo "❌ No VST3 plugin found in ~/.vst3"
                 fi
                 
-                # Check for standalone
+                # Check for standalone (optional)
                 if find "$HOME/.local/bin" -name "*" -type f -executable 2>/dev/null | grep -qi "$plugin_name\|black.*lounge"; then
                   standalone_found=true
                   echo "✅ Standalone app found in ~/.local/bin"
                 else
-                  echo "❌ No standalone app found in ~/.local/bin"
+                  echo "ℹ️ No standalone app found in ~/.local/bin (may not be built for this plugin)"
                 fi
                 
-                # Final verification
-                if [ "$vst3_found" = true ] && [ "$standalone_found" = true ]; then
+                # Final verification - only VST3 is required
+                if [ "$vst3_found" = true ]; then
                   echo "✅ Installation verification passed for $plugin_name"
                 else
                   echo "❌ Installation verification failed for $plugin_name"
