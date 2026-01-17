@@ -65,9 +65,9 @@ jobs:
             - **macOS**: Download and run the `.pkg` installer
             - **Linux**: Download the `.tar.gz` and run `./install.sh`
           files: |
-            artifacts/windows/${{ inputs.plugin }}*.exe
-            artifacts/macos/${{ inputs.plugin }}*.pkg
-            artifacts/linux/${{ inputs.plugin }}*.tar.gz
+            artifacts/windows/installers/${{ inputs.plugin }}*.exe
+            artifacts/macos/installers/${{ inputs.plugin }}*.pkg
+            artifacts/linux/installers/${{ inputs.plugin }}*.tar.gz
           draft: false
           prerelease: false
         env:
