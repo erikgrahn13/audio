@@ -84,6 +84,13 @@
       "configurePreset": "Release",
       "configurations": ["Release"],
       "configFile": "${sourceDir}/build/Abyss/CPackConfig-Abyss.cmake"
+    },
+    {
+      "name": "denoiser",
+      "displayName": "denoiser",
+      "configurePreset": "Release",
+      "configurations": ["Release"],
+      "configFile": "${sourceDir}/build/Denoiser/CPackConfig-Denoiser.cmake"
     }
   ],
   "workflowPresets": [
@@ -105,7 +112,8 @@
       "steps": [
         { "type": "configure", "name": "Release" },
         { "type": "build", "name": "Release" },
-        { "type": "package", "name": "black-lounge" }
+        { "type": "package", "name": "black-lounge" },
+        { "type": "package", "name": "denoiser" }
       ]
     }
   ],
