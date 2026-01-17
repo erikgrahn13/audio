@@ -1,0 +1,74 @@
+name: Release plugin
+
+on:
+  workflow_dispatch:
+    inputs:
+      plugin:
+        description: "Which plugin to release"
+        required: true
+        type: choice
+        options:
+          - Denoiser
+          - BlackLounge
+          - Abyss
+          - AbyssDrums
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Extract version from CMakeLists.txt
+      - name: Extract version from CMakeLists.txt
+        id: get_version
+        run: |
+          VERSION=$(grep -oP 'project\(\s*${{ inputs.plugin }}\s+VERSION\s+\K[0-9]+\.[0-9]+\.[0-9]+' ${{ inputs.plugin }}/CMakeLists.txt)
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+          echo "Detected version: $VERSION"
+
+      # Download pre-built artifacts from the build-and-test workflow
+      - name: Download Windows installer
+        uses: dawidd6/action-download-artifact@v3
+        with:
+          workflow: build-and-test.yaml
+          name: ${{ inputs.plugin }}-windows
+          path: artifacts/windows
+
+      - name: Download macOS installer
+        uses: dawidd6/action-download-artifact@v3
+        with:
+          workflow: build-and-test.yaml
+          name: ${{ inputs.plugin }}-macos
+          path: artifacts/macos
+
+      - name: Download Linux installer
+        uses: dawidd6/action-download-artifact@v3
+        with:
+          workflow: build-and-test.yaml
+          name: ${{ inputs.plugin }}-linux
+          path: artifacts/linux
+
+      # Create GitHub Release and upload assets
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ inputs.plugin }}-v${{ steps.get_version.outputs.VERSION }}
+          name: ${{ inputs.plugin }} v${{ steps.get_version.outputs.VERSION }}
+          body: |
+            Release of **${{ inputs.plugin }}** version ${{ steps.get_version.outputs.VERSION }}
+
+            ## Installation
+            - **Windows**: Download and run the `.exe` installer
+            - **macOS**: Download and run the `.pkg` installer
+            - **Linux**: Download the `.tar.gz` and run `./install.sh`
+          files: |
+            artifacts/windows/*.exe
+            artifacts/macos/*.pkg
+            artifacts/linux/*.tar.gz
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
