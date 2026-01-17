@@ -28,6 +28,8 @@ function(create_installer target INSTALL_IMAGE)
         set(VST3_INSTALL_DIRECTORY ".")
     endif()
 
+    include(CPackComponent)
+
     if(TARGET ${target}_VST3)
         get_target_property(VST3_PATH ${target}_VST3 JUCE_PLUGIN_ARTEFACT_FILE)
         install(DIRECTORY ${VST3_PATH}
@@ -36,6 +38,10 @@ function(create_installer target INSTALL_IMAGE)
             PATTERN "Plugin.ico" EXCLUDE
         )
         list(APPEND CPACK_COMPONENTS_ALL ${target}VST3)
+        cpack_add_component(${target}VST3
+            DISPLAY_NAME "${PLUGIN_NAME} VST3"
+            INSTALL_TYPES Full
+        )
     endif()
     
     if(TARGET ${target}_Standalone)
@@ -45,25 +51,35 @@ function(create_installer target INSTALL_IMAGE)
             COMPONENT ${target}APP
         )
         list(APPEND CPACK_COMPONENTS_ALL ${target}APP)
+        cpack_add_component(${target}APP
+            DISPLAY_NAME "${PLUGIN_NAME} Standalone"
+            INSTALL_TYPES Full
+        )
     endif()
 
     set(CPACK_COMPONENT_NAME "${target}")
 
     # Mac installer
     if(APPLE)
-        include(CPackComponent)
-
         configure_file("${CMAKE_SOURCE_DIR}/cmake/component.plist.in" "component.plist" @ONLY)
-        cpack_add_component(${target}APP PLIST "${CMAKE_CURRENT_BINARY_DIR}/component.plist")
+        cpack_add_component(${target}APP 
+            DISPLAY_NAME "${PLUGIN_NAME} Standalone"
+            PLIST "${CMAKE_CURRENT_BINARY_DIR}/component.plist"
+        )
         install(TARGETS ${target}_AU
             DESTINATION "Library/Audio/Plug-Ins/Components"
             COMPONENT ${target}AU
         )
         list(APPEND CPACK_COMPONENTS_ALL ${target}AU)
 
+        cpack_add_component(${target}AU
+            DISPLAY_NAME "${PLUGIN_NAME} AU"
+            INSTALL_TYPES Full
+        )
+
         set(CPACK_PACKAGING_INSTALL_PREFIX "/")
         set(CPACK_GENERATOR "productbuild")
-
+        
     # Windows installer
     elseif(WIN32)
         set(CPACK_GENERATOR "INNOSETUP")
@@ -73,21 +89,9 @@ function(create_installer target INSTALL_IMAGE)
         set(CPACK_INNOSETUP_SETUP_WizardBackImageFile ${INSTALL_IMAGE})
         set(CPACK_INNOSETUP_SETUP_DisableWelcomePage NO)
         set(CPACK_INNOSETUP_SETUP_SetupIconFile "${CMAKE_SOURCE_DIR}/resources/assets/logo_transparent.ico")
-
-        include(CPackComponent)
-
         set(CPACK_INNOSETUP_${target}VST3_INSTALL_DIRECTORY "{commoncf64}/VST3")
 
         cpack_add_install_type(Full DISPLAY_NAME "Full installation")
-
-        cpack_add_component(${target}APP
-            DISPLAY_NAME "${PLUGIN_NAME} Standalone"
-            INSTALL_TYPES Full
-        )
-        cpack_add_component(${target}VST3
-            DISPLAY_NAME "${PLUGIN_NAME} VST3"
-            INSTALL_TYPES Full
-        )
     else()
         set(CPACK_GENERATOR "TGZ")
         configure_file("${CMAKE_SOURCE_DIR}/cmake/install.sh.in" "install.sh" @ONLY)
