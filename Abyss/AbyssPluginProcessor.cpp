@@ -169,19 +169,19 @@ void AbyssAudioProcessor::processBlock(juce::AudioBuffer<float> &buffer, juce::M
 
     auto volume = juce::Decibels::decibelsToGain(mVolumeParameter->get());
     
+#if defined NDEBUG
     // Get the currently active model (real-time safe atomic read)
     int activeIndex = mActiveModelIndex.load();
-    if (auto* activeModel = mModels[activeIndex].get())
+    if (auto* activeModel = mModels[static_cast<size_t>(activeIndex)].get())
     {
-#if defined NDEBUG
         auto gain = juce::Decibels::decibelsToGain(mGainParameter->get());
         auto *input = buffer.getWritePointer(0);
         auto *output = buffer.getWritePointer(0);
 
         buffer.applyGain(gain);
         activeModel->process(input, output, buffer.getNumSamples());
-#endif
     }
+#endif
 
 
     // for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)

@@ -94,6 +94,7 @@ target_compile_definitions(${PROJECT_NAME}
     JUCE_USE_CURL=0 # If you remove this, add `NEEDS_CURL TRUE` to the `juce_add_plugin` call
     JUCE_VST3_CAN_REPLACE_VST2=0
     JUCE_ASIO=1
+    JUCE_JACK=1
     JUCE_USE_CUSTOM_PLUGIN_STANDALONE_APP=1
 )
 

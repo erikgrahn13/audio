@@ -252,7 +252,7 @@ void AbyssAudioProcessorEditor::resized()
 
 
 
-    // settingsButton.setBounds(bounds);
+    settingsButton.setBounds(bounds);
 
 }
 
