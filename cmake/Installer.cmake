@@ -10,7 +10,7 @@ function(create_installer target INSTALL_IMAGE)
 
     set(CPACK_OUTPUT_CONFIG_FILE "${CMAKE_CURRENT_BINARY_DIR}/CPackConfig-${target}.cmake")
     set(CPACK_PACKAGE_NAME "${PLUGIN_NAME}")
-    set(CPACK_PACKAGE_VERSION "1.0.0")
+    set(CPACK_PACKAGE_VERSION "${PROJECT_VERSION}")
     set(CPACK_PRODUCTBUILD_IDENTIFIER "${BUNDLE_ID}")
     # Place installer only in CPack packages directory to avoid duplicates
     set(CPACK_PACKAGE_DIRECTORY "${CMAKE_BINARY_DIR}/installers")
