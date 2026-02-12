@@ -2,16 +2,16 @@
 #include "DrumsPluginEditor.h"
 
 //==============================================================================
-AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAudioProcessor& p)
+DrumsAudioProcessorEditor::DrumsAudioProcessorEditor (DrumsAudioProcessor& p)
     : AudioProcessorEditor (&p), processorRef (p)
 {
     // Create channel strips
-    for (int i = 0; i < AudioPluginAudioProcessor::numChannels; ++i)
+    for (int i = 0; i < DrumsAudioProcessor::numChannels; ++i)
     {
-        channelStrips[i] = std::make_unique<ChannelStrip>(AudioPluginAudioProcessor::channelNames[i]);
+        channelStrips[i] = std::make_unique<ChannelStrip>(DrumsAudioProcessor::channelNames[i]);
         addAndMakeVisible(channelStrips[i].get());
         
-        juce::String paramID = juce::String(AudioPluginAudioProcessor::channelNames[i]) + "Volume";
+        juce::String paramID = juce::String(DrumsAudioProcessor::channelNames[i]) + "Volume";
         faderAttachments[i] = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
             processorRef.mParameters, paramID, channelStrips[i]->fader);
     }
@@ -20,10 +20,115 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
     kickPad.setButtonText("KICK");
     kickPad.onClick = [this](){
         int velocity = (int)velocitySlider.getValue();
-        processorRef.triggerKickNote(velocity);
+        processorRef.triggerNote(36, velocity);
     };
     addAndMakeVisible(kickPad);
+
+    snarePad.setButtonText("SNARE");
+    snarePad.onClick = [this](){
+        int velocity = (int)velocitySlider.getValue();
+        processorRef.triggerNote(38, velocity);
+    };
+    addAndMakeVisible(snarePad);
+
+    hihatOpenPad.setButtonText("HiHat Open");
+    hihatOpenPad.onClick = [this](){
+        int velocity = (int)velocitySlider.getValue();
+        processorRef.triggerNote(46, velocity);
+    };
+    addAndMakeVisible(hihatOpenPad);
+
+    hihatClosedPad.setButtonText("HiHat Closed");
+    hihatClosedPad.onClick = [this](){
+        int velocity = (int)velocitySlider.getValue();
+        processorRef.triggerNote(42, velocity);
+    };
+    addAndMakeVisible(hihatClosedPad);
+
+    tom1Pad.setButtonText("Tom1");
+    tom1Pad.onClick = [this](){
+        int velocity = (int)velocitySlider.getValue();
+        processorRef.triggerNote(48, velocity);
+    };
+    addAndMakeVisible(tom1Pad);
+
+    tom2Pad.setButtonText("Tom2");
+    tom2Pad.onClick = [this](){
+        int velocity = (int)velocitySlider.getValue();
+        processorRef.triggerNote(47, velocity);
+    };
+    addAndMakeVisible(tom2Pad);
+
+    tom3Pad.setButtonText("Tom3");
+    tom3Pad.onClick = [this](){
+        int velocity = (int)velocitySlider.getValue();
+        processorRef.triggerNote(45, velocity);
+    };
+    addAndMakeVisible(tom3Pad);
+
+    tom4Pad.setButtonText("Tom4");
+    tom4Pad.onClick = [this](){
+        int velocity = (int)velocitySlider.getValue();
+        processorRef.triggerNote(41, velocity);
+    };
+    addAndMakeVisible(tom4Pad);
+
+    rideLPad.setButtonText("RideL");
+    rideLPad.onClick = [this](){
+        int velocity = (int)velocitySlider.getValue();
+        processorRef.triggerNote(51, velocity);
+    };
+    addAndMakeVisible(rideLPad);
+
+    rideRPad.setButtonText("RideR");
+    rideRPad.onClick = [this](){
+        int velocity = (int)velocitySlider.getValue();
+        processorRef.triggerNote(59, velocity);
+    };
+    addAndMakeVisible(rideRPad);
+
+    chinaPad.setButtonText("China");
+    chinaPad.onClick = [this](){
+        int velocity = (int)velocitySlider.getValue();
+        processorRef.triggerNote(52, velocity);
+    };
+    addAndMakeVisible(chinaPad);
     
+    crashLPad.setButtonText("CrashL");
+    crashLPad.onClick = [this](){
+        int velocity = (int)velocitySlider.getValue();
+        processorRef.triggerNote(49, velocity);
+    };
+    addAndMakeVisible(crashLPad);
+
+    crashRPad.setButtonText("CrashR");
+    crashRPad.onClick = [this](){
+        int velocity = (int)velocitySlider.getValue();
+        processorRef.triggerNote(57, velocity);
+    };
+    addAndMakeVisible(crashRPad);
+
+    rideLBellPad.setButtonText("RideLBell");
+    rideLBellPad.onClick = [this](){
+        int velocity = (int)velocitySlider.getValue();
+        processorRef.triggerNote(55, velocity);
+    };
+    addAndMakeVisible(rideLBellPad);
+
+    rideRBellPad.setButtonText("RideRBell");
+    rideRBellPad.onClick = [this](){
+        int velocity = (int)velocitySlider.getValue();
+        processorRef.triggerNote(53, velocity);
+    };
+    addAndMakeVisible(rideRBellPad);
+
+    snareRestPad.setButtonText("SnareRest");
+    snareRestPad.onClick = [this](){
+        int velocity = (int)velocitySlider.getValue();
+        processorRef.triggerNote(37, velocity);
+    };
+    addAndMakeVisible(snareRestPad);
+
     // Velocity slider
     velocitySlider.setRange(0, 127, 1);
     velocitySlider.setValue(100);
@@ -39,12 +144,12 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
     startTimerHz(60); // 60fps meter updates
 }
 
-AudioPluginAudioProcessorEditor::~AudioPluginAudioProcessorEditor()
+DrumsAudioProcessorEditor::~DrumsAudioProcessorEditor()
 {
     stopTimer();
 }
 
-void AudioPluginAudioProcessorEditor::timerCallback()
+void DrumsAudioProcessorEditor::timerCallback()
 {
     // Get current levels from processor
     processorRef.getChannelLevels(channelLevels.data(), (int)channelLevels.size());
@@ -57,7 +162,7 @@ void AudioPluginAudioProcessorEditor::timerCallback()
 }
 
 //==============================================================================
-void AudioPluginAudioProcessorEditor::paint (juce::Graphics& g)
+void DrumsAudioProcessorEditor::paint (juce::Graphics& g)
 {
     g.fillAll (juce::Colours::darkgrey);
     
@@ -66,7 +171,7 @@ void AudioPluginAudioProcessorEditor::paint (juce::Graphics& g)
     g.drawText ("Kick Drum Mixer", 10, 10, 300, 30, juce::Justification::centredLeft);
 }
 
-void AudioPluginAudioProcessorEditor::resized()
+void DrumsAudioProcessorEditor::resized()
 {
     auto bounds = getLocalBounds().reduced(10);
     
@@ -75,7 +180,26 @@ void AudioPluginAudioProcessorEditor::resized()
     controlArea.removeFromTop(30); // Skip title area
     
     velocitySlider.setBounds(controlArea.removeFromTop(25).reduced(70, 0));
-    kickPad.setBounds(controlArea.withSizeKeepingCentre(100, 30));
+    
+    // Place drum pads horizontally
+    auto padArea = controlArea.withHeight(30);
+    auto left = padArea.getX();
+    kickPad.setBounds(left, padArea.getY(), 60, 30);
+    snarePad.setBounds(left + 60, padArea.getY(), 60, 30);
+    hihatOpenPad.setBounds(left + 120, padArea.getY(), 60, 30);
+    hihatClosedPad.setBounds(left + 180, padArea.getY(), 60, 30);
+    tom1Pad.setBounds(left + 240, padArea.getY(), 60, 30);
+    tom2Pad.setBounds(left + 300, padArea.getY(), 60, 30);
+    tom3Pad.setBounds(left + 360, padArea.getY(), 60, 30);
+    tom4Pad.setBounds(left + 420, padArea.getY(), 60, 30);
+    rideLPad.setBounds(left + 480, padArea.getY(), 60, 30);
+    rideRPad.setBounds(left + 540, padArea.getY(), 60, 30);
+    chinaPad.setBounds(left + 600, padArea.getY(), 60, 30);
+    crashLPad.setBounds(left + 660, padArea.getY(), 60, 30);
+    crashRPad.setBounds(left + 720, padArea.getY(), 60, 30);
+    rideLBellPad.setBounds(left + 780, padArea.getY(), 60, 30);
+    rideRBellPad.setBounds(left + 840, padArea.getY(), 60, 30);
+    snareRestPad.setBounds(left + 900, padArea.getY(), 60, 30);
     
     bounds.removeFromTop(10);
     

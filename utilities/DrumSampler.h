@@ -5,11 +5,15 @@
 class DrumSampler : public juce::Synthesiser
 {
 public:
+    explicit DrumSampler(int midiNote) 
+    : mMidiNote(midiNote){}
     // Public method to trigger a note programmatically
-    void triggerNote(int midiNoteNumber, float velocity)
+    void triggerNote(float velocity)
     {
-        noteOn(1, midiNoteNumber, velocity);
+        noteOn(1, mMidiNote, velocity);
     }
+
+    int getMidiNote() { return mMidiNote; }
 
 private:
     void noteOn(int midiChannel, int midiNoteNumber, float velocity) override
@@ -53,4 +57,6 @@ private:
         startVoice(findFreeVoice(selectedSound, midiChannel, midiNoteNumber, isNoteStealingEnabled()), selectedSound,
                    midiChannel, midiNoteNumber, velocity);
     }
+
+    int mMidiNote;
 };

@@ -3,12 +3,12 @@
 #include "DrumsPluginProcessor.h"
 
 //==============================================================================
-class AudioPluginAudioProcessorEditor final : public juce::AudioProcessorEditor,
+class DrumsAudioProcessorEditor final : public juce::AudioProcessorEditor,
                                                private juce::Timer
 {
 public:
-    explicit AudioPluginAudioProcessorEditor (AudioPluginAudioProcessor&);
-    ~AudioPluginAudioProcessorEditor() override;
+    explicit DrumsAudioProcessorEditor (DrumsAudioProcessor&);
+    ~DrumsAudioProcessorEditor() override;
 
     //==============================================================================
     void paint (juce::Graphics&) override;
@@ -83,9 +83,24 @@ private:
         float currentLevel = 0.0f;
     };
     
-    AudioPluginAudioProcessor& processorRef;
+    DrumsAudioProcessor& processorRef;
     
     juce::TextButton kickPad;
+    juce::TextButton snarePad;
+    juce::TextButton hihatOpenPad;
+    juce::TextButton hihatClosedPad;
+    juce::TextButton tom1Pad;
+    juce::TextButton tom2Pad;
+    juce::TextButton tom3Pad;
+    juce::TextButton tom4Pad;
+    juce::TextButton rideLPad;
+    juce::TextButton rideRPad;
+    juce::TextButton chinaPad;
+    juce::TextButton crashLPad;
+    juce::TextButton crashRPad;
+    juce::TextButton rideLBellPad;
+    juce::TextButton rideRBellPad;
+    juce::TextButton snareRestPad;
     juce::Slider velocitySlider;
     juce::Label velocityLabel;
     
@@ -94,5 +109,5 @@ private:
     std::array<std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>, 16> faderAttachments;
     std::array<float, 16> channelLevels{};
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioPluginAudioProcessorEditor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DrumsAudioProcessorEditor)
 };

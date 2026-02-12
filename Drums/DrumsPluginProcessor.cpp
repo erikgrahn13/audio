@@ -1,8 +1,9 @@
 #include "DrumsPluginProcessor.h"
 #include "DrumsPluginEditor.h"
+#include <filesystem>
 
 //==============================================================================
-AudioPluginAudioProcessor::AudioPluginAudioProcessor()
+DrumsAudioProcessor::DrumsAudioProcessor()
      : AudioProcessor (BusesProperties()
                      #if ! JucePlugin_IsMidiEffect
                       #if ! JucePlugin_IsSynth
@@ -23,18 +24,44 @@ AudioPluginAudioProcessor::AudioPluginAudioProcessor()
         channelVolumes[i] = dynamic_cast<juce::AudioParameterFloat*>(mParameters.getParameter(paramID));
     }
     
+    drumSamples.emplace_back(std::make_unique<DrumSampler>(36), "/Users/erikgrahn/Downloads/MuldjordKit3/KdrumR/samples");
+    drumSamples.emplace_back(std::make_unique<DrumSampler>(38), "/Users/erikgrahn/Downloads/MuldjordKit3/Snare/samples");
+    drumSamples.emplace_back(std::make_unique<DrumSampler>(46), "/Users/erikgrahn/Downloads/MuldjordKit3/HihatOpen/samples");
+    drumSamples.emplace_back(std::make_unique<DrumSampler>(42), "/Users/erikgrahn/Downloads/MuldjordKit3/HihatClosed/samples");
+    drumSamples.emplace_back(std::make_unique<DrumSampler>(48), "/Users/erikgrahn/Downloads/MuldjordKit3/Tom1/samples");
+    drumSamples.emplace_back(std::make_unique<DrumSampler>(47), "/Users/erikgrahn/Downloads/MuldjordKit3/Tom2/samples");
+    drumSamples.emplace_back(std::make_unique<DrumSampler>(45), "/Users/erikgrahn/Downloads/MuldjordKit3/Tom3/samples");
+    drumSamples.emplace_back(std::make_unique<DrumSampler>(41), "/Users/erikgrahn/Downloads/MuldjordKit3/Tom4/samples");
+    drumSamples.emplace_back(std::make_unique<DrumSampler>(59), "/Users/erikgrahn/Downloads/MuldjordKit3/RideL/samples");
+    drumSamples.emplace_back(std::make_unique<DrumSampler>(51), "/Users/erikgrahn/Downloads/MuldjordKit3/RideR/samples");
+    drumSamples.emplace_back(std::make_unique<DrumSampler>(52), "/Users/erikgrahn/Downloads/MuldjordKit3/China/samples");
+    drumSamples.emplace_back(std::make_unique<DrumSampler>(49), "/Users/erikgrahn/Downloads/MuldjordKit3/CrashL/samples");
+    drumSamples.emplace_back(std::make_unique<DrumSampler>(57), "/Users/erikgrahn/Downloads/MuldjordKit3/CrashR/samples");
+    drumSamples.emplace_back(std::make_unique<DrumSampler>(55), "/Users/erikgrahn/Downloads/MuldjordKit3/RideLBell/samples");
+    drumSamples.emplace_back(std::make_unique<DrumSampler>(53), "/Users/erikgrahn/Downloads/MuldjordKit3/RideRBell/samples");
+    drumSamples.emplace_back(std::make_unique<DrumSampler>(37), "/Users/erikgrahn/Downloads/MuldjordKit3/SnareRest/samples");
+
+    for(auto & [sampler, path] : drumSamples)
+    {
+        loadDrumSamples(*sampler, path);
+    }
+
     // Load kick samples
-    loadKickSamples();
+    // loadDrumSamples(kickSamples, "/Users/erikgrahn/Downloads/MuldjordKit3/KdrumR/samples", 36);
+    // loadDrumSamples(snareSamples, "/Users/erikgrahn/Downloads/MuldjordKit3/Snare/samples", 38);
+    // loadDrumSamples(hihatOpenSamples, "/Users/erikgrahn/Downloads/MuldjordKit3/HihatOpen/samples", 46);
+    // loadDrumSamples(hihatClosedSamples, "/Users/erikgrahn/Downloads/MuldjordKit3/HihatClosed/samples", 42);
+    // loadDrumSamples(tom1Samples, "/Users/erikgrahn/Downloads/MuldjordKit3/Tom1/samples", 48);
 }
 
-AudioPluginAudioProcessor::~AudioPluginAudioProcessor()
+DrumsAudioProcessor::~DrumsAudioProcessor()
 {
 }
 
 //==============================================================================
-void AudioPluginAudioProcessor::loadKickSamples()
+void DrumsAudioProcessor::loadDrumSamples(DrumSampler& drumSamples, const juce::String& path)
 {
-    juce::File samplesDir("/home/erik/Downloads/MuldjordKit3/KdrumR/samples");
+    juce::File samplesDir(path);
     
     if (!samplesDir.exists())
     {
@@ -108,12 +135,12 @@ void AudioPluginAudioProcessor::loadKickSamples()
                 // Create DrumSound with velocity range and add to synthesiser
                 auto* sound = new DrumSound(file.getFileNameWithoutExtension(),
                                            std::move(fullBuffer),
-                                           36,  // MIDI note 36 = kick (C1)
+                                           drumSamples.getMidiNote(),  // MIDI note 36 = kick (C1)
                                            reader->sampleRate,
                                            velocityRanges[layer][0],
                                            velocityRanges[layer][1]);
                 
-                kickSamples.addSound(sound);
+                drumSamples.addSound(sound);
                 
                 DBG("  Loaded: " + file.getFileName() + " - Layer " + juce::String(layer) + 
                     " (vel " + juce::String(velocityRanges[layer][0]) + "-" + 
@@ -122,16 +149,16 @@ void AudioPluginAudioProcessor::loadKickSamples()
         }
     }
     
-    DBG("Total kick sounds loaded: " + juce::String(kickSamples.getNumSounds()));
+    DBG("Total kick sounds loaded: " + juce::String(drumSamples.getNumSounds()));
 }
 
 //==============================================================================
-const juce::String AudioPluginAudioProcessor::getName() const
+const juce::String DrumsAudioProcessor::getName() const
 {
     return JucePlugin_Name;
 }
 
-bool AudioPluginAudioProcessor::acceptsMidi() const
+bool DrumsAudioProcessor::acceptsMidi() const
 {
    #if JucePlugin_WantsMidiInput
     return true;
@@ -140,7 +167,7 @@ bool AudioPluginAudioProcessor::acceptsMidi() const
    #endif
 }
 
-bool AudioPluginAudioProcessor::producesMidi() const
+bool DrumsAudioProcessor::producesMidi() const
 {
    #if JucePlugin_ProducesMidiOutput
     return true;
@@ -149,7 +176,7 @@ bool AudioPluginAudioProcessor::producesMidi() const
    #endif
 }
 
-bool AudioPluginAudioProcessor::isMidiEffect() const
+bool DrumsAudioProcessor::isMidiEffect() const
 {
    #if JucePlugin_IsMidiEffect
     return true;
@@ -158,40 +185,40 @@ bool AudioPluginAudioProcessor::isMidiEffect() const
    #endif
 }
 
-double AudioPluginAudioProcessor::getTailLengthSeconds() const
+double DrumsAudioProcessor::getTailLengthSeconds() const
 {
     return 0.0;
 }
 
-int AudioPluginAudioProcessor::getNumPrograms()
+int DrumsAudioProcessor::getNumPrograms()
 {
     return 1;   // NB: some hosts don't cope very well if you tell them there are 0 programs,
                 // so this should be at least 1, even if you're not really implementing programs.
 }
 
-int AudioPluginAudioProcessor::getCurrentProgram()
+int DrumsAudioProcessor::getCurrentProgram()
 {
     return 0;
 }
 
-void AudioPluginAudioProcessor::setCurrentProgram (int index)
+void DrumsAudioProcessor::setCurrentProgram (int index)
 {
     juce::ignoreUnused (index);
 }
 
-const juce::String AudioPluginAudioProcessor::getProgramName (int index)
+const juce::String DrumsAudioProcessor::getProgramName (int index)
 {
     juce::ignoreUnused (index);
     return {};
 }
 
-void AudioPluginAudioProcessor::changeProgramName (int index, const juce::String& newName)
+void DrumsAudioProcessor::changeProgramName (int index, const juce::String& newName)
 {
     juce::ignoreUnused (index, newName);
 }
 
 //==============================================================================
-void AudioPluginAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
+void DrumsAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
@@ -202,22 +229,49 @@ void AudioPluginAudioProcessor::prepareToPlay (double sampleRate, int samplesPer
         previewResampler->prepareToPlay(samplesPerBlock, sampleRate);
     }
 
-    kickSamples.clearVoices();
+    for(auto & drumSample : drumSamples)
+    {
+        drumSample.first->clearVoices();
+    }
+
+    // kickSamples.clearVoices();
+    // snareSamples.clearVoices();
+    // hihatOpenSamples.clearVoices();
+    // hihatClosedSamples.clearVoices();
+    // tom1Samples.clearVoices();
 
     for(int i = 0; i < 32; ++i)
     {
-        kickSamples.addVoice(new DrumVoice(channelVolumes, channelLevels));
+        for(auto & drumSample : drumSamples)
+        {
+            drumSample.first->addVoice(new DrumVoice(channelVolumes, channelLevels));
+        }
+        // kickSamples.addVoice(new DrumVoice(channelVolumes, channelLevels));
+        // snareSamples.addVoice(new DrumVoice(channelVolumes, channelLevels));
+        // hihatOpenSamples.addVoice(new DrumVoice(channelVolumes, channelLevels));
+        // hihatClosedSamples.addVoice(new DrumVoice(channelVolumes, channelLevels));
+        // tom1Samples.addVoice(new DrumVoice(channelVolumes, channelLevels));
     }
-    kickSamples.setCurrentPlaybackSampleRate(sampleRate);
+
+    for(auto & drumSample : drumSamples)
+    {
+        drumSample.first->setCurrentPlaybackSampleRate(sampleRate);
+    }
+
+    // kickSamples.setCurrentPlaybackSampleRate(sampleRate);
+    // snareSamples.setCurrentPlaybackSampleRate(sampleRate);
+    // hihatOpenSamples.setCurrentPlaybackSampleRate(sampleRate);
+    // hihatClosedSamples.setCurrentPlaybackSampleRate(sampleRate);
+    // tom1Samples.setCurrentPlaybackSampleRate(sampleRate);
 }
 
-void AudioPluginAudioProcessor::releaseResources()
+void DrumsAudioProcessor::releaseResources()
 {
     // When playback stops, you can use this as an opportunity to free up any
     // spare memory, etc.
 }
 
-bool AudioPluginAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
+bool DrumsAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
 {
   #if JucePlugin_IsMidiEffect
     juce::ignoreUnused (layouts);
@@ -241,7 +295,7 @@ bool AudioPluginAudioProcessor::isBusesLayoutSupported (const BusesLayout& layou
   #endif
 }
 
-void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
+void DrumsAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
                                               juce::MidiBuffer& midiMessages)
 {
     juce::ScopedNoDenormals noDenormals;
@@ -259,22 +313,31 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
 
     buffer.clear();
 
-    kickSamples.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
+    for(auto & drumSample : drumSamples)
+    {
+        drumSample.first->renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
+    }
+
+    // kickSamples.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
+    // snareSamples.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
+    // hihatOpenSamples.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
+    // hihatClosedSamples.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
+    // hihatClosedSamples.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
 }
 
 //==============================================================================
-bool AudioPluginAudioProcessor::hasEditor() const
+bool DrumsAudioProcessor::hasEditor() const
 {
     return true; // (change this to false if you choose to not supply an editor)
 }
 
-juce::AudioProcessorEditor* AudioPluginAudioProcessor::createEditor()
+juce::AudioProcessorEditor* DrumsAudioProcessor::createEditor()
 {
-    return new AudioPluginAudioProcessorEditor (*this);
+    return new DrumsAudioProcessorEditor (*this);
 }
 
 //==============================================================================
-void AudioPluginAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
+void DrumsAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
 {
     // You should use this method to store your parameters in the memory block.
     // You could do that either as raw data, or use the XML or ValueTree classes
@@ -282,7 +345,7 @@ void AudioPluginAudioProcessor::getStateInformation (juce::MemoryBlock& destData
     juce::ignoreUnused (destData);
 }
 
-void AudioPluginAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
+void DrumsAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
@@ -293,10 +356,10 @@ void AudioPluginAudioProcessor::setStateInformation (const void* data, int sizeI
 // This creates new instances of the plugin..
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
-    return new AudioPluginAudioProcessor();
+    return new DrumsAudioProcessor();
 }
 
-juce::AudioProcessorValueTreeState::ParameterLayout AudioPluginAudioProcessor::createParameters()
+juce::AudioProcessorValueTreeState::ParameterLayout DrumsAudioProcessor::createParameters()
 {
     juce::AudioProcessorValueTreeState::ParameterLayout layout;
 
@@ -307,7 +370,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout AudioPluginAudioProcessor::c
         juce::String paramName = juce::String(channelNames[i]) + " Vol";
         
         // Default: main kick channels (KdrumL, KdrumR) at -6dB, others at -80dB (muted)
-        float defaultValue = (i == 3 || i == 4) ? -6.0f : -80.0f;
+        float defaultValue = ( i == 4 || i == 2) ? -6.0f : -80.0f;
         
         layout.add(std::make_unique<juce::AudioParameterFloat>(
             juce::ParameterID{paramID, 1}, 

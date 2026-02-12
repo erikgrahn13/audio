@@ -7,12 +7,12 @@
 #include "DrumSound.h"
 
 //==============================================================================
-class AudioPluginAudioProcessor final : public juce::AudioProcessor
+class DrumsAudioProcessor final : public juce::AudioProcessor
 {
 public:
     //==============================================================================
-    AudioPluginAudioProcessor();
-    ~AudioPluginAudioProcessor() override;
+    DrumsAudioProcessor();
+    ~DrumsAudioProcessor() override;
 
     //==============================================================================
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
@@ -46,10 +46,31 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
     
-    // Trigger a kick hit with given velocity
-    void triggerKickNote(int velocity = 100)
+    // Trigger a drum hit with given MIDI note and velocity
+    void triggerNote(int midiNote, int velocity = 100)
     {
-        kickSamples.triggerNote(36, velocity / 127.0f);
+        float velocityNormalized = velocity / 127.0f;
+
+        for(auto &drumSample : drumSamples)
+        {
+            if(midiNote == drumSample.first->getMidiNote())
+            {
+                drumSample.first->triggerNote(velocityNormalized);
+                break;
+            }
+        }
+        
+
+        // if(midiNote == 36)
+        //     kickSamples.triggerNote(midiNote, velocityNormalized);
+        // else if(midiNote == 38)
+        //     snareSamples.triggerNote(midiNote, velocityNormalized);
+        // else if(midiNote == 46)
+        //     hihatOpenSamples.triggerNote(midiNote, velocityNormalized);
+        // else if(midiNote == 42)
+        //     hihatClosedSamples.triggerNote(midiNote, velocityNormalized);
+        // else if(midiNote == 48)
+        //     tom1Samples.triggerNote(midiNote, velocityNormalized);
     }
     
     // Channel names for the 16-channel drum kit
@@ -82,12 +103,17 @@ private:
     // Channel levels for metering (atomic for thread-safe access from UI)
     std::array<std::atomic<float>, numChannels> channelLevels;
     
-    void loadKickSamples();
+    void loadDrumSamples(DrumSampler &drumSamples, const juce::String& path);
 
     juce::SpinLock previewLock;
-    DrumSampler kickSamples;
+    // DrumSampler kickSamples{36};
+    // DrumSampler snareSamples{38};
+    // DrumSampler hihatOpenSamplπes{46};
+    // DrumSampler hihatClosedSamples{42};
+    // DrumSampler tom1Samples{48};
+    std::vector<std::pair<std::unique_ptr<DrumSampler>, std::string>> drumSamples;
     std::unique_ptr<juce::ResamplingAudioSource>   previewResampler;
 
     //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioPluginAudioProcessor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DrumsAudioProcessor)
 };
