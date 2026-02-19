@@ -6,15 +6,15 @@ DrumsAudioProcessorEditor::DrumsAudioProcessorEditor (DrumsAudioProcessor& p)
     : AudioProcessorEditor (&p), processorRef (p)
 {
     // Create channel strips
-    for (int i = 0; i < DrumsAudioProcessor::numChannels; ++i)
-    {
-        channelStrips[i] = std::make_unique<ChannelStrip>(DrumsAudioProcessor::channelNames[i]);
-        addAndMakeVisible(channelStrips[i].get());
+    // for (int i = 0; i < DrumsAudioProcessor::numChannels; ++i)
+    // {
+    //     channelStrips[i] = std::make_unique<ChannelStrip>(DrumsAudioProcessor::channelNames[i]);
+    //     addAndMakeVisible(channelStrips[i].get());
         
-        juce::String paramID = juce::String(DrumsAudioProcessor::channelNames[i]) + "Volume";
-        faderAttachments[i] = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
-            processorRef.mParameters, paramID, channelStrips[i]->fader);
-    }
+    //     juce::String paramID = juce::String(DrumsAudioProcessor::channelNames[i]) + "Volume";
+    //     faderAttachments[i] = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
+    //         processorRef.mParameters, paramID, channelStrips[i]->fader);
+    // }
     
     // Kick pad
     kickPad.setButtonText("KICK");
@@ -140,8 +140,10 @@ DrumsAudioProcessorEditor::DrumsAudioProcessorEditor (DrumsAudioProcessor& p)
     velocityLabel.attachToComponent(&velocitySlider, true);
     addAndMakeVisible(velocityLabel);
 
+    addAndMakeVisible(mixerPanel);
+
     setSize (1200, 400);
-    startTimerHz(60); // 60fps meter updates
+    startTimerHz(24); // 60fps meter updates
 }
 
 DrumsAudioProcessorEditor::~DrumsAudioProcessorEditor()
@@ -152,13 +154,21 @@ DrumsAudioProcessorEditor::~DrumsAudioProcessorEditor()
 void DrumsAudioProcessorEditor::timerCallback()
 {
     // Get current levels from processor
-    processorRef.getChannelLevels(channelLevels.data(), (int)channelLevels.size());
+    // processorRef.getChannelLevels(channelLevels.data(), (int)channelLevels.size());
     
     // Update level meters for all channels
-    for (int i = 0; i < (int)channelStrips.size(); ++i)
+    // for (int i = 0; i < (int)channelStrips.size(); ++i)
+    // {
+    //     channelStrips[i]->setLevel(channelLevels[i]);
+    //     // mixerPanel.channelStrips[i].setLevel(channelLevels[i]);
+    // }
+    for(int ch = 0; ch < 16; ++ch)
     {
-        channelStrips[i]->setLevel(channelLevels[i]);
+        float level = processorRef.channelLevels[ch].load();
+        // meter
+        mixerPanel.channelStrips[ch].setLevel(level);
     }
+
 }
 
 //==============================================================================
@@ -202,14 +212,18 @@ void DrumsAudioProcessorEditor::resized()
     snareRestPad.setBounds(left + 900, padArea.getY(), 60, 30);
     
     bounds.removeFromTop(10);
+
+    
     
     // Mixer area - 16 channel strips
     auto mixerArea = bounds;
-    int channelWidth = mixerArea.getWidth() / (int)channelStrips.size();
+    int channelWidth = mixerArea.getWidth() / (int)mixerPanel.channelStrips.size();
     
-    for (int i = 0; i < (int)channelStrips.size(); ++i)
-    {
-        auto stripBounds = mixerArea.removeFromLeft(channelWidth).reduced(2);
-        channelStrips[i]->setBounds(stripBounds);
-    }
+    mixerPanel.setBounds(mixerArea);
+
+    // for (int i = 0; i < (int)mixerPanel.channelStrips.size(); ++i)
+    // {
+    //     auto stripBounds = mixerArea.removeFromLeft(channelWidth).reduced(2);
+    //     channelStrips[i]->setBounds(stripBounds);
+    // }
 }

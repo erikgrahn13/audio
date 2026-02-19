@@ -1,6 +1,7 @@
 #pragma once
 
 #include "DrumsPluginProcessor.h"
+#include "MixerPanel.h"
 
 //==============================================================================
 class DrumsAudioProcessorEditor final : public juce::AudioProcessorEditor,
@@ -105,9 +106,11 @@ private:
     juce::Label velocityLabel;
     
     // 16 channel strips
-    std::array<std::unique_ptr<ChannelStrip>, 16> channelStrips;
+    // std::array<std::unique_ptr<ChannelStrip>, 16> channelStrips;
     std::array<std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>, 16> faderAttachments;
-    std::array<float, 16> channelLevels{};
+    // std::array<float, 16> channelLevels{};
+
+    MixerPanel mixerPanel;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DrumsAudioProcessorEditor)
 };

@@ -20,8 +20,13 @@ DrumsAudioProcessor::DrumsAudioProcessor()
     // Get channel volume parameters
     for (int i = 0; i < numChannels; ++i)
     {
-        juce::String paramID = juce::String(channelNames[i]) + "Volume";
-        channelVolumes[i] = dynamic_cast<juce::AudioParameterFloat*>(mParameters.getParameter(paramID));
+        juce::String ParamID = juce::String(channelNames[i]) + "Volume";
+        // juce::String volumeParamID = juce::String(channelNames[i]) + "Volume";
+        // juce::String muteParamID = juce::String(channelNames[i]) + "Mute";
+        // juce::String soloParamID = juce::String(channelNames[i]) + "Solo";
+
+        // channelParams.at(i).volume = dynamic_cast<juce::AudioParameterFloat*>(mParameters.getParameter(volumeParamID));
+        channelVolumes[i] = dynamic_cast<juce::AudioParameterFloat*>(mParameters.getParameter(ParamID));
     }
     
     drumSamples.emplace_back(std::make_unique<DrumSampler>(36), "/Users/erikgrahn/Downloads/MuldjordKit3/KdrumR/samples");
@@ -224,11 +229,6 @@ void DrumsAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
     // initialisation that you need..
     juce::ignoreUnused (sampleRate, samplesPerBlock);
 
-    if(previewResampler)
-    {
-        previewResampler->prepareToPlay(samplesPerBlock, sampleRate);
-    }
-
     for(auto & drumSample : drumSamples)
     {
         drumSample.first->clearVoices();
@@ -311,11 +311,35 @@ void DrumsAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     }
     midiMessages.swapWith(filtered);
 
-    buffer.clear();
+    // Create 16-channel intermediate buffer for drum rendering
+    juce::AudioBuffer<float> sixteenChannelBuffer(16, buffer.getNumSamples());
+    sixteenChannelBuffer.clear();
 
+    // Render all drum samples to 16-channel buffer
     for(auto & drumSample : drumSamples)
     {
-        drumSample.first->renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
+        drumSample.first->renderNextBlock(sixteenChannelBuffer, midiMessages, 0, buffer.getNumSamples());
+    }
+
+    // Calculate RMS for each channel for metering
+    for(int ch = 0; ch < numChannels; ++ch)
+    {
+        float rms = sixteenChannelBuffer.getRMSLevel(ch, 0, buffer.getNumSamples());
+        channelLevels[ch].store(rms);
+    }
+
+    // Mix 16 channels to stereo output using channel volumes
+    buffer.clear();
+    for(int ch = 0; ch < numChannels; ++ch)
+    {
+        const float gain = juce::Decibels::decibelsToGain(channelVolumes[ch]->get());
+        
+        for(int i = 0; i < buffer.getNumSamples(); ++i)
+        {
+            const float sample = sixteenChannelBuffer.getSample(ch, i) * gain;
+            buffer.addSample(0, i, sample);  // Left
+            buffer.addSample(1, i, sample);  // Right
+        }
     }
 
     // kickSamples.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
@@ -370,12 +394,12 @@ juce::AudioProcessorValueTreeState::ParameterLayout DrumsAudioProcessor::createP
         juce::String paramName = juce::String(channelNames[i]) + " Vol";
         
         // Default: main kick channels (KdrumL, KdrumR) at -6dB, others at -80dB (muted)
-        float defaultValue = ( i == 4 || i == 2) ? -6.0f : -80.0f;
+        // float defaultValue = ( i == 4 || i == 2) ? -6.0f : -80.0f;
         
         layout.add(std::make_unique<juce::AudioParameterFloat>(
             juce::ParameterID{paramID, 1}, 
             paramName, 
-            -80.f, 12.f, defaultValue));
+            -80.f, 12.f, -6.f));
     }
 
     return layout;

@@ -54,20 +54,13 @@ public:
                 break;
             }
 
-            // Render each channel with its individual volume
+            // Render each channel to the 16-channel output buffer
             for (int ch = 0; ch < sourceChannels; ++ch)
             {
                 const float sample = sourceBuffer.getSample(ch, sourcePos);
-                const float gain = juce::Decibels::decibelsToGain(volumes[static_cast<size_t>(ch)]->get());
-                const float outputSample = sample * gain;
                 
-                // Add to stereo output (mix all channels to L+R)
-                outputBuffer.addSample(0, startSample + i, outputSample);  // Left
-                outputBuffer.addSample(1, startSample + i, outputSample);  // Right
-                
-                // Update level meter with RMS-style smoothing
-                const float currentLevel = levels[static_cast<size_t>(ch)].load();
-                levels[static_cast<size_t>(ch)].store(currentLevel * 0.95f + std::abs(outputSample) * 0.05f);
+                // Add sample to corresponding channel (no volume/mixing here)
+                outputBuffer.addSample(ch, startSample + i, sample);
             }
 
             position += pitchRatio;

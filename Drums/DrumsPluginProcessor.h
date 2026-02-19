@@ -91,6 +91,8 @@ public:
     }
     
     juce::AudioProcessorValueTreeState mParameters;
+    std::array<std::atomic<float>, numChannels> channelLevels;
+
 
 private:
     juce::AudioProcessorValueTreeState::ParameterLayout createParameters();
@@ -100,19 +102,26 @@ private:
     // Channel volume parameters (one for each of the 16 channels)
     std::array<juce::AudioParameterFloat*, numChannels> channelVolumes;
     
+    
+    struct ChannelParams {
+        juce::AudioParameterFloat* volume;
+        juce::AudioParameterBool* mute;
+        juce::AudioParameterBool* solo;
+    };
+    std::array<ChannelParams, numChannels> channelParams;
+    
     // Channel levels for metering (atomic for thread-safe access from UI)
-    std::array<std::atomic<float>, numChannels> channelLevels;
     
     void loadDrumSamples(DrumSampler &drumSamples, const juce::String& path);
 
-    juce::SpinLock previewLock;
+    // juce::SpinLock previewLock;
     // DrumSampler kickSamples{36};
     // DrumSampler snareSamples{38};
     // DrumSampler hihatOpenSamplπes{46};
     // DrumSampler hihatClosedSamples{42};
     // DrumSampler tom1Samples{48};
     std::vector<std::pair<std::unique_ptr<DrumSampler>, std::string>> drumSamples;
-    std::unique_ptr<juce::ResamplingAudioSource>   previewResampler;
+    // std::unique_ptr<juce::ResamplingAudioSource>   previewResampler;
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DrumsAudioProcessor)
