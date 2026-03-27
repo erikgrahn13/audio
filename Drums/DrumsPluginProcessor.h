@@ -5,6 +5,7 @@
 #include "DrumSampler.h"
 #include "DrumVoice.h"
 #include "DrumSound.h"
+#include "constants.h"
 
 //==============================================================================
 class DrumsAudioProcessor final : public juce::AudioProcessor
@@ -74,12 +75,12 @@ public:
     }
     
     // Channel names for the 16-channel drum kit
-    static constexpr int numChannels = 16;
-    static constexpr const char* channelNames[numChannels] = {
-        "AmbL", "AmbR", "Hihat", "KdrumL", "KdrumR",
-        "OHL", "OHR", "RideL", "RideR", "Snare_bottom",
-        "Snare_top", "Tom1", "Tom2", "Tom3", "Tom4", "Trigger"
-    };
+    // static constexpr int numChannels = 16;
+    // static constexpr const char* channelNames[numChannels] = {
+    //     "AmbL", "AmbR", "Hihat", "KdrumL", "KdrumR",
+    //     "OHL", "OHR", "RideL", "RideR", "Snare_bottom",
+    //     "Snare_top", "Tom1", "Tom2", "Tom3", "Tom4", "Trigger"
+    // };
     
     // Get current channel levels for metering
     void getChannelLevels(float* levels, int numLevels) const

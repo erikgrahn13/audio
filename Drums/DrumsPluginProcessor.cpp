@@ -325,7 +325,7 @@ void DrumsAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     for(int ch = 0; ch < numChannels; ++ch)
     {
         float rms = sixteenChannelBuffer.getRMSLevel(ch, 0, buffer.getNumSamples());
-        channelLevels[ch].store(rms);
+        channelLevels[ch].store(juce::Decibels::gainToDecibels(rms));
     }
 
     // Mix 16 channels to stereo output using channel volumes

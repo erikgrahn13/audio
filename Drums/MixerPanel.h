@@ -3,16 +3,25 @@
 #include <juce_gui_basics/juce_gui_basics.h>
 #include <array>
 #include "ChannelStrip.h"
+#include "constants.h"
 
 class MixerPanel : public juce::Component
 {
     public:
-    MixerPanel() {
-        for(auto & channelStrip : channelStrips)
-        {
-            addAndMakeVisible(channelStrip);
-        }
+    MixerPanel(juce::AudioProcessorValueTreeState &parameters) {
+        // for(auto & channelStrip : channelStrips)
+        // {
+        //     addAndMakeVisible(channelStrip);
+        // }
         
+        for(int i = 0; i < numChannels; ++i)
+        {
+            juce::String ParamID = juce::String(channelNames[i]) + "Volume";
+
+            channelStrips.push_back(std::make_unique<ChannelStrip>(parameters, ParamID));
+            addAndMakeVisible(channelStrips.at(i).get());
+        }
+
         // startTimerHz(24);
     }
 
@@ -39,7 +48,7 @@ class MixerPanel : public juce::Component
         for (int i = 0; i < (int)channelStrips.size(); ++i)
         {
             auto stripBounds = bounds.removeFromLeft(channelWidth).reduced(2);
-            channelStrips[i].setBounds(stripBounds);
+            channelStrips[i]->setBounds(stripBounds);
         }
 
 
@@ -47,6 +56,7 @@ class MixerPanel : public juce::Component
     }
 
     
-    std::array<ChannelStrip, 16> channelStrips;
+    // std::array<ChannelStrip, 16> channelStrips;
+    std::vector<std::unique_ptr<ChannelStrip>> channelStrips;
     private:
 };

@@ -4,10 +4,13 @@
 class ChannelStrip : public juce::Component
 {
 public:
-	ChannelStrip()
+	ChannelStrip(juce::AudioProcessorValueTreeState &parameters, juce::String &paramID)
 	{
 		volumeSlider.setSliderStyle(juce::Slider::LinearVertical);
 	    volumeSlider.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::TextBoxBelow, false, 0, 0);
+
+        sliderAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(
+            parameters, paramID, volumeSlider));
 
 		addAndMakeVisible(volumeSlider);
 		addAndMakeVisible(levelMeter);
@@ -25,12 +28,18 @@ public:
 
 				g.setColour(juce::Colours::white);
 				// map level from -60.f / +6.f  to  0 / width
+                if(level > -50.f)
+                {
+                    int hej;
+                    hej = 1;
+                }
 				const auto scaledY = 
 					juce::jmap(level, -60.f, +6.f, 0.f, static_cast<float>(getHeight()));
-				g.fillRoundedRectangle(bounds.removeFromBottom(scaledY), 5.f);
+				// g.fillRoundedRectangle(bounds.removeFromBottom(scaledY), 5.f);
+                g.fillRoundedRectangle(bounds.withY(bounds.getBottom() - scaledY).withHeight(scaledY), 5.f);
 			}
 
-			void setLevel(const float value) { level = value; }
+			void setLevel(const float value) { level = value; repaint(); }
 		private:
 			float level = -60.f;
 	};
@@ -45,11 +54,20 @@ public:
 
 	void setLevel(float level)
 	{
-		levelMeter.setLevel(level);
+        constexpr float smoothing = 0.2f; // adjust for desired smoothness
+        smoothedLevel = smoothedLevel * (1.0f - smoothing) + level * smoothing;
+		levelMeter.setLevel(smoothedLevel);
+
 	}
 
 
 	private:
+    float smoothedLevel{-60.f};
+    bool isMuted{false};
 	LevelMeter levelMeter;
+    juce::TextButton muteButton;
+    juce::TextButton soloButton;
 	juce::Slider volumeSlider;
+	std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachment;
+
 };

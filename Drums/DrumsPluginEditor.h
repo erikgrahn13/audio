@@ -107,7 +107,7 @@ private:
     
     // 16 channel strips
     // std::array<std::unique_ptr<ChannelStrip>, 16> channelStrips;
-    std::array<std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>, 16> faderAttachments;
+    // std::array<std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>, 16> faderAttachments;
     // std::array<float, 16> channelLevels{};
 
     MixerPanel mixerPanel;

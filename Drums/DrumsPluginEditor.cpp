@@ -3,7 +3,7 @@
 
 //==============================================================================
 DrumsAudioProcessorEditor::DrumsAudioProcessorEditor (DrumsAudioProcessor& p)
-    : AudioProcessorEditor (&p), processorRef (p)
+    : AudioProcessorEditor (&p), processorRef (p), mixerPanel(p.mParameters)
 {
     // Create channel strips
     // for (int i = 0; i < DrumsAudioProcessor::numChannels; ++i)
@@ -166,7 +166,7 @@ void DrumsAudioProcessorEditor::timerCallback()
     {
         float level = processorRef.channelLevels[ch].load();
         // meter
-        mixerPanel.channelStrips[ch].setLevel(level);
+        mixerPanel.channelStrips[ch]->setLevel(level);
     }
 
 }
